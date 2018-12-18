@@ -1,0 +1,12 @@
+@import '~Theme';
+.content {
+    margin-top: var(--contentGutter);
+    margin-right: var(--contentGutter);
+    margin-left: var(--contentGutter);
+    overflow: auto;
+    width: calc(100vw - var(--siderWidth) - 20px);
+    & > div:first-child {
+        background-color: var(--default-color);
+        min-height: calc(100vh - var(--headerHeight) - var(--footerHeight) - var(--contentGutter));
+    }
+}

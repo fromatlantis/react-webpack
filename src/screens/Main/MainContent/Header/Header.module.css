@@ -1,0 +1,19 @@
+@import '~Theme';
+.header {
+    background-color: var(--default-color);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+}
+.fold {
+    font-size: 20px;
+    cursor: pointer;
+}
+.bell {
+    top: 3px;
+    margin-right: 20px;
+    font-size: 20px;
+}
+.uname {
+    margin-left: 8px;
+}

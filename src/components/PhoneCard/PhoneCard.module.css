@@ -1,0 +1,9 @@
+.root {
+    width: 350px;
+    height: 690px;
+    padding: 50px 30px;
+    background-size: cover;
+}
+.ios {
+    background-image: url(../../assets/ios.png);
+}
