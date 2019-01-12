@@ -29,7 +29,7 @@ class Main extends Component {
     }
     renderLayout = () => {
         let { user } = this.props
-        if(user.tenant_category){
+        if(user){
             return (
                 <Layout className={styles.container}>
                     <Header />
