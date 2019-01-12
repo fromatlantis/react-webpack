@@ -1,39 +1,45 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { HashRouter as Router } from "react-router-dom";
-import { Boot } from "./screens";
+import { createHashHistory } from 'history'
 import * as serviceWorker from "./serviceWorker";
 // redux相关
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./redux";
-// saga异步处理
+// saga中间件：异步处理
 import createSagaMiddleware from "redux-saga";
+// router中间件：router放入redux
+import { ConnectedRouter, routerMiddleware } from 'connected-react-router'
 import { watchFetchData } from "./redux/saga";
 // redux-logger
 import { createLogger } from 'redux-logger';
-
-// mockjs
-import "./mock";
+// 页面入口
+import Layout from "./Layout/Layout";
 // 样式
 import "./index.css";
 
 const sagaMiddleware = createSagaMiddleware();
 const loggerMiddleware = createLogger();
-const middleware = [sagaMiddleware, loggerMiddleware];
+const history = createHashHistory()
+const middleware = [sagaMiddleware,routerMiddleware(history)];
+// mockjs
+//import "./mock";
+if (process.env.NODE_ENV === "development") {
+    require("./mock")
+    middleware.push(loggerMiddleware)
+}
 
-const store = createStore(
-    rootReducer,
+export const store = createStore(
+    rootReducer(history),
     applyMiddleware(...middleware)
 );
 sagaMiddleware.run(watchFetchData);
-
 // render
 ReactDOM.render(
     <Provider store={store}>
-        <Router>
-            <Boot />
-        </Router>
+        <ConnectedRouter history={history}> 
+            <Layout />
+        </ConnectedRouter>
     </Provider>,
     document.getElementById("root")
 );

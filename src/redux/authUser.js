@@ -1,85 +1,70 @@
-import { put, call } from 'redux-saga/effects'
-import request from '../utils/request'
-
-// Action Types
-export const types = {
-    login: "AuthUser_LOGIN",
-    loginSuccess: "AuthUser_LOGIN_SUCCESS",
-    logout: "AuthUser_LOGOUT",
-    user_info: 'AuthUser_Info'
-};
-
-const initialState = {
-    toPath: '/home/home',
-    auth: [],
-    user: {}
-};
-
-// Reducer
-export default function reducer(state = initialState, action = {}) {
-    switch (action.type) {
-        case types.loginSuccess: {
-            return {
-                ...state,       
-                user: action.payload.user,
-                auth: action.payload.auth
+import { put, call } from "redux-saga/effects";
+import { replace } from "connected-react-router";
+import request from "../utils/request";
+import { blaze } from "../utils/blaze";
+const model = {
+    namespace: "authUser",
+    state: {
+        loginPath: "/home",
+        auth: [],
+        user: {}
+    },
+    actions: [
+        {
+            name: "login",
+            *effect(action) {
+                const res = yield call(request, {
+                    type: "post",
+                    url: "/authuser/login",
+                    data: action.payload
+                });
+                if (res.data) {
+                    yield put(actions("loginSuccess")(res.data));
+                    yield put(replace("/home"));
+                }
+            }
+        },
+        {
+            name: "loginSuccess",
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    user: action.payload.user,
+                    auth: action.payload.auth
+                };
+            }
+        },
+        {
+            name: 'logout',
+            *effect(action) {
+                yield put(replace("/login"));
+            }
+        },
+        {
+            name: 'storeLoginPath',
+            reducer: 'loginPath'
+        },
+        {
+            name: "getUserInfo",
+            *effect(action) {
+                try {
+                    let res = yield call(request, {
+                        url: "/authuser/userinfo"
+                    });
+                    if (res.data) {
+                        yield put(actions("loginSuccess")(res.data));
+                    } else {
+                        yield put(replace("/login"));
+                    }
+                } catch (err) { }
             }
         }
-        default:
-            return state;
-    }
-}
-
-// Action Creators
-export const actions = {
-    login: function (user) {
-        //console.log(portals)
-        return {
-            type: types.login,
-            payload: user
-        };
-    },
-    loginSuccess: function (data) {
-        return {
-            type: types.loginSuccess,
-            payload: data,
-        }
-    },
-    logout: function (user) {
-        return {
-            type: types.logout,
-            payload: user,
-        }
-    },
+    ]
 };
-
-export const userInfo = () => {
-    return {
-        type: types.user_info
-    }
-    
-}
-
-// saga generate
-export function* login(action) {
-    try{
-        const json = yield call(request,{
-            type: 'post',
-            url: '/authuser/login',
-            data: action.payload
-        })
-        let res = json.data;
-        yield put(actions.loginSuccess(res.data));
-    }catch(err){
-        
-    }
-}
-
-export function* getUserInfo() {
-    let userInfo =  yield call(request, {
-        url: '/authuser/userinfo'
-    })
-
-    yield put(actions.loginSuccess(userInfo.data.data));
-    // console.log(userInfo);
-}
+const manager = blaze(model);
+// reducer combineReducers使用
+export default manager.reducers;
+// action connect组件使用
+export const actions = manager.actions;
+// effects saga监听副作用函数使用
+export const effects = manager.effects;

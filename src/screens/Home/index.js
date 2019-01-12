@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 
-class Home extends PureComponent {
+export default class Home extends PureComponent {
     render() {
         return (
             <div>
@@ -8,7 +8,4 @@ class Home extends PureComponent {
             </div>
         )
     }
-}
-export {
-    Home
 }

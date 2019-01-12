@@ -1,9 +1,14 @@
 @import '~ThemeVariables';
 .header {
-    background-color: var(--default-color);
     display: flex;
     justify-content: space-between;
     padding: 0 15px;
+}
+.title {
+    color: #fff;
+    font-size: 18px;
+    margin-left: 15px;
+    margin-right: 90px;
 }
 .fold {
     font-size: 20px;
@@ -16,4 +21,9 @@
 }
 .uname {
     margin-left: 8px;
+    color: #fff;
+}
+.linkBtn {
+    cursor: pointer;
+    color: #1890ff;
 }

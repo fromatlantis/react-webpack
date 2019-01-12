@@ -6,12 +6,6 @@ import styles from './Login.module.css'
 const FormItem = Form.Item;
 
 class LoginForm extends PureComponent {
-    componentWillReceiveProps = (nextProps) => {
-        if (nextProps.user.name) {
-            //let toPath = nextProps.toPath ? nextProps.toPath : '/';
-            nextProps.history.push(nextProps.toPath);
-        }
-    }
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {

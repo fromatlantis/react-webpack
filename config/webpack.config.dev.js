@@ -141,7 +141,8 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
-      'Theme': path.resolve(__dirname, '../src/theme/variables.css'),
+      'Theme': path.resolve(__dirname, '../src/theme/theme.module.css'),
+      'ThemeVariables': path.resolve(__dirname, '../src/theme/variables.css'),
       'assets': path.resolve(__dirname, '../src/assets'),
       'reduxDir': path.resolve(__dirname, '../src/redux'),
     },

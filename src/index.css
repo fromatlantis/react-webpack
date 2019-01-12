@@ -1,4 +1,4 @@
-@import './theme/variables.css';
+@import '~ThemeVariables';
 body {
   margin: 0;
   padding: 0;
