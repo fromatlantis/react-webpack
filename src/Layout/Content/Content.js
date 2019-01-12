@@ -15,12 +15,13 @@ export default class Content extends Component {
                                 <Route
                                     exact
                                     //strict
-                                    path='/home'
+                                    path={item.path}
                                     component={item.component}
                                     key={index}
                                 />
                             );
                         })}
+                        <Redirect exact path="/" to="/home" />
                         <Redirect to="/404" />
                     </Switch>
                 </div>
