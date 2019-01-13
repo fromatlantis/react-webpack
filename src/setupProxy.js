@@ -2,6 +2,6 @@
 const proxy = require('http-proxy-middleware');
 module.exports = function (app) {
     // 接口代理e.g.
-    app.use(proxy('/authuser/', { target: 'http://62.234.115.117:8804/houzai' }));
-    app.use(proxy('/user/', { target: 'http://62.234.115.117:8804//houzai' }));
+    app.use(proxy('/authuser/', { target: 'http://*.*.*.*:8080/service' }));
+    app.use(proxy('/user/', { target: 'http://*.*.*.*:8080//service' }));
 };
