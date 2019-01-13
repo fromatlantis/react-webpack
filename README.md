@@ -7,6 +7,7 @@
 - 集成了connected-react-router将router放入redux中
 - 集成了react-loadable按需加载
 - 封装了axios网络请求
+- 集成了mock.js模拟请求接口
 ### 主要模块版本
 - "connected-react-router": "^5.0.0",
 - "react": "^16.6.0"
