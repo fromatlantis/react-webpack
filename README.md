@@ -1,5 +1,5 @@
-### 启迪智慧园区平台前端项目
-- 项目框架基于create-react-app脚手架
+### react-webpack
+- 基于create-react-app
 - 集成了路由组件react-router-dom V4版本
 - 集成了第三方UI组件库antd https://ant.design
 - 集成了css-modules、postcss-preset-env stage0
@@ -7,6 +7,14 @@
 - 集成了connected-react-router将router放入redux中
 - 集成了react-loadable按需加载
 - 封装了axios网络请求
+### 主要模块版本
+- "connected-react-router": "^5.0.0",
+- "react": "^16.6.0"
+- "react-loadable": "^5.5.0",
+- "react-redux": "^5.1.0",
+- "react-router-dom": "^4.3.1",
+- "redux": "^4.0.1",
+- "webpack": "4.19.1"
 ### 运行项目
 1. `git clone https://github.com/fromatlantis/react-webpack.git`
 2. `cd react-webpack`
