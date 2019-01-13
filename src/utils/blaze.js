@@ -8,7 +8,7 @@ export const blaze = (model) => {
         return `${model.namespace}/${name}`
     }
     return {
-        // 方法：返回action
+        // 方法：生成一个action
         actions: (name) => {
             let { actions } = model
             let item = actions.find(item => item.name === name)
@@ -19,7 +19,7 @@ export const blaze = (model) => {
                 };
             }
         },
-        // 方法：返回更新后的状态
+        // 方法：生成一个reducer
         reducers: (state = model.state, action = {}) => {
             let { actions } = model
             let item = actions.find(item => generateType(item.name) === action.type)
