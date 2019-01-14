@@ -26,7 +26,7 @@ export const blaze = (model) => {
             // return getNewState(item,state,action)
             return item && item.reducer ? (typeof (item.reducer) === 'string' ? {
                 ...state,
-                [item.state]: action.payload
+                [item.reducer]: action.payload
             } : item.reducer(state, action)) : { ...state }
         },
         // 属性：代表包含takeEvery的数组
