@@ -1,0 +1,21 @@
+.container{
+    padding: 40px 50px;
+}
+.SpaceDetailTop{
+    display: flex;
+    flex-direction: row;
+}
+.imgRight{
+    display:flex;
+    justify-content:space-between;
+    flex-direction:column;
+    height: 500px;
+}
+.people{
+    height: 42%;
+    width:'100%';
+    box-shadow: 0px 1px 1px #888888;
+}
+.people img,.people p{
+    margin: 6px 0
+}
