@@ -10,7 +10,7 @@ class LoginForm extends PureComponent {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                values.type = '1';
+                values.type = '0';
                 this.props.login(values);
                 //console.log('Received values of form: ', values);
             }

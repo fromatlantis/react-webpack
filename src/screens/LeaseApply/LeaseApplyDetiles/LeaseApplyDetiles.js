@@ -2,7 +2,7 @@
  * 租赁申请==>房间详情
  */
 import React, { PureComponent } from 'react'
-import { Card,Button,Tabs,Select,Pagination,Divider,Carousel } from 'antd';
+import { Card,Button,Tabs,Carousel } from 'antd';
 import { Link } from 'react-router-dom'
 import styles from './LeaseApplyDetiles.module.css'
 import avatar from '../../../assets/avatar.png';
@@ -20,9 +20,10 @@ export default class LeaseApplyDetiles extends PureComponent {
         this.props.getHouseDetail({buildingId:buildingId, houseId:houseId, photoWidth:'100', photoHeight:'100'})
     }
     render() {
-        const {address, buildingArea, buildingName, buildingNo, email, floorLevel, houseDescribe,
+        const { buildingArea, buildingName, buildingNo, email, floorLevel, houseDescribe,
             houseId, houseNo, housePrice, houseStatus, houseType, leader, orientation, planePhoto,
             pooledArea, realityPhoto, rentArea, telephone} = this.props.houseDetail
+        const houseName = `${buildingName} ${buildingNo}座 ${floorLevel}楼 ${houseNo}室`
         const TabPane = Tabs.TabPane;
         const tabListNoTitle = [{
             key: '咨询',
@@ -34,7 +35,8 @@ export default class LeaseApplyDetiles extends PureComponent {
                     <Link to={`/leaseApply`}>租赁管理/租赁申请/房间详情</Link>
                 </Card>
                 <Card bordered={false} 
-                    title={<h3 style={{display:'inline',marginRight:15}}>{buildingName}  {buildingNo}座  {floorLevel}楼  {houseNo}室</h3>}
+                    // title={<h3 style={{display:'inline',marginRight:15}}>{buildingName}  {buildingNo}座  {floorLevel}楼  {houseNo}室</h3>}
+                    title={<h3 style={{display:'inline',marginRight:15}}>{houseName}</h3>}
                 >
                     <div style={{display:'flex',flexDirection:'row',fontSize:15,paddingLeft:'20px'}}>
                         <div style={{width:'42%'}}>
@@ -53,7 +55,7 @@ export default class LeaseApplyDetiles extends PureComponent {
                                 <p>朝向：{orientation}</p>
                                 <p>类型：{houseType}</p>
                                 <p>状态：{houseStatus}</p>
-                                <Button type='primary' size="large"><Link to={`/submitApply/${houseId}`}>申请入驻</Link></Button>
+                                <Button type='primary' size="large"><Link to={`/submitApply/${houseId}/${houseName}`}>申请入驻</Link></Button>
                             </div>
                         </div>
                         <Card

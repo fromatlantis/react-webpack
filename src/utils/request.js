@@ -2,7 +2,7 @@ import axios from "axios";
 import { message } from "antd";
 import {store} from '../index'
 import { replace } from 'connected-react-router'
-
+import { actions } from 'reduxDir/loading'
 // 状态码错误信息
 const codeMessage = {
     200: '服务器成功返回请求的数据。',
@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === "development") {
 } else if (process.env.NODE_ENV === "debug") {
     baseURL = "/";
 } else if (process.env.NODE_ENV === "production") {
-    baseURL = "/";
+    baseURL = "/houzai";
 }
 
 // create an axios instance
@@ -46,6 +46,7 @@ request.interceptors.request.use(
         if (token) {
             config.headers.Authorization = "Bearer " + token; // 让每个请求携带token
         }
+        store.dispatch(actions('complate')(false))
         return config;
     },
     error => {
@@ -56,6 +57,7 @@ request.interceptors.request.use(
 // 再添加一个返回拦截器
 request.interceptors.response.use(
     response => {
+        store.dispatch(actions('complate')(true))
         return response;
     },
     error => {
@@ -85,7 +87,7 @@ export default ({
     if (contentType === "multipart/form-data") {
         let formData = new FormData();
         for (let k in data) {
-            formData.append(k, data[k]);
+            data[k] && formData.append(k, data[k]);
         }
         postData = formData;
     }

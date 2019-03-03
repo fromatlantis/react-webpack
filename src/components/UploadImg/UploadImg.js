@@ -57,6 +57,7 @@ class UploadImg extends Component {
             </div>
         );
         const imageUrl = this.state.imageUrl;
+        const { url } = this.props
         return (
             <Upload
                 name="avatar"
@@ -67,7 +68,8 @@ class UploadImg extends Component {
                 beforeUpload={this.beforeUpload}
                 onChange={this.handleChange}
             >
-                {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+                {url && !imageUrl ? <img src={url} alt="" style={{ width: 100, height: 100 }} /> : imageUrl ? <img src={imageUrl} style={{ width: 100, height: 100 }} alt="avatar" /> : uploadButton}
+                {/* {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton} */}
             </Upload>
         );
     }

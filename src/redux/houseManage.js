@@ -59,21 +59,21 @@ const model = {
             name: "getProjectDetailSuccess",
             reducer: 'projectDetail',
         },{   //修改园区项目信息 
-            name:"updateProjectInfo",
+            name:"saveOrUpdateProjectInfo",
             *effect(action){
                 const res = yield call(request,{
                     type: 'post',
-                    url: '/asset/updateProjectInfo',
+                    url: '/asset/saveOrUpdateProjectInfo',
                     contentType: "multipart/form-data",
                     data: action.payload
                 });
                 if(res.code===1000){
-                    yield put(actions('updateProjectInfoSuccess')(res.data));
+                    yield put(actions('saveOrUpdateProjectInfoSuccess')(res.data));
                     yield put(actions('getProjectDetail')());
                 }
             }
         },{ 
-            name: "updateProjectInfoSuccess",
+            name: "saveOrUpdateProjectInfoSuccess",
         },{   //获取楼宇分页列表
             name:"buildingInfoList",
             reducer: (state, action)=>{

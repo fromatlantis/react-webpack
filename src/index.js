@@ -25,7 +25,7 @@ const middleware = [sagaMiddleware,routerMiddleware(history)];
 // mockjs
 //import "./mock";
 if (process.env.NODE_ENV === "development") {
-    require("./mock")
+    //require("./mock")
     middleware.push(loggerMiddleware)
 }
 

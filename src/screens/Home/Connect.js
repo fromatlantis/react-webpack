@@ -21,7 +21,7 @@ const mapDispatchToProps = (dispatch) => {
         //获取园区项目详情
         getProjectDetail: actions('getProjectDetail'),
         //修改园区项目信息 
-        updateProjectInfo: actions('updateProjectInfo'),
+        updateProjectInfo: actions('saveOrUpdateProjectInfo'),
         //获取楼宇分页列表
         buildingInfoList: actions('buildingInfoList'),
          //添加楼宇信息 

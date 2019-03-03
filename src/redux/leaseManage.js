@@ -287,6 +287,22 @@ const model = {
             }
         },{ 
             name: "enterApproveSuccess",
+        },{   //POST/ 新增企业入驻申请
+            name:"saveCompamyApply",
+            *effect(action){
+                const res = yield call(request,{
+                    type: 'post',
+                    url: `/merchants/saveCompamyApply`,
+                    contentType: "multipart/form-data",
+                    data: action.payload
+                });
+                if(res.code===1000){
+                    yield put(actions('saveCompamyApplySuccess')(res.data));
+                    yield put(goBack()); 
+                }
+            }
+        },{ 
+            name: "saveCompamyApplySuccess",
         },
     ],
 };

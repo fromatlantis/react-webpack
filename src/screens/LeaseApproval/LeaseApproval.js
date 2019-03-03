@@ -84,7 +84,6 @@ export default class LeaseApproval extends PureComponent {
         
         let zong = 0
         if(this.props.approveStatus.apply_count){
-            console.log(apply_count)
             zong = zong + apply_count
         }
         if(this.props.approveStatus.agree_count){

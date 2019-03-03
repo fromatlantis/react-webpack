@@ -6,13 +6,14 @@ import { actions } from '../../../redux/leaseManage'
 const mapStateToProps = (state) => {
     return {
         // houseDetail: state.leaseManage.houseDetail, //获取de房源详情
+        user: state.authUser.user,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-         //获取房源详情
-        // getHouseDetail: actions('getHouseDetail'),
+        //POST/ 新增企业入驻申请
+        saveCompamyApply :actions('saveCompamyApply'),
     }, dispatch);
 }
 
