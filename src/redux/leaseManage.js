@@ -22,6 +22,7 @@ const model = {
         totalCountEnterApplyLists: null, //企业入驻申请列表查询的总条数
         approveStatus: [], //统计当前用审批的企业入驻申请以及未审批的申请数量
         enterApplyDetail: [], //GET企业入驻申请详情
+        companyMessages: [{emails:"",enterprisetype:"",industrybussness:"",legalrepresent:"",name:"",phoneNums:"",unitsocialcreditno:""}], //根据企业名称获取的企业信息
         
 
         searchParamsRh:{ //租赁管理-租赁房源List 参数
@@ -283,10 +284,33 @@ const model = {
                 if(res.code===1000){
                     yield put(actions('enterApproveSuccess')(res.data));
                     yield put(goBack()); 
+                    if(action.payload.approveStatus===1){
+                        console.log('审批通过，改变状态')
+                        yield put(actions('updateHouseEnterStatus')(action.payload.applyId));
+                    }
                 }
             }
         },{ 
             name: "enterApproveSuccess",
+        },{   // 修改发布房源入驻状态
+            name:"updateHouseEnterStatus",
+            reducer: (state, action)=>{
+                return{
+                    ...state,
+                    enterApplyDetail:[]
+                }
+            },
+            *effect(action){
+                const res = yield call(request,{
+                    type: 'get',
+                    url: `/asset/updateHouseEnterStatus?applyId=${action.payload}`,
+                });
+                if(res.code===1000){
+                    yield put(actions('updateHouseEnterStatusSuccess')(res.data));
+                }
+            }
+        },{ 
+            name: "updateHouseEnterStatusSuccess",
         },{   //POST/ 新增企业入驻申请
             name:"saveCompamyApply",
             *effect(action){
@@ -303,6 +327,26 @@ const model = {
             }
         },{ 
             name: "saveCompamyApplySuccess",
+        },{   //根据企业名称获取企业相关信息
+            name:"getCompanyInfoByName",
+            reducer: (state, action)=>{
+                return{
+                    ...state,
+                    companyMessages: [{emails:"",enterprisetype:"",industrybussness:"",legalrepresent:"",name:"",phoneNums:"",unitsocialcreditno:""}],
+                }
+            },
+            *effect(action){
+                const res = yield call(request,{
+                    type: 'get',
+                    url: `/merchants/getCompanyInfoByName?companyName=${action.payload}`,
+                });
+                if(res.data){
+                    yield put(actions('getCompanyInfoByNameSuccess')(res.data));
+                }
+            }
+        },{ 
+            name: "getCompanyInfoByNameSuccess",
+            reducer: 'companyMessages',
         },
     ],
 };

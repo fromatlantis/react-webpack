@@ -1,5 +1,5 @@
 import { put, call } from "redux-saga/effects";
-import { replace } from "connected-react-router";
+import { replace, push } from "connected-react-router";
 import request from "../utils/request";
 import { blaze } from "../utils/blaze";
 const model = {
@@ -38,7 +38,16 @@ const model = {
         {
             name: 'logout',
             *effect(action) {
-                yield put(replace("/login"));
+                // yield put(replace("/login"));
+                try {
+                    let res = yield call(request, {
+                        url: "/authuser/logout"
+                    });
+                    if (res.code === 1000) {
+                        yield put(push("/login"));
+                        //yield put(actions("logoutSuccess")());
+                    } 
+                } catch (err) { }
             }
         },
         {
@@ -55,7 +64,7 @@ const model = {
                     if (res.data) {
                         yield put(actions("loginSuccess")(res.data));
                     } else {
-                        yield put(replace("/login"));
+                        // yield put(replace("/login"));
                     }
                 } catch (err) { }
             }

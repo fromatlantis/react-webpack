@@ -87,7 +87,13 @@ export default ({
     if (contentType === "multipart/form-data") {
         let formData = new FormData();
         for (let k in data) {
-            data[k] && formData.append(k, data[k]);
+            if(k==='filesList'){
+                data['filesList'].forEach((item)=>{
+                    formData.append(data['filesName'], item);
+                })
+            }else if(!(k==='filesName')){
+                data[k] && formData.append(k, data[k]);
+            }
         }
         postData = formData;
     }

@@ -28,10 +28,10 @@ class UpdateBuilding extends PureComponent {
             if (!error) {
                 values.buildingId = this.props.fatherName
                 // values.realityPhoto = icon
+                console.log(values)
+                this.props.updateBuildingInfo(values)
+                this.setState({  addVisible: false, });
             }
-            console.log(values)
-            this.props.updateBuildingInfo(values)
-            // this.setState({  addVisible: false, });
         })
     }
     handleCancel = () => {

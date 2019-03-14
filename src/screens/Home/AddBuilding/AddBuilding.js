@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Input, Form, Modal, Button, Col, Row, notification, Icon, Upload } from 'antd'
 import styles from '../index.module.css'
-import UploadImg from '../../../components/UploadImg/UploadImg'
+import UploadManyImg from '../../../components/UploadImg/UploadManyImg'
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -15,6 +15,7 @@ class AddBuilding extends PureComponent {
         previewVisible: false,
         previewImage: '',
         fileList: [],
+        files: [],
     }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -24,18 +25,19 @@ class AddBuilding extends PureComponent {
         this.setState({  addVisible: true, });
     }
     handleOk = () => {
-        let { fileList } = this.state
+        let { files } = this.state
         this.props.form.validateFields((error, values) => {
             if (!error) {
-                if(fileList==''){
+                if(files==''){
                     this.openNotification()
                 }else{
-                    values.realityPhoto = fileList
+                    values.filesName = 'realityPhoto'
+                    values.filesList = files
                     console.log(values)
                     this.props.AddBuilding(values)
+                    this.setState({  addVisible: false, });
                 }
             }
-            // this.setState({  addVisible: false, });
         })
     }
     openNotification = () => {
@@ -52,19 +54,24 @@ class AddBuilding extends PureComponent {
     handleCancelF = () => {
         this.setState({  addVisible: false, });
     }
-
-    ImgOnClick = (file) => {
-        this.setState({ icon: file })
-    }
     //上传图片方法
     handleCancel = () => this.setState({ previewVisible: false })
     handlePreview = (file) => {
         this.setState({
-        previewImage: file.url || file.thumbUrl,
-        previewVisible: true,
+            previewImage: file.url || file.thumbUrl,
+            previewVisible: true,
         });
     }
-    handleChange = ({ fileList }) => this.setState({ fileList })
+    handleChange = ({fileList}) => {
+        let files = []
+        for(let i=0;i<fileList.length;i++){
+            files[i] = fileList[i].originFileObj
+        }
+        this.setState( {fileList, files} );
+    }
+    beforeUpload = (file) => {
+        return false
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -195,28 +202,24 @@ class AddBuilding extends PureComponent {
                                 </FormItem>
                             </Col>
                         </Row>
-                        {/* <Row gutter={16}>
-                            <Col span={24}> */}
-                                <FormItem style={{ marginLeft:'45px' }} label="实景图片：">
-                                    {getFieldDecorator('realityPhoto')(
-                                        <div style={{ width:'100%' }}>
-                                            <Upload
-                                                action="//jsonplaceholder.typicode.com/posts/"
-                                                listType="picture-card"
-                                                fileList={fileList}
-                                                onPreview={this.handlePreview}
-                                                onChange={this.handleChange}
-                                            >
-                                                {fileList.length >= 4 ? null : uploadButton}
-                                            </Upload>
-                                            <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                                                <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                                            </Modal>
-                                        </div>
-                                    )}
-                                </FormItem>
-                            {/* </Col>
-                        </Row> */}
+                        <FormItem style={{ marginLeft:'45px' }} label="实景图片：">
+                            {getFieldDecorator('realityPhoto')(
+                                <div style={{ width:'100%' }}>
+                                    <Upload
+                                        listType="picture-card"
+                                        fileList={fileList}
+                                        onPreview={this.handlePreview}
+                                        onChange={this.handleChange}
+                                        beforeUpload={this.beforeUpload}
+                                    >
+                                        {fileList.length >= 4 ? null : uploadButton}
+                                    </Upload>
+                                    <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                                        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                                    </Modal>
+                                </div>
+                            )}
+                        </FormItem>
                     </Form>
                 </Modal>
             </div>

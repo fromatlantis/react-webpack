@@ -2,12 +2,13 @@
  * 租赁管理=》租赁申请=》提交申请
  */
 import React, { PureComponent } from 'react'
-import { Form,Card,Button,DatePicker,Input,Select,notification,Icon } from 'antd';
+import { Form,Card,Button,DatePicker,Input,Select,notification,Icon, Col, Row, } from 'antd';
 import { Link } from 'react-router-dom'
 import UploadImg from '../../../components/UploadImg/UploadImg'
 import moment from "moment";
 
 const Option = Select.Option;
+const Search = Input.Search;
 const { RangePicker } = DatePicker;
 
 class SubmitApply extends PureComponent {
@@ -20,12 +21,21 @@ class SubmitApply extends PureComponent {
         //上传身份证
         iconZ: null,
         iconF: null,
+        iconH: null,
+        iconY: null,
+        displayStr: 'none',
     }
     ImgOnClickZ = (file) => {
         this.setState({  iconZ: file })
     }
     ImgOnClickF = (file) => {
         this.setState({  iconF: file })
+    }
+    ImgOnClickH = (file) => {
+        this.setState({  iconH: file })
+    }
+    ImgOnClickY = (file) => {
+        this.setState({  iconY: file })
     }
     //上传图片方法
     // handleCancel = () => this.setState({ previewVisible: false })
@@ -38,9 +48,14 @@ class SubmitApply extends PureComponent {
     // handleChange = ({ fileList }) => this.setState({ fileList })
     //客户类型改变
     changeCustomerType = (value) => {
-        console.log('value==>'+value)
         this.setState({ valueStr:value })
     }
+    //根据企业名称搜索企业信息
+    changeCompanyName = (cname) => {
+        // alert(cname)
+        this.props.getCompanyInfoByName(cname)
+    }
+    //隐藏de企业信息
     enterpriseM = (num) => {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -53,13 +68,12 @@ class SubmitApply extends PureComponent {
                 sm: { span: 16 },
             },
         }
-        console.log('num==>'+num)
-        if(num===2){
-            return(
+        if(num==='2'){
+        return(
                 <div>
                     <Form.Item {...formItemLayout} label='企业名称：'>
-                        {getFieldDecorator('company_name')(
-                            <Input style={{width:'400px'}}/>
+                        {getFieldDecorator('companyName')(
+                            <Search placeholder="输入企业名称以检索企业信息" style={{width:'400px'}} onSearch={(value) => this.changeCompanyName(value)} />
                         )}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label='企业信用代码：'>
@@ -78,26 +92,27 @@ class SubmitApply extends PureComponent {
                         )}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label='所属行业：'>
-                        {getFieldDecorator('enterptype')(
+                        {getFieldDecorator('industry')(
                             <Input style={{width:'400px'}}/>
                         )}
                     </Form.Item>
-                </div>
-            )
-        }
-    }
-    messagess = () => {
-        if(true){
-            return(
-                <div>
-                    
+                    <Form.Item {...formItemLayout} label="上传合同：">
+                        <div style={{ display:'flex',flexDirection:'row' }}>
+                            <UploadImg onUpload={this.ImgOnClickH}/>
+                        </div>
+                    </Form.Item>
+                    <Form.Item {...formItemLayout} label="上传营业执照：">
+                        <div style={{ display:'flex',flexDirection:'row' }}>
+                            <UploadImg onUpload={this.ImgOnClickY}/>
+                        </div>
+                    </Form.Item>
                 </div>
             )
         }
     }
     handleSubmit = (e) => {
         e.preventDefault();
-        let { iconZ, iconF } = this.state
+        let { iconZ, iconF, iconH, iconY } = this.state
         this.props.form.validateFields((err, fieldsValue) => {
             if (err) {
                 return
@@ -106,19 +121,31 @@ class SubmitApply extends PureComponent {
             const rangeValue = fieldsValue['beginEndDate'];
             let rangeValueBegin = rangeValue[0].format('YYYY-MM-DD HH:mm:ss')
             let rangeValueEnd = rangeValue[1].format('YYYY-MM-DD HH:mm:ss')
+            //客户类型
+            let customerTypee = fieldsValue['customerType'];
+            if(customerTypee==='1'){
+                customerTypee = 'personal'
+            }else{
+                customerTypee = 'company'
+            }
             const values = {
                 ...fieldsValue,
+                customerType: customerTypee,
+                houseId: this.props.match.params.id,
+                rentPrice: this.props.match.params.rentPrice,
                 beginEndDate: '',
                 beginDate: rangeValueBegin,
                 endDate: rangeValueEnd,
                 identityFrontal: iconZ,
                 identityDorsal: iconF,
+                contract: iconH,
+                tradingCertificate: iconY,
             }
             if(JSON.stringify(values.identityFrontal) === 'null' || JSON.stringify(values.identityDorsal) === 'null'){
                 this.openNotification()
             }else{
                 console.log(values)
-                // this.props.saveCompamyApply(fieldsValue)
+                this.props.saveCompamyApply(values)
             }
         });
     }
@@ -165,77 +192,68 @@ class SubmitApply extends PureComponent {
                     }
                     style={{ width: '100%' }}
                 >
-                    <Form onSubmit={this.handleSubmit} >
-                        <Form.Item {...formItemLayout} label='意向房间：'>
-                            {getFieldDecorator('houseName')(
-                                <Input disabled style={{width:'400px'}} placeholder='请输入'/>
-                            )}
-                        </Form.Item>
-                        <Form.Item {...formItemLayout} label='申请人：'>
-                            {getFieldDecorator('applyUserName',{
-                                rules: [{  required: true, message: '请输入申请人', }],
-                            })(
-                                <Input style={{width:'400px'}} placeholder='请输入'/>
-                            )}
-                        </Form.Item>
-                        <Form.Item {...formItemLayout} label='申请时间：'>
-                            {getFieldDecorator('applyTime')(
-                                <Input disabled style={{width:'400px'}}/>
-                            )}
-                        </Form.Item>
-                        <Form.Item {...formItemLayout} label='租赁时间：'>
-                            {getFieldDecorator('beginEndDate', {
-                                rules: [{  required: true, message: '请输入租赁时间', }],
-                            })(
-                                <RangePicker style={{width:'400px'}} />
-                            )}
-                        </Form.Item>
-                        <Form.Item {...formItemLayout} label='客户类型：'>
-                            {getFieldDecorator('customerType', {
-                                rules: [{  required: true, message: '请输入客户类型', }],
-                            })(
-                                <Select style={{width:'400px'}} placeholder='类型' onChange={this.changeCustomerType}>
-                                    <Option value="1">个人</Option>
-                                    <Option value="2">企业</Option>
-                                </Select>
-                            )} 
-                        </Form.Item>
-                        {this.enterpriseM(this.state.valueStr)}
-                        <Form.Item {...formItemLayout} label='联系电话：'>
-                            {getFieldDecorator('phoneNums', {
-                                rules: [{  required: true, message: '请输入联系电话', }],
-                            })(
-                                <Input style={{width:'400px'}} placeholder='请输入'/>
-                            )}
-                        </Form.Item>
-                        <Form.Item {...formItemLayout} label='邮箱：'>
-                            {getFieldDecorator('emails', {
-                                rules: [{  required: true, message: '请输入邮箱', }],
-                            })(
-                                <Input style={{width:'400px'}} placeholder='请输入'/>
-                            )}
-                        </Form.Item>
-                        {this.messagess(this.state.valueStr)}
-                        <Form.Item {...formItemLayout} label="上传申请人证件：">
-                            <div style={{ display:'flex',flexDirection:'row' }}>
-                                <UploadImg onUpload={this.ImgOnClickZ}/>
-                                <UploadImg onUpload={this.ImgOnClickF}/>
-                            </div>
-                                 {/* <div style={{ width:'100%' }}>
-                                     <Upload
-                                        action="//jsonplaceholder.typicode.com/posts/"
-                                        listType="picture-card"
-                                        fileList={fileList}
-                                        onPreview={this.handlePreview}
-                                        onChange={this.handleChange}
-                                    >
-                                        {fileList.length >= 2 ? null : uploadButton}
-                                    </Upload>
-                                    <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                                        <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                                    </Modal>
-                                </div> */}
-                        </Form.Item>
+                    <Form onSubmit={this.handleSubmit} style={{ marginLeft:'80px' }}>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <Form.Item {...formItemLayout} label='意向房间：'>
+                                    {getFieldDecorator('houseName')(
+                                        <Input disabled style={{width:'400px'}} placeholder='请输入'/>
+                                    )}
+                                </Form.Item>
+                                <Form.Item {...formItemLayout} label='申请人：'>
+                                    {getFieldDecorator('applyUserName',{
+                                        rules: [{  required: true, message: '请输入申请人', }],
+                                    })(
+                                        <Input style={{width:'400px'}} placeholder='请输入'/>
+                                    )}
+                                </Form.Item>
+                                <Form.Item {...formItemLayout} label='申请时间：'>
+                                    {getFieldDecorator('applyTime')(
+                                        <Input disabled style={{width:'400px'}}/>
+                                    )}
+                                </Form.Item>
+                                <Form.Item {...formItemLayout} label='租赁时间：'>
+                                    {getFieldDecorator('beginEndDate', {
+                                        rules: [{  required: true, message: '请输入租赁时间', }],
+                                    })(
+                                        <RangePicker style={{width:'400px'}} />
+                                    )}
+                                </Form.Item>
+                                <Form.Item {...formItemLayout} label='客户类型：'>
+                                    {getFieldDecorator('customerType', {
+                                        rules: [{  required: true, message: '请输入客户类型', }],
+                                    })(
+                                        <Select style={{width:'400px'}} placeholder='类型' onChange={this.changeCustomerType}>
+                                            <Option value="1">个人</Option>
+                                            <Option value="2">企业</Option>
+                                        </Select>
+                                    )} 
+                                </Form.Item>
+                                <Form.Item {...formItemLayout} label='联系电话：'>
+                                    {getFieldDecorator('phoneNums', {
+                                        rules: [{  required: true, message: '请输入联系电话', }],
+                                    })(
+                                        <Input style={{width:'400px'}} placeholder='请输入'/>
+                                    )}
+                                </Form.Item>
+                                <Form.Item {...formItemLayout} label='邮箱：'>
+                                    {getFieldDecorator('emails', {
+                                        rules: [{  required: true, message: '请输入邮箱', },{ type: 'email', message: '请输入正确的邮箱地址' }],
+                                    })(
+                                        <Input style={{width:'400px'}} placeholder='请输入'/>
+                                    )}
+                                </Form.Item>
+                                <Form.Item {...formItemLayout} label="上传申请人证件：">
+                                    <div style={{ display:'flex',flexDirection:'row' }}>
+                                        <UploadImg onUpload={this.ImgOnClickZ}/>
+                                        <UploadImg onUpload={this.ImgOnClickF}/>
+                                    </div>
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                                {this.enterpriseM(this.state.valueStr)}
+                            </Col>
+                        </Row>
                         <Form.Item style={{marginLeft:'15%'}}>
                             <Button htmlType="submit" type='primary'>提交</Button>
                             <Button style={{marginLeft:'15px'}}>取消</Button>
@@ -253,6 +271,13 @@ export default Form.create({
             applyUserName: Form.createFormField({  value: props.user.name }),
             houseName: Form.createFormField({  value: props.match.params.name }),
             applyTime: Form.createFormField({  value: moment().format('YYYY-MM-DD HH:mm:ss') }),
+            companyName: Form.createFormField({  value: props.companyMessages[0].name }),
+            unitsocialcreditno: Form.createFormField({  value: props.companyMessages[0].unitsocialcreditno }),
+            legalrepresent: Form.createFormField({  value: props.companyMessages[0].legalrepresent }),
+            enterprisetype: Form.createFormField({  value: props.companyMessages[0].enterprisetype }),
+            industry: Form.createFormField({  value: props.companyMessages[0].industrybussness }),
+            phoneNums: Form.createFormField({  value: props.companyMessages[0].phoneNums }),
+            emails: Form.createFormField({  value: props.companyMessages[0].emails }),
         };
     }
 })(SubmitApply)

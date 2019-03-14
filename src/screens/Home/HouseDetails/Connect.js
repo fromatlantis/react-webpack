@@ -21,6 +21,8 @@ const mapDispatchToProps = (dispatch) => {
         getRenterRecordList: actions('getRenterRecordList'),
         //添加租客
         addRenter: actions('addRenter'),
+        //修改租客信息
+        updateRenterInfo: actions('updateRenterInfo'),
     }, dispatch);
 }
 

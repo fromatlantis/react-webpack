@@ -8,24 +8,23 @@ class ListClick extends Component{
         spot:true,
     }
     componentWillReceiveProps(nextProps) {
-        if (nextProps.data.length !== this.state.navTitle.length) {
-            
-         let list = nextProps.data.filter((item,i) => {
-            return i<6
-        })
+        if ( nextProps.data.length !== this.state.navTitle.length) {
+            let list = nextProps.data.filter((item,i) => {
+                return i<6
+            })
             this.setState({
-                activeKey:this.state.activeKey?this.state.activeKey:nextProps.data[0].Ids,
+                activeKey:this.state.activeKey?this.state.activeKey:'',
                 navTitle:list
             })
         }
     }
-    titleClick = (id) => {
+    titleClick = (id, name) => {
         this.setState({
             activeKey: id
         })
         let that = this
         setTimeout(() => {
-            that.props.getId(id)
+            that.props.getId(id, name)
         }, 0);
     }
     allList = () => {
@@ -44,11 +43,9 @@ class ListClick extends Component{
                     {
                         this.state.navTitle.map((item, i) => {
                             return <span key={i}
-                                        style={{ marginRight: '13px', fontSize: '15px',
-                                            float:'left', padding: '4px 6px', cursor: 'pointer'
-                                        }}
-                                    onClick={() => { this.titleClick(item.Ids) }}
-                                    className={this.state.activeKey === item.Ids ? styles.active : ''}
+                                        style={{marginRight:'13px', fontSize:'15px', float:'left', padding:'4px 6px', cursor:'pointer'}}
+                                        onClick={() => { this.titleClick(item.Ids, item.Names) }}
+                                        className={this.state.activeKey === item.Ids ? styles.active : ''}
 
                             >{item.Names}</span>
                         })

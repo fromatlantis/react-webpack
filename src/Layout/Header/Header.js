@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import { replace } from "connected-react-router";
-import { Layout, Avatar, Popover } from "antd";
+import { Layout, Avatar, Popover, Button } from "antd";
 import Navigation from '../Navigation/Navigation'
 import styles from "./Header.module.css";
 import avatar from "assets/avatar.png";
+import { Link } from 'react-router-dom'
 export default class Header extends Component {
     logout = () => {
         this.props.logout()
     }
     render() {
-        let { name, account } = this.props.user
+        let { name, account, photo } = this.props.user
         return (
             <Layout.Header className={styles.header}>
                 <div style={{ display: 'flex', alignItems:'center' }}>
@@ -19,16 +20,23 @@ export default class Header extends Component {
                     </div>
                     <Navigation />
                 </div>
-                <div style={{cursor:'pointer'}}>
-                    <Popover
+                <div className={styles.login} style={{cursor:'pointer'}}>
+                    {
+                    name ? <Popover
                         trigger="click"
                         placement="bottomRight"
                         content={<span className={styles.linkBtn} onClick={this.logout} >退出登录</span>}
                         title={account} >
-                        <Avatar src={avatar} size="user" />
-                        <span className={styles.uname}>{name}</span>
+                            <Avatar src={photo} size="user" />
+                            <span className={styles.uname}>{name}</span>
                     </Popover> 
-                </div>
+                    :
+                    <Link to='/login'>
+                        <Button type="primary">登录 | 注册</Button>
+                    </Link>
+                    }
+
+                </div> 
             </Layout.Header>
         );
     }
