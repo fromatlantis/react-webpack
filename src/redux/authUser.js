@@ -2,6 +2,7 @@ import { put, call } from "redux-saga/effects";
 import { replace, push } from "connected-react-router";
 import request from "../utils/request";
 import { blaze } from "../utils/blaze";
+import { redirectLogin } from '../utils'
 const model = {
     namespace: "authUser",
     state: {
@@ -44,10 +45,23 @@ const model = {
                         url: "/authuser/logout"
                     });
                     if (res.code === 1000) {
-                        yield put(push("/login"));
-                        //yield put(actions("logoutSuccess")());
+                        yield put(actions("logoutSuccess")());
+                        redirectLogin({
+                            type: 0,
+                            storeurl: false
+                        })
                     } 
                 } catch (err) { }
+            }
+        },
+        {
+            name: "logoutSuccess",
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    user: {},
+                    auth: []
+                };
             }
         },
         {
@@ -64,7 +78,7 @@ const model = {
                     if (res.data) {
                         yield put(actions("loginSuccess")(res.data));
                     } else {
-                        // yield put(replace("/login"));
+                        yield put(replace("/leaseApply"));
                     }
                 } catch (err) { }
             }

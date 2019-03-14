@@ -21,7 +21,7 @@ export default class Content extends Component {
                                 />
                             );
                         })}
-                        <Redirect exact path="/" to="/home" />
+                        <Redirect exact path="/" to="/leaseApply" />
                         <Redirect to="/404" />
                     </Switch>
                 </div>
