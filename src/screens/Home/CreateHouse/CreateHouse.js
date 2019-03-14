@@ -19,6 +19,7 @@ class FormCreate extends React.Component{
         previewVisible: false,
         previewImage: '',
         fileList: [],
+        files: [],
     }
     ImgOnClick = (file) => {
         this.setState({ icon: file })
@@ -31,12 +32,21 @@ class FormCreate extends React.Component{
         previewVisible: true,
         });
     }
-    handleChange = ({ fileList }) => this.setState({ fileList })
+    handleChange = ({fileList}) => {
+        let files = []
+        for(let i=0;i<fileList.length;i++){
+            files[i] = fileList[i].originFileObj
+        }
+        this.setState( {fileList, files} );
+    }
+    beforeUpload = (file) => {
+        return false
+    }
 
     handleSubmit = (e) => {  
         e.preventDefault();
         let { icon } = this.state
-        let { fileList } = this.state
+        let { files } = this.state
         this.props.form.validateFields((err, fieldsValue) => {
             if (err) {
                 return
@@ -44,10 +54,12 @@ class FormCreate extends React.Component{
             fieldsValue.planePhoto = icon
             if(JSON.stringify(fieldsValue.planePhoto) === 'null'){
                 this.openNotification()
-            }else if(fileList==''){
+            }else if(files==''){
                 this.openNotification()
             }else{
-                fieldsValue.realityPhoto = fileList
+                // fieldsValue.realityPhoto = fileList
+                fieldsValue.filesName = 'realityPhoto'
+                fieldsValue.filesList = files
                 fieldsValue.buildingId = this.props.Ids
                 this.props.addHouse(fieldsValue)
             }
@@ -61,6 +73,21 @@ class FormCreate extends React.Component{
           duration: 2,
           icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
         });
+    };
+    验证手机号
+    checkAccount = (rule, value, callback) => {
+      //正则用//包起来
+      var regex = /^((\+)?86|((\+)?86)?)0?1[3458]\d{9}$/; 
+      if (value) {
+        //react使用正则表达式变量的test方法进行校验，直接使用value.match(regex)显示match未定义
+        if (regex.test(value)) { 
+          callback();
+        } else { 
+          callback('请输入正确的手机号码！');
+        }
+      } else {
+        //这里的callback函数会报错
+      }
     };
     render(){
         const { getFieldDecorator } = this.props.form;
@@ -175,7 +202,7 @@ class FormCreate extends React.Component{
                             <Col span={12}>
                                 <FormItem {...formItemLayout} label="类型：" >
                                     {getFieldDecorator('houseType', {
-                                        rules: [{  required: true, message: '请选择标题', }],
+                                        rules: [{  required: true, message: '请选择类型', }],
                                     })(
                                         <Select style={{ width:'350px' }}>
                                             {/* <Option value="">全部</Option> */}
@@ -191,7 +218,7 @@ class FormCreate extends React.Component{
                             <Col span={11}>
                                 <FormItem {...formItemLayout} label="房间价格(元/月)：" >
                                     {getFieldDecorator('housePrice', {
-                                        rules: [{  required: true, message: '请输入标题', }],
+                                        rules: [{  required: true, message: '请输入房间价格', }],
                                     })(
                                         <Input className={styles.inputStyle2} />
                                     )} 
@@ -202,7 +229,7 @@ class FormCreate extends React.Component{
                             <Col span={12}>
                                 <FormItem {...formItemLayout} label="状态：" >
                                     {getFieldDecorator('houseStatus', {
-                                        rules: [{  required: true, message: '请选择标题', }],
+                                        rules: [{  required: true, message: '请选择状态', }],
                                     })(
                                         <Select style={{ width:'350px' }}>
                                             {/* <Option value="">全部</Option> */}
@@ -217,7 +244,7 @@ class FormCreate extends React.Component{
                             <Col span={11}>
                                 <FormItem {...formItemLayout} label="公摊面积(㎡)：" >
                                     {getFieldDecorator('pooledArea', {
-                                        rules: [{  required: true, message: '请输入标题', }],
+                                        rules: [{  required: true, message: '请输入公摊面积', }],
                                     })(
                                         <Input className={styles.inputStyle2} />
                                     )} 
@@ -228,21 +255,21 @@ class FormCreate extends React.Component{
                             <Col span={12}>
                                 <FormItem {...formItemLayout} label="负责人：" >
                                     {getFieldDecorator('leader', {
-                                        rules: [{  required: true, message: '请输入标题', }],
+                                        rules: [{  required: true, message: '请输入负责人', }],
                                     })(
                                         <Input className={styles.inputStyle2} />
                                     )} 
                                 </FormItem>
                                 <FormItem {...formItemLayout} label="联系方式：" >
                                     {getFieldDecorator('telephone', {
-                                        rules: [{  required: true, message: '请输入标题', }],
+                                        rules: [{ required: true, message: '请输入联系方式', },{message: this.checkAccount,}],
                                     })(
-                                        <Input className={styles.inputStyle2} />
+                                        <Input className={styles.inputStyle2} onBlur={this.checkAccount} />
                                     )} 
                                 </FormItem>
                                 <FormItem {...formItemLayout} label="邮箱：" >
                                     {getFieldDecorator('email', {
-                                        rules: [{  required: true, message: '请输入标题', }],
+                                        rules: [{ required: true, message: '请输入邮箱', },{ type: 'email', message: '请输入正确的邮箱地址' }],
                                     })(
                                         <Input className={styles.inputStyle2} />
                                     )} 
@@ -251,7 +278,7 @@ class FormCreate extends React.Component{
                             <Col span={11}>
                                 <FormItem {...formItemLayout} label="房源描述：" >
                                     {getFieldDecorator('houseDescribe', {
-                                        rules: [{  required: true, message: '请输入标题', }],
+                                        rules: [{  required: true, message: '请输入房源描述', }],
                                     })(
                                         <TextArea placeholder="请输入备注" autosize={{ minRows: 5, maxRows: 8 }} />
                                     )} 
@@ -271,11 +298,11 @@ class FormCreate extends React.Component{
                                     {getFieldDecorator('realityPhoto')(
                                         <div style={{ width:'100%' }}>
                                             <Upload
-                                                action="//jsonplaceholder.typicode.com/posts/"
                                                 listType="picture-card"
                                                 fileList={fileList}
                                                 onPreview={this.handlePreview}
                                                 onChange={this.handleChange}
+                                                beforeUpload={this.beforeUpload}
                                             >
                                                 {fileList.length >= 4 ? null : uploadButton}
                                             </Upload>
@@ -348,8 +375,13 @@ class CreateHouse extends PureComponent{
                 return
             }
             const rangeValue = fieldsValue['noAndFloor'];
-            const rangeValueId = fieldsValue['buildingId'];
-            this.setState({  noAndFloor: rangeValue, buildingId: rangeValueId });
+            let num = 0
+            for(let i=0;i<this.props.buildingNo;i++){
+                if(this.props.buildingNo[i]===rangeValue){
+                    num = i
+                }
+            }
+            this.setState({  noAndFloor: rangeValue, buildingId: this.props.buildingNo[num].buildingId });
         });
         this.setState({  updateVisible: false, });
     }
@@ -453,19 +485,24 @@ class CreateHouse extends PureComponent{
                     <div className={styles.stepscontent}>
                         {this.divUpToDiv(current)}
                     </div>
-                    <div className="steps-action">
+                    <div className="steps-action" style={{ width: '30%', marginLeft: '70%', marginTop:'10px' }}>
+                        {
+                        current > 0
+                        && (<Button onClick={() => this.prev()}>上一步</Button>)
+                        }
+                        {
+                        current === 0
+                        && (<Button disabled >上一步</Button>)
+                        }
                         {
                         current < steps.length - 1
-                        && <Button type="primary" onClick={() => this.next(current)}>下一步</Button>
+                        && <Button type="primary" style={{ marginLeft: 8 }} onClick={() => this.next(current)}>下一步</Button>
                         }
                         {
                         current === steps.length - 1
-                        && <Button type="primary" onClick={ this.handleSubmit3 }>完成</Button>
+                        && <Button type="primary" style={{ marginLeft: 8 }} onClick={ this.handleSubmit3 }>完成</Button>
                         }
-                        {
-                        current > 0
-                        && (<Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>上一步</Button>)
-                        }
+                        
                     </div>
                 </Modal>
             </div>

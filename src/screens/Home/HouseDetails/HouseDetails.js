@@ -9,7 +9,6 @@ import styles from '../index.module.css'
 import { black } from 'ansi-colors';
 
 const {  RangePicker } = DatePicker;
-
 const Option = Select.Option;
 const FormItem = Form.Item;
 
@@ -27,7 +26,7 @@ class HouseDetails extends Component{
         let houseId = this.props.match.params.id2
         this.setState({  houseId: houseId, });
         //获取详情
-        this.props.getHouseDetail({buildingId:buildingId, houseId:houseId, photoWidth:'100', photoHeight:'100'})
+        this.props.getHouseDetail({ houseId:houseId})
         //租赁管理-租赁房源(详情)-租客记录List
         this.props.getRenterRecordList({ houseId:houseId })
     }
@@ -132,7 +131,7 @@ class HouseDetails extends Component{
             key: 'action',
             render: (text, record) => (
                 <span>
-                  <UpdateTenantButton UpdateTenantId={record.houseId} />
+                  <UpdateTenantButton updateRenterInfo={this.props.updateRenterInfo} applyId={record.applyId} applyUserName={record.applyUserName} phonenums={record.phonenums} emails={record.emails} />
                 </span>
               ),
           }];
@@ -201,7 +200,7 @@ class HouseDetails extends Component{
                                     )}
                                 </Form.Item>
                                 <Form.Item>
-                                    {getFieldDecorator('enterStatus')(
+                                    {getFieldDecorator('leaseStatus')(
                                         <Select style={{width:'300px'}} placeholder='入驻状态'>
                                             <Option value="0">未入驻</Option>
                                             <Option value="1">入驻中</Option>
@@ -212,8 +211,8 @@ class HouseDetails extends Component{
                                 </Form.Item>
                                 <Form.Item style={{marginLeft:'15%', }}>
                                     <div style={{  display:'flex',flexDirection:'row', }}>
-                                        <AddTenantButton typeStr={houseStatus==='待租' ? false:true} addRenters={this.props.addRenter} houseId={this.state.houseId} 
-                                        buildingName={buildingName} buildingNo={buildingNo} houseNo={houseNo} floorLevel={floorLevel}/>
+                                        {/* <AddTenantButton typeStr={houseStatus==='待租' ? false:true} addRenters={this.props.addRenter} houseId={this.state.houseId} 
+                                        buildingName={buildingName} buildingNo={buildingNo} houseNo={houseNo} floorLevel={floorLevel}/> */}
                                         <Button htmlType="submit" type='primary' icon="search" style={{marginLeft:'15px'}}>查询</Button>
                                         <Button style={{marginLeft:'15px'}} onClick={this.resetTable}>重置</Button>
                                     </div>
@@ -266,6 +265,104 @@ class HouseDetails extends Component{
     }
 }
 export default Form.create()(HouseDetails)
+
+//修改租客信息
+class UpdateTenant extends React.Component {
+    state = { 
+        updateVisible: false,
+    };
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, fieldsValue) => {
+            if (err) {
+                return
+            }
+            const values = { 
+                ...fieldsValue,
+                applyId: this.props.applyId,
+            }
+            console.log(values)
+            this.props.updateRenterInfo(values)
+            this.setState({  updateVisible: false, });
+        });
+    }
+    queryRepairs = (data) => {
+        this.props.search2(data)
+    }
+    
+    // 修改弹出表单方法
+    updateShowModal = () => {
+        this.setState({  updateVisible: true, });
+    }
+
+    updateHandleOk = (e) => {
+        this.setState({  updateVisible: false, });
+    }
+
+    updateHandleCancel = (e) => {
+        this.setState({  updateVisible: false, });
+    }
+
+  
+    render() {
+        const { getFieldDecorator } = this.props.form;
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 4 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 16 },
+            },
+        }
+        return (
+            <div>
+                <Link to={{ }} onClick={this.updateShowModal}>修改</Link>
+                <Modal
+                    title="租客信息修改"
+                    visible={this.state.updateVisible}
+                    onOk={this.handleSubmit}
+                    onCancel={this.updateHandleCancel}
+                >
+                    <Form onSubmit={this.handleSubmit}>
+                        <Form.Item {...formItemLayout} label='联系人：'>
+                            {getFieldDecorator('applyUserName',{
+                                rules: [{  required: true, message: '请输入联系人', }],
+                            })(
+                                <Input placeholder='请输入'/>
+                            )}
+                        </Form.Item>
+                        <Form.Item {...formItemLayout} label='联系方式：'>
+                            {getFieldDecorator('phonenums',{
+                                rules: [{  required: true, message: '请输入联系方式', }],
+                            })(
+                                <Input placeholder='请输入'/>
+                            )}
+                        </Form.Item>
+                        <Form.Item {...formItemLayout} label='邮箱'>
+                            {getFieldDecorator('emails',{
+                                rules: [{  required: true, message: '请输入邮箱', }],
+                            })(
+                                <Input placeholder='请输入'/>
+                            )}
+                        </Form.Item>
+                    </Form>
+                </Modal>
+            </div>
+        )
+    }
+}
+const UpdateTenantButton = Form.create({
+    mapPropsToFields(props) {
+        return {
+            applyUserName: Form.createFormField({  value: props.applyUserName,  }),
+            phonenums: Form.createFormField({  value: props.phonenums,  }),
+            emails: Form.createFormField({  value: props.emails,  }),
+        };
+    }
+})(UpdateTenant)
 
 //新增租客信息
 class AddTenant extends React.Component {
@@ -388,71 +485,3 @@ class AddTenant extends React.Component {
 }
 const AddTenantButton = Form.create()(AddTenant)
 
-//修改租客信息
-class UpdateTenant extends React.Component {
-    state = { 
-        updateVisible: false,
-    };
-
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.form.validateFields((err, fieldsValue) => {
-            if (err) {
-                return
-            }
-            const values = { 
-                ...fieldsValue,
-            }
-            console.log(values)
-            this.queryRepairs(values)
-        });
-    }
-    queryRepairs = (data) => {
-        this.props.search2(data)
-    }
-    
-    // 修改弹出表单方法
-    updateShowModal = () => {
-        this.setState({  updateVisible: true, });
-        console.log(this.props.UpdateTenantId)
-    }
-
-    updateHandleOk = (e) => {
-        this.setState({  updateVisible: false, });
-    }
-
-    updateHandleCancel = (e) => {
-        this.setState({  updateVisible: false, });
-    }
-
-  
-    render() {
-        const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        }
-        return (
-            <div>
-                <Link to={{ }} onClick={this.updateShowModal}>修改</Link>
-                <Modal
-                    title="租客信息修改"
-                    visible={this.state.updateVisible}
-                    onOk={this.updateHandleOk}
-                    onCancel={this.updateHandleCancel}
-                >
-                    <p>{this.props.UpdateTenantId}</p>
-                    <p>Some contents...</p>
-                    <p>Some contents...</p>
-                </Modal>
-            </div>
-        )
-    }
-}
-const UpdateTenantButton = Form.create()(UpdateTenant)

@@ -55,7 +55,7 @@ export default class LeaseApplyDetiles extends PureComponent {
                                 <p>朝向：{orientation}</p>
                                 <p>类型：{houseType}</p>
                                 <p>状态：{houseStatus}</p>
-                                <Button type='primary' size="large"><Link to={`/submitApply/${houseId}/${houseName}`}>申请入驻</Link></Button>
+                                <Button type='primary' size="large"><Link to={`/submitApply/${houseId}/${houseName}/${housePrice}`}>申请入驻</Link></Button>
                             </div>
                         </div>
                         <Card

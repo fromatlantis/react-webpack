@@ -83,7 +83,7 @@ const routes = [
         path: '/leaseHouseDetails/:id/:id2', 
         component: LeaseHouseDetails,
     },{
-        path: '/submitApply/:id/:name', 
+        path: '/submitApply/:id/:name/:rentPrice', 
         component: SubmitApply,
     },{
         path: '/approvalApply/:id', 

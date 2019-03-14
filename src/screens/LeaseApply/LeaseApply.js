@@ -34,7 +34,6 @@ class LeaseApply extends PureComponent {
         console.log('parms====>')
         console.log(parms)
         return parms
-
     }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -61,6 +60,8 @@ class LeaseApply extends PureComponent {
     getParkId(num){
         this.setState({  id:num })
         this.props.getBuildingsByPark(num)
+        let parms = this.formParms();
+        this.props.getRentalLists(parms);
     }
     getParkId2(num){
         this.setState({  buildingName:num })
@@ -78,11 +79,11 @@ class LeaseApply extends PureComponent {
                 </Card> */}
                 <div>
                     <div>
-                        <ListClick data={this.props.allParks} getId={(id)=>this.getParkId(id)} title='所属园区：'/>
+                        <ListClick data={this.props.allParks} getId={(id, name)=>this.getParkId(id)} title='所属园区：'/>
                     </div>
                     <Divider dashed />
                     <div>
-                        <ListClick data={this.props.buildingsByPark} getId={(id)=>this.getParkId2(id)} title='所属楼宇：'/>
+                        <ListClick data={this.props.buildingsByPark} getId={(id,name)=>this.getParkId2(name)} title='所属楼宇：'/>
                     </div>
                     <Divider dashed />
                     <Form layout='inline' onSubmit={this.handleSubmit}>

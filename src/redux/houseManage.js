@@ -194,7 +194,7 @@ const model = {
                     contentType: "multipart/form-data",
                     data: action.payload
                 });
-                if(res.data){
+                if(res.code===1000){
                     yield put(actions('addHouseInfoSuccess')(res.data));
                     yield put(goBack()); 
                 }
@@ -239,7 +239,7 @@ const model = {
                     contentType: "multipart/form-data",
                     data: action.payload
                 });
-                if(res.data){
+                if(res.code===1000){
                     yield put(actions('updateHouseInfoSuccess')(res.data));
                     yield put(goBack()); 
                 }
@@ -342,6 +342,22 @@ const model = {
         },{ 
             name: "getBuildingNoSuccess",
             reducer: 'buildingNo',
+        },{   //修改租客信息
+            name:"updateRenterInfo",
+            *effect(action){
+                const res = yield call(request,{
+                    type: 'post',
+                    url: '/asset/updateRenterInfo',
+                    contentType: "multipart/form-data",
+                    data: action.payload
+                });
+                if(res.code===1000){
+                    yield put(actions('updateRenterInfoSuccess')(res.data));
+                    yield put(actions('getRenterRecordList')({pageNo:1,pageSize:10}));
+                }
+            }
+        },{ 
+            name: "updateRenterInfoSuccess",
         },
     ],
 };
