@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Input, Form, Modal, Button } from 'antd'
+import { Input, Form, Modal, Col, Row, } from 'antd'
 import styles from '../index.module.css'
 import { Link } from 'react-router-dom'
 import PropTypes from "prop-types";
@@ -37,6 +37,13 @@ class UpdateBuilding extends PureComponent {
     handleCancel = () => {
         this.setState({  addVisible: false, });
     }
+    checkPrice = (rule, value, callback) => {
+        if ( value==='' ||  value > 0) {
+          callback();
+          return;
+        }
+        callback('请输入正确的值！');
+    }
 
     render() {
         const { addVisible } = this.state;
@@ -63,71 +70,112 @@ class UpdateBuilding extends PureComponent {
                     onCancel={this.handleCancel}
                     maskClosable='true'
                     okText='保存'
+                    width='800px'
                 >
                     <Form onSubmit={this.handleSubmit} style={{marginRight:'40px'}}>
-                        <FormItem {...formItemLayout} label="楼栋名称:" >
-                            {getFieldDecorator('buildingName', {
-                                rules: [{  required: true, message: '请输入楼栋名称', }],
-                            })(
-                                <Input className={styles.inputStyle} />
-                            )} 
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="楼栋编号:" >
-                            {getFieldDecorator('buildingNo', {
-                                rules: [{  required: true, message: '请输入楼栋编号', }],
-                            })(
-                                <Input className={styles.inputStyle} />
-                            )} 
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="楼层数:" >
-                            {getFieldDecorator('floor', {
-                                rules: [{  required: true, message: '请输入楼层数', }],
-                            })(
-                                <Input className={styles.inputStyle} />
-                            )} 
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="地址:" >
-                            {getFieldDecorator('location', {
-                                rules: [{  required: true, message: '请输入地址', }],
-                            })(
-                                <Input className={styles.inputStyle} />
-                            )} 
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="建筑面积(㎡)：" >
-                            {getFieldDecorator('buildingArea', {
-                                rules: [{  required: true, message: '请输入建筑面积', }],
-                            })(
-                                <Input className={styles.inputStyle} />
-                            )} 
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="使用面积(㎡)：" >
-                            {getFieldDecorator('useArea', {
-                                rules: [{  required: true, message: '请输入使用面积', }],
-                            })(
-                                <Input className={styles.inputStyle} />
-                            )} 
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="租赁面积(㎡)：" >
-                            {getFieldDecorator('rentArea', {
-                                rules: [{  required: true, message: '请输入租赁面积', }],
-                            })(
-                                <Input className={styles.inputStyle} />
-                            )} 
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="楼宇介绍:" >
-                            {getFieldDecorator('buildingIntro', {
-                                rules: [{  required: true, message: '请输入楼宇介绍', }],
-                            })(
-                                <TextArea placeholder="请输入介绍" autosize={{ minRows: 2, maxRows: 6 }} />
-                            )} 
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="交通说明:" >
-                            {getFieldDecorator('trafficState', {
-                                rules: [{  required: true, message: '请输入交通说明', }],
-                            })(
-                                <TextArea placeholder="请输入介绍" autosize={{ minRows: 2, maxRows: 6 }} />
-                            )} 
-                        </FormItem>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <FormItem {...formItemLayout} label="楼栋名称:" >
+                                    {getFieldDecorator('buildingName', {
+                                        rules: [{  required: true, message: '请输入楼栋名称', }],
+                                    })(
+                                        <Input disabled className={styles.inputStyle} />
+                                    )} 
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem {...formItemLayout} label="楼栋编号:" >
+                                    {getFieldDecorator('buildingNo', {
+                                        rules: [{  required: true, message: '请输入楼栋编号', }],
+                                    })(
+                                        <Input disabled className={styles.inputStyle} />
+                                    )} 
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <FormItem {...formItemLayout} label="楼层数:" >
+                                    {getFieldDecorator('floor', {
+                                        rules: [{  required: true, message: '请输入楼层数', }],
+                                    })(
+                                        <Input disabled className={styles.inputStyle} />
+                                    )} 
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem {...formItemLayout} label="地址:" >
+                                    {getFieldDecorator('location', {
+                                        rules: [{  required: true, message: '请输入地址', }],
+                                    })(
+                                        <Input className={styles.inputStyle} />
+                                    )} 
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <FormItem {...formItemLayout} label="建筑面积(㎡)：" >
+                                    {getFieldDecorator('buildingArea', {
+                                        rules: [{  required: true, message: '请输入建筑面积', },{ validator: this.checkPrice }],
+                                    })(
+                                        <Input className={styles.inputStyle} />
+                                    )} 
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem {...formItemLayout} label="使用面积(㎡)：" >
+                                    {getFieldDecorator('useArea', {
+                                        rules: [{  required: true, message: '请输入使用面积', },{ validator: this.checkPrice }],
+                                    })(
+                                        <Input className={styles.inputStyle} />
+                                    )} 
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <FormItem {...formItemLayout} label="租赁面积(㎡)：" >
+                                    {getFieldDecorator('rentArea', {
+                                        rules: [{  required: true, message: '请输入租赁面积', },{ validator: this.checkPrice }],
+                                    })(
+                                        <Input className={styles.inputStyle} />
+                                    )} 
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                            
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <FormItem {...formItemLayout} label="楼宇介绍:" >
+                                    {getFieldDecorator('buildingIntro', {
+                                        rules: [{  required: true, message: '请输入楼宇介绍', }],
+                                    })(
+                                        <TextArea placeholder="请输入介绍" autosize={{ minRows: 2, maxRows: 6 }} />
+                                    )} 
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem {...formItemLayout} label="交通说明:" >
+                                    {getFieldDecorator('trafficState', {
+                                        rules: [{  required: true, message: '请输入交通说明', }],
+                                    })(
+                                        <TextArea placeholder="请输入介绍" autosize={{ minRows: 2, maxRows: 6 }} />
+                                    )} 
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                     </Form>
                 </Modal>
             </div>

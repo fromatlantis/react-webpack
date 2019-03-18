@@ -2,10 +2,11 @@
  * 租赁申请==>房间详情
  */
 import React, { PureComponent } from 'react'
-import { Card,Button,Tabs,Carousel } from 'antd';
+import { Card,Button,Tabs,Carousel,Icon } from 'antd';
 import { Link } from 'react-router-dom'
 import styles from './LeaseApplyDetiles.module.css'
 import avatar from '../../../assets/avatar.png';
+import CarouselM from '../../../components/CarouselM/CarouselM'
 
 export default class LeaseApplyDetiles extends PureComponent {
     state = {
@@ -14,11 +15,11 @@ export default class LeaseApplyDetiles extends PureComponent {
     }
     //生命周期
     componentDidMount = ()=>{
-        let buildingId = this.props.match.params.id
-        let houseId = this.props.match.params.id2
+        let houseId = this.props.match.params.id
         //获取详情
-        this.props.getHouseDetail({buildingId:buildingId, houseId:houseId, photoWidth:'100', photoHeight:'100'})
+        this.props.getHouseDetail({houseId:houseId})
     }
+
     render() {
         const { buildingArea, buildingName, buildingNo, email, floorLevel, houseDescribe,
             houseId, houseNo, housePrice, houseStatus, houseType, leader, orientation, planePhoto,
@@ -34,18 +35,12 @@ export default class LeaseApplyDetiles extends PureComponent {
                 <Card bordered={false} style={{ width:'100%' }} bodyStyle={{ padding:'10px 20px', }}>
                     <Link to={`/leaseApply`}>租赁管理/租赁申请/房间详情</Link>
                 </Card>
-                <Card bordered={false} 
-                    // title={<h3 style={{display:'inline',marginRight:15}}>{buildingName}  {buildingNo}座  {floorLevel}楼  {houseNo}室</h3>}
+                <Card bordered={false}
                     title={<h3 style={{display:'inline',marginRight:15}}>{houseName}</h3>}
                 >
                     <div style={{display:'flex',flexDirection:'row',fontSize:15,paddingLeft:'20px'}}>
-                        <div style={{width:'42%'}}>
-                        <Carousel autoplay>
-                            { realityPhoto && realityPhoto.map((item,i) => {
-                                return <img key={i} src={item} height='400px' alt=''/>
-                            }) }
-                        </Carousel>
-                        </div>
+                        <CarouselM CarouselMDetail={ this.props.houseDetail.realityPhoto } />
+
                         <div style={{width:'27%',paddingLeft:'2%'}}>
                             <div className={styles.imgRight}>
                                 <p style={{ fontSize: '40px', color: 'red' }}>{housePrice}元/月</p>

@@ -13,11 +13,7 @@ const { RangePicker } = DatePicker;
 
 class SubmitApply extends PureComponent {
     state = {
-        valueStr: 0,
-        //上传照片
-        // previewVisible: false,
-        // previewImage: '',
-        // fileList: [],
+        valueStr: '1',
         //上传身份证
         iconZ: null,
         iconF: null,
@@ -37,15 +33,6 @@ class SubmitApply extends PureComponent {
     ImgOnClickY = (file) => {
         this.setState({  iconY: file })
     }
-    //上传图片方法
-    // handleCancel = () => this.setState({ previewVisible: false })
-    // handlePreview = (file) => {
-    //     this.setState({
-    //     previewImage: file.url || file.thumbUrl,
-    //     previewVisible: true,
-    //     });
-    // }
-    // handleChange = ({ fileList }) => this.setState({ fileList })
     //客户类型改变
     changeCustomerType = (value) => {
         this.setState({ valueStr:value })
@@ -123,14 +110,17 @@ class SubmitApply extends PureComponent {
             let rangeValueEnd = rangeValue[1].format('YYYY-MM-DD HH:mm:ss')
             //客户类型
             let customerTypee = fieldsValue['customerType'];
+            let companynoo = ''
             if(customerTypee==='1'){
                 customerTypee = 'personal'
             }else{
                 customerTypee = 'company'
+                companynoo = this.props.companyMessages[0].companyno
             }
             const values = {
                 ...fieldsValue,
                 customerType: customerTypee,
+                companyno: companynoo,
                 houseId: this.props.match.params.id,
                 rentPrice: this.props.match.params.rentPrice,
                 beginEndDate: '',
@@ -172,14 +162,6 @@ class SubmitApply extends PureComponent {
                 sm: { span: 16 },
             },
         }
-        //上传图片属性
-        // const { previewVisible, previewImage, fileList } = this.state;
-        // const uploadButton = (
-        //     <div>
-        //         <Icon type="plus" />
-        //         <div className="ant-upload-text">Upload</div>
-        //     </div>
-        // );
 
         return(
             <div>
@@ -220,8 +202,8 @@ class SubmitApply extends PureComponent {
                                     )}
                                 </Form.Item>
                                 <Form.Item {...formItemLayout} label='客户类型：'>
-                                    {getFieldDecorator('customerType', {
-                                        rules: [{  required: true, message: '请输入客户类型', }],
+                                    {getFieldDecorator('customerType',{initialValue: this.state.valueStr }, {
+                                        rules: [{  required: true, message: '请选择客户类型', }],
                                     })(
                                         <Select style={{width:'400px'}} placeholder='类型' onChange={this.changeCustomerType}>
                                             <Option value="1">个人</Option>
@@ -231,14 +213,15 @@ class SubmitApply extends PureComponent {
                                 </Form.Item>
                                 <Form.Item {...formItemLayout} label='联系电话：'>
                                     {getFieldDecorator('phoneNums', {
-                                        rules: [{  required: true, message: '请输入联系电话', }],
+                                        rules: [{  required: true, message: '请输入联系电话', },
+                                            {pattern:/^1[3,4,5,7,8]\d{9}$|^(\d{3,4}-)?\d{7,8}$/,message:'请输入正确的联系方式！'}],
                                     })(
                                         <Input style={{width:'400px'}} placeholder='请输入'/>
                                     )}
                                 </Form.Item>
                                 <Form.Item {...formItemLayout} label='邮箱：'>
                                     {getFieldDecorator('emails', {
-                                        rules: [{  required: true, message: '请输入邮箱', },{ type: 'email', message: '请输入正确的邮箱地址' }],
+                                        rules: [{  required: true, message: '请输入邮箱', },{ type: 'email', message: '请输入正确的邮箱地址！' }],
                                     })(
                                         <Input style={{width:'400px'}} placeholder='请输入'/>
                                     )}
@@ -256,7 +239,9 @@ class SubmitApply extends PureComponent {
                         </Row>
                         <Form.Item style={{marginLeft:'15%'}}>
                             <Button htmlType="submit" type='primary'>提交</Button>
-                            <Button style={{marginLeft:'15px'}}>取消</Button>
+                            <Button style={{marginLeft:'15px'}}>
+                                <Link to={{ pathname: `/leaseApplyDetiles/${this.props.match.params.id}`}}>取消</Link>
+                            </Button>
                         </Form.Item>
                     </Form>
                 </Card>

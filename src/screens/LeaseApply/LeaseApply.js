@@ -136,7 +136,7 @@ class LeaseApply extends PureComponent {
                             <List.Item
                                 extra={<span style={{ fontSize: 30, color: 'red', fontWeight: 'bold' }}>{item.housePrice}元/月</span>}
                             >
-                                <Link to={`/leaseApplyDetiles/${item.buildingId}/${item.houseId}`}>
+                                <Link to={`/leaseApplyDetiles/${item.houseId}`}>
                                     <div className={styles.contentItem}>
                                         <img src={item.realityPhoto.split(',')[0]} width='200px' height='130px' alt=''/>
                                         <div className={styles.imgRight}>

@@ -73,6 +73,14 @@ class Home extends PureComponent {
             this.props.updateProjectInfo(values)
         })
     }
+    //数值校验
+    checkPrice = (rule, value, callback) => {
+        if ( value==='' ||  value > 0) {
+          callback();
+          return;
+        }
+        callback('请输入正确的值！');
+    }
 
     render() {
 
@@ -278,41 +286,55 @@ class Home extends PureComponent {
                     <Form onSubmit={this.handleSubmit} style={{marginRight:'40px'}}>
                         <FormItem {...formItemLayout} label="项目名称：" >
                             {getFieldDecorator('projectName')(
-                                <Input disabled={this.state.disabledStr} className={styles.inputStyle} />
+                                <Input disabled className={styles.inputStyle} />
                             )} 
                         </FormItem>
                         <FormItem {...formItemLayout} label="项目地址：" >
-                            {getFieldDecorator('projectAddress',{initialValue: projectAddress })(
+                            {getFieldDecorator('projectAddress', {
+                                rules: [{  required: true, message: '请输入项目地址', }],
+                            })(
                                 <Input disabled={this.state.disabledStr} className={styles.inputStyle} />
                             )} 
                         </FormItem>
-                        <FormItem {...formItemLayout} label="运营公司" >
-                            {getFieldDecorator('runCompany')(
+                        <FormItem {...formItemLayout} label="运营公司：" >
+                            {getFieldDecorator('runCompany', {
+                                rules: [{  required: true, message: '请输入运营公司', }],
+                            })(
                                 <Input disabled={this.state.disabledStr} className={styles.inputStyle} />
                             )} 
                         </FormItem>
                         <FormItem {...formItemLayout} label="物业公司：" >
-                            {getFieldDecorator('estateCompany')(
+                            {getFieldDecorator('estateCompany', {
+                                rules: [{  required: true, message: '请输入物业公司', }],
+                            })(
                                 <Input disabled={this.state.disabledStr} className={styles.inputStyle} />
                             )} 
                         </FormItem>
                         <FormItem {...formItemLayout} label="建筑面积(㎡)：" >
-                            {getFieldDecorator('buildingArea')(
+                            {getFieldDecorator('buildingArea', {
+                                rules: [{  required: true, message: '请输入建筑面积', },{ validator: this.checkPrice }],
+                            })(
                                 <Input disabled={this.state.disabledStr} className={styles.inputStyle} />
                             )} 
                         </FormItem>
                         <FormItem {...formItemLayout} label="使用面积(㎡)：" >
-                            {getFieldDecorator('useArea')(
+                            {getFieldDecorator('useArea', {
+                                rules: [{  required: true, message: '请输入使用面积', },{ validator: this.checkPrice }],
+                            })(
                                 <Input disabled={this.state.disabledStr} className={styles.inputStyle} />
                             )} 
                         </FormItem>
                         <FormItem {...formItemLayout} label="租赁面积(㎡)：" >
-                            {getFieldDecorator('rentArea')(
+                            {getFieldDecorator('rentArea', {
+                                rules: [{  required: true, message: '请输入租赁面积', },{ validator: this.checkPrice }],
+                            })(
                                 <Input disabled={this.state.disabledStr} className={styles.inputStyle} />
                             )} 
                         </FormItem>
                         <FormItem {...formItemLayout} label="楼栋数量：" >
-                            {getFieldDecorator('buildingCount')(
+                            {getFieldDecorator('buildingCount', {
+                                rules: [{  required: true, message: '请输入楼栋数量', },{ validator: this.checkPrice }],
+                            })(
                                 <Input disabled={this.state.disabledStr} className={styles.inputStyle} />
                             )} 
                         </FormItem>
@@ -383,7 +405,6 @@ class Search1 extends React.Component {
                 sm: { span: 16 },
             },
         }
-
         return (
             <div>
                 <Form onSubmit={this.handleSubmit1} layout="inline">
@@ -484,7 +505,7 @@ class Search2 extends React.Component {
                             <Option value="1">商铺</Option>
                             <Option value="2">住宅</Option>
                             <Option value="3">厂房</Option>
-                            <Option value="45">其他</Option>
+                            <Option value="4">其他</Option>
                             <Option value="5">全部</Option>
                         </Select>
                     )} 

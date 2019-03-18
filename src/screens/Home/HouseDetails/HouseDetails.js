@@ -209,7 +209,7 @@ class HouseDetails extends Component{
                                         </Select>
                                     )} 
                                 </Form.Item>
-                                <Form.Item style={{marginLeft:'15%', }}>
+                                <Form.Item style={{marginLeft:'40%', }}>
                                     <div style={{  display:'flex',flexDirection:'row', }}>
                                         {/* <AddTenantButton typeStr={houseStatus==='待租' ? false:true} addRenters={this.props.addRenter} houseId={this.state.houseId} 
                                         buildingName={buildingName} buildingNo={buildingNo} houseNo={houseNo} floorLevel={floorLevel}/> */}

@@ -45,8 +45,7 @@ class FormCreate extends React.Component{
 
     handleSubmit = (e) => {  
         e.preventDefault();
-        let { icon } = this.state
-        let { files } = this.state
+        let { icon, files } = this.state
         this.props.form.validateFields((err, fieldsValue) => {
             if (err) {
                 return
@@ -74,21 +73,13 @@ class FormCreate extends React.Component{
           icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
         });
     };
-    验证手机号
-    checkAccount = (rule, value, callback) => {
-      //正则用//包起来
-      var regex = /^((\+)?86|((\+)?86)?)0?1[3458]\d{9}$/; 
-      if (value) {
-        //react使用正则表达式变量的test方法进行校验，直接使用value.match(regex)显示match未定义
-        if (regex.test(value)) { 
+    checkPrice = (rule, value, callback) => {
+        if ( value==='' ||  value > 0) {
           callback();
-        } else { 
-          callback('请输入正确的手机号码！');
+          return;
         }
-      } else {
-        //这里的callback函数会报错
-      }
-    };
+        callback('请输入正确的值！');
+    }
     render(){
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -117,210 +108,211 @@ class FormCreate extends React.Component{
         return (
             <div>
                 <Form onSubmit={this.handleSubmit} style={{marginRight:'50px'}}>
-                         <Row gutter={16}>
-                             <Col span={12}>
-                                 <FormItem {...formItemLayout} label="楼栋名称：" >
-                                     {getFieldDecorator('buildingName', {
-                                        rules: [{  required: true, message: '请输入楼栋名称', }],
-                                    })(
-                                        <Input disabled className={styles.inputStyle2} />
-                                    )} 
-                                </FormItem>
-                            </Col>
-                            <Col span={11}>
-                                <FormItem {...formItemLayout} label="楼栋编号：" >
-                                    {getFieldDecorator('buildingNo', {
-                                        rules: [{  required: true, message: '请输入楼栋编号', }],
-                                    })(
-                                        <Input disabled className={styles.inputStyle2} />
-                                    )} 
-                                </FormItem>
-                            </Col>
-                        </Row>
-                         <Row gutter={16}>
-                             <Col span={12}>
-                                 <FormItem {...formItemLayout} label="楼层数：" >
-                                     {getFieldDecorator('floorLevel', {
-                                        rules: [{  required: true, message: '请选择楼层数', }],
-                                    })(
-                                        // <Input className={styles.inputStyle2} />
-                                        <Select style={{ width:'350px' }} placeholder='请选择楼层数' >{children}</Select>
-                                    )} 
-                                </FormItem>
-                            </Col>
-                            <Col span={11}>
-                                <FormItem {...formItemLayout} label="房间号：" >
-                                    {getFieldDecorator('houseNo', {
-                                        rules: [{  required: true, message: '请输入房间号', }],
-                                    })(
-                                        <Input className={styles.inputStyle2} />
-                                    )} 
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={16}>
+                    <Row gutter={16}>
                             <Col span={12}>
-                                <FormItem {...formItemLayout} label="租赁面积(㎡)：" >
-                                    {getFieldDecorator('rentArea', {
-                                        rules: [{  required: true, message: '请输入租赁面积', }],
-                                    })(
-                                        <Input className={styles.inputStyle2} />
-                                    )} 
-                                </FormItem>
-                            </Col>
-                            <Col span={11}>
-                                <FormItem {...formItemLayout} label="朝向：" >
-                                    {getFieldDecorator('orientation', {
-                                        rules: [{  required: true, message: '请输入朝向', }],
-                                    })(
-                                        <Input className={styles.inputStyle2} />
-                                    )} 
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={16}>
+                                <FormItem {...formItemLayout} label="楼栋名称：" >
+                                    {getFieldDecorator('buildingName', {
+                                    rules: [{  required: true, message: '请输入楼栋名称', }],
+                                })(
+                                    <Input disabled className={styles.inputStyle2} />
+                                )} 
+                            </FormItem>
+                        </Col>
+                        <Col span={11}>
+                            <FormItem {...formItemLayout} label="楼栋编号：" >
+                                {getFieldDecorator('buildingNo', {
+                                    rules: [{  required: true, message: '请输入楼栋编号', }],
+                                })(
+                                    <Input disabled className={styles.inputStyle2} />
+                                )} 
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
                             <Col span={12}>
-                                <FormItem {...formItemLayout} label="建筑面积(㎡)：" >
-                                    {getFieldDecorator('buildingArea', {
-                                        rules: [{  required: true, message: '请输入建筑面积', }],
-                                    })(
-                                        <Input className={styles.inputStyle2} />
-                                    )} 
-                                </FormItem>
-                            </Col>
-                            <Col span={11}>
-                                <FormItem {...formItemLayout} label="容纳工位：" >
-                                    {getFieldDecorator('workerOne', {
-                                        rules: [{  required: true, message: '请输入容纳工位', }],
-                                    })(
-                                        <Input className={styles.inputStyle2} />
-                                    )} 
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={16}>
-                            <Col span={12}>
-                                <FormItem {...formItemLayout} label="类型：" >
-                                    {getFieldDecorator('houseType', {
-                                        rules: [{  required: true, message: '请选择类型', }],
-                                    })(
-                                        <Select style={{ width:'350px' }}>
-                                            {/* <Option value="">全部</Option> */}
-                                            <Option value="1">写字楼</Option>
-                                            <Option value="2">商铺</Option>
-                                            <Option value="3">住宅</Option>
-                                            <Option value="4">厂房</Option>
-                                            <Option value="5">其他</Option>
-                                        </Select>
-                                    )} 
-                                </FormItem>
-                            </Col>
-                            <Col span={11}>
-                                <FormItem {...formItemLayout} label="房间价格(元/月)：" >
-                                    {getFieldDecorator('housePrice', {
-                                        rules: [{  required: true, message: '请输入房间价格', }],
-                                    })(
-                                        <Input className={styles.inputStyle2} />
-                                    )} 
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={16}>
-                            <Col span={12}>
-                                <FormItem {...formItemLayout} label="状态：" >
-                                    {getFieldDecorator('houseStatus', {
-                                        rules: [{  required: true, message: '请选择状态', }],
-                                    })(
-                                        <Select style={{ width:'350px' }}>
-                                            {/* <Option value="">全部</Option> */}
-                                            <Option value="1">待租</Option>
-                                            <Option value="2">已租</Option>
-                                            <Option value="3">自用</Option>
-                                            <Option value="5">其他</Option>
-                                        </Select>
-                                    )} 
-                                </FormItem>
-                            </Col>
-                            <Col span={11}>
-                                <FormItem {...formItemLayout} label="公摊面积(㎡)：" >
-                                    {getFieldDecorator('pooledArea', {
-                                        rules: [{  required: true, message: '请输入公摊面积', }],
-                                    })(
-                                        <Input className={styles.inputStyle2} />
-                                    )} 
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={16}>
-                            <Col span={12}>
-                                <FormItem {...formItemLayout} label="负责人：" >
-                                    {getFieldDecorator('leader', {
-                                        rules: [{  required: true, message: '请输入负责人', }],
-                                    })(
-                                        <Input className={styles.inputStyle2} />
-                                    )} 
-                                </FormItem>
-                                <FormItem {...formItemLayout} label="联系方式：" >
-                                    {getFieldDecorator('telephone', {
-                                        rules: [{ required: true, message: '请输入联系方式', },{message: this.checkAccount,}],
-                                    })(
-                                        <Input className={styles.inputStyle2} onBlur={this.checkAccount} />
-                                    )} 
-                                </FormItem>
-                                <FormItem {...formItemLayout} label="邮箱：" >
-                                    {getFieldDecorator('email', {
-                                        rules: [{ required: true, message: '请输入邮箱', },{ type: 'email', message: '请输入正确的邮箱地址' }],
-                                    })(
-                                        <Input className={styles.inputStyle2} />
-                                    )} 
-                                </FormItem>
-                            </Col>
-                            <Col span={11}>
-                                <FormItem {...formItemLayout} label="房源描述：" >
-                                    {getFieldDecorator('houseDescribe', {
-                                        rules: [{  required: true, message: '请输入房源描述', }],
-                                    })(
-                                        <TextArea placeholder="请输入备注" autosize={{ minRows: 5, maxRows: 8 }} />
-                                    )} 
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row gutter={16}>
-                            <Col span={12}>
-                                <FormItem {...formItemLayout} label="上传平面图片：">
-                                    {getFieldDecorator('icon')(
-                                        <UploadImg onUpload={this.ImgOnClick} />
-                                    )}
-                                </FormItem>
-                            </Col>
-                            <Col span={11}>
-                                <FormItem {...formItemLayout} label="上传实景图片：">
-                                    {getFieldDecorator('realityPhoto')(
-                                        <div style={{ width:'100%' }}>
-                                            <Upload
-                                                listType="picture-card"
-                                                fileList={fileList}
-                                                onPreview={this.handlePreview}
-                                                onChange={this.handleChange}
-                                                beforeUpload={this.beforeUpload}
-                                            >
-                                                {fileList.length >= 4 ? null : uploadButton}
-                                            </Upload>
-                                            <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                                                <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                                            </Modal>
-                                        </div>
-                                    )}
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <FormItem>
-                            <Button type='primary' htmlType="submit" style={{ marginLeft:'45%' }}>保存</Button>
-                            <Button className={styles.btnStyle} style={{ marginLeft:'5%' }}>
-                                <Link to={{ pathname: "/home"}}>取消</Link>
-                            </Button>
-                        </FormItem>
-                    </Form>
+                                <FormItem {...formItemLayout} label="楼层数：" >
+                                    {getFieldDecorator('floorLevel', {
+                                    rules: [{  required: true, message: '请选择楼层数', }],
+                                })(
+                                    // <Input className={styles.inputStyle2} />
+                                    <Select style={{ width:'350px' }} placeholder='楼层数选定后不可修改' >{children}</Select>
+                                )} 
+                            </FormItem>
+                        </Col>
+                        <Col span={11}>
+                            <FormItem {...formItemLayout} label="房间号：" >
+                                {getFieldDecorator('houseNo', {
+                                    rules: [{  required: true, message: '请输入房间号', }],
+                                })(
+                                    <Input className={styles.inputStyle2} placeholder='房间号添加后不可修改'/>
+                                )} 
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <FormItem {...formItemLayout} label="租赁面积(㎡)：" >
+                                {getFieldDecorator('rentArea', {
+                                    rules: [{  required: true, message: '请输入租赁面积', },{ validator: this.checkPrice }],
+                                })(
+                                    <Input className={styles.inputStyle2} />
+                                )} 
+                            </FormItem>
+                        </Col>
+                        <Col span={11}>
+                            <FormItem {...formItemLayout} label="朝向：" >
+                                {getFieldDecorator('orientation', {
+                                    rules: [{  required: true, message: '请输入朝向', }],
+                                })(
+                                    <Input className={styles.inputStyle2} />
+                                )} 
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <FormItem {...formItemLayout} label="建筑面积(㎡)：" >
+                                {getFieldDecorator('buildingArea', {
+                                    rules: [{  required: true, message: '请输入建筑面积', },{ validator: this.checkPrice }],
+                                })(
+                                    <Input className={styles.inputStyle2} />
+                                )} 
+                            </FormItem>
+                        </Col>
+                        <Col span={11}>
+                            <FormItem {...formItemLayout} label="容纳工位：" >
+                                {getFieldDecorator('workerOne', {
+                                    rules: [{  required: true, message: '请输入容纳工位', },{ validator: this.checkPrice }],
+                                })(
+                                    <Input className={styles.inputStyle2} />
+                                )} 
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <FormItem {...formItemLayout} label="类型：" >
+                                {getFieldDecorator('houseType', {
+                                    rules: [{  required: true, message: '请选择类型', }],
+                                })(
+                                    <Select style={{ width:'350px' }}>
+                                        {/* <Option value="">全部</Option> */}
+                                        <Option value="0">写字楼</Option>
+                                        <Option value="1">商铺</Option>
+                                        <Option value="2">住宅</Option>
+                                        <Option value="3">厂房</Option>
+                                        <Option value="4">其他</Option>
+                                    </Select>
+                                )} 
+                            </FormItem>
+                        </Col>
+                        <Col span={11}>
+                            <FormItem {...formItemLayout} label="房间价格(元/月)：" >
+                                {getFieldDecorator('housePrice', {
+                                    rules: [{  required: true, message: '请输入房间价格', },{ validator: this.checkPrice }],
+                                })(
+                                    <Input className={styles.inputStyle2} />
+                                )} 
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <FormItem {...formItemLayout} label="状态：" >
+                                {getFieldDecorator('houseStatus', {
+                                    rules: [{  required: true, message: '请选择状态', }],
+                                })(
+                                    <Select style={{ width:'350px' }}>
+                                        {/* <Option value="">全部</Option> */}
+                                        <Option value="0">待租</Option>
+                                        <Option value="1">已租</Option>
+                                        <Option value="2">自用</Option>
+                                        <Option value="3">其他</Option>
+                                    </Select>
+                                )} 
+                            </FormItem>
+                        </Col>
+                        <Col span={11}>
+                            <FormItem {...formItemLayout} label="公摊面积(㎡)：" >
+                                {getFieldDecorator('pooledArea', {
+                                    rules: [{  required: true, message: '请输入公摊面积', },{ validator: this.checkPrice }],
+                                })(
+                                    <Input className={styles.inputStyle2} />
+                                )} 
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <FormItem {...formItemLayout} label="负责人：" >
+                                {getFieldDecorator('leader', {
+                                    rules: [{  required: true, message: '请输入负责人', }],
+                                })(
+                                    <Input className={styles.inputStyle2} />
+                                )} 
+                            </FormItem>
+                            <FormItem {...formItemLayout} label="联系方式：" >
+                                {getFieldDecorator('telephone', {
+                                    rules: [{ required: true, message: '请输入联系方式' },
+                                        {pattern:/^1[3,4,5,7,8]\d{9}$|^(\d{3,4}-)?\d{7,8}$/,message:'请输入正确的联系方式！'}],
+                                })(
+                                    <Input className={styles.inputStyle2} />
+                                )} 
+                            </FormItem>
+                            <FormItem {...formItemLayout} label="邮箱：" >
+                                {getFieldDecorator('email', {
+                                    rules: [{ required: true, message: '请输入邮箱', },{ type: 'email', message: '请输入正确的邮箱地址！' }],
+                                })(
+                                    <Input className={styles.inputStyle2} />
+                                )} 
+                            </FormItem>
+                        </Col>
+                        <Col span={11}>
+                            <FormItem {...formItemLayout} label="房源描述：" >
+                                {getFieldDecorator('houseDescribe', {
+                                    rules: [{  required: true, message: '请输入房源描述', }],
+                                })(
+                                    <TextArea placeholder="请输入房源描述" autosize={{ minRows: 5, maxRows: 8 }} />
+                                )} 
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <FormItem {...formItemLayout} label="上传平面图片：">
+                                {getFieldDecorator('icon')(
+                                    <UploadImg onUpload={this.ImgOnClick} />
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col span={11}>
+                            <FormItem {...formItemLayout} label="上传实景图片：">
+                                {getFieldDecorator('realityPhoto')(
+                                    <div style={{ width:'100%' }}>
+                                        <Upload
+                                            listType="picture-card"
+                                            fileList={fileList}
+                                            onPreview={this.handlePreview}
+                                            onChange={this.handleChange}
+                                            beforeUpload={this.beforeUpload}
+                                        >
+                                            {uploadButton}
+                                        </Upload>
+                                        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                                            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                                        </Modal>
+                                    </div>
+                                )}
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <FormItem>
+                        <Button type='primary' htmlType="submit" style={{ marginLeft:'45%' }}>保存</Button>
+                        <Button className={styles.btnStyle} style={{ marginLeft:'5%' }}>
+                            <Link to={{ pathname: "/home"}}>取消</Link>
+                        </Button>
+                    </FormItem>
+                </Form>
             </div>
         )
     }

@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Input, Form, Modal, Button, Col, Row, notification, Icon, Upload } from 'antd'
 import styles from '../index.module.css'
-import UploadManyImg from '../../../components/UploadImg/UploadManyImg'
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -72,6 +71,13 @@ class AddBuilding extends PureComponent {
     beforeUpload = (file) => {
         return false
     }
+    checkPrice = (rule, value, callback) => {
+        if ( value==='' ||  value > 0) {
+          callback();
+          return;
+        }
+        callback('请输入正确的值！');
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -114,7 +120,7 @@ class AddBuilding extends PureComponent {
                                 {getFieldDecorator('buildingName', {
                                     rules: [{  required: true, message: '请输入楼栋名称', }],
                                 })(
-                                    <Input className={styles.inputStyle} />
+                                    <Input className={styles.inputStyle} placeholder='楼栋名称添加后不可修改'/>
                                 )} 
                             </FormItem>
                             </Col>
@@ -123,7 +129,7 @@ class AddBuilding extends PureComponent {
                                     {getFieldDecorator('buildingNo', {
                                         rules: [{  required: true, message: '请输入楼栋编号', }],
                                     })(
-                                        <Input className={styles.inputStyle} />
+                                        <Input className={styles.inputStyle} placeholder='楼栋编号添加后不可修改'/>
                                     )} 
                                 </FormItem>
                             </Col>
@@ -132,9 +138,9 @@ class AddBuilding extends PureComponent {
                             <Col span={12}>
                                 <FormItem {...formItemLayout} label="楼层数:" >
                                     {getFieldDecorator('floor', {
-                                        rules: [{  required: true, message: '请输入楼层数', }],
+                                        rules: [{  required: true, message: '请输入楼层数' },{ validator: this.checkPrice }],
                                     })(
-                                        <Input className={styles.inputStyle} />
+                                        <Input className={styles.inputStyle} placeholder='楼层数添加后不可修改'/>
                                     )} 
                                 </FormItem>
                             </Col>
@@ -152,7 +158,7 @@ class AddBuilding extends PureComponent {
                             <Col span={12}>
                                 <FormItem {...formItemLayout} label="建筑面积(㎡)：" >
                                     {getFieldDecorator('buildingArea', {
-                                        rules: [{  required: true, message: '请输入建筑面积', }],
+                                        rules: [{  required: true, message: '请输入建筑面积', },{ validator: this.checkPrice }],
                                     })(
                                         <Input className={styles.inputStyle} />
                                     )} 
@@ -161,7 +167,7 @@ class AddBuilding extends PureComponent {
                             <Col span={12}>
                                 <FormItem {...formItemLayout} label="使用面积(㎡)：" >
                                     {getFieldDecorator('useArea', {
-                                        rules: [{  required: true, message: '请输入使用面积', }],
+                                        rules: [{  required: true, message: '请输入使用面积', },{ validator: this.checkPrice }],
                                     })(
                                         <Input className={styles.inputStyle} />
                                     )} 
@@ -172,7 +178,7 @@ class AddBuilding extends PureComponent {
                             <Col span={12}>
                                 <FormItem {...formItemLayout} label="租赁面积(㎡)：" >
                                     {getFieldDecorator('rentArea', {
-                                        rules: [{  required: true, message: '请输入租赁面积', }],
+                                        rules: [{  required: true, message: '请输入租赁面积', },{ validator: this.checkPrice }],
                                     })(
                                         <Input className={styles.inputStyle} />
                                     )} 
@@ -212,7 +218,7 @@ class AddBuilding extends PureComponent {
                                         onChange={this.handleChange}
                                         beforeUpload={this.beforeUpload}
                                     >
-                                        {fileList.length >= 4 ? null : uploadButton}
+                                        { uploadButton}
                                     </Upload>
                                     <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                                         <img alt="example" style={{ width: '100%' }} src={previewImage} />

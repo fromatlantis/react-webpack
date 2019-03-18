@@ -124,7 +124,7 @@ export default class LeaseApproval extends PureComponent {
                         />
                     </Col>
                 </Row>
-                <Card bordered={false} style={{ marginTop:'20px' }}>
+                <Card bordered={false} >
                     <SearchInput search={this.props.getEnterApplyLists} />
                     <Table
                         style={{marginTop:'20px'}}
@@ -178,15 +178,15 @@ class Search extends React.Component {
             <Form onSubmit={this.handleSubmit} layout="inline">
                 <Form.Item {...formItemLayout} label='申请人：'>
                     {getFieldDecorator('applyUserName')(
-                        <Input style={{width:'300px'}} placeholder='申请人姓名'/>
+                        <Input style={{width:'250px'}} placeholder='申请人姓名'/>
                     )}
                 </Form.Item>
                 <Form.Item {...formItemLayout} label='客户名称：'>
                     {getFieldDecorator('companyName')(
-                        <Input style={{width:'300px'}} placeholder='输入客户名称'/>
+                        <Input style={{width:'250px'}} placeholder='输入客户名称'/>
                     )}
                 </Form.Item>
-                <Form.Item style={{marginLeft:'20%'}}>
+                <Form.Item style={{marginLeft:'40px'}}>
                     <Button htmlType="submit" type='primary' icon="search">查询</Button>
                 </Form.Item>
             </Form>

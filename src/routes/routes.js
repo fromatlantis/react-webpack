@@ -92,7 +92,7 @@ const routes = [
         path: '/seeAdopt/:id', 
         component: SeeAdopt,
     },{
-        path: '/leaseApplyDetiles/:id/:id2', 
+        path: '/leaseApplyDetiles/:id', 
         component: LeaseApplyDetiles,
     }
 ];
