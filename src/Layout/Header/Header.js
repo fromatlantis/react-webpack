@@ -28,7 +28,7 @@ export default class Header extends Component {
                             placement="bottomRight"
                             content={<span className={styles.linkBtn} onClick={this.logout} >退出登录</span>}
                             title={account} >
-                            {photo===''?<Avatar src={mtou} size="user" />:<Avatar src={photo} size="user" />}
+                            {photo===null?<Avatar src={mtou} size="user" />:<Avatar src={photo} size="user" />}
                             
                             <span className={styles.uname}>{name}</span>
                         </Popover>
