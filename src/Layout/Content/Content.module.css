@@ -1,4 +1,4 @@
-n@import '~ThemeVariables';
+@import '~ThemeVariables';
 .content {
     margin-top: var(--contentGutter);
     margin-right: var(--contentGutter);
