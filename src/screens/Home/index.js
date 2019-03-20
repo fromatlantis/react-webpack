@@ -29,6 +29,7 @@ class Home extends PureComponent {
         this.props.getProjectDetail()
         this.props.buildingInfoList()
         this.props.getHouseList()
+        console.log(this.props.user.park_name)
     }
     //选项卡切换的方法
     onTabChange = (key) => {
@@ -285,7 +286,7 @@ class Home extends PureComponent {
                 >
                     <Form onSubmit={this.handleSubmit} style={{marginRight:'40px'}}>
                         <FormItem {...formItemLayout} label="项目名称：" >
-                            {getFieldDecorator('projectName')(
+                            {getFieldDecorator('projectName',{initialValue: this.props.user.park_name })(
                                 <Input disabled className={styles.inputStyle} />
                             )} 
                         </FormItem>
