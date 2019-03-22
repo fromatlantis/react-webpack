@@ -156,7 +156,7 @@ class LeaseHouseDetails extends Component{
                         <div style={{  display:'flex',flexDirection:'row'}}>
                             <div>
                                 <span style={{fontWeight:'bold'}}>平面图片：</span>
-                                <img src={planePhoto} width='100px' height='100px' alt=''
+                                <img src={(planePhoto || "")[0]} width='100px' height='100px' alt=''
                                     style={{ borderWidth: '2px', borderColor:'#ccc', borderStyle: 'dashed',padding:'2px'}}
                                     onClick={this.showModalP}/>
                             </div>
@@ -211,14 +211,17 @@ class LeaseHouseDetails extends Component{
                     </Tabs>
                 </Card>
                 <Modal
-                    title="平面图片"
+                    title="全部平面图片"
                     visible={this.state.visibleP}
                     onOk={this.handleCancelP}
                     onCancel={this.handleCancelP}
                     footer={null}
                 >
                     <Carousel autoplay>
-                        <img key='1' src={planePhoto} height='400px' alt=''/>
+                        {/* <img key='1' src={planePhoto} height='400px' alt=''/> */}
+                        { planePhoto && planePhoto.map((item,i) => {
+                            return <img key={i} src={item} height='400px' alt=''/>
+                        }) }
                     </Carousel>
                 </Modal>
                 <Modal

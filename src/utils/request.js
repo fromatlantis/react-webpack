@@ -92,7 +92,11 @@ export default ({
                 data['filesList'].forEach((item)=>{
                     formData.append(data['filesName'], item);
                 })
-            }else if(!(k==='filesName')){
+            }else if(k==='filesList2'){
+                data['filesList2'].forEach((item)=>{
+                    formData.append(data['filesName2'], item);
+                })
+            }else if(!(k==='filesName') && !(k==='filesName2')){
                 data[k] && formData.append(k, data[k]);
             }
         }

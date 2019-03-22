@@ -20,6 +20,11 @@ class FormCreate extends React.Component{
         previewImage: '',
         fileList: [],
         files: [],
+         //上传照片2
+         previewVisible2: false,
+         previewImage2: '',
+         fileList2: [],
+         files2: [],
     }
     ImgOnClick = (file) => {
         this.setState({ icon: file })
@@ -42,23 +47,42 @@ class FormCreate extends React.Component{
     beforeUpload = (file) => {
         return false
     }
+     //上传图片方法2
+     handleCancel2 = () => this.setState({ previewVisible2: false })
+     handlePreview2 = (file) => {
+         this.setState({
+         previewImage2: file.url || file.thumbUrl,
+         previewVisible2: true,
+         });
+     }
+     handleChange2 = ({fileList}) => {
+         let files2 = []
+         for(let i=0;i<fileList.length;i++){
+             files2[i] = fileList[i].originFileObj
+         }
+         this.setState( {fileList2: fileList, files2} );
+     }
+     beforeUpload2 = (file) => {
+         return false
+     }
 
     handleSubmit = (e) => {  
         e.preventDefault();
-        let { icon, files } = this.state
+        let { icon, files, files2 } = this.state
         this.props.form.validateFields((err, fieldsValue) => {
             if (err) {
                 return
             }
-            fieldsValue.planePhoto = icon
-            if(JSON.stringify(fieldsValue.planePhoto) === 'null'){
+            // fieldsValue.planePhoto = icon
+            if(files2==''){
                 this.openNotification()
             }else if(files==''){
                 this.openNotification()
             }else{
-                // fieldsValue.realityPhoto = fileList
                 fieldsValue.filesName = 'realityPhoto'
                 fieldsValue.filesList = files
+                fieldsValue.filesName2 = 'planePhoto'
+                fieldsValue.filesList2 = files2
                 fieldsValue.buildingId = this.props.Ids
                 this.props.addHouse(fieldsValue)
             }
@@ -93,7 +117,7 @@ class FormCreate extends React.Component{
             },
         }
         //上传图片属性
-        const { previewVisible, previewImage, fileList } = this.state;
+        const { previewVisible, previewImage, fileList, previewVisible2, previewImage2, fileList2 } = this.state;
         const uploadButton = (
             <div>
                 <Icon type="plus" />
@@ -225,7 +249,6 @@ class FormCreate extends React.Component{
                                     <Select style={{ width:'350px' }}>
                                         {/* <Option value="">全部</Option> */}
                                         <Option value="0">待租</Option>
-                                        <Option value="1">已租</Option>
                                         <Option value="2">自用</Option>
                                         <Option value="3">其他</Option>
                                     </Select>
@@ -280,12 +303,26 @@ class FormCreate extends React.Component{
                     <Row gutter={16}>
                         <Col span={12}>
                             <FormItem {...formItemLayout} label="上传平面图片：">
-                                {getFieldDecorator('icon')(
-                                    <UploadImg onUpload={this.ImgOnClick} />
+                                {getFieldDecorator('planePhoto')(
+                                    // <UploadImg onUpload={this.ImgOnClick} />
+                                    <div style={{ width:'100%' }}>
+                                        <Upload
+                                            listType="picture-card"
+                                            fileList={fileList2}
+                                            onPreview={this.handlePreview2}
+                                            onChange={this.handleChange2}
+                                            beforeUpload={this.beforeUpload2}
+                                        >
+                                            {uploadButton}
+                                        </Upload>
+                                        <Modal visible={previewVisible2} footer={null} onCancel={this.handleCancel2}>
+                                            <img alt="example" style={{ width: '100%' }} src={previewImage2} />
+                                        </Modal>
+                                    </div>
                                 )}
                             </FormItem>
                         </Col>
-                        <Col span={11}>
+                        <Col span={12}>
                             <FormItem {...formItemLayout} label="上传实景图片：">
                                 {getFieldDecorator('realityPhoto')(
                                     <div style={{ width:'100%' }}>
@@ -361,11 +398,11 @@ class CreateHouse extends PureComponent{
     }
     //最后传出值
     handleSubmit3 = (e) => {
-        message.success('信息已选择完毕!')
         this.props.form.validateFields((err, fieldsValue) => {
             if (err) {
                 return
             }
+            message.success('信息已选择完毕!')
             const rangeValue = fieldsValue['noAndFloor'];
             let num = 0
             for(let i=0;i<this.props.buildingNo;i++){
@@ -374,8 +411,9 @@ class CreateHouse extends PureComponent{
                 }
             }
             this.setState({  noAndFloor: rangeValue, buildingId: this.props.buildingNo[num].buildingId });
+            this.setState({  updateVisible: false, });
         });
-        this.setState({  updateVisible: false, });
+        
     }
 
     next(num) {
@@ -470,6 +508,7 @@ class CreateHouse extends PureComponent{
                     maskClosable={false}
                     width={ '600px' }
                     footer={null}
+                    closable={false}
                 >
                     <Steps current={current} size="small">
                         {steps.map(item => <Step key={item.title} title={item.title} />)}

@@ -147,6 +147,7 @@ class LeaseApply extends PureComponent {
                                             <p>租赁面积：{item.rentArea}</p>
                                             <p>朝向：{item.orientation}</p>
                                             <p>类型：{item.typeName}</p>
+                                            <p>工位：{item.workerone}</p>
                                         </div>
                                     </div>
                                 </Link>

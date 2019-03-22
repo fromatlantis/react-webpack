@@ -23,7 +23,7 @@ export default class LeaseApplyDetiles extends PureComponent {
     render() {
         const { buildingArea, buildingName, buildingNo, email, floorLevel, houseDescribe,
             houseId, houseNo, housePrice, houseStatus, houseType, leader, orientation, planePhoto,
-            pooledArea, realityPhoto, rentArea, telephone} = this.props.houseDetail
+            pooledArea, realityPhoto, rentArea, telephone, workerone} = this.props.houseDetail
         const houseName = `${buildingName} ${buildingNo}座 ${floorLevel}楼 ${houseNo}室`
         const TabPane = Tabs.TabPane;
         const tabListNoTitle = [{
@@ -50,6 +50,7 @@ export default class LeaseApplyDetiles extends PureComponent {
                                 <p>朝向：{orientation}</p>
                                 <p>类型：{houseType}</p>
                                 <p>状态：{houseStatus}</p>
+                                <p>工位：{workerone}</p>
                                 <Button type='primary' size="large"><Link to={`/submitApply/${houseId}/${houseName}/${housePrice}`}>申请入驻</Link></Button>
                             </div>
                         </div>

@@ -2,7 +2,7 @@
  * 租赁审批=》审批申请 
  */
 import React, { PureComponent } from 'react'
-import { Form,Card,Button,Input,Radio } from 'antd';
+import { Form,Card,Button,Input,Radio,Modal, Carousel } from 'antd';
 import { Link } from 'react-router-dom'
 import UploadImg from '../../../components/UploadImg/UploadImg'
 
@@ -11,6 +11,10 @@ const RadioGroup = Radio.Group;
 
 class ApprovalApply extends PureComponent {
     state = {
+        visible: false,
+        visible2: false,
+        visibleP: false,
+        visibleP2: false,
         applyId:'',
         value: 1,
     }
@@ -82,17 +86,44 @@ class ApprovalApply extends PureComponent {
                 <div>
                     <Form.Item {...formItemLayout} label="合同：">
                         {getFieldDecorator('icon')(
-                            <img src={item.contract} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
+                            <img src={item.contract} onClick={this.showModal} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
                         )}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="营业执照：">
                         {getFieldDecorator('icon')(
-                            <img src={item.trading_certificate} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
+                            <img src={item.trading_certificate} onClick={this.showModal2} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
                         )}
                     </Form.Item>
+                    <Modal title="合同" visible={this.state.visible}
+                        onOk={this.handleCancel} onCancel={this.handleCancel} footer={null}
+                    >
+                        <Carousel autoplay>
+                            <img src={item.contract} height='400px' alt=''/>
+                        </Carousel>
+                    </Modal>
+                    <Modal title="营业执照" visible={this.state.visible2}
+                        onOk={this.handleCancel2} onCancel={this.handleCancel2} footer={null}
+                    >
+                        <Carousel autoplay>
+                            <img src={item.trading_certificate} height='400px' alt=''/>
+                        </Carousel>
+                    </Modal>
                 </div>
             )
         }
+    }
+    // 合同、执照图片弹出方法
+    showModal = () => {
+        this.setState({  visible: true, });
+    }
+    handleCancel = () => {
+        this.setState({  visible: false, });
+    }
+    showModal2 = () => {
+        this.setState({  visible2: true, });
+    }
+    handleCancel2 = () => {
+        this.setState({  visible2: false, });
     }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -110,6 +141,19 @@ class ApprovalApply extends PureComponent {
             console.log(values)
             this.props.enterApprove(values)
         });
+    }
+    // 身份证图片弹出方法
+    showModalP = () => {
+        this.setState({  visibleP: true, });
+    }
+    handleCancelP = () => {
+        this.setState({  visibleP: false, });
+    }
+    showModalP2 = () => {
+        this.setState({  visibleP2: true, });
+    }
+    handleCancelP2 = () => {
+        this.setState({  visibleP2: false, });
     }
 
     render() {
@@ -164,8 +208,8 @@ class ApprovalApply extends PureComponent {
                         </Form.Item>
                         {this.imgM()}
                         <Form.Item {...formItemLayout} label="上传申请人证件：">
-                                <img src={item.identity_dorsal} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
-                                <img src={item.identity_frontal} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)',marginLeft:'10px'}}/>
+                                <img src={item.identity_dorsal} onClick={this.showModalP} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
+                                <img src={item.identity_frontal} onClick={this.showModalP2} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)',marginLeft:'10px'}}/>
                         </Form.Item>
                         <Form.Item {...formItemLayout} label='付款金额：'>
                             {getFieldDecorator('ttle',{initialValue: item.rent_price })(
@@ -191,6 +235,28 @@ class ApprovalApply extends PureComponent {
                         </Form.Item>
                     </Form>
                 </Card>
+                <Modal
+                    title="申请人证件"
+                    visible={this.state.visibleP}
+                    onOk={this.handleCancelP}
+                    onCancel={this.handleCancelP}
+                    footer={null}
+                >
+                    <Carousel autoplay>
+                        <img src={item.identity_dorsal} height='400px' alt=''/>
+                    </Carousel>
+                </Modal>
+                <Modal
+                    title="申请人证件"
+                    visible={this.state.visibleP2}
+                    onOk={this.handleCancelP2}
+                    onCancel={this.handleCancelP2}
+                    footer={null}
+                >
+                    <Carousel autoplay>
+                        <img src={item.identity_frontal} height='400px' alt=''/>
+                    </Carousel>
+                </Modal>
             </div>
         )
     }

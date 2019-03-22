@@ -2,7 +2,7 @@
  * 租赁审批=》查看通过审批申请 
  */
 import React, { PureComponent } from 'react'
-import { Form,Card,Button,Input,Radio } from 'antd';
+import { Form,Card,Button,Input,Radio,Carousel,Modal } from 'antd';
 import { Link } from 'react-router-dom'
 import UploadImg from '../../../components/UploadImg/UploadImg'
 
@@ -10,6 +10,12 @@ const { TextArea } = Input;
 const RadioGroup = Radio.Group;
 
 class SeeAdopt extends PureComponent {
+    state = { 
+        visible: false,
+        visible2: false,
+        visibleP: false,
+        visibleP2: false,
+    };
     //生命周期
     componentDidMount = () => {
         let applyId = this.props.match.params.id
@@ -75,17 +81,44 @@ class SeeAdopt extends PureComponent {
                 <div>
                     <Form.Item {...formItemLayout} label="合同：">
                         {getFieldDecorator('icon')(
-                            <img src={item.contract} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
+                            <img src={item.contract} onClick={this.showModal} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
                         )}
                     </Form.Item>
                     <Form.Item {...formItemLayout} label="营业执照：">
                         {getFieldDecorator('icon')(
-                            <img src={item.trading_certificate} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
+                            <img src={item.trading_certificate} onClick={this.showModal2} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
                         )}
                     </Form.Item>
+                    <Modal title="合同" visible={this.state.visible}
+                        onOk={this.handleCancel} onCancel={this.handleCancel} footer={null}
+                    >
+                        <Carousel autoplay>
+                            <img src={item.contract} height='400px' alt=''/>
+                        </Carousel>
+                    </Modal>
+                    <Modal title="营业执照" visible={this.state.visible2}
+                        onOk={this.handleCancel2} onCancel={this.handleCancel2} footer={null}
+                    >
+                        <Carousel autoplay>
+                            <img src={item.trading_certificate} height='400px' alt=''/>
+                        </Carousel>
+                    </Modal>
                 </div>
             )
         }
+    }
+    // 合同、执照图片弹出方法
+    showModal = () => {
+        this.setState({  visible: true, });
+    }
+    handleCancel = () => {
+        this.setState({  visible: false, });
+    }
+    showModal2 = () => {
+        this.setState({  visible2: true, });
+    }
+    handleCancel2 = () => {
+        this.setState({  visible2: false, });
     }
     OrNoDesc = () => {
         const { getFieldDecorator } = this.props.form;
@@ -121,6 +154,19 @@ class SeeAdopt extends PureComponent {
                 <span style={{ fontSize:'18px', fontWeight:'bold' }}>拒绝审批详情</span>
             )
         }
+    }
+    // 身份证图片弹出方法
+    showModalP = () => {
+        this.setState({  visibleP: true, });
+    }
+    handleCancelP = () => {
+        this.setState({  visibleP: false, });
+    }
+    showModalP2 = () => {
+        this.setState({  visibleP2: true, });
+    }
+    handleCancelP2 = () => {
+        this.setState({  visibleP2: false, });
     }
 
     render() {
@@ -172,9 +218,9 @@ class SeeAdopt extends PureComponent {
                             )}
                         </Form.Item>
                         {this.imgM()}
-                        <Form.Item {...formItemLayout} label="上传申请人证件：">
-                                <img src={item.identity_dorsal} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
-                                <img src={item.identity_frontal} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)',marginLeft:'10px'}}/>
+                        <Form.Item {...formItemLayout} label="申请人证件：">
+                                <img src={item.identity_dorsal} onClick={this.showModalP} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)'}}/>
+                                <img src={item.identity_frontal} onClick={this.showModalP2} alt="" style={{width:110,height:110,border: '1px solid rgb(221,221,221)',marginLeft:'10px'}}/>
                         </Form.Item>
                         <Form.Item {...formItemLayout} label='付款金额：'>
                             {getFieldDecorator('ttle',{initialValue: item.rent_price })(
@@ -195,6 +241,28 @@ class SeeAdopt extends PureComponent {
                         </Form.Item>
                     </Form>
                 </Card>
+                <Modal
+                    title="申请人证件"
+                    visible={this.state.visibleP}
+                    onOk={this.handleCancelP}
+                    onCancel={this.handleCancelP}
+                    footer={null}
+                >
+                    <Carousel autoplay>
+                        <img src={item.identity_dorsal} height='400px' alt=''/>
+                    </Carousel>
+                </Modal>
+                <Modal
+                    title="申请人证件"
+                    visible={this.state.visibleP2}
+                    onOk={this.handleCancelP2}
+                    onCancel={this.handleCancelP2}
+                    footer={null}
+                >
+                    <Carousel autoplay>
+                        <img src={item.identity_frontal} height='400px' alt=''/>
+                    </Carousel>
+                </Modal>
             </div>
         )
     }

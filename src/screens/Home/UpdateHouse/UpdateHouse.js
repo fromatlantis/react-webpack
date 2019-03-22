@@ -69,6 +69,8 @@ class UpdateHouse extends PureComponent {
             if (err) {
                 return
             }
+            // fieldsValue.filesName = 'realityPhoto'
+            // fieldsValue.filesList = files
             const values = {
                 ...fieldsValue,
                 houseId: this.state.houseId,
