@@ -25,6 +25,8 @@ export default class LeaseApplyDetiles extends PureComponent {
             houseId, houseNo, housePrice, houseStatus, houseType, leader, orientation, planePhoto,
             pooledArea, realityPhoto, rentArea, telephone, workerone} = this.props.houseDetail
         const houseName = `${buildingName} ${buildingNo}座 ${floorLevel}楼 ${houseNo}室`
+        //合并实景、平面图片
+        const realityPhoto1 = (realityPhoto || []).concat(planePhoto)
         const TabPane = Tabs.TabPane;
         const tabListNoTitle = [{
             key: '咨询',
@@ -39,7 +41,7 @@ export default class LeaseApplyDetiles extends PureComponent {
                     title={<h3 style={{display:'inline',marginRight:15}}>{houseName}</h3>}
                 >
                     <div style={{display:'flex',flexDirection:'row',fontSize:15,paddingLeft:'20px'}}>
-                        <CarouselM CarouselMDetail={ this.props.houseDetail.realityPhoto } />
+                        <CarouselM CarouselMDetail={ realityPhoto1 } />
 
                         <div style={{width:'27%',paddingLeft:'2%'}}>
                             <div className={styles.imgRight}>
@@ -60,7 +62,7 @@ export default class LeaseApplyDetiles extends PureComponent {
                             activeTabKey={this.state.noTitleKey}
                             style={{ width:'20%', marginLeft:'5%' }}
                         >
-                            <div >
+                            <div>
                                 <img src={avatar} width='80px' height='80px' alt=''/>
                                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', marginLeft: 4 }}>
                                     <p>联系人：{leader}</p>
@@ -100,10 +102,10 @@ export default class LeaseApplyDetiles extends PureComponent {
                                     </div>
                                 </div>
                                 <div style={{ overflow: 'hidden' }}>
-                                    { realityPhoto && realityPhoto.map((item, i) => {
+                                    { realityPhoto1 && realityPhoto1.map((item, i) => {
                                             return <img key={i} src={item} width='450px' height='380px' style={{ marginBottom: '11px', float: 'left', width: '48%', marginLeft: '6px' }} alt=''/>
                                     }) }
-                                    <img key='-1' src={planePhoto} width='450px' height='380px' style={{ marginBottom: '11px', float: 'left', width: '48%', marginLeft: '6px' }} alt=''/>
+                                    {/* <img key='-1' src={planePhoto} width='450px' height='380px' style={{ marginBottom: '11px', float: 'left', width: '48%', marginLeft: '6px' }} alt=''/> */}
                                 </div>
                             </div>
                         </TabPane>

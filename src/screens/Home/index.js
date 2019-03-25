@@ -30,6 +30,7 @@ class Home extends PureComponent {
         this.props.buildingInfoList()
         this.props.getHouseList()
         // console.log(this.props.user.park_name)
+        this.setState({key: this.props.tabActive})
     }
     //选项卡切换的方法
     onTabChange = (key) => {

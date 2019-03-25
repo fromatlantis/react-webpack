@@ -41,9 +41,6 @@ class BuildingDetails extends Component{
 
     render(){
         const{buildingArea, buildingIntro, buildingName, buildingNo, realityPhoto, floor, location, rentArea, trafficState, useArea} = this.props.buildingDetail
-        // console.log(this.props.buildingDetail.realityPhoto)
-        // const ddd = (this.props.buildingDetail.realityPhoto||[]).split(',')
-        // console.log(ddd)
         const columns = [
               {
             title: '房间号',
@@ -224,7 +221,7 @@ class Search extends React.Component {
                             <Option value="2">住宅</Option>
                             <Option value="3">厂房</Option>
                             <Option value="4">其他</Option>
-                            <Option value="">全部</Option>
+                            <Option value="5">全部</Option>
                         </Select>
                     )} 
                 </Form.Item>
@@ -239,7 +236,7 @@ class Search extends React.Component {
                         </Select>
                     )} 
                 </Form.Item>
-                <Form.Item style={{marginLeft:'20%'}}>
+                <Form.Item /* style={{marginLeft:'20%'}} */>
                     <Button htmlType="submit" type='primary' icon="search" loading={this.state.iconLoading} >查询</Button>
                     <Button style={{marginLeft:'15px'}} onClick={this.resetTable}>重置</Button>
                 </Form.Item>

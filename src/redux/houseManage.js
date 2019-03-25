@@ -9,6 +9,8 @@ import { blaze } from "../utils/blaze";
 const model = {
     namespace:'houseManage',
     state:{
+        tabActive: 'building', //房源管理页面标签
+
         projectDetail:[], //获取de园区项目详情
         buildingInfoList:[], //获取楼宇分页列表
         totalCount: null, //获取楼宇分页列表de总条数
@@ -196,6 +198,7 @@ const model = {
                 });
                 if(res.code===1000){
                     yield put(actions('addHouseInfoSuccess')(res.data));
+                    yield put(actions('storeTabActive')('house'));
                     yield put(goBack()); 
                 }
             }
@@ -241,6 +244,7 @@ const model = {
                 });
                 if(res.code===1000){
                     yield put(actions('updateHouseInfoSuccess')(res.data));
+                    yield put(actions('storeTabActive')('house'));
                     yield put(goBack()); 
                 }
             }
@@ -358,6 +362,9 @@ const model = {
             }
         },{ 
             name: "updateRenterInfoSuccess",
+        },{ //改变tab标签
+            name: "storeTabActive",
+            reducer:'tabActive',
         },
     ],
 };

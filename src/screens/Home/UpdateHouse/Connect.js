@@ -15,6 +15,8 @@ const mapDispatchToProps = (dispatch) => {
         updateHouseInfo: actions('updateHouseInfo'),
          //获取房源详情
         getHouseDetail: actions('getHouseDetail'),
+        //改变tag标签
+        storeTabActive: actions('storeTabActive'),
     }, dispatch);
 }
 

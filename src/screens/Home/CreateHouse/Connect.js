@@ -18,6 +18,8 @@ const mapDispatchToProps = (dispatch) => {
         addHouseInfo: actions('addHouseInfo'),
         //获取楼栋编号
         getBuildingNo: actions('getBuildingNo'),
+        //改变tag标签
+        storeTabActive: actions('storeTabActive'),
     }, dispatch);
 }
 

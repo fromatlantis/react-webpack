@@ -15,6 +15,7 @@ const mapStateToProps = (state) => {
         searchParamsHouse: state.houseManage.searchParamsHouse, //分页查询房源列表de参数
 
         user: state.authUser.user,//用户信息
+        tabActive: state.houseManage.tabActive, //标签选择值
     }
 }
 

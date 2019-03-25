@@ -137,7 +137,7 @@ class SeeAdopt extends PureComponent {
             return(
                 <Form.Item {...formItemLayout} label="审批意见:" >
                     {getFieldDecorator('approve_desc',{initialValue: item.approve_desc })(
-                        <TextArea placeholder="不通过原因" autosize={{ minRows: 3, maxRows: 6 }} style={{width:'400px'}}/>
+                        <TextArea disabled placeholder="不通过原因" autosize={{ minRows: 3, maxRows: 6 }} style={{width:'400px'}}/>
                     )} 
                 </Form.Item>
     )

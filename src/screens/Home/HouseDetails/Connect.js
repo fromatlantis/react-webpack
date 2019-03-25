@@ -23,6 +23,8 @@ const mapDispatchToProps = (dispatch) => {
         addRenter: actions('addRenter'),
         //修改租客信息
         updateRenterInfo: actions('updateRenterInfo'),
+        //改变tag标签
+        storeTabActive: actions('storeTabActive'),
     }, dispatch);
 }
 

@@ -139,7 +139,7 @@ class HouseDetails extends Component{
         return(
             <div>
                 <Card style={{ width:'100%' }} bodyStyle={{ padding:'10px 20px' }}>
-                    <Link to={{ pathname: "/home"}}>房源管理/房源管理/房间详情</Link>
+                    <Link to={{ pathname: "/home"}} onClick={this.props.storeTabActive('house')}>房源管理/房源管理/房间详情</Link>
                 </Card>
                 <Card
                     title={

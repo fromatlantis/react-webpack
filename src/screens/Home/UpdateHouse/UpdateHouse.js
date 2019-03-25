@@ -322,7 +322,7 @@ class UpdateHouse extends PureComponent {
                         <FormItem>
                             <Button type='primary' htmlType="submit" style={{ marginLeft:'45%', marginTop:'20px' }}>保存</Button>
                             <Button className={styles.btnStyle} style={{ marginLeft:'5%' }}>
-                                <Link to={{ pathname: "/home"}}>取消</Link>
+                                <Link to={{ pathname: "/home"}} onClick={this.props.storeTabActive('house')}>取消</Link>
                             </Button>
                         </FormItem>
                     </Form>

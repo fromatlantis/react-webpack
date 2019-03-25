@@ -346,7 +346,7 @@ class FormCreate extends React.Component{
                     <FormItem>
                         <Button type='primary' htmlType="submit" style={{ marginLeft:'45%' }}>保存</Button>
                         <Button className={styles.btnStyle} style={{ marginLeft:'5%' }}>
-                            <Link to={{ pathname: "/home"}}>取消</Link>
+                            <Link to={{ pathname: "/home"}} onClick={this.props.storeTabActive('house')}>取消</Link>
                         </Button>
                     </FormItem>
                 </Form>
@@ -516,7 +516,7 @@ class CreateHouse extends PureComponent{
                     <div className={styles.stepscontent}>
                         {this.divUpToDiv(current)}
                     </div>
-                    <div className="steps-action" style={{ width: '30%', marginLeft: '70%', marginTop:'10px' }}>
+                    <div className="steps-action" style={{ width: '45%', marginLeft: '55%', marginTop:'10px' }}>
                         {
                         current > 0
                         && (<Button onClick={() => this.prev()}>上一步</Button>)
@@ -533,7 +533,9 @@ class CreateHouse extends PureComponent{
                         current === steps.length - 1
                         && <Button type="primary" style={{ marginLeft: 8 }} onClick={ this.handleSubmit3 }>完成</Button>
                         }
-                        
+                        <Button style={{ marginLeft: 8 }}>
+                            <Link to={{ pathname: `/home`}} onClick={this.props.storeTabActive('house')}>返回</Link>
+                        </Button>
                     </div>
                 </Modal>
             </div>
