@@ -346,7 +346,7 @@ class FormCreate extends React.Component{
                     <FormItem>
                         <Button type='primary' htmlType="submit" style={{ marginLeft:'45%' }}>保存</Button>
                         <Button className={styles.btnStyle} style={{ marginLeft:'5%' }}>
-                            <Link to={{ pathname: "/home"}} onClick={this.props.storeTabActive('house')}>取消</Link>
+                            <Link to={{ pathname: "/home"}} onClick={this.props.storeTab('house')}>取消</Link>
                         </Button>
                     </FormItem>
                 </Form>
@@ -500,7 +500,8 @@ class CreateHouse extends PureComponent{
                     }
                     style={{ width:'100%' }}
                 >
-                    <FormCreateDiv Ids={this.state.buildingId} names={this.state.buildingName} NoOrNum={this.state.noAndFloor} addHouse={this.props.addHouseInfo}/>
+                    <FormCreateDiv Ids={this.state.buildingId} names={this.state.buildingName} NoOrNum={this.state.noAndFloor} 
+                        addHouse={this.props.addHouseInfo} storeTab={this.props.storeTabActive}/>
                 </Card>
                 <Modal
                     title="确认要添加房源的楼栋信息"
