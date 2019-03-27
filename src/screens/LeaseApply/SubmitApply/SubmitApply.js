@@ -2,7 +2,7 @@
  * 租赁管理=》租赁申请=》提交申请
  */
 import React, { PureComponent } from 'react'
-import { Form,Card,Button,DatePicker,Input,Select,notification,Icon, Col, Row, } from 'antd';
+import { Form,Card,Button,DatePicker,Input,Select,notification,Icon, Col, Row, message } from 'antd';
 import { Link } from 'react-router-dom'
 import UploadImg from '../../../components/UploadImg/UploadImg'
 import moment from "moment";
@@ -116,7 +116,13 @@ class SubmitApply extends PureComponent {
             }else{
                 customerTypee = 'company'
                 companynoo = this.props.companyMessages[0].companyno
+                if(!(fieldsValue['companyName'])){
+                    message.error('请填写企业信息!')
+                    return;
+                }
             }
+            //企业名称
+            
             const values = {
                 ...fieldsValue,
                 customerType: customerTypee,

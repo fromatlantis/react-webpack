@@ -39,6 +39,8 @@ class Home extends PureComponent {
     }
     //“更多”拉开抽屉的方法
     showDrawer = () => {
+        //获取园区项目详情
+        this.props.getProjectDetail()
         this.setState({  visible: true, });
     };
     onClose = () => {
@@ -73,6 +75,7 @@ class Home extends PureComponent {
             }
             console.log(values)
             this.props.updateProjectInfo(values)
+            this.setState({  visible: false, disabledStr: true, });
         })
     }
     //数值校验
@@ -442,7 +445,7 @@ class Search2 extends React.Component {
             if (err) {
                 return
             }
-            const values = { 
+            const values = {
                 ...fieldsValue,
                 pageNo: 1,
             }
