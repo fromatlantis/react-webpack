@@ -2,12 +2,11 @@
  * 房源管理界面
  */
 import React, { PureComponent } from 'react'
-import { Card, Input, Button, Table, Form, Drawer, Modal, Select, Divider } from 'antd'
+import { Card, Input, Button, Table, Form, Drawer, Select, Divider } from 'antd'
 import styles from './index.module.css'
 import { Link } from 'react-router-dom'
 import AddBuilding from './AddBuilding/Connect'
 import UpdateBuilding from './UpdateBuilding/Connect'
-import PropTypes from "prop-types";
 
 const FormItem = Form.Item;
 const Option = Select.Option;

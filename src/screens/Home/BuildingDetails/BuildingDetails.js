@@ -3,8 +3,6 @@
  */
 import React,{Component} from 'react';
 import { Form,Card,Button,Table,Input,Modal,Select,Carousel } from 'antd';
-import avatar from '../../../assets/avatar.png';
-import styles from '../index.module.css'
 import { Link } from 'react-router-dom'
 
 const Option = Select.Option;
@@ -93,7 +91,7 @@ class BuildingDetails extends Component{
         return(
             <div>
                 <Card style={{ width:'100%' }} bodyStyle={{ padding:'10px 20px' }}>
-                    <Link to={{ pathname: "/home"}}>房源管理/楼宇管理/楼宇详情</Link>
+                    <Link to={{ pathname: "/home"}} onClick={this.props.storeTabActive('building')}>房源管理/楼宇管理/楼宇详情</Link>
                 </Card>
                 <Card
                     title={

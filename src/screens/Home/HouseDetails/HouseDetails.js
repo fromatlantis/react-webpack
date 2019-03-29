@@ -3,10 +3,8 @@
  */
 import React,{Component} from 'react';
 import { Form,Card,Button,Table,Input,Modal,Tabs,Select,DatePicker,Carousel  } from 'antd';
-import avatar from '../../../assets/avatar.png';
 import { Link } from 'react-router-dom'
 import styles from '../index.module.css'
-import { black } from 'ansi-colors';
 
 const {  RangePicker } = DatePicker;
 const Option = Select.Option;
@@ -22,7 +20,7 @@ class HouseDetails extends Component{
     };
     //生命周期
     componentDidMount = () => {
-        let buildingId = this.props.match.params.id
+        // let buildingId = this.props.match.params.id
         let houseId = this.props.match.params.id2
         this.setState({  houseId: houseId, });
         //获取详情
@@ -76,7 +74,7 @@ class HouseDetails extends Component{
     render(){
         const{address,houseName, buildingArea, buildingName, buildingNo, email, floorLevel, houseDescribe,
             houseId, houseNo, housePrice, houseStatus, houseType, leader, orientation, planePhoto,
-            pooledArea, realityPhoto, realityPhotoBig, realityPhotoSmall, rentArea, telephone} = this.props.houseDetail
+            pooledArea, realityPhoto, rentArea, telephone} = this.props.houseDetail
 
         console.log(this.state.houseId)
 
