@@ -6,4 +6,5 @@ module.exports = function (app) {
     app.use(proxy('/user/', { target: 'http://62.234.115.117:8804/houzai/' }));
     app.use(proxy('/asset/', { target: 'http://62.234.115.117:8804/houzai/' }));
     app.use(proxy('/merchants/', { target: 'http://62.234.115.117:8804/houzai/' }));
+    app.use(proxy('/jurisdiction/', { target: 'http://62.234.115.117:8804/houzai/' }));
 };

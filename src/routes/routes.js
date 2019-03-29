@@ -33,18 +33,6 @@ const routes = [
             loading: Loading,
         })
     },{
-        path: "/createHouse",
-        component: createHouse,
-    },{
-        path: '/updateHouse/:id',
-        component: UpdateHouse,
-    },{
-        path: '/buildingDetails/:id',
-        component: BuildingDetails,
-    },{
-        path: '/houseDetails/:id/:id2',
-        component: HouseDetails,
-    },{
         path: '/lease',
         name: '租赁管理',
         icon: 'appstore',
@@ -80,6 +68,18 @@ const routes = [
             }
         ]
     },{
+        path: "/createHouse",
+        component: createHouse,
+    },{
+        path: '/updateHouse/:id',
+        component: UpdateHouse,
+    },{
+        path: '/buildingDetails/:id',
+        component: BuildingDetails,
+    },{
+        path: '/houseDetails/:id/:id2',
+        component: HouseDetails,
+    },{
         path: '/leaseHouseDetails/:id/:id2', 
         component: LeaseHouseDetails,
     },{
@@ -96,8 +96,40 @@ const routes = [
         component: LeaseApplyDetiles,
     }
 ];
+//权限返回数据的数组
+const isRoute = [
+                // {"appIdentity":"HZYYGLPTZHZS0013","fnId":148,"name":"房源管理","type":"pc","content":"","seq":"1"},
+                {"appIdentity":"HZYYGLPTZHZS0013","fnId":168,"name":"租赁申请","type":"pc","content":"","seq":"9"}
+            ]
+//过滤方法
+let selectRoute = () => {
+    let tfSave = [0,0,0,0]
+    routes.map(item => {
+        isRoute.map(item2 =>{
+            if(item.children){
+                for(let i=0;i<item.children.length;i++){
+                    if(item.children[i].name===item2.name){
+                        tfSave[i] = 1
+                    }
+                }
+            }else{
+                if(item.name===item2.name){
+                    tfSave[3] = 1
+                }
+            }
+        })
+    })
+    if(tfSave[0]==0){ routes[1].children.splice(0,1) }
+    if(tfSave[1]==0){ routes[1].children.splice(1,1) }
+    if(tfSave[2]==0){ routes[1].children.splice(2,1) }
+    if(tfSave[3]==0){ routes[0].name='' }
+    return routes
+}
+
+
 export const getNav = () => {
-    return routes.filter(item => item.navAttr).map(item => {
+    
+    return selectRoute().filter(item => item.navAttr).map(item => {
         return {
             name: item.name,
             path: item.path,
@@ -108,9 +140,9 @@ export const getNav = () => {
 }
 export default () => {
     let allRoutes = []
-    routes.map(item => {
+    selectRoute().map(item => {
         if(!(item.children==null)){
-            for(let i=0;i<=2;i++){
+            for(let i=0;i<item.children.length;i++){
                 let first =  {
                     path: item.children[i].path,
                     component: item.children[i].component,
@@ -127,3 +159,4 @@ export default () => {
     })
     return allRoutes;
 }
+

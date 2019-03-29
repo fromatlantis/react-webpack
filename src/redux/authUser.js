@@ -8,7 +8,8 @@ const model = {
     state: {
         loginPath: "/home",
         auth: [],
-        user: {}
+        user: {},
+        Authorities: {},//权限返回数据
     },
     actions: [
         {
@@ -77,12 +78,27 @@ const model = {
                     });
                     if (res.data) {
                         yield put(actions("loginSuccess")(res.data));
+                        yield put(actions("getAuthoritiesByUser")(res.data.user.id));
                     } else {
                         yield put(replace("/leaseApply"));
                     }
                 } catch (err) { }
             }
-        }
+        },{   //权限配置GET
+            name:"getAuthoritiesByUser",
+            *effect(action){
+                const res = yield call(request,{
+                    type: 'get',
+                    url: `/jurisdiction/getAuthoritiesByUser?userId=${action.payload}&appIdendity=HZYYGLPTZXGL0024`,
+                });
+                if(res.code===1000){
+                    yield put(actions('getAuthoritiesByUserSuccess')(res.data));
+                }
+            }
+        },{ 
+            name: "getAuthoritiesByUserSuccess",
+            reducer:'Authorities', 
+        },
     ]
 };
 const manager = blaze(model);
