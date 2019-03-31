@@ -33,7 +33,7 @@ class Main extends Component {
             return (
                 <Layout className={styles.container}>
                     <Header />
-                    <Content />
+                    <Content auths={this.props.auths}/>
                 </Layout>
             )
         }else{
@@ -52,7 +52,8 @@ class Main extends Component {
 
 const mapStateToProps = state => {
     return {
-        user: state.authUser.user
+        user: state.authUser.user,
+        auths: state.authUser.auths,
     }
 }
 const mapDispatchToProps = dispatch => {

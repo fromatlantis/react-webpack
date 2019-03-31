@@ -1,50 +1,41 @@
 import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
-import { Menu, Icon } from "antd";
+import { Menu, message } from "antd";
 
 import { getNav } from '../../routes/routes';
 
 const SubMenu = Menu.SubMenu;
 
-let Navigation = withRouter(({ history, location, match, items, style }) => {
+let Navigation = withRouter(({ history, location, match, items, style, auths }) => {
     const menu = getNav();
+    let link = (e, item) => {
+        // if(!auths.includes(item.name)) {
+        //     e.preventDefault()
+        //     message.warning('您没有对应的权限')
+        // }
+    }
     let generateMenu = () => {
         return menu.map((item, index) => {
-            if(!(item.children==null)){
-                return(
+            if (item.children.length > 0) {
+                return (
                     <SubMenu title={<span className="submenu-title-wrapper">{item.name}</span>} key={index}>
-                            {/* <Menu.Item key={item.children[0].path}>
-                                <NavLink to={item.children[0].path}>
-                                    <span>{item.children[0].name}</span>
-                                </NavLink>
-                            </Menu.Item>
-                            <Menu.Item key={item.children[1].path}>
-                                <NavLink to={item.children[1].path}>
-                                    <span>{item.children[1].name}</span>
-                                </NavLink>
-                            </Menu.Item>
-                            <Menu.Item key={item.children[2].path}>
-                                <NavLink to={item.children[2].path}>
-                                    <span>{item.children[2].name}</span>
-                                </NavLink>
-                            </Menu.Item> */}
-                            {
-                                item.children.map((item,i) => {
-                                    return(
-                                        <Menu.Item key={i}>
-                                        <NavLink to={item.path}>
-                                        <span>{item.name}</span>
+                        {
+                            item.children.map(item => {
+                                return (
+                                    <Menu.Item key={item.path}>
+                                        <NavLink to={item.path} onClick={(e) => { link(e, item) }}>
+                                            <span>{item.name}</span>
                                         </NavLink>
-                                        </Menu.Item>
-                                    )
-                                })
-                            }
+                                    </Menu.Item>
+                                )
+                            })
+                        }
                     </SubMenu>
                 )
-            }else{
+            } else {
                 return (
                     <Menu.Item key={item.path}>
-                        <NavLink to={item.path}>
+                        <NavLink to={item.path} onClick={(e) => { link(e, item) }}>
                             <span>{item.name}</span>
                         </NavLink>
                     </Menu.Item>
@@ -55,7 +46,7 @@ let Navigation = withRouter(({ history, location, match, items, style }) => {
     const openKeys = "/" + location.pathname.match(/[^/]+/);
     return (
         <Menu
-            defaultSelectedKeys={[location.pathname]}
+            selectedKeys={[location.pathname]}
             defaultOpenKeys={[openKeys]}
             mode="horizontal"
             style={{ lineHeight: '64px' }}

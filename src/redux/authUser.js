@@ -7,9 +7,9 @@ const model = {
     namespace: "authUser",
     state: {
         loginPath: "/home",
-        auth: [],
+        auth: [], //弃用
         user: {},
-        Authorities: {},//权限返回数据
+        auths: [],//权限返回数据
     },
     actions: [
         {
@@ -97,7 +97,7 @@ const model = {
             }
         },{ 
             name: "getAuthoritiesByUserSuccess",
-            reducer:'Authorities', 
+            reducer:'auths', 
         },
     ]
 };

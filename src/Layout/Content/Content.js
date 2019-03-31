@@ -6,11 +6,13 @@ import styles from "./Content.module.css";
 import Footer from "../Footer/Footer";
 export default class Content extends Component {
     render() {
+        const { auths } = this.props
+        const filterRoutes = routes(auths)
         return (
             <Layout.Content className={styles.content}>
                 <div className={styles.body}>
                     <Switch>
-                        {routes().map((item, index) => {
+                        {filterRoutes.map((item, index) => {
                             return (
                                 <Route
                                     exact
@@ -21,7 +23,7 @@ export default class Content extends Component {
                                 />
                             );
                         })}
-                        <Redirect exact path="/" to="/leaseApply" />
+                        <Redirect exact path="/" to={filterRoutes[0].path} />
                         <Redirect to="/404" />
                     </Switch>
                 </div>

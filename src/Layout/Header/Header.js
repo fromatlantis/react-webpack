@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { replace } from "connected-react-router";
-import { Layout, Avatar, Popover, Button } from "antd";
+
+import { Layout, Avatar, Popover } from "antd";
 import Navigation from '../Navigation/Navigation'
 import styles from "./Header.module.css";
 import hz from "assets/hz.png";
 import mtou from "assets/mtou.png";
-import { Link } from 'react-router-dom'
+
 export default class Header extends Component {
     logout = () => {
         this.props.logout()
@@ -19,7 +19,7 @@ export default class Header extends Component {
                         <Avatar shape="square" size="large" src={hz}/>
                         <span className={styles.title}>资产管理</span>
                     </div>
-                    <Navigation />
+                    <Navigation auths={this.props.auths}/>
                 </div>
                 <div className={styles.login} style={{ cursor: 'pointer' }}>
                     {

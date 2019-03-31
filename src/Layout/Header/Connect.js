@@ -5,7 +5,8 @@ import { actions } from 'reduxDir/authUser'
 
 const mapStateToProps = (state) => {
     return {
-        user: state.authUser.user
+        user: state.authUser.user,
+        auths: state.authUser.auths
     }
 }
 

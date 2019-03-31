@@ -19,47 +19,63 @@ import ApprovalApply from '../screens/LeaseApproval/ApprovalApply/Connect'
 // 租赁审批=》查看通过审批申请 
 import SeeAdopt from '../screens/LeaseApproval/SeeAdopt/Connect'
 
+// 包含children的不需要配置role
 const routes = [
     {
         path: '/home',
         name: '房源管理',
         icon: 'appstore',
-        navAttr: { 
+        navAttr: {
             index: 1,
-            role: 'home'
         },
+        role: '房源管理',
         component: Loadable({
             loader: () => import(/* webpackChunkName: "home" */'../screens/Home/Connect'),
             loading: Loading,
         })
-    },{
+    }, {
+        path: "/createHouse",
+        component: createHouse,
+        role: '房源管理',
+    }, {
+        path: '/updateHouse/:id',
+        component: UpdateHouse,
+    }, {
+        path: '/buildingDetails/:id',
+        component: BuildingDetails,
+    }, {
+        path: '/houseDetails/:id/:id2',
+        component: HouseDetails,
+    }, {
         path: '/lease',
         name: '租赁管理',
         icon: 'appstore',
-        navAttr: { 
-            index: 2,
-            role: 'lease'
+        navAttr: {
+            index: 2
         },
         children: [
             {
                 path: '/leaseHouse',
                 name: '租赁房源',
+                role: '租赁房源',
                 icon: 'appstore',
                 component: Loadable({
                     loader: () => import(/* webpackChunkName: "leaseHouse" */'../screens/LeaseHouse/Connect'),
                     loading: Loading,
                 }),
-            },{
+            }, {
                 path: '/leaseApply',
                 name: '租赁申请',
+                // 所有人可见
                 icon: 'appstore',
                 component: Loadable({
                     loader: () => import(/* webpackChunkName: "leaseApply" */'../screens/LeaseApply/Connect'),
                     loading: Loading,
                 }),
-            },{
+            }, {
                 path: '/leaseApproval',
                 name: '租赁审批',
+                role: '租赁审批',
                 icon: 'appstore',
                 component: Loadable({
                     loader: () => import(/* webpackChunkName: "leaseApproval" */'../screens/LeaseApproval/Connect'),
@@ -67,96 +83,78 @@ const routes = [
                 }),
             }
         ]
-    },{
-        path: "/createHouse",
-        component: createHouse,
-    },{
-        path: '/updateHouse/:id',
-        component: UpdateHouse,
-    },{
-        path: '/buildingDetails/:id',
-        component: BuildingDetails,
-    },{
-        path: '/houseDetails/:id/:id2',
-        component: HouseDetails,
-    },{
-        path: '/leaseHouseDetails/:id/:id2', 
+    }, {
+        path: '/leaseHouseDetails/:id/:id2',
         component: LeaseHouseDetails,
-    },{
-        path: '/submitApply/:id/:name/:rentPrice', 
+    }, {
+        path: '/submitApply/:id/:name/:rentPrice',
         component: SubmitApply,
-    },{
-        path: '/approvalApply/:id', 
+    }, {
+        path: '/approvalApply/:id',
         component: ApprovalApply,
-    },{
-        path: '/seeAdopt/:id', 
+    }, {
+        path: '/seeAdopt/:id',
         component: SeeAdopt,
-    },{
-        path: '/leaseApplyDetiles/:id', 
+    }, {
+        path: '/leaseApplyDetiles/:id',
         component: LeaseApplyDetiles,
     }
 ];
-//权限返回数据的数组
-const isRoute = [
-                // {"appIdentity":"HZYYGLPTZHZS0013","fnId":148,"name":"房源管理","type":"pc","content":"","seq":"1"},
-                {"appIdentity":"HZYYGLPTZHZS0013","fnId":168,"name":"租赁申请","type":"pc","content":"","seq":"9"}
-            ]
-//过滤方法
-let selectRoute = () => {
-    let tfSave = [0,0,0,0]
-    routes.map(item => {
-        isRoute.map(item2 =>{
-            if(item.children){
-                for(let i=0;i<item.children.length;i++){
-                    if(item.children[i].name===item2.name){
-                        tfSave[i] = 1
-                    }
+
+const filterByAuths = (routes = [], auths = []) => {
+    return routes.filter(route => {
+        if(route.children && route.children.length > 0){
+            return route.children.map(child=>{
+                if(!route.role || auths.includes(child.role)){
+                    return true
+                }else{
+                    return false
                 }
-            }else{
-                if(item.name===item2.name){
-                    tfSave[3] = 1
-                }
-            }
-        })
+            })
+        }else{
+            // 没有配置role，则全部可见
+            return !route.role || auths.includes(route.role)
+        }
     })
-    if(tfSave[0]==0){ routes[1].children.splice(0,1) }
-    if(tfSave[1]==0){ routes[1].children.splice(1,1) }
-    if(tfSave[2]==0){ routes[1].children.splice(2,1) }
-    if(tfSave[3]==0){ routes[0].name='' }
-    return routes
 }
-
-
-export const getNav = () => {
-    
-    return selectRoute().filter(item => item.navAttr).map(item => {
+export const getNav = (auths) => {
+    //auths = ['房源管理', '租赁审批']
+    const navs = routes.filter(item => item.navAttr).map(item => {
         return {
             name: item.name,
             path: item.path,
             icon: item.icon,
-            children: item.children,
+            role: item.role,
+            //children: item.children,
+            children: filterByAuths(item.children, auths),
         }
     })
+    //return navs
+    console.log(filterByAuths(navs, auths))
+    return filterByAuths(navs, auths)
 }
-export default () => {
+export default (auths) => {
     let allRoutes = []
-    selectRoute().map(item => {
-        if(!(item.children==null)){
-            for(let i=0;i<item.children.length;i++){
-                let first =  {
-                    path: item.children[i].path,
-                    component: item.children[i].component,
+    routes.map(item => {
+        if (item.children) {
+            item.children.map(child => {
+                let first = {
+                    path: child.path,
+                    component: child.component,
+                    role: child.role
                 }
                 allRoutes.push(first)
-            }
-        }else{
-            let first =  {
+                return true
+            })
+        } else {
+            let first = {
                 path: item.path,
-                component: item.component
+                component: item.component,
+                role: item.role
             }
             allRoutes.push(first)
         }
+        return true;
     })
-    return allRoutes;
+    return allRoutes.filter(route => !route.role || auths.includes(route.role));
 }
-
