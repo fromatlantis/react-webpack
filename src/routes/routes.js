@@ -133,6 +133,11 @@ export const getNav = (auths) => {
     console.log(filterByAuths(navs, auths))
     return filterByAuths(navs, auths)
 }
+// 首个路由
+export const getFirst = (auths) => {
+    const firstNav = getNav(auths)[0]
+    return firstNav && firstNav.children.length > 0 ? firstNav.children[0].path : firstNav.path 
+}
 export default (auths) => {
     let allRoutes = []
     routes.map(item => {

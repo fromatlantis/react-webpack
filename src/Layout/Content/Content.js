@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { Layout } from "antd";
-import routes from "../../routes/routes";
+import routes, { getFirst } from "../../routes/routes";
 import styles from "./Content.module.css";
 import Footer from "../Footer/Footer";
 export default class Content extends Component {
@@ -23,7 +23,7 @@ export default class Content extends Component {
                                 />
                             );
                         })}
-                        <Redirect exact path="/" to={filterRoutes[0].path} />
+                        <Redirect exact path="/" to={getFirst(auths)} />
                         <Redirect to="/404" />
                     </Switch>
                 </div>
