@@ -92,7 +92,7 @@ const model = {
                     url: `/jurisdiction/getAuthoritiesByUser?userId=${action.payload}&appIdendity=HZYYGLPTZCGL0028`,
                 });
                 if(res.code===1000){
-                    yield put(actions('getAuthoritiesByUserSuccess')(res.data));
+                    yield put(actions('getAuthoritiesByUserSuccess')(res.data.map(item=>item.name)));
                 }
             }
         },{ 
