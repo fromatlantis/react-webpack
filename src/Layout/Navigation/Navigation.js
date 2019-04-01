@@ -7,7 +7,7 @@ import { getNav } from '../../routes/routes';
 const SubMenu = Menu.SubMenu;
 
 let Navigation = withRouter(({ history, location, match, items, style, auths }) => {
-    const menu = getNav();
+    const menu = getNav(auths);
     let link = (e, item) => {
         // if(!auths.includes(item.name)) {
         //     e.preventDefault()
