@@ -40,12 +40,15 @@ const routes = [
     }, {
         path: '/updateHouse/:id',
         component: UpdateHouse,
+        role: '房源管理',
     }, {
         path: '/buildingDetails/:id',
         component: BuildingDetails,
+        role: '房源管理',
     }, {
         path: '/houseDetails/:id/:id2',
         component: HouseDetails,
+        role: '房源管理',
     }, {
         path: '/lease',
         name: '租赁管理',
@@ -86,15 +89,18 @@ const routes = [
     }, {
         path: '/leaseHouseDetails/:id/:id2',
         component: LeaseHouseDetails,
+        role: '租赁房源',
     }, {
         path: '/submitApply/:id/:name/:rentPrice',
         component: SubmitApply,
     }, {
         path: '/approvalApply/:id',
         component: ApprovalApply,
+        role: '租赁审批',
     }, {
         path: '/seeAdopt/:id',
         component: SeeAdopt,
+        role: '租赁审批',
     }, {
         path: '/leaseApplyDetiles/:id',
         component: LeaseApplyDetiles,
@@ -118,7 +124,7 @@ const filterByAuths = (routes = [], auths = []) => {
     })
 }
 export const getNav = (auths) => {
-    //auths = ['房源管理', '租赁审批']
+    // auths = ['房源管理', '租赁审批']
     const navs = routes.filter(item => item.navAttr).map(item => {
         return {
             name: item.name,
@@ -139,6 +145,7 @@ export const getFirst = (auths) => {
     return firstNav && firstNav.children.length > 0 ? firstNav.children[0].path : firstNav.path 
 }
 export default (auths) => {
+    // auths = ['房源管理', '租赁审批']
     let allRoutes = []
     routes.map(item => {
         if (item.children) {
