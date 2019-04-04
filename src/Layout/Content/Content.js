@@ -24,7 +24,7 @@ export default class Content extends Component {
                             );
                         })}
                         <Redirect exact path="/" to={getFirst(auths)} />
-                        <Redirect to="/404" />
+                        { auths.length > 0 && <Redirect to="/404" /> }
                     </Switch>
                 </div>
                 <Footer />

@@ -14,28 +14,26 @@ let Navigation = withRouter(({ history, location, match, items, style, auths }) 
         //     message.warning('您没有对应的权限')
         // }
     }
-    let generateMenu = () => {
-        return menu.map((item, index) => {
-            if (item.children.length > 0) {
+    let generateMenu = (menuData) => {
+        return menuData.map((item, index) => {
+            if(item.children && item.children.length > 0){
                 return (
-                    <SubMenu title={<span className="submenu-title-wrapper">{item.name}</span>} key={index}>
-                        {
-                            item.children.map(item => {
-                                return (
-                                    <Menu.Item key={item.path}>
-                                        <NavLink to={item.path} onClick={(e) => { link(e, item) }}>
-                                            <span>{item.name}</span>
-                                        </NavLink>
-                                    </Menu.Item>
-                                )
-                            })
+                    <SubMenu
+                        key={item.path}
+                        title={
+                            <span>
+                                {/* <Icon type={item.icon} theme="outlined" /> */}
+                                <span>{item.name}</span>
+                            </span>
                         }
+                    >
+                        {generateMenu(item.children)}
                     </SubMenu>
                 )
-            } else {
+            }else{
                 return (
                     <Menu.Item key={item.path}>
-                        <NavLink to={item.path} onClick={(e) => { link(e, item) }}>
+                        <NavLink to={item.path} >
                             <span>{item.name}</span>
                         </NavLink>
                     </Menu.Item>
@@ -46,13 +44,14 @@ let Navigation = withRouter(({ history, location, match, items, style, auths }) 
     const openKeys = "/" + location.pathname.match(/[^/]+/);
     return (
         <Menu
-            selectedKeys={[location.pathname]}
+            defaultSelectedKeys={[location.pathname]}
+            //selectedKeys={[location.pathname]}
             defaultOpenKeys={[openKeys]}
             mode="horizontal"
             style={{ lineHeight: '64px' }}
             theme="dark"
         >
-            {generateMenu()}
+            {generateMenu(menu)}
         </Menu>
     );
 });

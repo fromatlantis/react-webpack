@@ -22,7 +22,14 @@ const model = {
                     data: action.payload
                 });
                 if (res.data) {
-                    yield put(actions("loginSuccess")(res.data));
+                    if(res.data.users){
+                        let user = yield call(request, {
+                            url: `/authuser/confirm?token=${res.data.users[1].token}`
+                        });
+                        yield put(actions("loginSuccess")(user.data));
+                    }else{
+                        yield put(actions("loginSuccess")(res.data));
+                    }
                     yield put(replace("/home"));
                 }
             }
