@@ -1,0 +1,37 @@
+.carousel {
+    width: 600px;
+    /* height: 400px; */
+}
+
+.carImg {
+    width: 80px;
+    height: 80px;
+    padding: 2px;
+}
+.carousel img {
+    height: 400px;
+
+}
+.littleThumb {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    max-width: 560px;
+    position: absolute;
+    left: 20px;
+    right: 20px;
+}
+.selected {
+    border: 1px solid #000;
+}
+.guideBox {
+    width: 20px;
+    background: #ccc;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+}

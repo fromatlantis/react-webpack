@@ -9,9 +9,9 @@
     ant-design-palettes "^1.1.3"
     babel-runtime "^6.26.0"
 
-"@ant-design/icons@~1.1.15":
+"@ant-design/icons@~1.1.16":
   version "1.1.16"
-  resolved "http://registry.npm.taobao.org/@ant-design/icons/download/@ant-design/icons-1.1.16.tgz#ac6426216934e3f4bc108f2f48f92ed66789235e"
+  resolved "https://registry.npmjs.org/@ant-design/icons/-/icons-1.1.16.tgz#ac6426216934e3f4bc108f2f48f92ed66789235e"
 
 "@babel/code-frame@7.0.0", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.0.0-beta.35":
   version "7.0.0"
@@ -1042,11 +1042,11 @@ ant-design-palettes@^1.1.3:
   dependencies:
     tinycolor2 "^1.4.1"
 
-antd@^3.10.3:
-  version "3.11.0"
-  resolved "http://registry.npm.taobao.org/antd/download/antd-3.11.0.tgz#e9ff4e37bd1301bb085730e26a38e633270a38f1"
+antd@^3.13.4:
+  version "3.13.4"
+  resolved "https://registry.npmjs.org/antd/-/antd-3.13.4.tgz#8d9afb182a4c9e2d7d0e43bed8661513159e56b2"
   dependencies:
-    "@ant-design/icons" "~1.1.15"
+    "@ant-design/icons" "~1.1.16"
     "@ant-design/icons-react" "~1.1.2"
     array-tree-filter "^2.1.0"
     babel-runtime "6.x"
@@ -1056,38 +1056,37 @@ antd@^3.10.3:
     css-animation "^1.5.0"
     dom-closest "^0.2.0"
     enquire.js "^2.1.6"
-    intersperse "^1.0.0"
     lodash "^4.17.11"
-    moment "^2.22.2"
+    moment "^2.24.0"
     omit.js "^1.0.0"
     prop-types "^15.6.2"
     raf "^3.4.0"
     rc-animate "^2.5.4"
-    rc-calendar "~9.8.0"
-    rc-cascader "~0.16.0"
+    rc-calendar "~9.10.3"
+    rc-cascader "~0.17.0"
     rc-checkbox "~2.1.5"
-    rc-collapse "~1.10.0"
-    rc-dialog "~7.2.1"
+    rc-collapse "~1.10.2"
+    rc-dialog "~7.3.0"
     rc-drawer "~1.7.6"
-    rc-dropdown "~2.2.1"
+    rc-dropdown "~2.4.1"
     rc-editor-mention "^1.1.7"
-    rc-form "^2.2.3"
-    rc-input-number "~4.3.0"
+    rc-form "^2.4.0"
+    rc-input-number "~4.3.7"
     rc-menu "~7.4.12"
     rc-notification "~3.3.0"
-    rc-pagination "~1.17.3"
-    rc-progress "~2.2.6"
-    rc-rate "~2.4.2"
-    rc-select "~8.6.0"
-    rc-slider "~8.6.3"
+    rc-pagination "~1.17.7"
+    rc-progress "~2.3.0"
+    rc-rate "~2.5.0"
+    rc-select "^8.6.7"
+    rc-slider "~8.6.5"
     rc-steps "~3.3.0"
-    rc-switch "~1.8.0"
+    rc-switch "~1.9.0"
     rc-table "~6.4.0"
-    rc-tabs "~9.5.2"
-    rc-time-picker "~3.4.0"
+    rc-tabs "~9.6.0"
+    rc-time-picker "~3.6.1"
     rc-tooltip "~3.7.3"
     rc-tree "~1.14.6"
-    rc-tree-select "~2.4.0"
+    rc-tree-select "~2.5.0"
     rc-trigger "^2.6.2"
     rc-upload "~2.6.0"
     rc-util "^4.5.1"
@@ -1183,10 +1182,6 @@ array-map@~0.0.0:
 array-reduce@~0.0.0:
   version "0.0.0"
   resolved "http://registry.npm.taobao.org/array-reduce/download/array-reduce-0.0.0.tgz#173899d3ffd1c7d9383e4479525dbe278cab5f2b"
-
-array-tree-filter@^1.0.0:
-  version "1.0.1"
-  resolved "http://registry.npm.taobao.org/array-tree-filter/download/array-tree-filter-1.0.1.tgz#0a8ad1eefd38ce88858632f9cc0423d7634e4d5d"
 
 array-tree-filter@^2.1.0:
   version "2.1.0"
@@ -2287,7 +2282,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-create-react-class@^15.5.2, create-react-class@^15.5.3, create-react-class@^15.6.3:
+create-react-class@^15.5.3, create-react-class@^15.6.3:
   version "15.6.3"
   resolved "http://registry.npm.taobao.org/create-react-class/download/create-react-class-15.6.3.tgz#2d73237fb3f970ae6ebe011a9e66f46dbca80036"
   dependencies:
@@ -2301,6 +2296,13 @@ create-react-context@0.2.2:
   dependencies:
     fbjs "^0.8.0"
     gud "^1.0.0"
+
+cross-env@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.npmjs.org/cross-env/-/cross-env-5.2.0.tgz#6ecd4c015d5773e614039ee529076669b9d126f2"
+  dependencies:
+    cross-spawn "^6.0.5"
+    is-windows "^1.0.0"
 
 cross-spawn@6.0.5, cross-spawn@^6.0.0, cross-spawn@^6.0.5:
   version "6.0.5"
@@ -2335,6 +2337,10 @@ crypto-browserify@^3.11.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
     randomfill "^1.0.3"
+
+crypto-js@^3.1.9-1:
+  version "3.1.9-1"
+  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-3.1.9-1.tgz#fda19e761fc077e01ffbfdc6e9fdfc59e8806cd8"
 
 css-animation@1.x, css-animation@^1.3.2, css-animation@^1.5.0:
   version "1.5.0"
@@ -3968,6 +3974,12 @@ hoist-non-react-statics@^3.1.0:
   dependencies:
     react-is "^16.3.2"
 
+hoist-non-react-statics@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-3.3.0.tgz#b09178f0122184fb95acf525daaecb4d8f45958b"
+  dependencies:
+    react-is "^16.7.0"
+
 home-or-tmp@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/home-or-tmp/download/home-or-tmp-2.0.0.tgz#e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
@@ -4272,10 +4284,6 @@ internal-ip@^3.0.1:
     default-gateway "^2.6.0"
     ipaddr.js "^1.5.2"
 
-intersperse@^1.0.0:
-  version "1.0.0"
-  resolved "http://registry.npm.taobao.org/intersperse/download/intersperse-1.0.0.tgz#f2561fb1cfef9f5277cc3347a22886b4351a5181"
-
 invariant@^2.2.1, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "http://registry.npm.taobao.org/invariant/download/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
@@ -4569,7 +4577,7 @@ is-utf8@^0.2.0:
   version "0.2.1"
   resolved "http://registry.npm.taobao.org/is-utf8/download/is-utf8-0.2.1.tgz#4b0da1442104d1b336340e80797e865cf39f7d72"
 
-is-windows@^1.0.1, is-windows@^1.0.2:
+is-windows@^1.0.0, is-windows@^1.0.1, is-windows@^1.0.2:
   version "1.0.2"
   resolved "http://registry.npm.taobao.org/is-windows/download/is-windows-1.0.2.tgz#d1850eb9791ecd18e6182ce12a30f396634bb19d"
 
@@ -5647,9 +5655,13 @@ mockjs@^1.0.1-beta3:
   dependencies:
     commander "*"
 
-moment@2.x, moment@^2.22.2:
+moment@2.x:
   version "2.22.2"
   resolved "http://registry.npm.taobao.org/moment/download/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
+
+moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.npmjs.org/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -7100,26 +7112,27 @@ rc-animate@^3.0.0-rc.1, rc-animate@^3.0.0-rc.4, rc-animate@^3.0.0-rc.5:
     rc-util "^4.5.0"
     react-lifecycles-compat "^3.0.4"
 
-rc-calendar@~9.8.0:
-  version "9.8.0"
-  resolved "http://registry.npm.taobao.org/rc-calendar/download/rc-calendar-9.8.0.tgz#c3241320eae61c07b444c98ce34fde72b96c8059"
+rc-calendar@~9.10.3:
+  version "9.10.9"
+  resolved "https://registry.npmjs.org/rc-calendar/-/rc-calendar-9.10.9.tgz#8c0d56da4ff98d14360d97c85b1f7943afbda4f9"
   dependencies:
     babel-runtime "6.x"
     classnames "2.x"
-    create-react-class "^15.5.2"
     moment "2.x"
     prop-types "^15.5.8"
     rc-trigger "^2.2.0"
     rc-util "^4.1.1"
+    react-lifecycles-compat "^3.0.4"
 
-rc-cascader@~0.16.0:
-  version "0.16.2"
-  resolved "http://registry.npm.taobao.org/rc-cascader/download/rc-cascader-0.16.2.tgz#e8f44702523d88aa3f28e92e440f1de5ec384d41"
+rc-cascader@~0.17.0:
+  version "0.17.1"
+  resolved "https://registry.npmjs.org/rc-cascader/-/rc-cascader-0.17.1.tgz#914481c3370b5fd8f82e4f9df9b6596dfeda14d5"
   dependencies:
-    array-tree-filter "^1.0.0"
+    array-tree-filter "^2.1.0"
     prop-types "^15.5.8"
     rc-trigger "^2.2.0"
     rc-util "^4.0.4"
+    react-lifecycles-compat "^3.0.4"
     shallow-equal "^1.0.0"
     warning "^4.0.1"
 
@@ -7132,18 +7145,20 @@ rc-checkbox@~2.1.5:
     prop-types "15.x"
     rc-util "^4.0.4"
 
-rc-collapse@~1.10.0:
-  version "1.10.0"
-  resolved "http://registry.npm.taobao.org/rc-collapse/download/rc-collapse-1.10.0.tgz#b39578633a1e033391597776758763a10d3bc261"
+rc-collapse@~1.10.2:
+  version "1.10.3"
+  resolved "https://registry.npmjs.org/rc-collapse/-/rc-collapse-1.10.3.tgz#a223198b465c8badfa9c0bdf61d6294bdf382f66"
   dependencies:
     classnames "2.x"
     css-animation "1.x"
     prop-types "^15.5.6"
     rc-animate "2.x"
+    react-is "^16.7.0"
+    shallowequal "^1.1.0"
 
-rc-dialog@~7.2.1:
-  version "7.2.1"
-  resolved "http://registry.npm.taobao.org/rc-dialog/download/rc-dialog-7.2.1.tgz#ac92fcffdf2a0eaa64b77f829336653d911a57be"
+rc-dialog@~7.3.0:
+  version "7.3.0"
+  resolved "https://registry.npmjs.org/rc-dialog/-/rc-dialog-7.3.0.tgz#d5b8c4bb4f4b2ac38bb5a839ab9e255b8a88b1ac"
   dependencies:
     babel-runtime "6.x"
     rc-animate "2.x"
@@ -7158,11 +7173,12 @@ rc-drawer@~1.7.6:
     prop-types "^15.5.0"
     rc-util "^4.5.1"
 
-rc-dropdown@~2.2.1:
-  version "2.2.1"
-  resolved "http://registry.npm.taobao.org/rc-dropdown/download/rc-dropdown-2.2.1.tgz#172b6e87f0909fe8ab983e375f62e2866f3250c3"
+rc-dropdown@~2.4.1:
+  version "2.4.1"
+  resolved "https://registry.npmjs.org/rc-dropdown/-/rc-dropdown-2.4.1.tgz#aaef6eb3a5152cdd9982895c2a78d9b5f046cdec"
   dependencies:
     babel-runtime "^6.26.0"
+    classnames "^2.2.6"
     prop-types "^15.5.8"
     rc-trigger "^2.5.1"
     react-lifecycles-compat "^3.0.2"
@@ -7192,17 +7208,17 @@ rc-editor-mention@^1.1.7:
     rc-animate "^2.3.0"
     rc-editor-core "~0.8.3"
 
-rc-form@^2.2.3:
-  version "2.2.7"
-  resolved "http://registry.npm.taobao.org/rc-form/download/rc-form-2.2.7.tgz#8880851b9cd4a9c911f5272c91db73978a72377d"
+rc-form@^2.4.0:
+  version "2.4.2"
+  resolved "https://registry.npmjs.org/rc-form/-/rc-form-2.4.2.tgz#b32a84b80c8201087bbb7e1b54fd75527bce2230"
   dependencies:
     async-validator "~1.8.5"
     babel-runtime "6.x"
     create-react-class "^15.5.3"
     dom-scroll-into-view "1.x"
-    hoist-non-react-statics "^2.3.1"
+    hoist-non-react-statics "^3.3.0"
     lodash "^4.17.4"
-    warning "^3.0.0"
+    warning "^4.0.3"
 
 rc-hammerjs@~0.6.0:
   version "0.6.9"
@@ -7212,9 +7228,9 @@ rc-hammerjs@~0.6.0:
     hammerjs "^2.0.8"
     prop-types "^15.5.9"
 
-rc-input-number@~4.3.0:
-  version "4.3.7"
-  resolved "http://registry.npm.taobao.org/rc-input-number/download/rc-input-number-4.3.7.tgz#5c11a2015812c414492d8f0408ef04bb48fd6e1c"
+rc-input-number@~4.3.7:
+  version "4.3.9"
+  resolved "https://registry.npmjs.org/rc-input-number/-/rc-input-number-4.3.9.tgz#35994556ebda84b7e6b1fb479784844b6b4a738a"
   dependencies:
     babel-runtime "6.x"
     classnames "^2.2.0"
@@ -7248,33 +7264,33 @@ rc-notification@~3.3.0:
     rc-animate "2.x"
     rc-util "^4.0.4"
 
-rc-pagination@~1.17.3:
-  version "1.17.3"
-  resolved "http://registry.npm.taobao.org/rc-pagination/download/rc-pagination-1.17.3.tgz#4c5334adef607f7a80b90ca7501a1e962491aae5"
+rc-pagination@~1.17.7:
+  version "1.17.8"
+  resolved "https://registry.npmjs.org/rc-pagination/-/rc-pagination-1.17.8.tgz#65583bebe13fffe4de7f418e1a6c86374ceabceb"
   dependencies:
     babel-runtime "6.x"
     prop-types "^15.5.7"
+    react-lifecycles-compat "^3.0.4"
 
-rc-progress@~2.2.6:
-  version "2.2.6"
-  resolved "http://registry.npm.taobao.org/rc-progress/download/rc-progress-2.2.6.tgz#d5d07c07333b352a9ef13230c5940e13336c1e62"
+rc-progress@~2.3.0:
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/rc-progress/-/rc-progress-2.3.0.tgz#cfbd07ff9026c450100980de209a92650e24f313"
   dependencies:
     babel-runtime "6.x"
     prop-types "^15.5.8"
 
-rc-rate@~2.4.2:
-  version "2.4.3"
-  resolved "http://registry.npm.taobao.org/rc-rate/download/rc-rate-2.4.3.tgz#70434905faf84c9a0694bec4bdbd9b9a9099318f"
+rc-rate@~2.5.0:
+  version "2.5.0"
+  resolved "https://registry.npmjs.org/rc-rate/-/rc-rate-2.5.0.tgz#72d4984a03d0a7a0e6779c7a79efcea27626abf6"
   dependencies:
-    babel-runtime "^6.26.0"
     classnames "^2.2.5"
     prop-types "^15.5.8"
     rc-util "^4.3.0"
     react-lifecycles-compat "^3.0.4"
 
-rc-select@~8.6.0:
-  version "8.6.4"
-  resolved "http://registry.npm.taobao.org/rc-select/download/rc-select-8.6.4.tgz#0b80b486d16070640623d1cd43e828035023ab09"
+rc-select@^8.6.7:
+  version "8.8.3"
+  resolved "https://registry.npmjs.org/rc-select/-/rc-select-8.8.3.tgz#87ec0f3e119af1caac21a9489110669eef30c662"
   dependencies:
     babel-runtime "^6.23.0"
     classnames "2.x"
@@ -7289,9 +7305,9 @@ rc-select@~8.6.0:
     react-lifecycles-compat "^3.0.2"
     warning "^4.0.2"
 
-rc-slider@~8.6.3:
-  version "8.6.3"
-  resolved "http://registry.npm.taobao.org/rc-slider/download/rc-slider-8.6.3.tgz#1ca0e0bd2863252741de75e7bf8c9f2cfcffccb7"
+rc-slider@~8.6.5:
+  version "8.6.5"
+  resolved "https://registry.npmjs.org/rc-slider/-/rc-slider-8.6.5.tgz#4bc90b8adfa6d46430a887f63cf70b88b43070a8"
   dependencies:
     babel-runtime "6.x"
     classnames "^2.2.5"
@@ -7310,13 +7326,13 @@ rc-steps@~3.3.0:
     lodash "^4.17.5"
     prop-types "^15.5.7"
 
-rc-switch@~1.8.0:
-  version "1.8.0"
-  resolved "http://registry.npm.taobao.org/rc-switch/download/rc-switch-1.8.0.tgz#cff32fd04c406d8c0c0397e69bc36350a333e236"
+rc-switch@~1.9.0:
+  version "1.9.0"
+  resolved "https://registry.npmjs.org/rc-switch/-/rc-switch-1.9.0.tgz#ab2b878f2713c681358a453391976c9b95b290f7"
   dependencies:
-    babel-runtime "^6.23.0"
     classnames "^2.2.1"
     prop-types "^15.5.6"
+    react-lifecycles-compat "^3.0.4"
 
 rc-table@~6.4.0:
   version "6.4.0"
@@ -7333,9 +7349,9 @@ rc-table@~6.4.0:
     shallowequal "^1.0.2"
     warning "^3.0.0"
 
-rc-tabs@~9.5.2:
-  version "9.5.6"
-  resolved "http://registry.npm.taobao.org/rc-tabs/download/rc-tabs-9.5.6.tgz#59772031b18c2adb8e4d3930250754f2e0695a47"
+rc-tabs@~9.6.0:
+  version "9.6.0"
+  resolved "https://registry.npmjs.org/rc-tabs/-/rc-tabs-9.6.0.tgz#b212a85f58384897b09f52dd3ee6701fff7fccd5"
   dependencies:
     babel-runtime "6.x"
     classnames "2.x"
@@ -7347,11 +7363,10 @@ rc-tabs@~9.5.2:
     rc-util "^4.0.4"
     warning "^3.0.0"
 
-rc-time-picker@~3.4.0:
-  version "3.4.0"
-  resolved "http://registry.npm.taobao.org/rc-time-picker/download/rc-time-picker-3.4.0.tgz#274e80122f885b37a4eace7393f3a25334fa141f"
+rc-time-picker@~3.6.1:
+  version "3.6.2"
+  resolved "https://registry.npmjs.org/rc-time-picker/-/rc-time-picker-3.6.2.tgz#fd7133390353c6cd29ec09aa6c9711ab59228f1c"
   dependencies:
-    babel-runtime "6.x"
     classnames "2.x"
     moment "2.x"
     prop-types "^15.5.8"
@@ -7365,11 +7380,10 @@ rc-tooltip@^3.7.0, rc-tooltip@~3.7.3:
     prop-types "^15.5.8"
     rc-trigger "^2.2.2"
 
-rc-tree-select@~2.4.0:
-  version "2.4.3"
-  resolved "http://registry.npm.taobao.org/rc-tree-select/download/rc-tree-select-2.4.3.tgz#0e9cc8c209e32298d01166e26ad2b03e22f9a7ea"
+rc-tree-select@~2.5.0:
+  version "2.5.3"
+  resolved "https://registry.npmjs.org/rc-tree-select/-/rc-tree-select-2.5.3.tgz#17bce4851c24e746bf9e2211c509be1aaccdcd54"
   dependencies:
-    babel-runtime "^6.23.0"
     classnames "^2.2.1"
     prop-types "^15.5.8"
     raf "^3.4.0"
@@ -7498,6 +7512,10 @@ react-error-overlay@^5.1.0:
 react-is@^16.3.2, react-is@^16.6.0:
   version "16.6.3"
   resolved "http://registry.npm.taobao.org/react-is/download/react-is-16.6.3.tgz#d2d7462fcfcbe6ec0da56ad69047e47e56e7eac0"
+
+react-is@^16.7.0:
+  version "16.8.2"
+  resolved "https://registry.npmjs.org/react-is/-/react-is-16.8.2.tgz#09891d324cad1cb0c1f2d91f70a71a4bee34df0f"
 
 react-lazy-load@^3.0.13:
   version "3.0.13"
@@ -9011,6 +9029,12 @@ warning@^3.0.0:
 warning@^4.0.1, warning@^4.0.2, warning@~4.0.2:
   version "4.0.2"
   resolved "http://registry.npm.taobao.org/warning/download/warning-4.0.2.tgz#aa6876480872116fa3e11d434b0d0d8d91e44607"
+  dependencies:
+    loose-envify "^1.0.0"
+
+warning@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.npmjs.org/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
   dependencies:
     loose-envify "^1.0.0"
 

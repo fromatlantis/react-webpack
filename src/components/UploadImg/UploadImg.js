@@ -53,10 +53,11 @@ class UploadImg extends Component {
         const uploadButton = (
             <div>
                 <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                <div className="ant-upload-text">选择图片</div>
+                <div className="ant-upload-text">Upload</div>
             </div>
         );
         const imageUrl = this.state.imageUrl;
+        const { url } = this.props
         return (
             <Upload
                 name="avatar"
@@ -67,7 +68,8 @@ class UploadImg extends Component {
                 beforeUpload={this.beforeUpload}
                 onChange={this.handleChange}
             >
-                {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+                {url && !imageUrl ? <img src={url} alt="" style={{ width: 100, height: 100 }} /> : imageUrl ? <img src={imageUrl} style={{ width: 100, height: 100 }} alt="avatar" /> : uploadButton}
+                {/* {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton} */}
             </Upload>
         );
     }

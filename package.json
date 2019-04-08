@@ -5,7 +5,7 @@
   "dependencies": {
     "@babel/core": "7.1.0",
     "@svgr/webpack": "2.4.1",
-    "antd": "^3.10.3",
+    "antd": "^3.13.4",
     "axios": "^0.18.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
@@ -19,6 +19,8 @@
     "chalk": "2.4.1",
     "classnames": "^2.2.6",
     "connected-react-router": "^5.0.0",
+    "cross-env": "^5.2.0",
+    "crypto-js": "^3.1.9-1",
     "css-loader": "1.0.0",
     "dotenv": "6.0.0",
     "dotenv-expand": "4.2.0",
@@ -70,7 +72,8 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "production": "node scripts/build.js",
+    "build": "cross-env CONFIG_ENV=test node scripts/build.js",
     "test": "node scripts/test.js",
     "update": "git pull https://github.com/fromatlantis/react-webpack.git"
   },
@@ -137,5 +140,5 @@
   "devDependencies": {
     "redux-logger": "^3.0.6"
   },
-  "homepage":"."
+  "homepage": "."
 }

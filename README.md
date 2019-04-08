@@ -71,6 +71,7 @@
     - 本地 `git branch -d feature/common`
 - 创建Tag标签
     - 新建标签 `git tag -a v0.3.0 -m "new tag"`
+    - 查看已建标签 `git tag`
     - 查看标签 `git show v0.3.0`
     - 推送到远程 `git push origin v0.3.0`
     - 删除本地tag `git tag -d v0.3.0`

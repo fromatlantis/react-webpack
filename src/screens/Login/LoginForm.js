@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react'
 import { withRouter } from "react-router-dom"
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
-import styles from './Login.module.css'
+import { Form, Icon, Input, Button, Checkbox } from 'antd'
+import styles from './Login.module.css';
+import {DESEncrypt} from '../../utils';
 
 const FormItem = Form.Item;
 
@@ -10,7 +11,8 @@ class LoginForm extends PureComponent {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                values.type = '1';
+                values.type = '0';
+                values.password = DESEncrypt(values.password)
                 this.props.login(values);
                 //console.log('Received values of form: ', values);
             }

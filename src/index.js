@@ -22,10 +22,10 @@ const sagaMiddleware = createSagaMiddleware();
 const loggerMiddleware = createLogger();
 const history = createHashHistory()
 const middleware = [sagaMiddleware,routerMiddleware(history)];
-// mockjs
-//import "./mock";
+
 if (process.env.NODE_ENV === "development") {
-    require("./mock")
+    // mockjs
+    //require("./mock")
     middleware.push(loggerMiddleware)
 }
 
