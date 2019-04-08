@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { Layout } from "antd";
+import { Layout, BackTop } from "antd";
 import routes, { getFirst } from "../../routes/routes";
 import styles from "./Content.module.css";
 import Footer from "../Footer/Footer";
@@ -27,6 +27,7 @@ export default class Content extends Component {
                         { auths.length > 0 && <Redirect to="/404" /> }
                     </Switch>
                 </div>
+                <BackTop />
                 <Footer />
             </Layout.Content>
         )

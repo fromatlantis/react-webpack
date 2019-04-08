@@ -23,41 +23,55 @@ function beforeUpload(file) {
 class UploadImg extends Component {
     state = {
         loading: false,
+        imageUrl: this.props.value
     };
+    componentWillReceiveProps = (nextProps) => {
+        if ('value' in nextProps) {
+            const value = nextProps.value;
+            // 如果传过来的是File对象，转换成base64
+            if(value && typeof (value) === 'object'){
+                getBase64(value, imageUrl => {
+                    this.setState({
+                        imageUrl,
+                        loading: false,
+                    })
+                })
+            }else{
+                this.setState({
+                    imageUrl: value
+                })
+            }
+        }
+    }
+    triggerChange = (changedValue) => {
+        // Should provide an event to pass value to Form.
+        const onChange = this.props.onChange;
+        if (onChange) {
+            onChange(changedValue);
+        }
+    }
     beforeUpload = (file) => {
+        console.log(file)
         getBase64(file, imageUrl => this.setState({
             imageUrl,
             loading: false,
         }));
-        this.props.onUpload(file)
         return false
     }
     handleChange = (info) => {
         this.setState({ loading: true });
-        //console.log(info.file.status)
-        if (info.file.status === 'uploading') {
-            this.setState({ loading: true });
-            return;
-        }
-        if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            console.log(info.file.originFileObj)
-            getBase64(info.file.originFileObj, imageUrl => this.setState({
-                imageUrl,
-                loading: false,
-            }));
-        }
+        this.triggerChange(info.file);
     }
-
     render() {
         const uploadButton = (
             <div>
                 <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                <div className="ant-upload-text">Upload</div>
+                <div className="ant-upload-text">选择图片</div>
             </div>
         );
-        const imageUrl = this.state.imageUrl;
-        const { url } = this.props
+        //alert(this.props.value)
+        const { imageUrl } = this.state
+        console.log(imageUrl)
         return (
             <Upload
                 name="avatar"
@@ -68,8 +82,7 @@ class UploadImg extends Component {
                 beforeUpload={this.beforeUpload}
                 onChange={this.handleChange}
             >
-                {url && !imageUrl ? <img src={url} alt="" style={{ width: 100, height: 100 }} /> : imageUrl ? <img src={imageUrl} style={{ width: 100, height: 100 }} alt="avatar" /> : uploadButton}
-                {/* {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton} */}
+                {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
             </Upload>
         );
     }
