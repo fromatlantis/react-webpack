@@ -1,6 +1,6 @@
-import axios from "axios";
-import { message } from "antd";
-import {store} from '../index'
+import axios from 'axios'
+import { message } from 'antd'
+import { store } from '../index'
 //import { replace } from 'connected-react-router'
 import { actions } from 'reduxDir/loading'
 import { redirectLogin } from './index'
@@ -21,92 +21,89 @@ const codeMessage = {
     502: '网关错误。',
     503: '服务不可用，服务器暂时过载或维护。',
     504: '网关超时。',
-};
+}
 
-let baseURL;
+let baseURL
 
 // 环境的切换
-if (process.env.NODE_ENV === "development") {
-    baseURL = "/";
-} else if (process.env.NODE_ENV === "debug") {
-    baseURL = "/";
-} else if (process.env.NODE_ENV === "production") {
-    baseURL = "/houzai";
+if (process.env.NODE_ENV === 'development') {
+    baseURL = '/'
+} else if (process.env.NODE_ENV === 'debug') {
+    baseURL = '/'
+} else if (process.env.NODE_ENV === 'production') {
+    baseURL = '/houzai'
 }
 
 // create an axios instance
 const request = axios.create({
     baseURL,
-    timeout: 15000
-});
-const token = "";
+    timeout: 15000,
+})
+const token = ''
 // 请求拦截器
 request.interceptors.request.use(
     config => {
         // 在请求发送之前做一些事
         if (token) {
-            config.headers.Authorization = "Bearer " + token; // 让每个请求携带token
+            config.headers.Authorization = 'Bearer ' + token // 让每个请求携带token
         }
         store.dispatch(actions('complate')(false))
-        return config;
+        return config
     },
     error => {
         // Do something with request error
-        return Promise.reject(error);
-    }
-);
+        return Promise.reject(error)
+    },
+)
 // 再添加一个返回拦截器
 request.interceptors.response.use(
     response => {
         store.dispatch(actions('complate')(true))
-        return response;
+        return response
     },
     error => {
-        return Promise.reject(error);
-    }
-);
+        return Promise.reject(error)
+    },
+)
 /**
  * type: get|post|
  * get方式推荐使用RESTful，参数从路由匹配
  * contentType:
  */
-export default ({
-    type = "get",
-    url,
-    data = {},
-    contentType = "application/json"
-}) => {
-    type = type.toLocaleLowerCase();
+export default ({ type = 'get', url, data = {}, contentType = 'application/json' }) => {
+    type = type.toLocaleLowerCase()
     let postData = {},
         config = {
-            headers: { "Content-Type": contentType }
-        };
+            headers: { 'Content-Type': contentType },
+        }
     // 数据格式化，传过来的data均为json
-    if (type === "post") {
-        postData.params = data;
+    if (type === 'post') {
+        postData.params = data
     }
-    if (contentType === "multipart/form-data") {
-        let formData = new FormData();
+    if (contentType === 'multipart/form-data') {
+        let formData = new FormData()
         for (let k in data) {
-            data[k] && formData.append(k, data[k]);
+            data[k] && formData.append(k, data[k])
         }
-        postData = formData;
+        postData = formData
     }
-    return request[type](url, postData, config).then(response => {
-        if (response.data && response.data.code !== 1000) {
-            message.error(response.data.message);
-        }
-        return response.data || {};
-    }).catch(error => {
-        const {status,statusText} = error.response;
-        const errortext = codeMessage[status] || statusText;
-        //const { dispatch } = store;
-        if (status === 401) {
-            redirectLogin({
-                type: 0,
-                storeurl: true
-            })
-        }
-        return { code: status, message: codeMessage[errortext] }
-    })
-};
+    return request[type](url, postData, config)
+        .then(response => {
+            if (response.data && response.data.code !== 1000) {
+                message.error(response.data.message)
+            }
+            return response.data || {}
+        })
+        .catch(error => {
+            const { status, statusText } = error.response
+            const errortext = codeMessage[status] || statusText
+            //const { dispatch } = store;
+            if (status === 401) {
+                redirectLogin({
+                    type: 0,
+                    storeurl: true,
+                })
+            }
+            return { code: status, message: codeMessage[errortext] }
+        })
+}

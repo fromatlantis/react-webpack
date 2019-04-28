@@ -1,30 +1,27 @@
-import  React from 'react';
-import { Form, Input, Button } from 'antd';
-import styles from '../TableView/TableView.module.css';
-const FormItem = Form.Item;
+import React from 'react'
+import { Form, Input, Button } from 'antd'
+import styles from '../TableView/TableView.module.css'
+const FormItem = Form.Item
 const CreateQueryForm = Form.create()(props => {
-    const { form, name } = props;
+    const { form, name } = props
     const querySubmit = () => {
-        let fields = form.getFieldsValue();
+        let fields = form.getFieldsValue()
         props.onSubmit({
             pageNo: 1,
             pageSize: props.pageSize,
-            ...fields
+            ...fields,
         })
     }
-      
+
     return (
         <Form layout="inline" onSubmit={querySubmit}>
             <FormItem>
-                {
-                    form.getFieldDecorator(name)(<Input placeholder="请输入" className={styles.search}/>)
-                }
+                {form.getFieldDecorator(name)(
+                    <Input placeholder="请输入" className={styles.search} />,
+                )}
             </FormItem>
             <FormItem>
-                <Button
-                    type="primary"
-                    htmlType="submit"
-                >
+                <Button type="primary" htmlType="submit">
                     查询
                 </Button>
             </FormItem>
@@ -32,5 +29,4 @@ const CreateQueryForm = Form.create()(props => {
     )
 })
 
-
-export default CreateQueryForm;
+export default CreateQueryForm

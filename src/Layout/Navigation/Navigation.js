@@ -1,22 +1,22 @@
-import React from "react";
-import { NavLink, withRouter } from "react-router-dom";
-import { Menu, message } from "antd";
+import React from 'react'
+import { NavLink, withRouter } from 'react-router-dom'
+import { Menu, message } from 'antd'
 
-import { getNav } from '../../routes/routes';
+import { getNav } from '../../routes/routes'
 
-const SubMenu = Menu.SubMenu;
+const SubMenu = Menu.SubMenu
 
 let Navigation = withRouter(({ history, location, match, items, style, auths }) => {
-    const menu = getNav(auths);
+    const menu = getNav(auths)
     let link = (e, item) => {
         // if(!auths.includes(item.name)) {
         //     e.preventDefault()
         //     message.warning('您没有对应的权限')
         // }
     }
-    let generateMenu = (menuData) => {
+    let generateMenu = menuData => {
         return menuData.map((item, index) => {
-            if(item.children && item.children.length > 0){
+            if (item.children && item.children.length > 0) {
                 return (
                     <SubMenu
                         key={item.path}
@@ -30,10 +30,10 @@ let Navigation = withRouter(({ history, location, match, items, style, auths }) 
                         {generateMenu(item.children)}
                     </SubMenu>
                 )
-            }else{
+            } else {
                 return (
                     <Menu.Item key={item.path}>
-                        <NavLink to={item.path} >
+                        <NavLink to={item.path}>
                             <span>{item.name}</span>
                         </NavLink>
                     </Menu.Item>
@@ -41,7 +41,7 @@ let Navigation = withRouter(({ history, location, match, items, style, auths }) 
             }
         })
     }
-    const openKeys = "/" + location.pathname.match(/[^/]+/);
+    const openKeys = '/' + location.pathname.match(/[^/]+/)
     return (
         <Menu
             defaultSelectedKeys={[location.pathname]}
@@ -53,6 +53,6 @@ let Navigation = withRouter(({ history, location, match, items, style, auths }) 
         >
             {generateMenu(menu)}
         </Menu>
-    );
-});
-export default Navigation;
+    )
+})
+export default Navigation

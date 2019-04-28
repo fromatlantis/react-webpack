@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import { Layout, BackTop } from "antd";
-import routes, { getFirst } from "../../routes/routes";
-import styles from "./Content.module.css";
-import Footer from "../Footer/Footer";
+import React, { Component } from 'react'
+import { Redirect, Route, Switch } from 'react-router-dom'
+import { Layout, BackTop } from 'antd'
+import routes, { getFirst } from '../../routes/routes'
+import styles from './Content.module.css'
+import Footer from '../Footer/Footer'
 export default class Content extends Component {
     render() {
         const { auths } = this.props
@@ -21,10 +21,10 @@ export default class Content extends Component {
                                     component={item.component}
                                     key={index}
                                 />
-                            );
+                            )
                         })}
                         <Redirect exact path="/" to={getFirst(auths)} />
-                        { auths.length > 0 && <Redirect to="/404" /> }
+                        {auths.length > 0 && <Redirect to="/404" />}
                     </Switch>
                 </div>
                 <BackTop />

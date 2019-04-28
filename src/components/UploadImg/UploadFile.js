@@ -1,17 +1,15 @@
-import React, { Component } from 'react';
-import {
-    Upload, message, Button, Icon,
-} from 'antd';
+import React, { Component } from 'react'
+import { Upload, message, Button, Icon } from 'antd'
 
 const props = {
     name: 'file',
     headers: {
         authorization: 'authorization-text',
     },
-};
+}
 
 class UploadFile extends Component {
-    beforeUpload = (file) => {
+    beforeUpload = file => {
         this.props.upLoad(file)
         return false
     }
@@ -21,11 +19,7 @@ class UploadFile extends Component {
     render() {
         return (
             <div>
-                <Upload
-                    {...props}
-                    beforeUpload={this.beforeUpload}
-                    onChange={this.onChange}
-                >
+                <Upload {...props} beforeUpload={this.beforeUpload} onChange={this.onChange}>
                     <Button>
                         <Icon type="upload" /> 上传文件
                     </Button>
@@ -34,6 +28,5 @@ class UploadFile extends Component {
         )
     }
 }
-
 
 export default UploadFile

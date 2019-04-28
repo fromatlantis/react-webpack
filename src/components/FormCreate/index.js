@@ -1,8 +1,8 @@
-import { Form } from 'antd';
-import FormCreate from './formCreate';
-export default (itemObj) => {
-    Object.keys(itemObj).forEach((item) => {
-        FormCreate[item] = itemObj[item];
+import { Form } from 'antd'
+import FormCreate from './formCreate'
+export default itemObj => {
+    Object.keys(itemObj).forEach(item => {
+        FormCreate[item] = itemObj[item]
     })
 
     return Form.create({
@@ -17,5 +17,5 @@ export default (itemObj) => {
         //         return item;
         //     })
         // }
-    })(FormCreate);
+    })(FormCreate)
 }

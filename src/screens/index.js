@@ -1,4 +1,2 @@
 import Boot from './Boot/Boot'
-export {
-    Boot
-}
+export { Boot }

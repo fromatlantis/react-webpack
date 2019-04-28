@@ -1,18 +1,18 @@
-import { blaze } from "../utils/blaze";
+import { blaze } from '../utils/blaze'
 const model = {
-    namespace: "loading",
+    namespace: 'loading',
     state: {
-        complate: true
+        complate: true,
     },
     actions: [
         {
-            name: "complate",
-            reducer: 'complate'
-        }
-    ]
-};
-const loading = blaze(model);
+            name: 'complate',
+            reducer: 'complate',
+        },
+    ],
+}
+const loading = blaze(model)
 // reducer combineReducers使用
-export default loading.reducers;
+export default loading.reducers
 // action connect组件使用
-export const actions = loading.actions;
+export const actions = loading.actions
