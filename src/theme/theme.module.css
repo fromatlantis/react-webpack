@@ -1,0 +1,21 @@
+/* list页面 */
+.listContainer {
+    padding: 10px;
+    & .search {
+        width: 300px;
+        margin-bottom: 10px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    & .info {
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+}
+/* form表单 */
+.form {
+    padding: 20px 10px;
+}
+.inputChip {
+    width: 300px
+}
