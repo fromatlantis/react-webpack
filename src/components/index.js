@@ -4,4 +4,6 @@ import UploadImg from './UploadImg/UploadImg'
 import DetailView from './DetailView/DetailView'
 import UploadFile from './UploadImg/UploadFile'
 import FullScreenLoading from './Loading/FullScreen'
-export { FormBody, PhoneCard, UploadImg, DetailView, UploadFile, FullScreenLoading }
+import Crumbs from './Crumbs/Crumbs'
+
+export { FormBody, PhoneCard, UploadImg, DetailView, UploadFile, FullScreenLoading, Crumbs }
