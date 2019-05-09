@@ -11,12 +11,12 @@ const routes = [
             role: 'home',
         },
         component: Loadable({
-            loader: () => import(/* webpackChunkName: "home" */ '../screens/Home'),
+            loader: () => import(/* webpackChunkName: "Home" */ '../screens/Home'),
             loading: Loading,
         }),
     },
     {
-        path: '/admin',
+        path: '/company',
         name: '企服管理',
         icon: 'appstore',
         navAttr: {
@@ -24,7 +24,30 @@ const routes = [
             role: 'home',
         },
         component: Loadable({
-            loader: () => import(/* webpackChunkName: "admin" */ '../screens/Admin/Admin'),
+            loader: () => import(/* webpackChunkName: "Company" */ '../screens/Company/Company'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/newCompany',
+        name: '新增',
+        icon: 'appstore',
+        navAttr: {
+            index: 1,
+            role: 'home',
+        },
+        component: Loadable({
+            loader: () =>
+                import(/* webpackChunkName: "NewCompany" */ '../screens/NewCompany/NewCompany'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/newCompany/*',
+        name: '新增',
+        component: Loadable({
+            loader: () =>
+                import(/* webpackChunkName: "NewCompany" */ '../screens/NewCompany/NewCompany'),
             loading: Loading,
         }),
     },
