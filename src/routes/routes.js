@@ -16,6 +16,17 @@ const routes = [
         }),
     },
     {
+        //企服首页/企业详情
+        path: '/companyDetails',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "companyDetails" */ '../screens/CompanyDetails/CompanyDetails'
+                ),
+            loading: Loading,
+        }),
+    },
+    {
         path: '/admin',
         name: '企服管理',
         icon: 'appstore',

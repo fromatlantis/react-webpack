@@ -1,0 +1,49 @@
+/* 面包屑导航 */
+.BreadcrumbSty{
+    padding: 20px 40px;
+}
+/* 导航标题 */
+.SubMenuTitle{
+    font-size: 16px;
+    color: rgb(134, 125, 125);
+}
+/* 卡片 */
+.cardSty{
+    width: 80%;
+    margin: 0 0 25px 2%;
+    /* 阴影（水平阴影的位置，垂直阴影的位置，模糊距离，颜色） */
+    box-shadow: 0px 0px 5px #b1d1f0;
+}
+/* 时间轴-最后一行高度太高 */
+:global .ant-timeline-item-last > .ant-timeline-item-content {
+    min-height: 0px;
+}
+/* 基本信息表格所在卡片消除padding */
+.messageCard{
+    padding-bottom: 10px;
+    & :global .ant-card-wider-padding .ant-card-body {
+        padding: 0 0;
+    }
+}
+/* 表格样式-tr高度 */
+.tabletr{
+    height: 52px;
+}
+/* 有背景色的标题 */
+.tdleft{
+    width: 16%;
+    border: 1px rgb(230, 235, 241) solid;
+    background-color: rgb(244, 246, 250);
+    text-align: center;
+}
+/* 无背景色的内容 */
+.tdright{
+    width: 34%;
+    border: 1px rgb(230, 235, 241) solid;
+    text-align: center;
+}
+/* 列表 */
+.tableSty{
+    width: 80%;
+    margin: 0 0 20px 2%;
+}
