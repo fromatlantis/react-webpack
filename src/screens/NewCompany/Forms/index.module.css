@@ -1,0 +1,10 @@
+.searchCard {
+    & :global .ant-form-item {
+        width: 300px;
+    }
+}
+.modalBox {
+    & :global .ant-form-item {
+        width: 100%;
+    }
+}

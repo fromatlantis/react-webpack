@@ -1,4 +1,4 @@
-import { Info } from '../Forms'
+import { Info, Business, Finance, Members, News, Product, Event, Outward } from '../Forms'
 export const menuData = [
     {
         title: '企业名片',
@@ -9,10 +9,10 @@ export const menuData = [
                 path: 'info',
                 component: Info,
             },
-            {
-                title: '标签维护',
-                path: 'tags',
-            },
+            // {
+            //     title: '标签维护',
+            //     path: 'tags',
+            // },
         ],
     },
     {
@@ -22,22 +22,27 @@ export const menuData = [
             {
                 title: '工商信息',
                 path: 'business',
+                component: Business,
             },
             {
                 title: '融资信息',
                 path: 'finance',
+                component: Finance,
             },
             {
                 title: '核心人员',
                 path: 'members',
+                component: Members,
             },
             {
-                title: '相关新闻',
+                title: '企业动态',
                 path: 'news',
+                component: News,
             },
             {
                 title: '主要产品',
                 path: 'product',
+                component: Product,
             },
         ],
     },
@@ -48,10 +53,12 @@ export const menuData = [
             {
                 title: '投资事件',
                 path: 'event',
+                component: Event,
             },
             {
                 title: '对外投资',
                 path: 'outward',
+                component: Outward,
             },
         ],
     },
