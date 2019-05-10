@@ -26,6 +26,7 @@ export default ({ items, data }) => {
         render() {
             const { formItemLayout, layout, saveBtn } = this.props
             const { getFieldDecorator } = this.props.form
+            console.log(saveBtn + 'saveBtn')
             return (
                 <Form {...formItemLayout} layout={layout} onSubmit={this.handleSubmit}>
                     {items.map((item, index) => {

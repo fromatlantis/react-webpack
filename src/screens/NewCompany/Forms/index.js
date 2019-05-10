@@ -5,6 +5,20 @@ import Members from './Members/Members'
 import News from './News/News'
 import Product from './Product/Product'
 import Event from './Event/Event'
+import Copyright from './Copyright/Copyright'
+import Works from './Works/Works'
 import Outward from './Outward/Outward'
-
-export { Info, Business, Finance, Members, News, Product, Event, Outward }
+import Website from './Website/Website'
+export {
+    Website,
+    Info,
+    Business,
+    Finance,
+    Members,
+    News,
+    Product,
+    Event,
+    Outward,
+    Copyright,
+    Works,
+}

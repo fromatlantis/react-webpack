@@ -1,4 +1,16 @@
-import { Info, Business, Finance, Members, News, Product, Event, Outward } from '../Forms'
+import {
+    Info,
+    Business,
+    Finance,
+    Members,
+    News,
+    Product,
+    Event,
+    Copyright,
+    Outward,
+    Works,
+    Website,
+} from '../Forms'
 export const menuData = [
     {
         title: '企业名片',
@@ -77,14 +89,17 @@ export const menuData = [
             {
                 title: '软件著作权',
                 path: 'copyright',
+                component: Copyright,
             },
             {
                 title: '作品著作权',
                 path: 'works',
+                component: Works,
             },
             {
                 title: '网站域名',
                 path: 'website',
+                component: Website,
             },
         ],
     },
