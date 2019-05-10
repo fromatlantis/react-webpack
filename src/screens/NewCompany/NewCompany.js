@@ -10,10 +10,8 @@ class NewCompany extends PureComponent {
     render() {
         return (
             <div className={styles.root}>
-                <div>
-                    <LeftMenu />
-                </div>
-                <div style={{ flex: 1 }}>
+                <LeftMenu />
+                <div style={{ flex: 1, paddingLeft: '256px' }}>
                     {routes().map((item, index) => {
                         return (
                             <Route

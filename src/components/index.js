@@ -4,4 +4,5 @@ import UploadImg from './UploadImg/UploadImg'
 import DetailView from './DetailView/DetailView'
 import UploadFile from './UploadImg/UploadFile'
 import FullScreenLoading from './Loading/FullScreen'
-export { FormBody, PhoneCard, UploadImg, DetailView, UploadFile, FullScreenLoading }
+import IconFont from './IconFont/IconFont'
+export { FormBody, PhoneCard, UploadImg, DetailView, UploadFile, FullScreenLoading, IconFont }

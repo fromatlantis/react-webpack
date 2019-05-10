@@ -29,20 +29,6 @@ const routes = [
         }),
     },
     {
-        path: '/newCompany',
-        name: '新增',
-        icon: 'appstore',
-        navAttr: {
-            index: 1,
-            role: 'home',
-        },
-        component: Loadable({
-            loader: () =>
-                import(/* webpackChunkName: "NewCompany" */ '../screens/NewCompany/NewCompany'),
-            loading: Loading,
-        }),
-    },
-    {
         path: '/newCompany/*',
         name: '新增',
         component: Loadable({

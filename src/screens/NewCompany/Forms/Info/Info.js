@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Card, Input, Icon, AutoComplete, Tag } from 'antd'
+import { Card, Input, Icon, AutoComplete } from 'antd'
 import { UploadImg } from 'components'
 import formView from '../FormView'
 export default class Info extends PureComponent {
