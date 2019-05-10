@@ -1,0 +1,19 @@
+.card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    & > img {
+        width: 120px;
+        height: 100%;
+    }
+    & > div {
+        padding: 15px;
+    }
+    & .base {
+        width: 160px;
+    }
+    & .intro {
+        flex: 1;
+    }
+}
