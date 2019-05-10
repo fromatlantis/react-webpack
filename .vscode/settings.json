@@ -4,7 +4,7 @@
     "emmet.triggerExpansionOnTab": true,
     "files.associations": {
         "*.js": "javascriptreact",
-        "*.css": "postcss"
+        "*.css": "css"
     },
     "editor.formatOnSave": false,
     "eslint.autoFixOnSave": true

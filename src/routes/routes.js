@@ -37,6 +37,44 @@ const routes = [
             loading: Loading,
         }),
     },
+    {
+        path: '/humanResourceService/:id',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "humanResourceService" */ '../screens/humanResourceService/humanResourceService'
+                ),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/IntermediaryDetails/:id/:type',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "IntermediaryDetails" */ '../screens/IntermediaryDetails/IntermediaryDetails'
+                ),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/dynamicList',
+        component: Loadable({
+            loader: () =>
+                import(/* webpackChunkName: "dynamicList" */ '../screens/dynamicList/dynamicList'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/dynamicDetails/:id',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "dynamicDetails" */ '../screens/dynamicDetails/dynamicDetails'
+                ),
+            loading: Loading,
+        }),
+    },
 ]
 const filterByAuths = (routes = [], auths = []) => {
     return routes.filter(route => {
