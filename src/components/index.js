@@ -6,6 +6,7 @@ import UploadFile from './UploadImg/UploadFile'
 import FullScreenLoading from './Loading/FullScreen'
 import IconFont from './IconFont/IconFont'
 import Crumbs from './Crumbs/Crumbs'
+import Graph from './Graph/Graph'
 
 export {
     FormBody,
@@ -16,4 +17,5 @@ export {
     FullScreenLoading,
     Crumbs,
     IconFont,
+    Graph,
 }

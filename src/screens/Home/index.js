@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Button, Input, Icon, Tag, Pagination } from 'antd'
+import { Button, Input, Icon, Tag, Pagination, Divider } from 'antd'
 import styles from './index.module.css'
 import chuizi from '../../assets/home/chuizi.png'
 import jizhang from '../../assets/home/jizhang.png'
@@ -75,7 +75,7 @@ class Home extends PureComponent {
                         size="large"
                     />
                 </div>
-                <div className={styles.dividingLine} />
+                <Divider />
                 {this.state.searchValue ? null : (
                     <div>
                         <h1>中介服务</h1>
@@ -113,7 +113,7 @@ class Home extends PureComponent {
                                 <h2>人资服务</h2>
                             </div>
                         </div>
-                        <div className={styles.dividingLine} />
+                        <Divider />
                         <h1>
                             企业动态
                             <span

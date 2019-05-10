@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { push } from 'connected-react-router'
 import { Link } from 'react-router-dom'
 
-import { Alert, Button, Input, List, Tag, Modal, Divider } from 'antd'
+import { Alert, Button, Input, List, Tag, Modal, Divider, Steps, message } from 'antd'
 import { IconFont } from 'components'
 import TransferView from './TransferView'
 import styles from './Company.module.css'
@@ -12,6 +12,7 @@ import styles from './Company.module.css'
 import avatar from 'assets/hz.png'
 
 const Search = Input.Search
+const Step = Steps.Step
 
 const data = [
     'Racing car sprays burning fuel into crowd.',
@@ -20,6 +21,19 @@ const data = [
     'Man charged over missing wedding girl.',
     'Los Angeles battles huge wildfires.',
 ]
+const steps = [
+    {
+        title: '上传文件',
+        content: 'First-content',
+        icon: <IconFont type="iconshangchuanwenjian" />,
+    },
+    {
+        title: '预览',
+        content: 'Second-content',
+        icon: <IconFont type="iconyulan" />,
+    },
+]
+
 @connect(
     state => ({}),
     dispatch => {
@@ -35,6 +49,8 @@ class Home extends PureComponent {
     state = {
         batchAssign: false,
         assign: false,
+        importList: false,
+        current: 0,
     }
     batchAssign = () => {
         this.setState({
@@ -66,13 +82,37 @@ class Home extends PureComponent {
             assign: false,
         })
     }
+    importList = () => {
+        this.setState({
+            importList: true,
+        })
+    }
+    importListOk = () => {
+        this.setState({
+            importList: false,
+        })
+    }
+    importListCancel = () => {
+        this.setState({
+            importList: false,
+        })
+    }
+    next() {
+        const current = this.state.current + 1
+        this.setState({ current })
+    }
+
+    prev() {
+        const current = this.state.current - 1
+        this.setState({ current })
+    }
     renderItem = () => {
         return (
             <div className={styles.itemCard}>
                 <img src={avatar} alt="logo" />
                 <div className={styles.intro}>
                     <div className={styles.title}>
-                        <div>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
                             <span>润江物业服务有限公司</span>
                             <Tag color="orange">实驻企业</Tag>
                         </div>
@@ -80,9 +120,9 @@ class Home extends PureComponent {
                             <a href>
                                 <IconFont type="iconicon_zhipai" onClick={this.assign} />
                             </a>
-                            <a href>
+                            <Link to={`/companyDetails/information`}>
                                 <IconFont type="icondetails" />
-                            </a>
+                            </Link>
                             <Link to={`/newCompany/info`}>
                                 <IconFont type="iconbianji" />
                             </Link>
@@ -145,6 +185,7 @@ class Home extends PureComponent {
         )
     }
     render() {
+        let { current } = this.state
         return (
             <div className={styles.root}>
                 <div className={styles.searchBox}>
@@ -167,7 +208,7 @@ class Home extends PureComponent {
                         >
                             新增
                         </Button>
-                        <Button>导入</Button>
+                        <Button onClick={this.importList}>导入</Button>
                     </div>
                 </div>
                 <List dataSource={data} renderItem={this.renderItem} />
@@ -190,6 +231,41 @@ class Home extends PureComponent {
                     //footer={null}
                 >
                     <TransferView titles={['选择人员', '已选人员']} />
+                </Modal>
+                <Modal
+                    title="导入"
+                    visible={this.state.importList}
+                    onOk={this.importListOk}
+                    onCancel={this.importListCancel}
+                    footer={
+                        <div className="steps-action">
+                            {current < steps.length - 1 && (
+                                <Button type="primary" onClick={() => this.next()}>
+                                    下一步
+                                </Button>
+                            )}
+                            {current === steps.length - 1 && (
+                                <Button
+                                    type="primary"
+                                    onClick={() => message.success('Processing complete!')}
+                                >
+                                    完成
+                                </Button>
+                            )}
+                            {current > 0 && (
+                                <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
+                                    上一步
+                                </Button>
+                            )}
+                        </div>
+                    }
+                >
+                    <Steps current={current}>
+                        {steps.map(item => (
+                            <Step key={item.title} title={item.title} icon={item.icon} />
+                        ))}
+                    </Steps>
+                    <div className={styles.stepCard}>{steps[current].content}</div>
                 </Modal>
             </div>
         )
