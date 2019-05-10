@@ -1,19 +1,37 @@
-import { Info, Business, Finance, Members, News, Product, Event, Outward } from '../Forms'
+import {
+    Info,
+    Business,
+    Finance,
+    Members,
+    News,
+    Product,
+    Event,
+    Outward,
+    Trademark,
+    Patent,
+    Suggest,
+    Other,
+    Copyright,
+    Works,
+    Website,
+} from '../Forms'
 export const menuData = [
     {
         title: '企业名片',
         icon: '',
-        children: [
-            {
-                title: '企业信息',
-                path: 'info',
-                component: Info,
-            },
-            // {
-            //     title: '标签维护',
-            //     path: 'tags',
-            // },
-        ],
+        path: 'info',
+        component: Info,
+        // children: [
+        //     {
+        //         title: '企业信息',
+        //         path: 'info',
+        //         component: Info,
+        //     },
+        //     {
+        //         title: '标签维护',
+        //         path: 'tags',
+        //     },
+        // ],
     },
     {
         title: '基本信息',
@@ -69,64 +87,71 @@ export const menuData = [
             {
                 title: '商标信息',
                 path: 'trademark',
+                component: Trademark,
             },
             {
                 title: '专利信息',
                 path: 'patent',
+                component: Patent,
             },
             {
                 title: '软件著作权',
                 path: 'copyright',
+                component: Copyright,
             },
             {
                 title: '作品著作权',
                 path: 'works',
+                component: Works,
             },
             {
                 title: '网站域名',
                 path: 'website',
+                component: Website,
             },
         ],
     },
-    {
-        title: '更新记录',
-        icon: '',
-        children: [
-            {
-                title: '更新消息',
-                path: 'update',
-            },
-            {
-                title: '历史记录',
-                path: 'history',
-            },
-        ],
-    },
-    {
-        title: '新闻舆情',
-        icon: '',
-        path: 'sentiment',
-    },
-    {
-        title: '企业需求',
-        icon: '',
-        path: 'requirement',
-    },
+    // {
+    //     title: '更新记录',
+    //     icon: '',
+    //     children: [
+    //         {
+    //             title: '更新消息',
+    //             path: 'update',
+    //         },
+    //         {
+    //             title: '历史记录',
+    //             path: 'history',
+    //         },
+    //     ],
+    // },
+    // {
+    //     title: '新闻舆情',
+    //     icon: '',
+    //     path: 'sentiment',
+    // },
+    // {
+    //     title: '企业需求',
+    //     icon: '',
+    //     path: 'requirement',
+    // },
     {
         title: '改进建议',
         icon: '',
         path: 'suggest',
+        component: Suggest,
     },
     {
         title: '其他信息',
         icon: '',
         path: 'other',
+        component: Other,
     },
-    {
-        title: '企业档案',
-        icon: '',
-        path: 'files',
-    },
+    // {
+    //     title: '企业档案',
+    //     icon: '',
+    //     path: 'files',
+    // },
 ]
 export default () => {
     let routes = menuData
@@ -135,6 +160,7 @@ export default () => {
             return {
                 title: route.title,
                 path: route.path,
+                component: route.component,
             }
         })
     return menuData

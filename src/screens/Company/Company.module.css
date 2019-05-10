@@ -36,6 +36,18 @@
     & .title {
         font-weight: bold;
         font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        & span {
+            margin-right: 10px;
+        }
+    }
+    & .toobar {
+        & i {
+            margin-right: 10px;
+            font-size: 23px;
+        }
     }
     & .info {
         display: flex;
@@ -45,6 +57,7 @@
     }
     & .status {
         align-self: center;
-        width: 90px;
+        width: 160px;
+        text-align: center;
     }
 }

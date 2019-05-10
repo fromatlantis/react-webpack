@@ -1,0 +1,121 @@
+.Container{
+    display:flex;
+    flex:1;
+    min-width:1080px;
+    flex-direction:column;
+    padding: 0 10%;
+    height: 100%;
+}
+.Content{
+    display: flex;
+    height: 100%;
+    overflow: auto;
+}
+.imgView{
+    width: 500px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+img{
+    width: 100%;
+    max-width: 460px;
+    max-height: 460px;
+}
+.details{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+.details h1{
+    margin-left: 125px;
+}
+.about{
+    margin: 10px 25px 25px;
+    font-size: 16px;
+}
+.moneyView{
+    margin-left: 25px;
+    height: 50px;
+    background: #e0e0e0;
+    display: flex;
+    width: 500px;
+    align-items: center;
+    padding-left: 50px;
+}
+.money{
+    color:#000;
+    letter-spacing:10px;
+}
+.money span{
+    font-size: 20px;
+    font-weight: bolder;
+    color:red;
+    letter-spacing:0px;
+
+}
+.yes{
+    width: 250px;
+    margin: 0 40px;
+}
+.numView{
+    display: flex;
+    height: 125px;
+    align-items: center;
+    margin-left: 25px;
+}
+.numView p{
+    font-size: 16px;
+}
+.numView .numTitle{
+    letter-spacing:10px;
+    columns: #333333;
+}
+
+.numView i{
+    margin:  0 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

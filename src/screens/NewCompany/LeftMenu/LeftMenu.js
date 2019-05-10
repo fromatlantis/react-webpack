@@ -4,10 +4,16 @@ import { connect } from 'react-redux'
 import { Menu, Icon } from 'antd'
 import { menuData } from './menuData'
 
+import styles from '../NewCompany.module.css'
+
 const SubMenu = Menu.SubMenu
 
 @connect(state => ({ router: state.router }))
 class LeftMenu extends PureComponent {
+    rootSubmenuKeys = ['1', '2', '3']
+    state = {
+        openKeys: ['1'],
+    }
     renderMenu = data => {
         return data.map((item, index) => {
             if (item.children) {
@@ -28,6 +34,7 @@ class LeftMenu extends PureComponent {
                 return (
                     <Menu.Item key={`/newCompany/${item.path}`}>
                         <NavLink to={`/newCompany/${item.path}`}>
+                            <Icon type="appstore" />
                             <span>{item.title}</span>
                         </NavLink>
                     </Menu.Item>
@@ -35,14 +42,27 @@ class LeftMenu extends PureComponent {
             }
         })
     }
+    onOpenChange = openKeys => {
+        const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1)
+        if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+            this.setState({ openKeys })
+        } else {
+            this.setState({
+                openKeys: latestOpenKey ? [latestOpenKey] : [],
+            })
+        }
+    }
     render() {
         let { pathname } = this.props.router.location
         console.log(pathname)
         return (
             <Menu
-                style={{ width: 256 }}
+                className={styles.menu}
+                //style={{ width: 256 }}
                 defaultSelectedKeys={[pathname]}
-                defaultOpenKeys={['0']}
+                //defaultOpenKeys={['0']}
+                openKeys={this.state.openKeys}
+                onOpenChange={this.onOpenChange}
                 mode="inline"
             >
                 {this.renderMenu(menuData)}

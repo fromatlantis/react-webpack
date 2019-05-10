@@ -40,13 +40,8 @@ const routes = [
         }),
     },
     {
-        path: '/newCompany',
+        path: '/newCompany/*',
         name: '新增',
-        icon: 'appstore',
-        navAttr: {
-            index: 1,
-            role: 'home',
-        },
         component: Loadable({
             loader: () =>
                 import(/* webpackChunkName: "NewCompany" */ '../screens/NewCompany/NewCompany'),
@@ -54,11 +49,40 @@ const routes = [
         }),
     },
     {
-        path: '/newCompany/*',
-        name: '新增',
+        path: '/humanResourceService/:id',
         component: Loadable({
             loader: () =>
-                import(/* webpackChunkName: "NewCompany" */ '../screens/NewCompany/NewCompany'),
+                import(
+                    /* webpackChunkName: "humanResourceService" */ '../screens/humanResourceService/humanResourceService'
+                ),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/IntermediaryDetails/:id/:type',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "IntermediaryDetails" */ '../screens/IntermediaryDetails/IntermediaryDetails'
+                ),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/dynamicList',
+        component: Loadable({
+            loader: () =>
+                import(/* webpackChunkName: "dynamicList" */ '../screens/dynamicList/dynamicList'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/dynamicDetails/:id',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "dynamicDetails" */ '../screens/dynamicDetails/dynamicDetails'
+                ),
             loading: Loading,
         }),
     },
