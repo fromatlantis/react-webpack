@@ -2,26 +2,74 @@
  * 企服首页/企业详情
  */
 import React, { PureComponent, Fragment } from 'react'
-import { Input, Tag, Breadcrumb, Card, Menu, Icon, Timeline, Table } from 'antd'
+import { Input, Tag, Breadcrumb, Card, Menu, Row, Col, Modal } from 'antd'
 import { Link, NavLink, Route } from 'react-router-dom'
 import styles from './CompanyDetails.module.css'
+import { menuData } from './MenuData'
+import routes from './MenuData'
 
-import Information from './Information/Information'
+import phont from '../../assets/QDZH.png'
+import retime from '../../assets/retime.png'
 
-import avatar from 'assets/avatar.png'
-
-const Search = Input.Search
 const SubMenu = Menu.SubMenu
-const MenuItemGroup = Menu.ItemGroup
 
 export default class CompanyDetails extends PureComponent {
     state = {
+        // 路由Menu参数
         current: '',
+        // modal对话框参数
+        visible: false,
     }
-
+    //导航Menu点击回调
     handleClick = e => {
-        console.log('click ', e)
+        console.log('click ', e.key)
         this.setState({ current: e.key })
+        // 轮询-锚点跳转
+        const uiInt = setInterval(() => {
+            let element = document.getElementById(e.key)
+            if (element) {
+                clearInterval(uiInt)
+                element.scrollIntoView()
+            }
+        }, 20)
+    }
+    //导航Menu的便利方法
+    renderMenu = data => {
+        return data.map((item, index) => {
+            if (item.children) {
+                return (
+                    <SubMenu
+                        key={index}
+                        title={
+                            <NavLink
+                                exact
+                                className={styles.SubMenuTitle}
+                                to={`/companyDetails/${item.path}`}
+                            >
+                                {item.title}
+                            </NavLink>
+                        }
+                    >
+                        {this.renderMenu(item.children)}
+                    </SubMenu>
+                )
+            } else {
+                return (
+                    <Menu.Item key={`${item.key}`}>
+                        <NavLink to={`/companyDetails/${item.path}`}>
+                            <span>{item.title}</span>
+                        </NavLink>
+                    </Menu.Item>
+                )
+            }
+        })
+    }
+    // modal弹出/关闭方法
+    showModal = () => {
+        this.setState({ visible: true })
+    }
+    handleCancel = e => {
+        this.setState({ visible: false })
     }
 
     render() {
@@ -33,352 +81,118 @@ export default class CompanyDetails extends PureComponent {
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>企业详情</Breadcrumb.Item>
                 </Breadcrumb>
-                <Card style={{ width: '80%', marginLeft: '2%' }}>复用</Card>
+
+                <Card className={styles.cardSty} /* style={{ height: 150 }} */>
+                    <div className={styles.flexDiv}>
+                        <img
+                            src={phont}
+                            alt=""
+                            style={{ width: 100, height: 100, marginTop: 20 }}
+                        />
+                        <div style={{ paddingLeft: 30, width: '80%' }}>
+                            <h1 className={styles.modalTd}>润江物业服务有限公司</h1>
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                <img src={retime} alt="" style={{ width: 14, height: 14 }} />
+                                <p style={{ padding: '0 10px' }}>更新时间：10分钟前</p>
+                                <Tag color="#2db7f5" onClick={this.showModal}>
+                                    发票抬头
+                                </Tag>
+                            </div>
+                            <Row gutter={16} style={{ marginTop: 6 }}>
+                                <Col span={7}>
+                                    <div>法人：庄花</div>
+                                </Col>
+                                <Col span={7}>
+                                    <div>注册资金：5000万元人民币</div>
+                                </Col>
+                                <Col span={7}>
+                                    <div>成立时间：2019-10-23</div>
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{ marginTop: 6 }}>
+                                <Col span={7}>
+                                    <div>邮箱：zhuanghua@163.com</div>
+                                </Col>
+                                <Col span={7}>
+                                    <div>联系电话：010-897788-906</div>
+                                </Col>
+                                <Col span={7}>
+                                    <div>官网：http://www.example.com</div>
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{ marginTop: 6 }}>
+                                <Col span={16}>
+                                    <div>企业地址：石家庄市科技中心润江大厦B座1201室</div>
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{ marginTop: 6 }}>
+                                <Col span={7}>
+                                    <div>企服负责人：小红</div>
+                                </Col>
+                                <Col span={7}>
+                                    <div>跟踪状态：在业</div>
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
+                </Card>
+                <Modal
+                    title="保存发票抬头"
+                    visible={this.state.visible}
+                    onCancel={this.handleCancel}
+                    footer={null}
+                    width="400px"
+                >
+                    <table>
+                        <tbody>
+                            <tr className={styles.modalTr}>
+                                <td className={styles.modalTd}>企业名称：</td>
+                                <td>小米科技有限公司</td>
+                            </tr>
+                            <tr className={styles.modalTr}>
+                                <td className={styles.modalTd}>企业税号：</td>
+                                <td>9117674378947237Q</td>
+                            </tr>
+                            <tr className={styles.modalTr}>
+                                <td className={styles.modalTd}>企业地址：</td>
+                                <td>蛊惑江湖核对好风景就哭哭</td>
+                            </tr>
+                            <tr className={styles.modalTr}>
+                                <td className={styles.modalTd}>企业电话：</td>
+                                <td>010-03984757</td>
+                            </tr>
+                            <tr className={styles.modalTr}>
+                                <td className={styles.modalTd}>开户银行：</td>
+                                <td>软件而诶热一人哦is人激怒股</td>
+                            </tr>
+                            <tr className={styles.modalTr}>
+                                <td className={styles.modalTd}>银行账户：</td>
+                                <td>11012947387889</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </Modal>
                 <Menu
+                    style={{ margin: '20px 18% 0 2%' }}
                     onClick={this.handleClick}
                     selectedKeys={[this.state.current]}
                     mode="horizontal"
-                    style={{ margin: '20px 18% 0 2%' }}
                 >
-                    {/* <SubMenu title={<span className={styles.SubMenuTitle}>基本信息</span>}> */}
-                    <SubMenu
-                        title={
-                            <NavLink
-                                exact
-                                className={styles.SubMenuTitle}
-                                to="/companyDetails/information"
-                            >
-                                基本信息
-                            </NavLink>
-                        }
-                    >
-                        <MenuItemGroup>
-                            <Menu.Item key="information:1">工商信息</Menu.Item>
-                            <Menu.Item key="information:2">融资历程</Menu.Item>
-                            <Menu.Item key="information:3">核心人员</Menu.Item>
-                            <Menu.Item key="information:4">相关新闻</Menu.Item>
-                            <Menu.Item key="information:5">主要产品</Menu.Item>
-                        </MenuItemGroup>
-                    </SubMenu>
-                    <SubMenu title={<span className={styles.SubMenuTitle}>投资关系</span>}>
-                        <MenuItemGroup>
-                            <Menu.Item key="Investment:1">投资事件</Menu.Item>
-                            <Menu.Item key="Investment:2">对外投资</Menu.Item>
-                        </MenuItemGroup>
-                    </SubMenu>
-                    <SubMenu title={<span className={styles.SubMenuTitle}>企业关系</span>}>
-                        <MenuItemGroup>
-                            <Menu.Item key="company:1">企业图谱</Menu.Item>
-                            <Menu.Item key="company:2">投资图谱</Menu.Item>
-                        </MenuItemGroup>
-                    </SubMenu>
-                    <SubMenu title={<span className={styles.SubMenuTitle}>知识产权</span>}>
-                        <MenuItemGroup>
-                            <Menu.Item key="property:1">商标信息</Menu.Item>
-                            <Menu.Item key="property:2">专利信息</Menu.Item>
-                            <Menu.Item key="property:3">软件著作权</Menu.Item>
-                            <Menu.Item key="property:4">作品著作权</Menu.Item>
-                            <Menu.Item key="property:5">网站域名</Menu.Item>
-                        </MenuItemGroup>
-                    </SubMenu>
-                    <SubMenu title={<span className={styles.SubMenuTitle}>更新记录</span>}>
-                        <MenuItemGroup>
-                            <Menu.Item key="renew:1">更新消息</Menu.Item>
-                            <Menu.Item key="renew:2">历史记录</Menu.Item>
-                        </MenuItemGroup>
-                    </SubMenu>
-                    <Menu.Item key="news">新闻舆情</Menu.Item>
-                    <Menu.Item key="need">企业需求</Menu.Item>
-                    <Menu.Item key="advice">改进建议</Menu.Item>
-                    <Menu.Item key="otherMes">其他信息</Menu.Item>
-                    <Menu.Item key="archives">企业档案</Menu.Item>
+                    {this.renderMenu(menuData)}
                 </Menu>
-                <Card
-                    title={<span style={{ color: '#1890ff' }}>企业动态</span>}
-                    extra={<a>展开更多>></a>}
-                    className={styles.cardSty}
-                    // tabList={[{ key: '企业动态', tab: '企业动态' }]}
-                >
-                    <Timeline>
-                        <Timeline.Item color="green">
-                            <p>2015-09-01 公司成立</p>
-                        </Timeline.Item>
-                        <Timeline.Item color="green">
-                            <p>2015-09-01 营收增长50%</p>
-                        </Timeline.Item>
-                        <Timeline.Item color="red">
-                            <p>2015-08-01 公司利润增长60%</p>
-                        </Timeline.Item>
-                        <Timeline.Item color="red">
-                            <p>2015-08-01《XXPlay》产品发布</p>
-                        </Timeline.Item>
-                        <Timeline.Item>
-                            <p>2015-07-01 公司董事会成立，确立公司章程，确认董事会人选及董事长</p>
-                        </Timeline.Item>
-                    </Timeline>
-                </Card>
-                <Route exact path="/companyDetails/information" component={Information} />
-                {/* <div className={styles.messageCard}>
-                    <Card
-                        className={styles.cardSty}
-                        tabList={[{ key: '工商信息', tab: '工商信息' }]}
-                    >
-                        <table style={{ width: '100%' }}>
-                            <tbody>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>法人</td>
-                                    <td className={styles.tdright}>张三</td>
-                                    <td className={styles.tdleft}>注册资本</td>
-                                    <td className={styles.tdright}>2011.0899万元人民币</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>经营状态</td>
-                                    <td className={styles.tdright}>开业</td>
-                                    <td className={styles.tdleft}>实缴资本</td>
-                                    <td className={styles.tdright}>2011.0899万元人民币</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>统一社会信用代码</td>
-                                    <td className={styles.tdright}>911101080964417131D</td>
-                                    <td className={styles.tdleft}>成立日期</td>
-                                    <td className={styles.tdright}>2014-04-03</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>工商注册号</td>
-                                    <td className={styles.tdright}>1108016971123</td>
-                                    <td className={styles.tdleft}>纳税人识别号</td>
-                                    <td className={styles.tdright}>09644173-1</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>公司类型</td>
-                                    <td className={styles.tdright}>其他责任有限公司</td>
-                                    <td className={styles.tdleft}>组织机构代码</td>
-                                    <td className={styles.tdright}>MA90DGJJ-1</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>核准日期</td>
-                                    <td className={styles.tdright}>2018-5-12</td>
-                                    <td className={styles.tdleft}>所属行业</td>
-                                    <td className={styles.tdright}>销售业</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>所属地区</td>
-                                    <td className={styles.tdright}>北京市</td>
-                                    <td className={styles.tdleft}>登记机关</td>
-                                    <td className={styles.tdright}>北京市工商行政管理局海淀分局</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>曾用名</td>
-                                    <td className={styles.tdright}>北京思明软件系统有限公司</td>
-                                    <td className={styles.tdleft}>英文名</td>
-                                    <td className={styles.tdright}>enriiodreo</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>人员规模</td>
-                                    <td className={styles.tdright}>100～499人</td>
-                                    <td className={styles.tdleft}>参保人数</td>
-                                    <td className={styles.tdright}>466</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>企业地址</td>
-                                    <td className={styles.tdright}>
-                                        北京市海淀区中关村东路1号院1号楼10层1002
-                                    </td>
-                                    <td className={styles.tdleft}>营业期限</td>
-                                    <td className={styles.tdright}>2014-04-03 至 2034-04-02</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </Card>
-                    <Card
-                        title={<span style={{ color: '#1890ff' }}>融资历程</span>}
-                        extra={<a>展开更多>></a>}
-                        className={styles.cardSty}
-                        // tabList={[{ key: '融资历程', tab: '融资历程' }]}
-                    >
-                        <Table
-                            bordered={true} //边框
-                            pagination={false} //分页器
-                            columns={[
-                                {
-                                    title: '时间',
-                                    dataIndex: 'name',
-                                    key: 'name',
-                                    align: 'center',
-                                },
-                                {
-                                    title: '金额',
-                                    dataIndex: 'age',
-                                    key: 'age',
-                                    align: 'center',
-                                },
-                                {
-                                    title: '投资方',
-                                    dataIndex: 'address',
-                                    key: 'address',
-                                    align: 'center',
-                                },
-                            ]}
-                            dataSource={[
-                                {
-                                    key: '1',
-                                    name: '2019-4-29',
-                                    age: '金额未知',
-                                    address: 'xxx公司',
-                                },
-                                {
-                                    key: '2',
-                                    name: '2019-4-29',
-                                    age: '1亿美金',
-                                    address: 'xxx公司',
-                                },
-                            ]}
-                        />
-                    </Card>
-                    <Card
-                        title={<span style={{ color: '#1890ff' }}>核心人员</span>}
-                        extra={<a>展开更多>></a>}
-                        className={styles.cardSty}
-                    >
-                        <Table
-                            bordered={true} //边框
-                            pagination={false} //分页器
-                            columns={[
-                                {
-                                    title: '姓名',
-                                    dataIndex: 'name',
-                                    key: 'name',
-                                    align: 'center',
-                                    width: '30%',
-                                },
-                                {
-                                    title: '职位',
-                                    dataIndex: 'age',
-                                    key: 'age',
-                                    align: 'center',
-                                    width: '30%',
-                                },
-                                {
-                                    title: '介绍',
-                                    dataIndex: 'address',
-                                    key: 'address',
-                                    align: 'center',
-                                },
-                            ]}
-                            dataSource={[
-                                {
-                                    key: '1',
-                                    name: '张三',
-                                    age: '董事长兼联合创始人',
-                                    address:
-                                        '王川，小米公司联合创始人兼副总裁，毕业于北京科技大学，1997年创立了雷石科技，并将其发展为中国最大的影音娱乐设备公司。2012年加入小米科技，担任联合创始人及副总裁。目前负责小米盒子',
-                                },
-                                {
-                                    key: '2',
-                                    name: '张三',
-                                    age: '联合创始人',
-                                    address:
-                                        '王川，小米公司联合创始人兼副总裁，毕业于北京科技大学，1997年创立了雷石科技，并将其发展为中国最大的影音娱乐设备公司。',
-                                },
-                            ]}
-                        />
-                    </Card>
-                    <Card
-                        title={<span style={{ color: '#1890ff' }}>相关新闻</span>}
-                        extra={<a>展开更多>></a>}
-                        className={styles.cardSty}
-                    >
-                        <Table
-                            bordered={true} //边框
-                            pagination={false} //分页器
-                            columns={[
-                                {
-                                    title: '姓名',
-                                    dataIndex: 'name',
-                                    key: 'name',
-                                    align: 'center',
-                                },
-                                {
-                                    title: '新闻来源',
-                                    dataIndex: 'age',
-                                    key: 'age',
-                                    align: 'center',
-                                    width: '30%',
-                                },
-                                {
-                                    title: '发布时间',
-                                    dataIndex: 'address',
-                                    key: 'address',
-                                    align: 'center',
-                                    width: '30%',
-                                },
-                            ]}
-                            dataSource={[
-                                {
-                                    key: '1',
-                                    name:
-                                        '小米联手北京时代美术馆推出科技艺术大展：超级对撞Xcelerator',
-                                    age: '董事长兼联合创始人',
-                                    address: '2019-4-29 18:05',
-                                },
-                                {
-                                    key: '2',
-                                    name: '小米不只要做互联网公司，还要成为AI公司',
-                                    age: '联合创始人',
-                                    address: '2019-4-29 18:05',
-                                },
-                            ]}
-                        />
-                    </Card>
-                    <Card
-                        title={<span style={{ color: '#1890ff' }}>主要产品</span>}
-                        extra={<a>展开更多>></a>}
-                        className={styles.cardSty}
-                    >
-                        <Table
-                            bordered={true} //边框
-                            pagination={false} //分页器
-                            columns={[
-                                {
-                                    title: '产品名称',
-                                    dataIndex: 'name',
-                                    key: 'name',
-                                    align: 'center',
-                                    width: '20%',
-                                },
-                                {
-                                    title: '产品介绍',
-                                    dataIndex: 'age',
-                                    key: 'age',
-                                    align: 'center',
-                                    width: '40%',
-                                },
-                                {
-                                    title: '主要功能',
-                                    dataIndex: 'address',
-                                    key: 'address',
-                                    align: 'center',
-                                },
-                            ]}
-                            dataSource={[
-                                {
-                                    key: '1',
-                                    name: '哎呀宝贝',
-                                    age:
-                                        '世界的新看法，期待总于意料之外。小米VR满足你对这个世界的好奇心，换一种方式感知前所未有的体验。',
-                                    address: '主要功能描述',
-                                },
-                                {
-                                    key: '2',
-                                    name: '小米VR Play',
-                                    age:
-                                        '世界的新看法，期待总于意料之外。小米VR满足你对这个世界的好奇心，换一种方式感知前所未有的体验。',
-                                    address: '主要功能描述',
-                                },
-                            ]}
-                        />
-                    </Card>
-                </div> */}
+
+                <div style={{ flex: 1 }}>
+                    {routes().map((item, index) => {
+                        return (
+                            <Route
+                                exact
+                                path={`/companyDetails/${item.path}`}
+                                component={item.component}
+                                key={index}
+                            />
+                        )
+                    })}
+                </div>
             </Fragment>
         )
     }

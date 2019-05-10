@@ -2,7 +2,7 @@
  * 企服首页/企业详情==> Information 基本信息
  */
 import React, { PureComponent, Fragment } from 'react'
-import { Input, Tag, Breadcrumb, Card, Menu, Icon, Timeline, Table } from 'antd'
+import { Card, Table, Timeline } from 'antd'
 import styles from '../CompanyDetails.module.css'
 
 export default class Information extends PureComponent {
@@ -11,6 +11,70 @@ export default class Information extends PureComponent {
             <Fragment>
                 <div className={styles.messageCard}>
                     <Card
+                        id="information:1"
+                        title={<span style={{ color: '#1890ff' }}>企业动态</span>}
+                        extra={<a>展开更多>></a>}
+                        className={styles.cardSty}
+                        // tabList={[{ key: '企业动态', tab: '企业动态' }]}
+                    >
+                        <Table
+                            bordered={true} //边框
+                            pagination={false} //分页器
+                            columns={[
+                                {
+                                    title: '标题',
+                                    dataIndex: 'name',
+                                    key: 'name',
+                                    align: 'center',
+                                },
+                                {
+                                    title: '新闻来源',
+                                    dataIndex: 'age',
+                                    key: 'age',
+                                    align: 'center',
+                                },
+                                {
+                                    title: '发布时间',
+                                    dataIndex: 'address',
+                                    key: 'address',
+                                    align: 'center',
+                                },
+                            ]}
+                            dataSource={[
+                                {
+                                    key: '1',
+                                    name: '小米不只要做互联网公司，还要成为AI公司',
+                                    age: '金额未知',
+                                    address: '2019-4-29 18:05',
+                                },
+                                {
+                                    key: '2',
+                                    name: '智能音箱中场：“小爱同学”喜提3000万月活',
+                                    age: '1亿美金',
+                                    address: '2019-4-29 18:05',
+                                },
+                            ]}
+                        />
+                        {/* <Timeline>
+                        <Timeline.Item color="green">
+                            <p>2015-09-01 公司成立</p>
+                        </Timeline.Item>
+                        <Timeline.Item color="green">
+                            <p>2015-09-01 营收增长50%</p>
+                        </Timeline.Item>
+                        <Timeline.Item color="red">
+                            <p>2015-08-01 公司利润增长60%</p>
+                        </Timeline.Item>
+                        <Timeline.Item color="red">
+                            <p>2015-08-01《XXPlay》产品发布</p>
+                        </Timeline.Item>
+                        <Timeline.Item>
+                            <p>2015-07-01 公司董事会成立，确立公司章程，确认董事会人选及董事长</p>
+                        </Timeline.Item>
+                    </Timeline> */}
+                    </Card>
+                    <Card
+                        id="information:2"
                         className={styles.cardSty}
                         tabList={[{ key: '工商信息', tab: '工商信息' }]}
                     >
@@ -80,12 +144,28 @@ export default class Information extends PureComponent {
                                 </tr>
                             </tbody>
                         </table>
+                        <table style={{ width: '100%' }}>
+                            <tbody>
+                                <tr className={styles.tabletr}>
+                                    <td className={styles.tdleft}>经营范围</td>
+                                    <td
+                                        style={{
+                                            width: '84%',
+                                            border: '1px rgb(230, 235, 241) solid',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        软件技术开发、技术咨询、技术服务、通讯设备、计算机技术维修、软件服务、技术进出口、代理进出口企业管理咨询销售计算
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </Card>
                     <Card
+                        id="information:3"
                         title={<span style={{ color: '#1890ff' }}>融资历程</span>}
                         extra={<a>展开更多>></a>}
                         className={styles.cardSty}
-                        // tabList={[{ key: '融资历程', tab: '融资历程' }]}
                     >
                         <Table
                             bordered={true} //边框
@@ -127,6 +207,7 @@ export default class Information extends PureComponent {
                         />
                     </Card>
                     <Card
+                        id="information:4"
                         title={<span style={{ color: '#1890ff' }}>核心人员</span>}
                         extra={<a>展开更多>></a>}
                         className={styles.cardSty}
@@ -175,53 +256,7 @@ export default class Information extends PureComponent {
                         />
                     </Card>
                     <Card
-                        title={<span style={{ color: '#1890ff' }}>相关新闻</span>}
-                        extra={<a>展开更多>></a>}
-                        className={styles.cardSty}
-                    >
-                        <Table
-                            bordered={true} //边框
-                            pagination={false} //分页器
-                            columns={[
-                                {
-                                    title: '姓名',
-                                    dataIndex: 'name',
-                                    key: 'name',
-                                    align: 'center',
-                                },
-                                {
-                                    title: '新闻来源',
-                                    dataIndex: 'age',
-                                    key: 'age',
-                                    align: 'center',
-                                    width: '30%',
-                                },
-                                {
-                                    title: '发布时间',
-                                    dataIndex: 'address',
-                                    key: 'address',
-                                    align: 'center',
-                                    width: '30%',
-                                },
-                            ]}
-                            dataSource={[
-                                {
-                                    key: '1',
-                                    name:
-                                        '小米联手北京时代美术馆推出科技艺术大展：超级对撞Xcelerator',
-                                    age: '董事长兼联合创始人',
-                                    address: '2019-4-29 18:05',
-                                },
-                                {
-                                    key: '2',
-                                    name: '小米不只要做互联网公司，还要成为AI公司',
-                                    age: '联合创始人',
-                                    address: '2019-4-29 18:05',
-                                },
-                            ]}
-                        />
-                    </Card>
-                    <Card
+                        id="information:5"
                         title={<span style={{ color: '#1890ff' }}>主要产品</span>}
                         extra={<a>展开更多>></a>}
                         className={styles.cardSty}

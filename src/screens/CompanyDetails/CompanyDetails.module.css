@@ -7,6 +7,11 @@
     font-size: 16px;
     color: rgb(134, 125, 125);
 }
+/* 公司详情卡片 */
+.flexDiv{
+    display: flex;
+    flex-direction: row;
+}
 /* 卡片 */
 .cardSty{
     width: 80%;
@@ -18,11 +23,23 @@
 :global .ant-timeline-item-last > .ant-timeline-item-content {
     min-height: 0px;
 }
-/* 基本信息表格所在卡片消除padding */
+/* 所有de表格所在卡片消除padding */
 .messageCard{
     padding-bottom: 10px;
-    & :global .ant-card-wider-padding .ant-card-body {
+    /* & :global .ant-card-wider-padding .ant-card-body {
         padding: 0 0;
+    } */
+    & :global .ant-card-body {
+        padding: 0;
+        zoom: 1;
+    }
+    /* news新闻舆情的列表 */
+    & :global .ant-list-item-action {
+        flex: 0 0 auto;
+        margin-left: 150px;
+        padding: 0;
+        font-size: 0;
+        list-style: none;
     }
 }
 /* 表格样式-tr高度 */
@@ -46,4 +63,25 @@
 .tableSty{
     width: 80%;
     margin: 0 0 20px 2%;
+}
+/* 新闻舆情-List-列表样式 */
+.titleSty{
+    font-size: 16px;
+    font-weight: bold;
+}
+/* 新闻舆情-列表详情样式 */
+.about{
+    padding:  20px 0;
+    color:#666
+}
+.newsTitleSty{
+    font-size: 28px;
+    font-weight: bold;
+}
+/* modal-发票抬头-表格 */
+.modalTr{
+    height: 30px;
+}
+.modalTd{
+    font-weight: bold;
 }
