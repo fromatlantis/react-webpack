@@ -87,7 +87,7 @@ const model = {
                         yield put(actions('loginSuccess')(res.data))
                         yield put(actions('getAuthoritiesByUser')(res.data.user.id))
                     } else {
-                        yield put(replace('/home'))
+                        yield put(replace('/companyDetails/information'))
                     }
                 } catch (err) {}
             },

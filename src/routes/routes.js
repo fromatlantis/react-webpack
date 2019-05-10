@@ -16,6 +16,17 @@ const routes = [
         }),
     },
     {
+        //企服首页/企业详情
+        path: '/companyDetails/*',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "companyDetails" */ '../screens/CompanyDetails/CompanyDetails'
+                ),
+            loading: Loading,
+        }),
+    },
+    {
         path: '/company',
         name: '企服管理',
         icon: 'appstore',
@@ -107,7 +118,7 @@ export const getNav = auths => {
             }
         })
     //return navs
-    console.log(filterByAuths(navs, auths))
+    // console.log(filterByAuths(navs, auths))
     return filterByAuths(navs, auths)
 }
 // 首个路由
