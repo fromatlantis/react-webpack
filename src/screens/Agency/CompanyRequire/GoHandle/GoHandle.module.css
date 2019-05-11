@@ -1,0 +1,18 @@
+.container{
+    padding: 15px 15px;
+}
+.inputStyle{
+    width:50%;
+}
+.title{
+    margin-bottom:25px;
+}
+.order{
+    margin-top:20px;
+}
+:global .ant-divider-horizontal{
+    margin: 15px 0;
+}
+.commonLeft{
+    margin-left:15px;
+}
