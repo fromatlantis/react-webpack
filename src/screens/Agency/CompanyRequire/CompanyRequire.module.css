@@ -1,0 +1,33 @@
+.container{
+    padding: 15px 15px;
+}
+.typeTitle{
+    margin-bottom:15px;
+    display: flex;
+    flex-direction: row;
+}
+.typeBut{
+    display: inline-block;
+    margin-right: 13px;
+    float: left;
+    padding: 1px 8px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.typeList{
+    margin-bottom:10px;
+}
+.btn{
+    position: absolute;
+    right: 10px;
+    top:0px;
+}
+.formStyle{
+    position: relative;
+    margin-left: 12px;
+    margin-bottom:25px;
+}
+:global .ant-form-item-label{
+        line-height: 32px;
+}

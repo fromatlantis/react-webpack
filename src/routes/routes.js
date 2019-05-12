@@ -86,6 +86,19 @@ const routes = [
             loading: Loading,
         }),
     },
+    {
+        path: '/agency/*',
+        name: '中介服务',
+        icon: 'appstore',
+        navAttr: {
+            index: 1,
+            role: 'home',
+        },
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "admin" */ '../screens/Agency/Agency'),
+            loading: Loading,
+        }),
+    },
 ]
 const filterByAuths = (routes = [], auths = []) => {
     return routes.filter(route => {
