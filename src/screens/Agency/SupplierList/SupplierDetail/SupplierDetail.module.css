@@ -1,5 +1,5 @@
 .container{
- padding: 15px 15px;
+    padding: 15px 15px;
 }
 .inputStyle{
     width:50%;
@@ -9,9 +9,6 @@
 }
 .order{
     margin-top:20px;
-}
-:global .ant-divider-horizontal{
-    margin: 15px 0;
 }
 .btn{
     padding-bottom:40px;

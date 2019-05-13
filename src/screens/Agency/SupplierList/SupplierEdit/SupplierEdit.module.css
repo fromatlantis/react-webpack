@@ -10,9 +10,6 @@
 .order{
     margin-top:20px;
 }
-:global .ant-divider-horizontal{
-    margin: 15px 0;
-}
 .btn{
     padding-bottom:40px;
     display: flex;
