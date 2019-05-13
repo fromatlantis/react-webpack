@@ -211,7 +211,8 @@ class Home extends PureComponent {
                         <Button onClick={this.importList}>导入</Button>
                     </div>
                 </div>
-                <List dataSource={data} renderItem={this.renderItem} />
+                {data.map(item => this.renderItem())}
+                {/* <List dataSource={data} renderItem={this.renderItem} /> */}
                 <Modal
                     title="批量指派企服人员"
                     visible={this.state.batchAssign}

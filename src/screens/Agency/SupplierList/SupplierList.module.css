@@ -1,9 +1,6 @@
 .container{
     padding:15px 15px;
 }
-:global .ant-divider-horizontal{
-    margin: 15px 0;
-}
 .active{
     background-color: #1E90FF;
     color: #fff;
@@ -36,12 +33,6 @@
 }
 .addBtn{
     margin-right: 8px;
-}
-:global .ant-form-item{
-    margin-bottom:0px;
-}
-:global .ant-form-item-control{
-    line-height:1;
 }
 .totalBtn{
     position: absolute;
