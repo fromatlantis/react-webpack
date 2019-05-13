@@ -1,5 +1,6 @@
 .root {
     padding: 0 50px;
+    overflow: hidden;
 }
 .searchBox {
     padding: 15px 250px;
