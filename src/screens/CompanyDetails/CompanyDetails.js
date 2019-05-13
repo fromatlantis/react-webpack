@@ -4,6 +4,8 @@
 import React, { PureComponent, Fragment } from 'react'
 import { Input, Tag, Breadcrumb, Card, Menu, Row, Col, Modal } from 'antd'
 import { Link, NavLink, Route } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import styles from './CompanyDetails.module.css'
 import { menuData } from './MenuData'
 import routes from './MenuData'
@@ -13,7 +15,7 @@ import retime from '../../assets/retime.png'
 
 const SubMenu = Menu.SubMenu
 
-export default class CompanyDetails extends PureComponent {
+class CompanyDetails extends PureComponent {
     state = {
         // 路由Menu参数
         current: '',
@@ -92,7 +94,11 @@ export default class CompanyDetails extends PureComponent {
                         <div style={{ paddingLeft: 30, width: '80%' }}>
                             <h1 className={styles.modalTd}>润江物业服务有限公司</h1>
                             <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                <img src={retime} alt="" style={{ width: 14, height: 14 }} />
+                                <img
+                                    src={retime}
+                                    alt=""
+                                    style={{ width: 14, height: 14, marginTop: 3 }}
+                                />
                                 <p style={{ padding: '0 10px' }}>更新时间：10分钟前</p>
                                 <Tag color="#2db7f5" onClick={this.showModal}>
                                     发票抬头
@@ -173,7 +179,7 @@ export default class CompanyDetails extends PureComponent {
                     </table>
                 </Modal>
                 <Menu
-                    style={{ margin: '20px 18% 0 2%' }}
+                    style={{ margin: '20px 50px 0 50px' }}
                     onClick={this.handleClick}
                     selectedKeys={[this.state.current]}
                     mode="horizontal"
@@ -197,3 +203,16 @@ export default class CompanyDetails extends PureComponent {
         )
     }
 }
+const mapStateToProps = state => {
+    return {
+        router: state.router,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({}, dispatch)
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(CompanyDetails)
