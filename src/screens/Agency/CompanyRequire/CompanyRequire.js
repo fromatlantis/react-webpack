@@ -149,17 +149,17 @@ class Agency extends PureComponent {
                         })}
                     </div>
                 </div>
-                <Form layout="inline" className={styles.formStyle} onSubmit={this.handleSubmit}>
+                <Form layout="inline" onSubmit={this.handleSubmit}>
                     <Form.Item label="企业名称：">
                         {getFieldDecorator('companyName')(
-                            <Input placeholder="请输入" style={{ width: 250 }} />,
+                            <Input placeholder="请输入" style={{ width: 220 }} />,
                         )}
                     </Form.Item>
                     <Form.Item label="类型：">
                         {getFieldDecorator('status', { initialValue: '' })(
                             <Select
                                 getPopupContainer={triggerNode => triggerNode.parentNode} //异常浮动
-                                style={{ width: 250 }}
+                                style={{ width: 220 }}
                                 placeholder="请选择"
                             >
                                 <Option value="">全部</Option>
@@ -168,14 +168,14 @@ class Agency extends PureComponent {
                             </Select>,
                         )}
                     </Form.Item>
-                    <Form.Item className={styles.btn}>
-                        <Button htmlType="submit" style={{ marginRight: 10 }}>
+                    <Form.Item>
+                        <Button htmlType="submit" style={{ marginRight: 10, marginLeft: 10 }}>
                             清空
                         </Button>
                         <Button type="primary">查询</Button>
                     </Form.Item>
                 </Form>
-                <Tabs type="card">
+                <Tabs type="card" style={{ marginTop: 20 }}>
                     <TabPane tab="未办理需求" key="1">
                         <Table
                             columns={columns}

@@ -1,5 +1,5 @@
 .container{
-    padding: 15px 15px;
+    padding: 16px 24px 0 24px;
 }
 .typeTitle{
     margin-bottom:15px;
@@ -28,6 +28,8 @@
     margin-left: 12px;
     margin-bottom:25px;
 }
-:global .ant-form-item-label{
-        line-height: 32px;
+.active{
+    background-color: #1E90FF;
+    color: #fff;
 }
+
