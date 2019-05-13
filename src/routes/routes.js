@@ -95,7 +95,7 @@ const routes = [
             role: 'home',
         },
         component: Loadable({
-            loader: () => import(/* webpackChunkName: "admin" */ '../screens/Agency/Agency'),
+            loader: () => import(/* webpackChunkName: "agency" */ '../screens/Agency/Agency'),
             loading: Loading,
         }),
     },
