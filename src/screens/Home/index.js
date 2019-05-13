@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Button, Input, Icon, Tag, Pagination, Divider } from 'antd'
+import { Button, Input, Icon, Tag, Pagination, Divider, Alert } from 'antd'
 import styles from './index.module.css'
 import chuizi from '../../assets/home/chuizi.png'
 import jizhang from '../../assets/home/jizhang.png'
@@ -211,15 +211,9 @@ class Home extends PureComponent {
                         </div>
                     </div>
                 )}
-
                 <div className={styles.allCompanys}>
-                    <div>
-                        <Icon type="info-circle" theme="filled" />
-                        <p>总计：25个企业</p>
-                    </div>
-                    <div>
-                        <p className={styles.more}>展开更多 >></p>
-                    </div>
+                    <Alert message="总计：25个企业" type="info" showIcon />
+                    <p className={styles.more}>展开更多 >></p>
                 </div>
                 <div>
                     <div className={styles.company}>

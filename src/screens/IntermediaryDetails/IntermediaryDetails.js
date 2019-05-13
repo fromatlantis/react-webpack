@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react'
 import { Icon, Button } from 'antd'
-import { Crumbs } from '../../components'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import styles from './IntermediaryDetails.module.css'
-
+import { Breadcrumb } from 'antd'
+import { Link } from 'react-router-dom'
 import banner from '../../assets/banner.png'
 
 const routes1 = [
@@ -73,13 +73,28 @@ class IntermediaryDetails extends PureComponent {
             }
         }
     }
+    show(routes) {
+        let items = []
+        for (let i in routes) {
+            if (routes[i].path) {
+                items.push(
+                    <Breadcrumb.Item>
+                        <Link to={routes[i].path}>{routes[i].breadcrumbName}</Link>
+                    </Breadcrumb.Item>,
+                )
+            } else {
+                items.push(<Breadcrumb.Item>{routes[i].breadcrumbName}</Breadcrumb.Item>)
+            }
+        }
+
+        return <Breadcrumb className={styles.BreadcrumbSty}>{items}</Breadcrumb>
+    }
     render() {
         let type = this.props.match.params.type
         let id = this.props.match.params.id
         let routes = []
         let routeIne = [
             {
-                path: '/IntermediaryDetails/' + id + '/' + type,
                 breadcrumbName: '详情',
             },
         ]
@@ -94,7 +109,7 @@ class IntermediaryDetails extends PureComponent {
         }
         return (
             <div className={styles.Container}>
-                <Crumbs routes={routes} />
+                {this.show(routes)}
                 <div className={styles.Content}>
                     <div className={styles.imgView}>
                         <img src={banner} alt="" />

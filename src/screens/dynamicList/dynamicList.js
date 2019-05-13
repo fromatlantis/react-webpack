@@ -1,21 +1,12 @@
 import React, { PureComponent } from 'react'
 import { Pagination } from 'antd'
-import { Crumbs } from '../../components'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { push } from 'connected-react-router'
-import styles from './dynamicList.module.css'
+import styles from './DynamicList.module.css'
+import { Breadcrumb } from 'antd'
+import { Link } from 'react-router-dom'
 
-const routes = [
-    {
-        path: '/home',
-        breadcrumbName: '企服首页',
-    },
-    {
-        path: '/dynamicList',
-        breadcrumbName: '企服动态',
-    },
-]
 class dynamicList extends PureComponent {
     gopush(nav) {
         this.props.push(nav)
@@ -23,8 +14,12 @@ class dynamicList extends PureComponent {
     render() {
         return (
             <div className={styles.Container}>
-                <Crumbs routes={routes} />
-
+                <Breadcrumb className={styles.BreadcrumbSty}>
+                    <Breadcrumb.Item>
+                        <Link to={`/home`}>企服首页</Link>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>企服动态</Breadcrumb.Item>
+                </Breadcrumb>
                 <div className={styles.dynamics}>
                     <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
                         <p className={styles.dynamicTitle}>题目</p>

@@ -38,6 +38,10 @@
     text-align: center;
 }
 
+/* 面包屑导航 */
+.BreadcrumbSty{
+    padding: 20px 40px;
+}
 
 
 

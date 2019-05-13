@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react'
 import {} from 'antd'
-import { Crumbs } from '../../components'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import styles from './humanResourceService.module.css'
+import styles from './HumanResourceService.module.css'
+import { Breadcrumb } from 'antd'
+import { Link } from 'react-router-dom'
 
 const routes1 = [
     {
@@ -12,7 +13,6 @@ const routes1 = [
         breadcrumbName: '企服首页',
     },
     {
-        path: '/humanResourceService/1',
         breadcrumbName: '知识产权',
     },
 ]
@@ -22,7 +22,6 @@ const routes2 = [
         breadcrumbName: '企服首页',
     },
     {
-        path: '/humanResourceService/2',
         breadcrumbName: '代理记账',
     },
 ]
@@ -32,7 +31,6 @@ const routes3 = [
         breadcrumbName: '企服首页',
     },
     {
-        path: '/humanResourceService/3',
         breadcrumbName: '法律服务',
     },
 ]
@@ -42,7 +40,6 @@ const routes4 = [
         breadcrumbName: '企服首页',
     },
     {
-        path: '/humanResourceService/4',
         breadcrumbName: '人资服务',
     },
 ]
@@ -114,7 +111,7 @@ const items1 = [
         money: '¥998',
     },
 ]
-class humanResourceService extends PureComponent {
+class HumanResourceService extends PureComponent {
     gopush(nav) {
         this.props.push(nav)
     }
@@ -150,6 +147,22 @@ class humanResourceService extends PureComponent {
         }
         return item
     }
+    show(routes) {
+        let items = []
+        for (let i in routes) {
+            if (routes[i].path) {
+                items.push(
+                    <Breadcrumb.Item>
+                        <Link to={routes[i].path}>{routes[i].breadcrumbName}</Link>
+                    </Breadcrumb.Item>,
+                )
+            } else {
+                items.push(<Breadcrumb.Item>{routes[i].breadcrumbName}</Breadcrumb.Item>)
+            }
+        }
+
+        return <Breadcrumb className={styles.BreadcrumbSty}>{items}</Breadcrumb>
+    }
     render() {
         let id = this.props.match.params.id
         let routes = []
@@ -169,7 +182,7 @@ class humanResourceService extends PureComponent {
         }
         return (
             <div className={styles.Container}>
-                <Crumbs routes={routes} />
+                {this.show(routes)}
                 {this.showitems(items)}
             </div>
         )
@@ -193,4 +206,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(humanResourceService)
+)(HumanResourceService)
