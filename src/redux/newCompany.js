@@ -36,6 +36,12 @@ const model = {
                     yield put(actions('getBaseInfoOk')(res.data))
                 }
             },
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    baseInfo: {},
+                }
+            },
         },
         {
             name: 'getBaseInfoOk',

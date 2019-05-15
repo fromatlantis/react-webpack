@@ -116,6 +116,11 @@ class Home extends PureComponent {
         const current = this.state.current - 1
         this.setState({ current })
     }
+    toEdit = item => {
+        sessionStorage.setItem('companyId', item.company_id)
+        sessionStorage.setItem('companyName', item.name)
+        this.props.push('/newCompany/info')
+    }
     renderItem = () => {
         const { company } = this.props
         return (company.list || []).map(item => {
@@ -129,15 +134,21 @@ class Home extends PureComponent {
                                 <Tag color="orange">实驻企业</Tag>
                             </div>
                             <div className={styles.toobar}>
-                                <a href>
-                                    <IconFont type="iconicon_zhipai" onClick={this.assign} />
-                                </a>
-                                <Link to={`/companyDetails/information`}>
+                                <Button type="link" size="small" onClick={this.assign}>
+                                    <IconFont type="iconicon_zhipai" />
+                                </Button>
+                                <Button type="link" size="small">
                                     <IconFont type="icondetails" />
-                                </Link>
-                                <Link to={`/newCompany/info`}>
+                                </Button>
+                                <Button
+                                    type="link"
+                                    size="small"
+                                    onClick={() => {
+                                        this.toEdit(item)
+                                    }}
+                                >
                                     <IconFont type="iconbianji" />
-                                </Link>
+                                </Button>
                             </div>
                         </div>
                         <div className={styles.info}>

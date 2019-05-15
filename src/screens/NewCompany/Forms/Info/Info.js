@@ -35,6 +35,12 @@ class Info extends PureComponent {
     state = {
         dataSource: [],
     }
+    componentDidMount = () => {
+        const companyName = sessionStorage.getItem('companyName')
+        if (companyName) {
+            this.props.getBaseInfo(companyName)
+        }
+    }
     handleSearch = word => {
         this.props.getSearchWord(word)
     }
@@ -59,7 +65,7 @@ class Info extends PureComponent {
                         message: '请输入企业名称',
                     },
                 ],
-                component: <AutoComplete />,
+                component: <AutoComplete disabled={sessionStorage.companyId ? true : false} />,
             },
             {
                 label: '企业logo',

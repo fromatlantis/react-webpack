@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Card, Input, Icon, DatePicker, Select } from 'antd'
 
 import FormView from '../FormView2'
+import styles from './Business.module.css'
 
 const Option = Select.Option
 
@@ -126,7 +127,7 @@ class Business extends PureComponent {
         //const FormView = formView({ items, data: {} })
         const { baseInfo } = this.props
         return (
-            <Card title="工商信息" bordered={false}>
+            <Card title="工商信息" bordered={false} className={styles.root}>
                 <FormView url="123" layout="inline" items={items} data={baseInfo} />
             </Card>
         )
