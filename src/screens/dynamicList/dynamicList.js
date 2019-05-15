@@ -21,14 +21,14 @@ class dynamicList extends PureComponent {
                     <Breadcrumb.Item>企服动态</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className={styles.dynamics}>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
+                    <div className={styles.dynamic} onClick={() => this.gopush('DynamicDetails/1')}>
                         <p className={styles.dynamicTitle}>题目</p>
                         <div className={styles.dynamicDescribe}>
                             <span className={styles.dynamicCome}>来源：来源</span>
                             <span className={styles.dynamicTime}>时间</span>
                         </div>
                     </div>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
+                    <div className={styles.dynamic} onClick={() => this.gopush('DynamicDetails/1')}>
                         <p className={styles.dynamicTitle}>
                             题目题目题目题目题目题目题目题目题目题目
                         </p>
@@ -38,7 +38,7 @@ class dynamicList extends PureComponent {
                             <span className={styles.dynamicTime}>时间</span>
                         </div>
                     </div>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
+                    <div className={styles.dynamic} onClick={() => this.gopush('DynamicDetails/1')}>
                         <p className={styles.dynamicTitle}>
                             题目题目题目题目题目题目题目题目题目题目
                         </p>
@@ -47,7 +47,7 @@ class dynamicList extends PureComponent {
                             <span className={styles.dynamicTime}>时间</span>
                         </div>
                     </div>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
+                    <div className={styles.dynamic} onClick={() => this.gopush('DynamicDetails/1')}>
                         <p className={styles.dynamicTitle}>题目</p>
                         <p className={styles.dynamicAbout}>
                             1、展示爬取到的园区企业的新闻（存放在企服管理的基本信息的企业动态中），按照时间顺序倒序排列；
@@ -57,7 +57,7 @@ class dynamicList extends PureComponent {
                             <span className={styles.dynamicTime}>时间</span>
                         </div>
                     </div>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
+                    <div className={styles.dynamic} onClick={() => this.gopush('DynamicDetails/1')}>
                         <p className={styles.dynamicTitle}>
                             题目很长很长很长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长
                         </p>
@@ -69,7 +69,7 @@ class dynamicList extends PureComponent {
                             <span className={styles.dynamicTime}>时间</span>
                         </div>
                     </div>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
+                    <div className={styles.dynamic} onClick={() => this.gopush('DynamicDetails/1')}>
                         <p className={styles.dynamicTitle}>题目</p>
                         <p className={styles.dynamicAbout}>
                             1、展示爬取到的园区企业的新闻（存放在企服管理的基本信息的企业动态中），按照时间顺序倒序排列；

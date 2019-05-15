@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { push } from 'connected-react-router'
 import { Link } from 'react-router-dom'
-
 import { Alert, Button, Input, List, Tag, Modal, Divider, Steps, message } from 'antd'
 import { IconFont } from 'components'
 import TransferView from './TransferView'
@@ -106,6 +105,25 @@ class Home extends PureComponent {
         const current = this.state.current - 1
         this.setState({ current })
     }
+    detailsCompany(item) {
+        item = {
+            name: 'liyuke',
+            id: 615,
+        }
+        sessionStorage.setItem('nowCompany', JSON.stringify(item))
+        this.getCompanyDetails(item)
+    }
+    getCompanyDetails(item) {
+        let that = this
+        let sessionStorageItem = JSON.parse(sessionStorage.getItem('nowCompany'))
+        if (item.id == sessionStorageItem.id) {
+            this.props.push('/newCompany/info')
+        } else {
+            setTimeout(() => {
+                that.getCompanyDetails(item)
+            }, 5)
+        }
+    }
     renderItem = () => {
         return (
             <div className={styles.itemCard}>
@@ -123,9 +141,9 @@ class Home extends PureComponent {
                             <Link to={`/companyDetails/information`}>
                                 <IconFont type="icondetails" />
                             </Link>
-                            <Link to={`/newCompany/info`}>
-                                <IconFont type="iconbianji" />
-                            </Link>
+                            {/* <Link to={`/newCompany/info`}> */}
+                            <IconFont type="iconbianji" onClick={() => this.detailsCompany()} />
+                            {/* </Link> */}
                         </div>
                     </div>
                     <div className={styles.info}>
@@ -272,4 +290,23 @@ class Home extends PureComponent {
         )
     }
 }
-export default Home
+const mapStateToProps = state => {
+    return {
+        router: state.router,
+        intermediarys: state.intermediary,
+        user: state.authUser,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            push: push,
+        },
+        dispatch,
+    )
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Home)

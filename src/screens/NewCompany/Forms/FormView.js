@@ -20,13 +20,11 @@ export default ({ items, data }) => {
                 if (err) {
                     return
                 }
-                console.log('Received values of form: ', fieldsValue)
             })
         }
         render() {
-            const { formItemLayout, layout, saveBtn } = this.props
+            const { formItemLayout, layout, saveBtn, emptyBtn } = this.props
             const { getFieldDecorator } = this.props.form
-            console.log(saveBtn + 'saveBtn')
             return (
                 <Form {...formItemLayout} layout={layout} onSubmit={this.handleSubmit}>
                     {items.map((item, index) => {
@@ -45,6 +43,33 @@ export default ({ items, data }) => {
                             </Button>
                         </Form.Item>
                     )}
+                    {emptyBtn && (
+                        <Form.Item wrapperCol={{ offset: formItemLayout.labelCol.span }}>
+                            <Button
+                                htmlType="submit"
+                                style={{ marginRight: '10px' }}
+                                onClick={() => this.props.empty()}
+                            >
+                                清空
+                            </Button>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                style={{ marginRight: '10px', background: 'rgb(50,200,100)' }}
+                                onClick={() => this.props.query()}
+                            >
+                                查询
+                            </Button>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                style={{ marginRight: '10px' }}
+                                onClick={() => this.props.add()}
+                            >
+                                新增
+                            </Button>
+                        </Form.Item>
+                    )}
                 </Form>
             )
         }
@@ -58,7 +83,6 @@ export default ({ items, data }) => {
                     value: data[item.field],
                 })
             })
-            console.log(fields)
             return fields
         },
     })(FormView)

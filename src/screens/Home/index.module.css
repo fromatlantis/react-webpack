@@ -118,9 +118,9 @@
     color:#333;
     font-weight:blod;
     font-size:14px;
-    white-space:nowrap;
+    /* white-space:nowrap;
   overflow:hidden;
-  text-overflow:ellipsis;
+  text-overflow:ellipsis; */
 }
 .dynamicAbout{
     color:#999;
