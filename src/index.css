@@ -14,6 +14,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+em {
+    color: red;
+    font-style: normal;
+}
 /* 设置滚动条的样式 */
 ::-webkit-scrollbar {
     width: 6px;
