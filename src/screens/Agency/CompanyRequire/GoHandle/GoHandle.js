@@ -58,7 +58,7 @@ class GoHandle extends PureComponent {
         this.props.getSupplierList(parm)
     }
     clearInput = () => {
-        this.props.updateType({ key: '' })
+        // this.props.updateType({ key: '' })
         this.props.form.resetFields()
     }
     handleSubmit = () => {
