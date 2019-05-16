@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             saveBasicInfo: actions('saveBasicInfo'),
-            getBaseInfo: actions('getBaseInfo'),
+            queryBasicInfoDetial: actions('queryBasicInfoDetial'),
             loadEnterpriseInfo: actions('loadEnterpriseInfo'),
         },
         dispatch,
@@ -36,9 +36,9 @@ class Info extends PureComponent {
         dataSource: [],
     }
     componentDidMount = () => {
-        const companyName = sessionStorage.getItem('companyName')
-        if (companyName) {
-            this.props.getBaseInfo(companyName)
+        const companyId = sessionStorage.getItem('companyId')
+        if (companyId) {
+            this.props.queryBasicInfoDetial(companyId)
         }
     }
     handleSearch = word => {

@@ -110,8 +110,8 @@ class Members extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 6 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 5 },
+            wrapperCol: { span: 14 },
         }
         //const FormView = formView({ items, data: {} })
         return (
@@ -121,7 +121,7 @@ class Members extends PureComponent {
                 }}
                 items={items}
                 formItemLayout={formItemLayout}
-                layout="inline"
+                //layout="inline"
                 saveBtn={false}
             />
         )

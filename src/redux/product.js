@@ -6,7 +6,7 @@ import { message } from 'antd'
 const model = {
     namespace: 'product',
     state: {
-        productList: [],
+        product: {},
     },
     actions: [
         {
@@ -19,13 +19,13 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getProductInfoList')(res.data))
+                    yield put(actions('getProductInfoListOk')(res.data))
                 }
             },
         },
         {
             name: 'getProductInfoListOk',
-            reducer: 'productList',
+            reducer: 'product',
         },
         {
             name: 'increaseProductInfoApprove',
