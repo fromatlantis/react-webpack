@@ -1,3 +1,9 @@
+.searchBox{
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
 .card {
     display: flex;
     align-items: center;

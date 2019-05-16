@@ -1,0 +1,9 @@
+.root {
+    & :global .ant-form-inline .ant-form-item {
+        width: 350px;
+    }
+    & :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+        width: 120px;
+        text-align: right;
+    }
+}

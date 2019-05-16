@@ -37,17 +37,11 @@ em {
 ::-webkit-scrollbar-thumb:window-inactive {
     background: rgba(255,0,0,0.4);
 }
-.ant-form-inline .ant-form-item {
-    width: 350px;
-}
-.ant-form-inline .ant-form-item > .ant-form-item-label {
-    width: 120px;
-    text-align: right;
-}
+
 .ant-form-inline .ant-form-item-with-help {
     margin-bottom: 0;
 }
 /* 时间轴-最后一行高度太高 */
-:global .ant-timeline-item-last > .ant-timeline-item-content {
+.ant-timeline-item-last > .ant-timeline-item-content {
     min-height: 0px;
 }

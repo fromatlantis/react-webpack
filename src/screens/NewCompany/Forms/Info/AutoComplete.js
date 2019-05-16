@@ -78,7 +78,7 @@ class AutoComplete extends PureComponent {
     render() {
         let { showOptions, searchValue } = this.state
         console.log(searchValue)
-        let { searchWord } = this.props
+        let { searchWord, disabled } = this.props
         return (
             <div className={styles.root}>
                 <Input
@@ -87,6 +87,7 @@ class AutoComplete extends PureComponent {
                     onBlurCapture={this.onBlur}
                     onFocus={this.onFocus}
                     value={searchValue}
+                    disabled={disabled}
                     ref="search"
                 />
                 {showOptions && searchWord.length > 0 && (

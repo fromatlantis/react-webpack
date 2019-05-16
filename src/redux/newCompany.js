@@ -26,6 +26,7 @@ const model = {
             name: 'getSearchWordOk',
             reducer: 'searchWord',
         },
+        // 从天眼查获取
         {
             name: 'getBaseInfo',
             *effect(action) {
@@ -34,6 +35,12 @@ const model = {
                 })
                 if (res.code === 1000) {
                     yield put(actions('getBaseInfoOk')(res.data))
+                }
+            },
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    baseInfo: {},
                 }
             },
         },
@@ -81,6 +88,24 @@ const model = {
                     message.success('保存成功')
                     sessionStorage.setItem('companyId', res.data.companyId)
                     //yield put(actions('saveBasicInfoOk')({}))
+                }
+            },
+        },
+        // 从数据库查询
+        {
+            name: 'queryBasicInfoDetial',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/queryBasicInfoDetial?companyId=${action.payload}`,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('getBaseInfoOk')(res.data))
+                }
+            },
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    baseInfo: {},
                 }
             },
         },

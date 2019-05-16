@@ -4,35 +4,35 @@ import { blaze } from '../utils/blaze'
 import { message } from 'antd'
 
 const model = {
-    namespace: 'finance',
+    namespace: 'trademark',
     state: {
-        finance: {},
+        trademark: {},
     },
     actions: [
         {
-            name: 'getFinancingList',
+            name: 'getTrademarkList',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/getFinancingList`,
+                    url: `/enterprise/getTrademarkList`,
                     contentType: 'multipart/form-data',
                     data: action.payload,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getFinancingListOk')(res.data))
+                    yield put(actions('getTrademarkListOk')(res.data))
                 }
             },
         },
         {
-            name: 'getFinancingListOk',
-            reducer: 'finance',
+            name: 'getTrademarkListOk',
+            reducer: 'trademark',
         },
         {
-            name: 'increaseFinancingApprove',
+            name: 'increaseTrademarkApprove',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/increaseFinancingApprove`,
+                    url: `/enterprise/increaseTrademarkApprove`,
                     data: {
                         params: action.payload,
                     },
@@ -44,10 +44,10 @@ const model = {
         },
     ],
 }
-const finance = blaze(model)
+const trademark = blaze(model)
 // reducer combineReducers使用
-export default finance.reducers
+export default trademark.reducers
 // action connect组件使用
-export const actions = finance.actions
+export const actions = trademark.actions
 // effects saga监听副作用函数使用
-export const effects = finance.effects
+export const effects = trademark.effects

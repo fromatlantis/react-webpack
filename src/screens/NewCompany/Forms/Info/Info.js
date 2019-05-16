@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             saveBasicInfo: actions('saveBasicInfo'),
-            getBaseInfo: actions('getBaseInfo'),
+            queryBasicInfoDetial: actions('queryBasicInfoDetial'),
             loadEnterpriseInfo: actions('loadEnterpriseInfo'),
         },
         dispatch,
@@ -34,6 +34,12 @@ const mapDispatchToProps = dispatch => {
 class Info extends PureComponent {
     state = {
         dataSource: [],
+    }
+    componentDidMount = () => {
+        const companyId = sessionStorage.getItem('companyId')
+        if (companyId) {
+            this.props.queryBasicInfoDetial(companyId)
+        }
     }
     handleSearch = word => {
         this.props.getSearchWord(word)
@@ -59,7 +65,7 @@ class Info extends PureComponent {
                         message: '请输入企业名称',
                     },
                 ],
-                component: <AutoComplete />,
+                component: <AutoComplete disabled={sessionStorage.companyId ? true : false} />,
             },
             {
                 label: '企业logo',
