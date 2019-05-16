@@ -7,6 +7,25 @@ import { UploadImg } from 'components'
 import styles from './Members.module.css'
 import avatar from 'assets/avatar.png'
 
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/members'
+
+const mapStateToProps = state => {
+    return {
+        team: state.members.team,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getCoreTeamList: actions('getCoreTeamList'),
+        },
+        dispatch,
+    )
+}
+
 const { TextArea } = Input
 const dataSource = [
     {
@@ -27,10 +46,22 @@ const dataSource = [
     },
 ]
 
-export default class Members extends PureComponent {
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Members extends PureComponent {
     state = {
         visible: false,
     }
+    componentDidMount() {
+        this.props.getCoreTeamList({
+            companyId: sessionStorage.getItem('companyId'),
+            pageNo: 1,
+            pageSize: 10,
+        })
+    }
+
     newInfo = () => {
         this.setState({
             visible: true,
@@ -95,6 +126,7 @@ export default class Members extends PureComponent {
         )
     }
     render() {
+        const { team } = this.props
         return (
             <Card
                 title="核心人员"
@@ -105,13 +137,19 @@ export default class Members extends PureComponent {
                     </Button>
                 }
             >
-                {dataSource.map(item => {
+                {(team.list || []).map(item => {
                     return (
                         <div className={styles.card} key={item.key}>
-                            <img src={avatar} alt="" />
+                            <img src={item.icon} alt="" />
                             <div className={styles.base}>
-                                <p>{item.name}</p>
-                                <p>{item.duty}</p>
+                                <p>
+                                    <b>姓名：</b>
+                                    {item.name}
+                                </p>
+                                <p>
+                                    <b>职务：</b>
+                                    {item.title}
+                                </p>
                             </div>
                             <div className={styles.intro}>{item.intro}</div>
                             <div>
@@ -139,3 +177,4 @@ export default class Members extends PureComponent {
         )
     }
 }
+export default Members

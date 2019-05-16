@@ -21,7 +21,6 @@
     margin-left: 10px;
 }
 
-
 /* “更多”的第一个抽屉下方div样式 */
 .oneDrawerDiv{
     position: absolute;
@@ -38,28 +37,6 @@
     font-size: 18px;
 }
 
-/* CreateHousse的样式 */
-:global .ant-form-item {
-    font-family: "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-size: 14px;
-    -webkit-font-feature-settings: "tnum";
-    font-feature-settings: "tnum";
-    font-variant: tabular-nums;
-    line-height: 1.5;
-    color: rgba(0, 0, 0, 0.65);
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    margin-bottom: 2px;
-    vertical-align: top;
-}
-/* 楼宇管理的搜索、点击 */
-:global .ant-form-item-control {
-    position: relative;
-    line-height: 31.9999px;
-    zoom: 1;
-}
 /* CreateHouse中样式 */
 .stepscontent {
     margin-top: 16px;
@@ -71,13 +48,12 @@
     padding-top: 60px;
 }
 
-
 .Container{
     display:flex;
     flex:1;
     min-width:1080px;
     flex-direction:column;
-    padding: 0 10%;
+    padding: 0 50px;
 
 }
 .searchView{

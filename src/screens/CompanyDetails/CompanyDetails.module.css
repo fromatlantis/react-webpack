@@ -18,10 +18,6 @@
     /* 阴影（水平阴影的位置，垂直阴影的位置，模糊距离，颜色） */
     box-shadow: 1px 1px 6px rgba(0,0,0,.1);
 }
-/* 时间轴-最后一行高度太高 */
-:global .ant-timeline-item-last > .ant-timeline-item-content {
-    min-height: 0px;
-}
 /* 所有de表格所在卡片消除padding */
 .messageCard{
     padding-bottom: 10px;

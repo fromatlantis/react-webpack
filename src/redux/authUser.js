@@ -1,5 +1,5 @@
 import { put, call } from 'redux-saga/effects'
-import { replace, push } from 'connected-react-router'
+import { replace } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { redirectLogin } from '../utils'
@@ -17,9 +17,8 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    //url: "/authuser/login",
                     url: '/authuser/login',
-                    data: action.payload,
+                    data: { params: action.payload },
                 })
                 if (res.data) {
                     if (res.data.users) {
@@ -85,9 +84,9 @@ const model = {
                     })
                     if (res.data) {
                         yield put(actions('loginSuccess')(res.data))
-                        yield put(actions('getAuthoritiesByUser')(res.data.user.id))
+                        // yield put(actions('getAuthoritiesByUser')(res.data.user.id))
                     } else {
-                        yield put(replace('/companyDetails/information'))
+                        yield put(replace('/login'))
                     }
                 } catch (err) {}
             },

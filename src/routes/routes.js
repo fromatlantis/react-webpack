@@ -17,7 +17,7 @@ const routes = [
     },
     {
         //企服首页/企业详情
-        path: '/companyDetails/*',
+        path: '/companyDetails/*/:company_id',
         component: Loadable({
             loader: () =>
                 import(
@@ -83,6 +83,19 @@ const routes = [
                 import(
                     /* webpackChunkName: "dynamicDetails" */ '../screens/dynamicDetails/dynamicDetails'
                 ),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/agency/*',
+        name: '中介服务',
+        icon: 'appstore',
+        navAttr: {
+            index: 1,
+            role: 'home',
+        },
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "agency" */ '../screens/Agency/Agency'),
             loading: Loading,
         }),
     },

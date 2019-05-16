@@ -1,0 +1,22 @@
+.toalNav{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(252, 252, 252, 1);
+    width:200px;
+    text-align:center;
+    min-height:535px;
+}
+.nav {
+    color:#000;
+    font-size:15px;
+    
+    height: 45px;
+    line-height: 45px;
+}
+.active {
+    background-color: #eee;
+}
+.container{
+    display:flex;
+    flex-direction:row;
+}

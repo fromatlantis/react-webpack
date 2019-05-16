@@ -14,6 +14,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+em {
+    color: red;
+    font-style: normal;
+}
 /* 设置滚动条的样式 */
 ::-webkit-scrollbar {
     width: 6px;
@@ -42,4 +46,8 @@ code {
 }
 .ant-form-inline .ant-form-item-with-help {
     margin-bottom: 0;
+}
+/* 时间轴-最后一行高度太高 */
+:global .ant-timeline-item-last > .ant-timeline-item-content {
+    min-height: 0px;
 }
