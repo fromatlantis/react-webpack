@@ -75,7 +75,7 @@ class Relation extends PureComponent {
                     >
                         <div style={{ height: '500px', display: 'flex', flexDirection: 'column' }}>
                             {/* <Graph elements={this.state.elements} /> */}
-                            <Graph elements={this.props.FirmGraph[0]} />
+                            {/* <Graph elements={this.props.FirmGraph[0]} /> */}
                         </div>
                     </Card>
                 </div>
