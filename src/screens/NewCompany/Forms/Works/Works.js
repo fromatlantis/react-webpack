@@ -128,6 +128,15 @@ class Works extends PureComponent {
                 },
             }
             if (that.state.type === 'add') {
+                let obj = newValue.params
+                for (let i in obj) {
+                    if (obj[i]) {
+                        obj[i] = obj[i].replace(
+                            /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/g,
+                            '',
+                        )
+                    }
+                }
                 that.props.increaseProductTrademarkApprove(newValue)
             } else {
                 let newValue = {
@@ -140,6 +149,15 @@ class Works extends PureComponent {
                     authorNationality: values.authorNationality,
                 }
                 newValue = { ...that.state.FormView, ...newValue }
+                let obj = newValue
+                for (let i in obj) {
+                    if (obj[i]) {
+                        obj[i] = obj[i].replace(
+                            /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/g,
+                            '',
+                        )
+                    }
+                }
                 that.changeProductTrademarkApprove(newValue)
             }
         })
@@ -183,14 +201,15 @@ class Works extends PureComponent {
             {
                 label: '著作权名称',
                 field: 'fullname',
-                component: <Input />,
+                component: <Input placeholder="著作权名称" />,
             },
             {
-                label: '著作权类别',
+                label: '作品著权类别',
                 field: 'type',
                 component: (
                     <Select
                         defaultValue="请选择"
+                        placeholder="请选择"
                         style={{ width: 120 }}
                         onChange={() => this.handleChange()}
                     >
@@ -215,22 +234,22 @@ class Works extends PureComponent {
             {
                 label: '著作权人',
                 field: 'authorNationality',
-                component: <Input />,
+                component: <Input placeholder="著作权人" />,
             },
             {
                 label: '登记日期',
                 field: 'regtime',
-                component: <Input />,
+                component: <Input placeholder="登记日期" />,
             },
             {
                 label: '登记号',
                 field: 'regnum',
-                component: <Input />,
+                component: <Input placeholder="登记号" />,
             },
             {
                 label: '完成创作时间',
                 field: 'finishTime',
-                component: <Input />,
+                component: <Input placeholder="完成创作时间" />,
             },
         ]
         const formItemLayout = {
@@ -266,13 +285,14 @@ class Works extends PureComponent {
             {
                 label: '著作权名称',
                 field: 'fullname',
-                component: <Input />,
+                component: <Input placeholder="著作权名称" />,
             },
             {
                 label: '著作权类别',
                 field: 'type',
                 component: (
                     <Select
+                        placeholder="著作权类别"
                         defaultValue="请选择"
                         style={{ width: 120 }}
                         onChange={() => this.handleChange()}
@@ -303,17 +323,17 @@ class Works extends PureComponent {
             {
                 label: '登记日期',
                 field: 'regtime',
-                component: <Input />,
+                component: <Input placeholder="登记日期" />,
             },
             {
                 label: '登记号',
                 field: 'regnum',
-                component: <Input />,
+                component: <Input placeholder="登记号" />,
             },
             {
                 label: '完成创作时间',
                 field: 'finishTime',
-                component: <Input />,
+                component: <Input placeholder="完成创作时间" />,
             },
         ]
         const formItemLayout = {
@@ -339,7 +359,15 @@ class Works extends PureComponent {
     }
     empty() {
         this.form.resetFields()
-
+        this.setState({
+            form: {
+                fullname: '',
+                type: '',
+                regtime: '',
+                regnum: '',
+                finishTime: '',
+            },
+        })
         let that = this
         setTimeout(() => {
             that.DidMount()
@@ -460,7 +488,7 @@ class Works extends PureComponent {
                     />
                 </div>
                 <Modal
-                    title="知识产权-作品著作权"
+                    title="作品著作权信息"
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}

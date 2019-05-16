@@ -33,6 +33,7 @@ export default ({ items, data }) => {
                                 {/* {item.component} */}
                                 {getFieldDecorator(item.field, {
                                     rules: item.rules,
+                                    initialValue: item.initialValue,
                                 })(item.component)}
                             </Form.Item>
                         )
