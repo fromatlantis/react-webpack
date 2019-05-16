@@ -53,7 +53,7 @@ const routes = [
         component: Loadable({
             loader: () =>
                 import(
-                    /* webpackChunkName: "HumanResourceService" */ '../screens/HumanResourceService/HumanResourceService'
+                    /* webpackChunkName: "HumanResourceService" */ '../screens/HumanResourceService/humanResourceService'
                 ),
             loading: Loading,
         }),
@@ -72,7 +72,7 @@ const routes = [
         path: '/DynamicList',
         component: Loadable({
             loader: () =>
-                import(/* webpackChunkName: "DynamicList" */ '../screens/DynamicList/DynamicList'),
+                import(/* webpackChunkName: "DynamicList" */ '../screens/DynamicList/dynamicList'),
             loading: Loading,
         }),
     },
@@ -81,7 +81,7 @@ const routes = [
         component: Loadable({
             loader: () =>
                 import(
-                    /* webpackChunkName: "DynamicDetails" */ '../screens/DynamicDetails/DynamicDetails'
+                    /* webpackChunkName: "DynamicDetails" */ '../screens/DynamicDetails/dynamicDetails'
                 ),
             loading: Loading,
         }),
