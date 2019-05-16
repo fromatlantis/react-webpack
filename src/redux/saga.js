@@ -1,6 +1,7 @@
 import { all } from 'redux-saga/effects'
 
 import { effects } from './authUser'
+import { effects as companyDetailsEffects } from './companyDetails'
 import { effects as companyEffects } from './company'
 import { effects as newCompanyEffects } from './newCompany'
 import { effects as businessEffects } from './business'
@@ -21,6 +22,7 @@ export function* watchFetchData() {
         ...businessEffects,
         ...financeEffects,
         ...membersEffects,
+        ...companyDetailsEffects,
         ...newsEffects,
         ...productEffects,
         ...effectsTrademark,

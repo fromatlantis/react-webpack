@@ -1,26 +1,52 @@
 /**
- * 企服首页/企业详情
+ * 企服首页（企服管理）/企业详情
  */
 import React, { PureComponent, Fragment } from 'react'
-import { Input, Tag, Breadcrumb, Card, Menu, Row, Col, Modal } from 'antd'
+import { Tag, Breadcrumb, Card, Menu, Row, Col, Modal } from 'antd'
 import { Link, NavLink, Route } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { push } from 'connected-react-router'
+import { actions } from '../../redux/companyDetails'
+import moment from 'moment'
 import styles from './CompanyDetails.module.css'
 import { menuData } from './MenuData'
 import routes from './MenuData'
 
-import phont from '../../assets/QDZH.png'
 import retime from '../../assets/retime.png'
 
 const SubMenu = Menu.SubMenu
 
+@connect(
+    state => {
+        return {
+            BasicInfoDetial: state.companyDetails.BasicInfoDetial, //企业详情信息
+        }
+    },
+    dispatch => {
+        return bindActionCreators(
+            {
+                push: push,
+                queryBasicInfoDetial: actions('queryBasicInfoDetial'),
+            },
+            dispatch,
+        )
+    },
+)
 class CompanyDetails extends PureComponent {
     state = {
         // 路由Menu参数
         current: '',
         // modal对话框参数
         visible: false,
+        //企业id
+        company_id: '',
+    }
+    //生命周期
+    componentDidMount = () => {
+        let company_id = this.props.match.params.company_id
+        this.setState({ company_id })
+        this.props.queryBasicInfoDetial(company_id)
     }
     //导航Menu点击回调
     handleClick = e => {
@@ -46,7 +72,7 @@ class CompanyDetails extends PureComponent {
                             <NavLink
                                 exact
                                 className={styles.SubMenuTitle}
-                                to={`/companyDetails/${item.path}`}
+                                to={`/companyDetails/${item.path}/${this.state.company_id}`}
                             >
                                 {item.title}
                             </NavLink>
@@ -58,7 +84,7 @@ class CompanyDetails extends PureComponent {
             } else {
                 return (
                     <Menu.Item key={`${item.key}`}>
-                        <NavLink to={`/companyDetails/${item.path}`}>
+                        <NavLink to={`/companyDetails/${item.path}/${this.state.company_id}`}>
                             <span>{item.title}</span>
                         </NavLink>
                     </Menu.Item>
@@ -75,11 +101,14 @@ class CompanyDetails extends PureComponent {
     }
 
     render() {
+        const item = this.props.BasicInfoDetial
+        // alert(item.estiblishTime)
+        // alert(moment(item.estiblishTime).format('YYYY-MM-DD'))
         return (
             <Fragment>
                 <Breadcrumb className={styles.BreadcrumbSty}>
                     <Breadcrumb.Item>
-                        <Link to={`/home`}>企服首页</Link>
+                        <Link to={`/company`}>企服管理</Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>企业详情</Breadcrumb.Item>
                 </Breadcrumb>
@@ -87,40 +116,43 @@ class CompanyDetails extends PureComponent {
                 <Card className={styles.cardSty} /* style={{ height: 150 }} */>
                     <div className={styles.flexDiv}>
                         <img
-                            src={phont}
+                            src={item.logo}
                             alt=""
                             style={{ width: 100, height: 100, marginTop: 20 }}
                         />
                         <div style={{ paddingLeft: 30, width: '80%' }}>
-                            <h1 className={styles.modalTd}>润江物业服务有限公司</h1>
+                            <h1 className={styles.modalTd}>{item.name}</h1>
                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                                 <img
                                     src={retime}
                                     alt=""
                                     style={{ width: 14, height: 14, marginTop: 3 }}
                                 />
-                                <p style={{ padding: '0 10px' }}>更新时间：10分钟前</p>
+                                <p style={{ padding: '0 10px' }}>更新时间：{item.updateTime}</p>
                                 <Tag color="#2db7f5" onClick={this.showModal}>
                                     发票抬头
                                 </Tag>
                             </div>
                             <Row gutter={16} style={{ marginTop: 6 }}>
                                 <Col span={7}>
-                                    <div>法人：庄花</div>
+                                    <div>法人：{item.legalPersonName}</div>
                                 </Col>
                                 <Col span={7}>
-                                    <div>注册资金：5000万元人民币</div>
+                                    <div>注册资金：{item.regCapital}</div>
                                 </Col>
                                 <Col span={7}>
-                                    <div>成立时间：2019-10-23</div>
+                                    <div>
+                                        成立时间：
+                                        {moment(parseInt(item.estiblishTime)).format('YYYY-MM-DD')}
+                                    </div>
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginTop: 6 }}>
                                 <Col span={7}>
-                                    <div>邮箱：zhuanghua@163.com</div>
+                                    <div>邮箱：{item.email}</div>
                                 </Col>
                                 <Col span={7}>
-                                    <div>联系电话：010-897788-906</div>
+                                    <div>联系电话：{item.phoneNumber}</div>
                                 </Col>
                                 <Col span={7}>
                                     <div>官网：http://www.example.com</div>
@@ -128,7 +160,7 @@ class CompanyDetails extends PureComponent {
                             </Row>
                             <Row gutter={16} style={{ marginTop: 6 }}>
                                 <Col span={16}>
-                                    <div>企业地址：石家庄市科技中心润江大厦B座1201室</div>
+                                    <div>企业地址：{item.regLocation}</div>
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginTop: 6 }}>
@@ -147,33 +179,33 @@ class CompanyDetails extends PureComponent {
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     footer={null}
-                    width="400px"
+                    width="600px"
                 >
                     <table>
                         <tbody>
                             <tr className={styles.modalTr}>
                                 <td className={styles.modalTd}>企业名称：</td>
-                                <td>小米科技有限公司</td>
+                                <td>{item.name}</td>
                             </tr>
                             <tr className={styles.modalTr}>
                                 <td className={styles.modalTd}>企业税号：</td>
-                                <td>9117674378947237Q</td>
+                                <td>{item.creditCode}</td>
                             </tr>
                             <tr className={styles.modalTr}>
                                 <td className={styles.modalTd}>企业地址：</td>
-                                <td>蛊惑江湖核对好风景就哭哭</td>
+                                <td>{item.regLocation}</td>
                             </tr>
                             <tr className={styles.modalTr}>
                                 <td className={styles.modalTd}>企业电话：</td>
-                                <td>010-03984757</td>
+                                <td>{item.phoneNumber}</td>
                             </tr>
                             <tr className={styles.modalTr}>
                                 <td className={styles.modalTd}>开户银行：</td>
-                                <td>软件而诶热一人哦is人激怒股</td>
+                                <td>{item.depositBank}</td>
                             </tr>
                             <tr className={styles.modalTr}>
                                 <td className={styles.modalTd}>银行账户：</td>
-                                <td>11012947387889</td>
+                                <td>{item.bankAccount}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -192,7 +224,7 @@ class CompanyDetails extends PureComponent {
                         return (
                             <Route
                                 exact
-                                path={`/companyDetails/${item.path}`}
+                                path={`/companyDetails/${item.path}/:company_id`}
                                 component={item.component}
                                 key={index}
                             />
@@ -203,16 +235,4 @@ class CompanyDetails extends PureComponent {
         )
     }
 }
-const mapStateToProps = state => {
-    return {
-        router: state.router,
-    }
-}
-const mapDispatchToProps = dispatch => {
-    return bindActionCreators({}, dispatch)
-}
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(CompanyDetails)
+export default CompanyDetails
