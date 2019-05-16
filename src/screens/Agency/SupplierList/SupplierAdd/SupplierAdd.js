@@ -1,8 +1,12 @@
 // 企业需求/办理
 import React, { PureComponent } from 'react'
 import { Button, Form, Input, Divider, Select, TreeSelect, Breadcrumb, Card } from 'antd'
-import styles from './SupplierEdit.module.css'
+import styles from './SupplierAdd.module.css'
 import { Link } from 'react-router-dom'
+
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from '../../../../redux/agencyRequire'
 
 const { TextArea } = Input
 const TreeNode = TreeSelect.TreeNode
@@ -11,8 +15,6 @@ class supplierEdit extends PureComponent {
         value: undefined,
     }
     componentDidMount = () => {
-        let id = this.props.match.params.id
-        this.props.getSupplierList({ id: id })
         this.props.getServiceTypeList()
     }
     // 处理接口返回的数据
@@ -46,10 +48,9 @@ class supplierEdit extends PureComponent {
         e.preventDefault()
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                // values.category = this.props.supperList.id
-                let id = this.props.match.params.id
-                values.id = id
-                this.props.updateSupplier(values)
+                // console.log('用户输入的是', values)
+                values.category = values.category.join(',')
+                this.props.addSupplier(values)
             }
         })
     }
@@ -66,7 +67,6 @@ class supplierEdit extends PureComponent {
                 sm: { span: 16 },
             },
         }
-        let id = this.props.match.params.id
         return (
             <div>
                 <Card
@@ -76,7 +76,7 @@ class supplierEdit extends PureComponent {
                                 <Link to="/agency/supplierList">供应商列表</Link>
                             </Breadcrumb.Item>
                             <Breadcrumb.Item>
-                                <Link to={`/agency/supplierEdit/${id}`}>供应商编辑</Link>
+                                <Link to="/agency/supplierAdd">供应商新建</Link>
                             </Breadcrumb.Item>
                         </Breadcrumb>
                     }
@@ -184,16 +184,25 @@ class supplierEdit extends PureComponent {
         )
     }
 }
-export default Form.create({
-    mapPropsToFields(props) {
-        return {
-            supplier: Form.createFormField({ value: props.supperList.supplier }),
-            contract: Form.createFormField({ value: props.supperList.contract }),
-            telephone: Form.createFormField({ value: props.supperList.telephone }),
-            email: Form.createFormField({ value: props.supperList.email }),
-            website: Form.createFormField({ value: props.supperList.website }),
-            introduce: Form.createFormField({ value: props.supperList.introduce }),
-            category: Form.createFormField({ value: props.supperList.category_id }),
-        }
-    },
-})(supplierEdit)
+
+const mapStateToProps = state => {
+    return {
+        ServiceTypeList: state.agencyRequire.ServiceTypeList,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            addSupplier: actions('addSupplier'),
+            getServiceTypeList: actions('getServiceTypeList'),
+        },
+        dispatch,
+    )
+}
+
+export default Form.create()(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps,
+    )(supplierEdit),
+)

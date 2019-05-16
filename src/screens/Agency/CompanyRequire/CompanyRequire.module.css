@@ -1,4 +1,4 @@
-.container{
+.containerR{
     padding: 16px 24px 0 24px;
 }
 .typeTitle{
@@ -31,5 +31,9 @@
 .active{
     background-color: #1E90FF;
     color: #fff;
+}
+.containerR :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+    width: 80px !important;
+    text-align: right;
 }
 

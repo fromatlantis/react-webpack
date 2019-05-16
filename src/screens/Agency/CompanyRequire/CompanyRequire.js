@@ -2,68 +2,101 @@ import React, { PureComponent } from 'react'
 import { Menu, Icon, Form, Input, Button, Table, Select, Tabs } from 'antd'
 import { Link } from 'react-router-dom'
 import styles from './CompanyRequire.module.css'
+import ListClick from '../../../components/ListClick/ListClick'
+
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from '../../../redux/agencyRequire'
 
 const MenuItemGroup = Menu.ItemGroup
 const TabPane = Tabs.TabPane
-
+const page = {
+    pageSize: 10,
+    pageNo: 1,
+}
 class Agency extends PureComponent {
     state = {
-        activeKey: '',
+        tabKey: '0',
+        typeId: '',
     }
-    supplierList = i => {
-        this.setState({
-            activeKey: i,
-        })
+    componentDidMount = () => {
+        this.props.getServiceTypeList()
+        page.processStatus = '0'
+        this.props.getDemandList(page)
     }
-    handleSubmit = e => {
-        e.preventDefault()
+    formParms = () => {
+        let params = {}
         this.props.form.validateFields((err, fieldsValue) => {
             if (err) {
                 return
             }
-            // let rangeTime = fieldsValue.publishTime
-            // if( rangeTime ) {
-            //     fieldsValue.publishTime = rangeTime.map(x=>x.format('YYYY-MM-DD')).join(',')
-            // }
-            // fieldsValue.pageNo = 1 //重置分页
-            // this.props.getParkNoticeList(fieldsValue)
+            params = fieldsValue
+            params.processStatus = this.state.tabKey
+            if (this.state.typeId && this.state.typeId !== 'undefined') {
+                params.typeId = this.state.typeId
+            }
         })
+        return params
+    }
+    handleSubmit = e => {
+        e.preventDefault()
+        let parm = this.formParms()
+        parm.pageNo = 1
+        parm.pageSize = 10
+        this.props.getDemandList(parm)
+    }
+    Tabscallback = key => {
+        this.setState({ tabKey: key })
+        let parm = this.formParms()
+        parm.pageNo = 1
+        parm.pageSize = 10
+        if (key === '0') {
+            parm.processStatus = '0'
+            this.props.getDemandList(parm)
+        } else {
+            parm.processStatus = '3'
+            this.props.getDemandList(parm)
+        }
+    }
+    // 点击清除按钮
+    clearInput = () => {
+        this.listClick.updateAll()
+        this.props.form.resetFields()
+        let parm = this.formParms()
+        parm.pageNo = 1
+        parm.pageSize = 10
+        parm.typeId = undefined
+        this.props.getDemandList(parm)
+    }
+    // table的pageSize改变
+    onShowSizeChange = (pageNo, pageSize) => {
+        let parm = this.formParms()
+        parm.pageNo = 1
+        parm.pageSize = pageSize
+        this.props.getDemandList(parm)
+    }
+    // table的pageNo改变
+    onChange = (pageNo, pageSize) => {
+        let parm = this.formParms()
+        parm.pageNo = pageNo
+        parm.pageSize = pageSize
+        this.props.getDemandList(parm)
+    }
+    getTypeId = num => {
+        this.setState({
+            typeId: num,
+        })
+    }
+    onRef = ref => {
+        this.listClick = ref
     }
     render() {
         const { getFieldDecorator } = this.props.form
+        const serList = this.props.ServiceTypeList.filter(item => {
+            return item.level === '1'
+        })
+        serList.unshift({ typeName: '全部', id: 'undefined' })
         const Option = Select.Option
-        const data = [
-            {
-                key: '1',
-                supplierType: '知识产权',
-                money: '200',
-                companyType: '实驻企业',
-                companyName: '启迪智慧',
-                companyRelative: '张三',
-                companyPhone: '13171784045',
-                time: '2019-12-05',
-            },
-            {
-                key: '2',
-                supplierType: '知识产权',
-                money: '200',
-                companyType: '实驻企业',
-                companyName: '启迪智慧',
-                companyRelative: '张三',
-                companyPhone: '13171784045',
-                time: '2019-12-05',
-            },
-            {
-                key: '3',
-                supplierType: '知识产权',
-                money: '200',
-                companyType: '实驻企业',
-                companyName: '启迪智慧',
-                companyRelative: '张三',
-                companyPhone: '13171784045',
-                time: '2019-12-05',
-            },
-        ]
         const columns = [
             {
                 title: '序号',
@@ -74,44 +107,38 @@ class Agency extends PureComponent {
             },
             {
                 title: '供应商类型',
-                dataIndex: 'supplierType',
-                key: 'supplierType',
+                dataIndex: 'category',
+                key: 'category',
                 align: 'center',
             },
             {
-                title: '金额',
-                dataIndex: 'money',
-                key: 'money',
-                align: 'center',
-            },
-            {
-                title: '企业类型',
-                dataIndex: 'companyType',
-                key: 'companyType',
+                title: '总金额',
+                dataIndex: 'amount',
+                key: 'amount',
                 align: 'center',
             },
             {
                 title: '企业名称',
-                dataIndex: 'companyName',
-                key: 'companyName',
+                dataIndex: 'enterpriseName',
+                key: 'enterpriseName',
                 align: 'center',
             },
             {
                 title: '企业联系人',
-                dataIndex: 'companyRelative',
-                key: 'companyRelative',
+                dataIndex: 'contract',
+                key: 'contract',
                 align: 'center',
             },
             {
                 title: '企业联系方式',
-                dataIndex: 'companyPhone',
-                key: 'companyPhone',
+                dataIndex: 'telephone',
+                key: 'telephone',
                 align: 'center',
             },
             {
                 title: '请求时间',
-                dataIndex: 'time',
-                key: 'time',
+                dataIndex: 'requestTime',
+                key: 'requestTime',
                 align: 'center',
             },
             {
@@ -121,84 +148,154 @@ class Agency extends PureComponent {
                 align: 'center',
                 render: (text, record) => (
                     <span>
-                        <Link to="/agency/goHandle">办理</Link>
+                        <Link to={`/agency/goHandle/${record.id}`}>办理</Link>
                     </span>
                 ),
             },
         ]
-        const supplierType = ['知识产权', '法律服务', '人资服务', '代理记账']
-        return (
-            <div className={styles.container}>
-                <div className={styles.typeTitle}>
-                    <span>供应商类型：</span>
-                    <div className={styles.typeList}>
-                        {supplierType.map((item, i) => {
-                            return (
-                                <span
-                                    key={i}
-                                    onClick={() => {
-                                        this.supplierList(i)
-                                    }}
-                                    className={`${styles.typeBut} ${
-                                        this.state.activeKey === i ? styles.active : ''
-                                    }`}
-                                >
-                                    {item}
-                                </span>
-                            )
-                        })}
+        const isColumns = [
+            {
+                title: '序号',
+                key: 'num',
+                dataIndex: 'num',
+                align: 'center',
+                render: (text, record, index) => <span key={text}>{index + 1}</span>,
+            },
+            {
+                title: '供应商类型',
+                dataIndex: 'category',
+                key: 'category',
+                align: 'center',
+            },
+            {
+                title: '金额',
+                dataIndex: 'amount',
+                key: 'amount',
+                align: 'center',
+            },
+            {
+                title: '企业名称',
+                dataIndex: 'enterpriseName',
+                key: 'enterpriseName',
+                align: 'center',
+            },
+            {
+                title: '企业联系人',
+                dataIndex: 'contract',
+                key: 'contract',
+                align: 'center',
+            },
+            {
+                title: '企业联系方式',
+                dataIndex: 'telephone',
+                key: 'telephone',
+                align: 'center',
+            },
+            {
+                title: '状态',
+                dataIndex: 'processStatus',
+                key: 'processStatus',
+                align: 'center',
+                render: (text, record) => (
+                    <div>
+                        <span>{text === '1' ? '已办理' : '已完成'}</span>
                     </div>
+                ),
+            },
+            {
+                title: '操作',
+                dataIndex: 'handle',
+                key: 'handle',
+                align: 'center',
+                render: (text, record) => (
+                    <span>
+                        <Link to={`/agency/goView/${record.id}`}>查看</Link>
+                    </span>
+                ),
+            },
+        ]
+        return (
+            <div className={styles.containerR}>
+                <div className={styles.typeTitle}>
+                    <ListClick
+                        onRef={this.onRef}
+                        data={serList}
+                        getId={id => this.getTypeId(id)}
+                        title="供应商类型："
+                    />
                 </div>
                 <Form layout="inline" onSubmit={this.handleSubmit}>
                     <Form.Item label="企业名称：">
-                        {getFieldDecorator('companyName')(
+                        {getFieldDecorator('enterpriseName')(
                             <Input placeholder="请输入" style={{ width: 220 }} />,
                         )}
                     </Form.Item>
-                    <Form.Item label="类型：">
-                        {getFieldDecorator('status', { initialValue: '' })(
-                            <Select
-                                getPopupContainer={triggerNode => triggerNode.parentNode} //异常浮动
-                                style={{ width: 220 }}
-                                placeholder="请选择"
-                            >
-                                <Option value="">全部</Option>
-                                <Option value="1">企业实驻</Option>
-                                <Option value="2">虚拟企业</Option>
-                            </Select>,
+                    <Form.Item label="企业联系人：">
+                        {getFieldDecorator('contract', { initialValue: '' })(
+                            <Input placeholder="请输入" style={{ width: 220 }} />,
                         )}
                     </Form.Item>
                     <Form.Item>
-                        <Button htmlType="submit" style={{ marginRight: 10, marginLeft: 10 }}>
+                        <Button
+                            style={{ marginRight: 10, marginLeft: 10 }}
+                            onClick={this.clearInput}
+                        >
                             清空
                         </Button>
-                        <Button type="primary">查询</Button>
+                        <Button type="primary" htmlType="submit">
+                            查询
+                        </Button>
                     </Form.Item>
                 </Form>
-                <Tabs type="card" style={{ marginTop: 20 }}>
-                    <TabPane tab="未办理需求" key="1">
+                <Tabs type="card" style={{ marginTop: 20 }} onChange={this.Tabscallback}>
+                    <TabPane tab="未办理需求" key="0">
                         <Table
                             columns={columns}
-                            dataSource={data}
-                            // rowKey={(record, index) => `complete${record.id}${index}`}
-                            // dataSource={this.props.parkNoticeList}
-                            // pagination={{
-                            //     current: pageNo,
-                            //     showSizeChanger: true,
-                            //     showQuickJumper: true,
-                            //     pageSizeOptions: ['10', '15', '20'],
-                            //     total: this.props.total,
-                            //     onShowSizeChange: this.onShowSizeChange.bind(this),
-                            //     onChange: this.onChange.bind(this)
-                            // }}
+                            dataSource={this.props.demandList}
+                            rowKey={(record, index) => `complete${record.id}${index}`}
+                            pagination={{
+                                // current: pageNo,
+                                showSizeChanger: true,
+                                showQuickJumper: true,
+                                pageSizeOptions: ['10', '15', '20'],
+                                total: this.props.demandTotal,
+                                onShowSizeChange: this.onShowSizeChange.bind(this),
+                                onChange: this.onChange.bind(this),
+                            }}
                         />
                     </TabPane>
-                    <TabPane tab="已办理需求" key="2">
-                        <Table columns={columns} dataSource={data} />
+                    <TabPane tab="已办理需求" key="3">
+                        <Table
+                            columns={isColumns}
+                            dataSource={this.props.demandList}
+                            rowKey={(record, index) => `complete${record.id}${index}`}
+                        />
                     </TabPane>
                 </Tabs>
             </div>
         )
     }
 }
-export default Form.create()(Agency)
+
+const mapStateToProps = state => {
+    return {
+        demandList: state.agencyRequire.demandList,
+        demandTotal: state.agencyRequire.demandTotal,
+        ServiceTypeList: state.agencyRequire.ServiceTypeList,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getDemandList: actions('getDemandList'),
+            getServiceTypeList: actions('getServiceTypeList'),
+        },
+        dispatch,
+    )
+}
+export default Form.create()(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps,
+    )(Agency),
+)

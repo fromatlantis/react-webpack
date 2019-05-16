@@ -17,7 +17,6 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    //url: "/authuser/login",
                     url: '/authuser/login',
                     data: action.payload,
                 })
@@ -87,7 +86,7 @@ const model = {
                         yield put(actions('loginSuccess')(res.data))
                         yield put(actions('getAuthoritiesByUser')(res.data.user.id))
                     } else {
-                        yield put(replace('/companyDetails/information'))
+                        yield put(replace('/login'))
                     }
                 } catch (err) {}
             },
