@@ -68,9 +68,9 @@ class Copyright extends PureComponent {
                         <Button type="primary" onClick={() => this.newInfo(data)}>
                             编辑
                         </Button>
-                        <Button style={{ marginLeft: '10px' }} onClick={() => this.del(data)}>
+                        {/* <Button style={{ marginLeft: '10px' }} onClick={() => this.del(data)}>
                             删除
-                        </Button>
+                        </Button> */}
                     </div>
                 ),
             },
@@ -101,10 +101,30 @@ class Copyright extends PureComponent {
     handleOk = () => {
         let that = this
         this.form.validateFields((errors, values) => {
-            let newValue = values
+            values.companyId = sessionStorage.getItem('companyId')
+            let newValue = {
+                params: {
+                    companyId: sessionStorage.getItem('companyId'),
+                    fullname: values.fullname,
+                    simplename: values.simplename,
+                    regtime: values.regtime,
+                    regnum: values.regnum,
+                    catnum: values.catnum,
+                    authorNationality: values.authorNationality,
+                },
+            }
             if (that.state.type === 'add') {
                 that.props.increaseSoftwareCopyrightApprove(newValue)
             } else {
+                let newValue = {
+                    companyId: sessionStorage.getItem('companyId'),
+                    fullname: values.fullname,
+                    simplename: values.simplename,
+                    regtime: values.regtime,
+                    regnum: values.regnum,
+                    catnum: values.catnum,
+                    authorNationality: values.authorNationality,
+                }
                 newValue = { ...that.state.FormView, ...newValue }
                 that.changeSoftwareCopyrightApprove(newValue)
             }
@@ -159,8 +179,8 @@ class Copyright extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 8 },
+            wrapperCol: { span: 14 },
         }
         const FormView = formView({ items, data: this.state.FormView })
         return (
@@ -204,8 +224,8 @@ class Copyright extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 8 },
+            wrapperCol: { span: 16 },
         }
         const FormView = formView({ items, data: this.state.form })
         return (
@@ -226,6 +246,10 @@ class Copyright extends PureComponent {
     }
     empty() {
         this.form.resetFields()
+        let that = this
+        setTimeout(() => {
+            that.DidMount()
+        }, 0)
     }
     query() {
         let that = this
@@ -265,12 +289,11 @@ class Copyright extends PureComponent {
             catnum: '',
         },
     ) {
-        let sessionStorageItem = JSON.parse(sessionStorage.getItem('nowCompany'))
         var result = await request({
             type: 'post',
             url: '/enterprise/getSoftwareCopyrightList',
             data: {
-                companyId: 484167,
+                companyId: sessionStorage.getItem('companyId'),
                 pageNo: req.pageNo,
                 pageSize: 10,
                 fullname: this.state.form.fullname,
@@ -283,7 +306,6 @@ class Copyright extends PureComponent {
         })
         if (result.code === 1000) {
             this.setState({
-                sessionStorageItem,
                 List: result.data,
                 page: req.pageNo,
             })
@@ -312,7 +334,9 @@ class Copyright extends PureComponent {
                     </Button>
                 }
             >
-                <div className={styles.searchCard}>{this.renderForm('search')}</div>
+                <div className={styles.searchCard} style={{ marginBottom: '20px' }}>
+                    {this.renderForm('search')}
+                </div>
                 <Table
                     bordered
                     pagination={false}
@@ -341,7 +365,7 @@ class Copyright extends PureComponent {
                     onCancel={this.handleCancel}
                     //footer={null}
                 >
-                    {this.renderFormNo()}
+                    <div className={styles.searchCard}>{this.renderFormNo()}</div>
                 </Modal>
             </Card>
         )

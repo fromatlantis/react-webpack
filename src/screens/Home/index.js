@@ -50,7 +50,7 @@ class Home extends PureComponent {
         })
         if (result.code === 1000) {
             this.setState({
-                RecentNews: result.data,
+                RecentNews: result.data.resultList,
             })
         } else {
             message.info(result.message)
@@ -69,7 +69,7 @@ class Home extends PureComponent {
     search(value) {
         this.setState({
             searchValue: value,
-            searchShow: value,
+            searchShow: true,
         })
         if (value) {
             let payload = {
@@ -91,13 +91,13 @@ class Home extends PureComponent {
                 pageNo: 1,
                 pageSize: 10,
             }
-            if (this.state.size === '查公司') {
-                payload.column = 'name'
-            } else if (this.state.size === '查法人') {
-                payload.column = 'legal_person_name'
-            } else if (this.state.size === '查行业') {
-                payload.column = 'industry'
-            }
+            // if (this.state.size === '查公司') {
+            //     payload.column = 'name'
+            // } else if (this.state.size === '查法人') {
+            //     payload.column = 'legal_person_name'
+            // } else if (this.state.size === '查行业') {
+            //     payload.column = 'industry'
+            // }
             this.searchCompany(payload)
         }
     }

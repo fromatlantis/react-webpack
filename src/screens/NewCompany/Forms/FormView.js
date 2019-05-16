@@ -30,6 +30,7 @@ export default ({ items, data }) => {
                     {items.map((item, index) => {
                         return (
                             <Form.Item label={item.label} key={index}>
+                                {/* {item.component} */}
                                 {getFieldDecorator(item.field, {
                                     rules: item.rules,
                                 })(item.component)}
@@ -44,7 +45,7 @@ export default ({ items, data }) => {
                         </Form.Item>
                     )}
                     {emptyBtn && (
-                        <Form.Item wrapperCol={{ offset: formItemLayout.labelCol.span }}>
+                        <Form.Item wrapperCol={{ offset: formItemLayout.labelCol.span / 2 }}>
                             <Button
                                 htmlType="submit"
                                 style={{ marginRight: '10px' }}

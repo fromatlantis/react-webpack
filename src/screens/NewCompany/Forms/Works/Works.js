@@ -68,9 +68,9 @@ class Works extends PureComponent {
                         <Button type="primary" onClick={() => this.newInfo(data)}>
                             编辑
                         </Button>
-                        <Button style={{ marginLeft: '10px' }} onClick={() => this.del(data)}>
+                        {/* <Button style={{ marginLeft: '10px' }} onClick={() => this.del(data)}>
                             删除
-                        </Button>
+                        </Button> */}
                     </div>
                 ),
             },
@@ -115,10 +115,30 @@ class Works extends PureComponent {
     handleOk = () => {
         let that = this
         this.form.validateFields((errors, values) => {
-            let newValue = values
+            values.companyId = sessionStorage.getItem('companyId')
+            let newValue = {
+                params: {
+                    companyId: sessionStorage.getItem('companyId'),
+                    fullname: values.fullname,
+                    type: values.type,
+                    regtime: values.regtime,
+                    regnum: values.regnum,
+                    finishTime: values.finishTime,
+                    authorNationality: values.authorNationality,
+                },
+            }
             if (that.state.type === 'add') {
                 that.props.increaseProductTrademarkApprove(newValue)
             } else {
+                let newValue = {
+                    companyId: sessionStorage.getItem('companyId'),
+                    fullname: values.fullname,
+                    type: values.type,
+                    regtime: values.regtime,
+                    regnum: values.regnum,
+                    finishTime: values.finishTime,
+                    authorNationality: values.authorNationality,
+                }
                 newValue = { ...that.state.FormView, ...newValue }
                 that.changeProductTrademarkApprove(newValue)
             }
@@ -214,8 +234,8 @@ class Works extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 8 },
+            wrapperCol: { span: 14 },
         }
         const FormView = formView({ items, data: this.state.FormView })
         return (
@@ -297,8 +317,8 @@ class Works extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 8 },
+            wrapperCol: { span: 14 },
         }
         const FormView = formView({ items, data: this.state.form })
         return (
@@ -319,6 +339,11 @@ class Works extends PureComponent {
     }
     empty() {
         this.form.resetFields()
+
+        let that = this
+        setTimeout(() => {
+            that.DidMount()
+        }, 0)
     }
     query() {
         let that = this
@@ -401,16 +426,18 @@ class Works extends PureComponent {
                 bordered={false}
                 extra={
                     <div>
-                        <Button type="primary" onClick={this.newInfo}>
+                        {/* <Button type="primary" onClick={this.newInfo}>
                             预览
                         </Button>
                         <Button onClick={this.newInfo} style={{ marginLeft: '10px' }}>
                             存档
-                        </Button>
+                        </Button> */}
                     </div>
                 }
             >
-                <div className={styles.searchCard}>{this.renderForm('search')}</div>
+                <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
+                    {this.renderForm('search')}
+                </div>
                 <Table
                     bordered
                     pagination={false}
@@ -437,8 +464,9 @@ class Works extends PureComponent {
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
+                    className={styles.searchCard}
                 >
-                    {this.renderFormNo()}
+                    <div className={styles.searchCard}>{this.renderFormNo()}</div>
                 </Modal>
             </Card>
         )

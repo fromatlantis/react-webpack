@@ -24,7 +24,7 @@ export const blaze = model => {
             let { actions } = model
             let item = actions.find(item => generateType(item.name) === action.type)
             // return getNewState(item,state,action)
-            return item && item.reducer
+            return item && item.reducer && action.payload
                 ? typeof item.reducer === 'string'
                     ? {
                           ...state,

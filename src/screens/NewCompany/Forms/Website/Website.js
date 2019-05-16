@@ -16,6 +16,8 @@ class Website extends PureComponent {
         form: {
             ym: '',
             webSite: '',
+            liscense: '',
+            examineDate: '',
         },
         type: '',
         sessionStorageItem: {},
@@ -76,9 +78,9 @@ class Website extends PureComponent {
                         <Button type="primary" onClick={() => this.newInfo(data)}>
                             编辑
                         </Button>
-                        <Button style={{ marginLeft: '10px' }} onClick={() => this.del(data)}>
+                        {/* <Button style={{ marginLeft: '10px' }} onClick={() => this.del(data)}>
                             删除
-                        </Button>
+                        </Button> */}
                     </div>
                 ),
             },
@@ -102,19 +104,27 @@ class Website extends PureComponent {
     handleOk = () => {
         let that = this
         this.form.validateFields((errors, values) => {
+            values.companyId = sessionStorage.getItem('companyId')
             let newValue = {
-                ym: values.ym,
-                webSite: values.webSite,
-                liscense: values.liscense,
-                companyType: values.companyType,
-                examineDate: values.examineDate,
-                companyId: that.state.sessionStorageItem.companyId,
+                params: {
+                    companyId: sessionStorage.getItem('companyId'),
+                    ym: values.ym,
+                    liscense: values.liscense,
+                    webSite: values.webSite,
+                    examineDate: values.examineDate,
+                },
             }
             if (that.state.type === 'add') {
                 that.props.increaseWebsiteRecordsApprove(newValue)
             } else {
+                let newValue = {
+                    companyId: sessionStorage.getItem('companyId'),
+                    ym: values.ym,
+                    liscense: values.liscense,
+                    webSite: values.webSite,
+                    examineDate: values.examineDate,
+                }
                 newValue = { ...that.state.FormView, ...newValue }
-                console.log(newValue, '--------------------')
                 that.changeWebsiteRecordsApprove(newValue)
             }
         })
@@ -193,8 +203,8 @@ class Website extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 12 },
+            wrapperCol: { span: 10 },
         }
         const FormView = formView({ items, data: this.state.FormView })
         return (
@@ -215,8 +225,14 @@ class Website extends PureComponent {
             form: {
                 webSite: '',
                 ym: '',
+                liscense: '',
+                examineDate: '',
             },
         })
+        let that = this
+        setTimeout(() => {
+            that.DidMount()
+        }, 0)
     }
     query() {
         let that = this
@@ -226,6 +242,8 @@ class Website extends PureComponent {
                 form: {
                     ym: values.ym,
                     webSite: values.webSite,
+                    liscense: values.liscense,
+                    examineDate: values.examineDate,
                 },
             })
             setTimeout(() => {
@@ -288,10 +306,20 @@ class Website extends PureComponent {
                 field: 'webSite',
                 component: <Input />,
             },
+            {
+                label: '备案号',
+                field: 'liscense',
+                component: <Input />,
+            },
+            {
+                label: '审核时间',
+                field: 'examineDate',
+                component: <Input />,
+            },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 12 },
+            wrapperCol: { span: 10 },
         }
         const FormView = formView({ items, data: this.state.form })
         return (
@@ -330,6 +358,8 @@ class Website extends PureComponent {
                 pageSize: 10,
                 ym: this.state.form.ym,
                 webSite: this.state.form.webSite,
+                liscense: this.state.form.liscense,
+                examineDate: this.state.form.examineDate,
             },
             contentType: 'multipart/form-data',
         })
@@ -380,16 +410,18 @@ class Website extends PureComponent {
                 bordered={false}
                 extra={
                     <div>
-                        <Button type="primary" onClick={this.newInfo}>
+                        {/* <Button type="primary" onClick={this.newInfo}>
                             预览
                         </Button>
                         <Button onClick={this.newInfo} style={{ marginLeft: '10px' }}>
                             存档
-                        </Button>
+                        </Button> */}
                     </div>
                 }
             >
-                <div className={styles.searchCard}>{this.renderForm('search')}</div>
+                <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
+                    {this.renderForm('search')}
+                </div>
                 <Table
                     bordered
                     pagination={false}
@@ -418,7 +450,7 @@ class Website extends PureComponent {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
-                    {this.renderFormNo()}
+                    <div className={styles.searchCard}>{this.renderFormNo()}</div>
                 </Modal>
             </Card>
         )

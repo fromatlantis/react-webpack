@@ -1,8 +1,28 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker } from 'antd'
 
-import formView from '../FormView'
+import FormView from '../FormView2'
+
 import styles from '../index.module.css'
+
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/finance'
+
+const mapStateToProps = state => {
+    return {
+        financingList: state.finance.financingList,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getFinancingList: actions('getFinancingList'),
+        },
+        dispatch,
+    )
+}
 
 const dataSource = [
     {
@@ -51,10 +71,22 @@ const columns = [
     },
 ]
 
-export default class Finance extends PureComponent {
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Finance extends PureComponent {
     state = {
         visible: false,
     }
+    componentDidMount() {
+        this.props.getFinancingList({
+            companyId: sessionStorage.getItem('companyId'),
+            pageNo: 1,
+            pageSize: 10,
+        })
+    }
+
     newInfo = () => {
         this.setState({
             visible: true,
@@ -111,12 +143,13 @@ export default class Finance extends PureComponent {
             labelCol: { span: 6 },
             wrapperCol: { span: 12 },
         }
-        const FormView = formView({ items, data: {} })
+        //const FormView = formView({ items, data: {} })
         return (
             <FormView
                 ref={form => {
                     this.form = form
                 }}
+                items={items}
                 formItemLayout={formItemLayout}
                 layout="inline"
                 saveBtn={false}
@@ -149,3 +182,4 @@ export default class Finance extends PureComponent {
         )
     }
 }
+export default Finance

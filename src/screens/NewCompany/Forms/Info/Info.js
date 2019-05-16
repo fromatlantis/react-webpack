@@ -1,16 +1,63 @@
 import React, { PureComponent } from 'react'
-import { Card, Input, Icon, AutoComplete } from 'antd'
+import { Card, Input, Select, DatePicker, Modal } from 'antd'
+import moment from 'moment'
 import { UploadImg } from 'components'
-import formView from '../FormView'
-export default class Info extends PureComponent {
-    search = () => {
-        alert('11')
+import FormView from '../FormView2'
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/newCompany'
+
+import AutoComplete from './AutoComplete'
+
+const Option = Select.Option
+const mapStateToProps = state => {
+    return {
+        baseInfo: state.newCompany.baseInfo,
+        loadAll: state.newCompany.loadAll,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            saveBasicInfo: actions('saveBasicInfo'),
+            getBaseInfo: actions('getBaseInfo'),
+            loadEnterpriseInfo: actions('loadEnterpriseInfo'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Info extends PureComponent {
+    state = {
+        dataSource: [],
+    }
+    componentDidMount = () => {
+        const companyName = sessionStorage.getItem('companyName')
+        if (companyName) {
+            this.props.getBaseInfo(companyName)
+        }
+    }
+    handleSearch = word => {
+        this.props.getSearchWord(word)
+    }
+    handleChange = word => {
+        this.props.getSearchWord(word)
+        console.log(word)
+    }
+    onSubmit = values => {
+        console.log(values)
+        values.companyId = sessionStorage.getItem('companyId')
+        values.estiblishTime = moment(values.estiblishTime).format('YYYY-MM-DD')
+        this.props.saveBasicInfo(values)
     }
     render() {
-        const dataSource = ['12345', '23456', '34567']
         const items = [
             {
-                label: '公司名称',
+                label: '企业名称',
                 field: 'name',
                 rules: [
                     {
@@ -18,20 +65,7 @@ export default class Info extends PureComponent {
                         message: '请输入企业名称',
                     },
                 ],
-                component: (
-                    <AutoComplete
-                        dropdownMatchSelectWidth={false}
-                        dropdownStyle={{ width: 300 }}
-                        size="large"
-                        style={{ width: '100%' }}
-                        dataSource={dataSource}
-                        placeholder="请输入企业名称"
-                        optionLabelProp="value"
-                        onChange={this.search}
-                    >
-                        <Input suffix={<Icon type="search" className="certain-category-icon" />} />
-                    </AutoComplete>
-                ),
+                component: <AutoComplete disabled={sessionStorage.companyId ? true : false} />,
             },
             {
                 label: '企业logo',
@@ -46,7 +80,7 @@ export default class Info extends PureComponent {
             },
             {
                 label: '企业税号',
-                field: 'logo',
+                field: 'creditCode',
                 rules: [
                     {
                         required: true,
@@ -57,40 +91,29 @@ export default class Info extends PureComponent {
             },
             {
                 label: '开户银行',
-                field: 'logo',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入企业名称',
-                    },
-                ],
+                field: 'depositBank',
                 component: <Input />,
             },
             {
                 label: '银行账户',
-                field: 'logo',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入企业名称',
-                    },
-                ],
+                field: 'bankAccount',
                 component: <Input />,
             },
             {
                 label: '成立时间',
-                field: 'logo',
+                field: 'estiblishTime',
                 rules: [
                     {
                         required: true,
                         message: '请输入企业名称',
                     },
                 ],
-                component: <Input />,
+                type: 'date',
+                component: <DatePicker />,
             },
             {
                 label: '法定代表人',
-                field: 'logo',
+                field: 'legalPersonName',
                 rules: [
                     {
                         required: true,
@@ -101,7 +124,7 @@ export default class Info extends PureComponent {
             },
             {
                 label: '注册资金',
-                field: 'logo',
+                field: 'regCapital',
                 rules: [
                     {
                         required: true,
@@ -112,7 +135,7 @@ export default class Info extends PureComponent {
             },
             {
                 label: '联系电话',
-                field: 'logo',
+                field: 'phoneNumber',
                 rules: [
                     {
                         required: true,
@@ -123,7 +146,7 @@ export default class Info extends PureComponent {
             },
             {
                 label: '企业邮箱',
-                field: 'logo',
+                field: 'email',
                 rules: [
                     {
                         required: true,
@@ -134,7 +157,7 @@ export default class Info extends PureComponent {
             },
             {
                 label: '企业地址',
-                field: 'logo',
+                field: 'regLocation',
                 rules: [
                     {
                         required: true,
@@ -143,12 +166,41 @@ export default class Info extends PureComponent {
                 ],
                 component: <Input />,
             },
+            {
+                label: '企业类型',
+                field: 'category',
+                initialValue: '1',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入企业类型',
+                    },
+                ],
+                component: (
+                    <Select>
+                        <Option value="1">实驻企业</Option>
+                        <Option value="2">虚拟企业</Option>
+                    </Select>
+                ),
+            },
         ]
-        const FormView = formView({ items, data: { name: '123' } })
+        const { loadAll } = this.props
+        loadAll === 'yes' &&
+            Modal.confirm({
+                title: '是否保存其他信息?',
+                content: '点击确定初始化其他全部信息',
+                onOk: () => {
+                    this.props.loadEnterpriseInfo()
+                },
+                onCancel() {
+                    console.log('Cancel')
+                },
+            })
         return (
             <Card title="企业信息" bordered={false}>
-                <FormView url="123" />
+                <FormView items={items} data={this.props.baseInfo} onSubmit={this.onSubmit} />
             </Card>
         )
     }
 }
+export default Info

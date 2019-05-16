@@ -1,5 +1,5 @@
 import { put, call } from 'redux-saga/effects'
-import { replace, push } from 'connected-react-router'
+import { replace } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { redirectLogin } from '../utils'
@@ -18,7 +18,7 @@ const model = {
                 const res = yield call(request, {
                     type: 'post',
                     url: '/authuser/login',
-                    data: action.payload,
+                    data: { params: action.payload },
                 })
                 if (res.data) {
                     if (res.data.users) {
