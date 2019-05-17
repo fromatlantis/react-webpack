@@ -29,4 +29,5 @@ export default history =>
         product,
         trademark,
         patent,
+        intermediary,
     })
