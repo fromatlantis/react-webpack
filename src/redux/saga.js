@@ -7,6 +7,7 @@ import { effects as newCompanyEffects } from './newCompany'
 import { effects as businessEffects } from './business'
 import { effects as financeEffects } from './finance'
 import { effects as membersEffects } from './members'
+import { effects as intermediary } from './intermediary'
 import { effects as newsEffects } from './news'
 import { effects as productEffects } from './product'
 
@@ -22,6 +23,7 @@ export function* watchFetchData() {
         ...businessEffects,
         ...financeEffects,
         ...membersEffects,
+        ...intermediary,
         ...companyDetailsEffects,
         ...newsEffects,
         ...productEffects,

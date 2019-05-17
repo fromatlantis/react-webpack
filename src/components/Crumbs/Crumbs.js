@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import styles from './Crumbs.module.css'
 import { bindActionCreators } from 'redux'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
+import { Breadcrumb } from 'antd'
 
 class Crumbs extends Component {
     gpush(nav) {
@@ -12,31 +14,13 @@ class Crumbs extends Component {
         let { routes } = this.props
         let items = []
         for (let i = 0; i < routes.length; i++) {
-            if (i === 0) {
-                items.push(
-                    <p key={i} onClick={() => this.gpush(routes[i].path)} className={styles.item}>
-                        {routes[i].breadcrumbName}
-                    </p>,
-                )
-            } else if (i === routes.length - 1) {
-                items.push(
-                    <p
-                        key={i}
-                        onClick={() => this.gpush(routes[i].path)}
-                        className={styles.itemlast}
-                    >
-                        / {routes[i].breadcrumbName}
-                    </p>,
-                )
-            } else {
-                items.push(
-                    <p key={i} onClick={() => this.gpush(routes[i].path)} className={styles.item}>
-                        / {routes[i].breadcrumbName}
-                    </p>,
-                )
-            }
+            items.push(
+                <Breadcrumb.Item>
+                    <Link to={routes[i].path}>{routes[i].breadcrumbName}</Link>
+                </Breadcrumb.Item>,
+            )
         }
-        return <div className={styles.items}>{items}</div>
+        return <Breadcrumb className={styles.items}>{items}</Breadcrumb>
     }
     render() {
         return <div className={styles.border}>{this.items()}</div>

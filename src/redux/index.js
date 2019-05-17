@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import { connectRouter } from 'connected-react-router'
 
 import authUser from './authUser'
+import intermediary from './intermediary'
 import companyDetails from './companyDetails'
 import company from './company'
 import newCompany from './newCompany'
@@ -28,4 +29,5 @@ export default history =>
         product,
         trademark,
         patent,
+        intermediary,
     })
