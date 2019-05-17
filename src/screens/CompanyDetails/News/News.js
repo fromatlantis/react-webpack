@@ -76,9 +76,7 @@ class News extends PureComponent {
                                     actions={[
                                         <NavLink
                                             exact
-                                            to={`/companyDetails/newsDetails/${
-                                                this.state.company_id
-                                            }`}
+                                            to={`/companyDetails/newsDetails/${company_id}/details`}
                                         >
                                             详情
                                         </NavLink>,

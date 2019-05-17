@@ -142,7 +142,9 @@ class Home extends PureComponent {
                                     size="small"
                                     onClick={() => {
                                         this.props.push(
-                                            `/companyDetails/information/${item.company_id}`,
+                                            `/companyDetails/information/${
+                                                item.company_id
+                                            }/company`,
                                         )
                                     }}
                                 >

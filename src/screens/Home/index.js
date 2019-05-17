@@ -182,7 +182,9 @@ class Home extends PureComponent {
                         className={styles.company}
                         key={list[i].company_id}
                         onClick={() =>
-                            this.gopush('/companyDetails/information/' + list[i].company_id)
+                            this.gopush(
+                                '/companyDetails/information/' + list[i].company_id + '/home',
+                            )
                         }
                     >
                         <img className={styles.serviceImg} src={list[i].logo} alt="" />
@@ -236,7 +238,11 @@ class Home extends PureComponent {
                     <div
                         className={styles.company}
                         key={list[i].company_id}
-                        onClick={() => this.gopush('/companyDetails/' + list[i].company_id)}
+                        onClick={() =>
+                            this.gopush(
+                                '/companyDetails/information/' + list[i].company_id + '/home',
+                            )
+                        }
                     >
                         <img className={styles.serviceImg} src={list[i].logo} alt="" />
                         <div className={styles.about}>
@@ -289,7 +295,11 @@ class Home extends PureComponent {
                     <div
                         className={styles.company}
                         key={list[i].company_id}
-                        onClick={() => this.gopush('/companyDetails/' + list[i].company_id)}
+                        onClick={() =>
+                            this.gopush(
+                                '/companyDetails/information/' + list[i].company_id + '/home',
+                            )
+                        }
                     >
                         <img className={styles.serviceImg} src={list[i].logo} alt="" />
                         <div className={styles.about}>
