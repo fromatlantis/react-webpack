@@ -38,7 +38,7 @@ const model = {
                     url: `/enterprise/changeBaseInfoApprove`,
                     contentType: 'multipart/form-data',
                     data: {
-                        newContent: action.payload,
+                        newContent: JSON.stringify(action.payload),
                     },
                 })
                 if (res.code === 1000) {

@@ -186,7 +186,7 @@ class Info extends PureComponent {
             },
         ]
         let { loadAll, baseInfo } = this.props
-        if (!sessionStorage.companyId) baseInfo = {} //新增时清空redux数据
+        // if (!sessionStorage.companyId) baseInfo = {} //新增时清空redux数据
         // 时间处理
         baseInfo.estiblishTime = moment(parseInt(baseInfo.estiblishTime))
         loadAll === 'yes' &&

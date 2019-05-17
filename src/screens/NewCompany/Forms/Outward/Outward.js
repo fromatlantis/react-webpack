@@ -49,7 +49,7 @@ class Outward extends PureComponent {
         })
     }
     handleOk = () => {
-        this.form.validateFields((errors, values) => {
+        this.newForm.validateFields((errors, values) => {
             if (!errors) {
                 const { isEdit } = this.state
                 const {

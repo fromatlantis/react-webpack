@@ -96,7 +96,7 @@ class Product extends PureComponent {
         const items = [
             {
                 label: '产品图片',
-                field: 'avatar',
+                field: 'icon',
                 component: <UploadImg />,
             },
             {
@@ -111,7 +111,7 @@ class Product extends PureComponent {
             },
             {
                 label: '产品介绍',
-                field: 'person',
+                field: 'brief',
                 component: <TextArea />,
             },
         ]

@@ -64,12 +64,13 @@ const model = {
         {
             name: 'increaseProductInfoApprove',
             *effect(action) {
+                let params = action.payload
+                params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
                     url: `/enterprise/increaseProductInfoApprove`,
-                    data: {
-                        params: action.payload,
-                    },
+                    contentType: 'multipart/form-data',
+                    data: params,
                 })
                 if (res.code === 1000) {
                     message.success('保存成功')
@@ -84,7 +85,7 @@ const model = {
                     url: `/enterprise/changeProductInfoApprove`,
                     contentType: 'multipart/form-data',
                     data: {
-                        newContent: action.payload,
+                        newContent: JSON.stringify(action.payload),
                     },
                 })
                 if (res.code === 1000) {

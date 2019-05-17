@@ -31,24 +31,6 @@ const mapDispatchToProps = dispatch => {
 }
 
 const { TextArea } = Input
-const dataSource = [
-    {
-        key: '1',
-        avatar: avatar,
-        name: '马云',
-        duty: '董事会主席',
-        intro:
-            '1988年毕业于杭州师范学院外语系，同年担任杭州电子工业学院英文及国际贸易教师，1995年创办中国第一家互联网商业信息发布网站“中国黄页”，1998年出任中国国际电子商务中心国富通信息技术发展有限公司总经理，1999年创办阿里巴巴，并担任阿里集团CEO、董事局主席。',
-    },
-    {
-        key: '2',
-        avatar: avatar,
-        name: '马化腾',
-        duty: '腾讯科技创始人',
-        intro:
-            '2017年8月7日，腾讯股价盘中再创历史新高价320.6港元，马化腾身家361亿美元成为中国首富。 [3]  2018年4月，获《时代周刊》2018年全球最具影响力人物荣誉。 [4]  2018年10月25日，2019年3月，马化腾以388亿美元财富排名2019年福布斯全球亿万富豪榜第20位。',
-    },
-]
 
 @connect(
     mapStateToProps,
@@ -70,7 +52,7 @@ class Members extends PureComponent {
         })
     }
     handleOk = () => {
-        this.form.validateFields((errors, values) => {
+        this.newForm.validateFields((errors, values) => {
             if (!errors) {
                 const { isEdit } = this.state
                 const { changeCoreTeamApprove, increaseCoreTeamApprove, detail } = this.props
@@ -86,9 +68,6 @@ class Members extends PureComponent {
                 })
             }
         })
-        this.setState({
-            visible: false,
-        })
     }
     handleCancel = () => {
         this.setState({
@@ -99,7 +78,7 @@ class Members extends PureComponent {
         const items = [
             {
                 label: '形象照片',
-                field: 'avatar',
+                field: 'icon',
                 rules: [
                     {
                         required: true,
@@ -115,12 +94,12 @@ class Members extends PureComponent {
             },
             {
                 label: '职务',
-                field: 'duty',
+                field: 'title',
                 component: <Input />,
             },
             {
                 label: '介绍',
-                field: 'person',
+                field: 'description',
                 component: <TextArea />,
             },
         ]

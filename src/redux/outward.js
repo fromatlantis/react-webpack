@@ -64,11 +64,13 @@ const model = {
         {
             name: 'increaseInvestmentAbroadApprove',
             *effect(action) {
+                let params = action.payload
+                params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
                     url: `/enterprise/increaseInvestmentAbroadApprove`,
                     data: {
-                        params: action.payload,
+                        params,
                     },
                 })
                 if (res.code === 1000) {
@@ -84,7 +86,7 @@ const model = {
                     url: `/enterprise/changeInvestmentAbroadApprove`,
                     contentType: 'multipart/form-data',
                     data: {
-                        newContent: action.payload,
+                        newContent: JSON.stringify(action.payload),
                     },
                 })
                 if (res.code === 1000) {

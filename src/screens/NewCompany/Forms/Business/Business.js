@@ -37,8 +37,8 @@ class Business extends PureComponent {
         }
     }
     onSubmit = values => {
-        console.log(values)
-        this.props.changeBaseInfoApprove(values)
+        const { businessInfo } = this.props
+        this.props.changeBaseInfoApprove({ ...businessInfo, ...values })
     }
     render() {
         const items = [
