@@ -1,4 +1,4 @@
-import FormBody from './FormBody/FormBody'
+// import FormBody from './FormBody/FormBody'
 import PhoneCard from './PhoneCard/PhoneCard'
 import UploadImg from './UploadImg/UploadImg'
 import DetailView from './DetailView/DetailView'
@@ -9,7 +9,7 @@ import Crumbs from './Crumbs/Crumbs'
 import Graph from './Graph/Graph'
 
 export {
-    FormBody,
+    // FormBody,
     PhoneCard,
     UploadImg,
     DetailView,
