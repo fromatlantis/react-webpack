@@ -55,7 +55,23 @@ class Relation extends PureComponent {
     }
 
     render() {
-        console.log('this.props.FirmGraph', this.props.FirmGraph[0])
+        // console.log('this.props.FirmGraph', this.props.FirmGraph)
+        const FirmGraph = this.props.FirmGraph
+        const nodes =
+            FirmGraph.nodes &&
+            FirmGraph.nodes.map(node => ({
+                data: node,
+            }))
+        const edges =
+            FirmGraph.relationships &&
+            FirmGraph.relationships.map(rs => ({
+                data: {
+                    id: rs.id,
+                    source: rs.startNode,
+                    target: rs.endNode,
+                },
+            }))
+        const upFirmGraph = { nodes, edges }
         return (
             <Fragment>
                 <div className={styles.messageCard}>
@@ -74,8 +90,7 @@ class Relation extends PureComponent {
                         className={styles.cardSty}
                     >
                         <div style={{ height: '500px', display: 'flex', flexDirection: 'column' }}>
-                            {/* <Graph elements={this.state.elements} /> */}
-                            {/* <Graph elements={this.props.FirmGraph[0]} /> */}
+                            <Graph elements={upFirmGraph} />
                         </div>
                     </Card>
                 </div>

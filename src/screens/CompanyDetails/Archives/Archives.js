@@ -16,10 +16,20 @@ import Advice from '../Advice/Advice'
 import OtherMes from '../OtherMes/OtherMes'
 
 export default class Archives extends PureComponent {
+    state = {
+        //企业id
+        company_id: '',
+    }
+    //生命周期
+    componentDidMount = () => {
+        let company_id = this.props.match.params.company_id
+        this.setState({ company_id })
+    }
     render() {
+        const { company_id } = this.state
         return (
             <Fragment>
-                <Information />
+                <Information company_id={company_id} />
                 <Investment />
                 <Relation />
                 <Property />
