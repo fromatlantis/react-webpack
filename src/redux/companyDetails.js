@@ -195,7 +195,12 @@ const model = {
         },
         {
             name: 'getInvestmentAbroadListSuccess',
-            reducer: 'InvestmentAbroadList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    InvestmentAbroadList: action.payload.resultList,
+                }
+            },
         },
         {
             //POST 获取商标信息列表

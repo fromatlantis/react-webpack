@@ -32,7 +32,9 @@ class Relation extends PureComponent {
     }
     //生命周期
     componentDidMount = () => {
-        let company_id = this.props.match.params.company_id
+        let company_id = this.props.match
+            ? this.props.match.params.company_id
+            : this.props.company_id
         //投资图谱
         this.props.getFirmGraph(company_id)
 

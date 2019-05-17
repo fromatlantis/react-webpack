@@ -29,15 +29,21 @@ export default class Archives extends PureComponent {
         const { company_id } = this.state
         return (
             <Fragment>
-                <Information company_id={company_id} />
-                <Investment />
-                <Relation />
-                <Property />
-                <Renew />
-                <News />
-                <Need />
-                <Advice />
-                <OtherMes />
+                {company_id ? (
+                    <div>
+                        <Information company_id={company_id} />
+                        <Investment company_id={company_id} />
+                        <Relation company_id={company_id} />
+                        <Property company_id={company_id} />
+                        <Renew company_id={company_id} />
+                        <News company_id={company_id} />
+                        <Need company_id={company_id} />
+                        <Advice company_id={company_id} />
+                        <OtherMes company_id={company_id} />
+                    </div>
+                ) : (
+                    <span />
+                )}
             </Fragment>
         )
     }
