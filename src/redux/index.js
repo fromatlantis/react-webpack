@@ -3,6 +3,7 @@ import { connectRouter } from 'connected-react-router'
 
 import authUser from './authUser'
 import companyDetails from './companyDetails'
+import intermediary from './intermediary'
 import company from './company'
 import newCompany from './newCompany'
 import business from './business'
@@ -29,4 +30,5 @@ export default history =>
         outward,
         trademark,
         patent,
+        intermediary,
     })

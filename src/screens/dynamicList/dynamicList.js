@@ -1,92 +1,90 @@
 import React, { PureComponent } from 'react'
-import { Pagination } from 'antd'
-import { Crumbs } from '../../components'
-import { bindActionCreators } from 'redux'
+import { Pagination, message } from 'antd'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { push } from 'connected-react-router'
 import styles from './dynamicList.module.css'
+import { Breadcrumb } from 'antd'
+import { Link } from 'react-router-dom'
+import request from '../../utils/request'
 
-const routes = [
-    {
-        path: '/home',
-        breadcrumbName: '企服首页',
-    },
-    {
-        path: '/dynamicList',
-        breadcrumbName: '企服动态',
-    },
-]
 class dynamicList extends PureComponent {
-    gopush(nav) {
-        this.props.push(nav)
+    constructor() {
+        super()
+        this.state = {
+            RecentNews: [],
+            pageNo: 1,
+            totalCount: 0,
+        }
+    }
+    gopush(uri) {
+        // this.props.push(nav)
+        window.open(uri)
+    }
+    componentDidMount() {
+        this.getRecentNews()
+    }
+    async getRecentNews() {
+        var result = await request({
+            type: 'post',
+            url: '/enterprise/getRecentNews',
+            data: {
+                pageNo: this.state.pageNo,
+                pageSize: 10,
+            },
+            contentType: 'multipart/form-data',
+        })
+        if (result.code === 1000) {
+            this.setState({
+                RecentNews: result.data.resultList,
+                totalCount: result.data.totalCount,
+            })
+        } else {
+            message.info(result.message)
+        }
+    }
+    showRecentNews() {
+        let { RecentNews } = this.state
+        let item = []
+        for (let i in RecentNews) {
+            item.push(
+                <div className={styles.dynamic} onClick={() => this.gopush(RecentNews[i].url)}>
+                    <p className={styles.dynamicTitle}>{RecentNews[i].title}</p>
+                    <div className={styles.dynamicDescribe}>
+                        <span className={styles.dynamicCome}>来源：{RecentNews[i].website}</span>
+                        <span className={styles.dynamicTime}>{RecentNews[i].time}</span>
+                    </div>
+                </div>,
+            )
+        }
+        return item
+    }
+    pageOnChange(page, pageSize) {
+        this.setState({
+            pageNo: page,
+        })
+        let that = this
+        setTimeout(() => {
+            that.getRecentNews()
+        }, 0)
     }
     render() {
         return (
             <div className={styles.Container}>
-                <Crumbs routes={routes} />
-
-                <div className={styles.dynamics}>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
-                        <p className={styles.dynamicTitle}>题目</p>
-                        <div className={styles.dynamicDescribe}>
-                            <span className={styles.dynamicCome}>来源：来源</span>
-                            <span className={styles.dynamicTime}>时间</span>
-                        </div>
-                    </div>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
-                        <p className={styles.dynamicTitle}>
-                            题目题目题目题目题目题目题目题目题目题目
-                        </p>
-                        <p className={styles.dynamicAbout}>一段描述，</p>
-                        <div className={styles.dynamicDescribe}>
-                            <span className={styles.dynamicCome}>来源：数据来源数据来源</span>
-                            <span className={styles.dynamicTime}>时间</span>
-                        </div>
-                    </div>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
-                        <p className={styles.dynamicTitle}>
-                            题目题目题目题目题目题目题目题目题目题目
-                        </p>
-                        <div className={styles.dynamicDescribe}>
-                            <span className={styles.dynamicCome}>来源：数据来源数据来源</span>
-                            <span className={styles.dynamicTime}>时间</span>
-                        </div>
-                    </div>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
-                        <p className={styles.dynamicTitle}>题目</p>
-                        <p className={styles.dynamicAbout}>
-                            1、展示爬取到的园区企业的新闻（存放在企服管理的基本信息的企业动态中），按照时间顺序倒序排列；
-                        </p>
-                        <div className={styles.dynamicDescribe}>
-                            <span className={styles.dynamicCome}>来源：数据来源数据来源</span>
-                            <span className={styles.dynamicTime}>时间</span>
-                        </div>
-                    </div>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
-                        <p className={styles.dynamicTitle}>
-                            题目很长很长很长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长
-                        </p>
-                        <p className={styles.dynamicAbout}>
-                            1、展示爬取到的园区企业的新闻（存放在企服管理的基本信息的企业动态中），按照时间顺序倒序排列；
-                        </p>
-                        <div className={styles.dynamicDescribe}>
-                            <span className={styles.dynamicCome}>来源：数据来源数据来源</span>
-                            <span className={styles.dynamicTime}>时间</span>
-                        </div>
-                    </div>
-                    <div className={styles.dynamic} onClick={() => this.gopush('dynamicDetails/1')}>
-                        <p className={styles.dynamicTitle}>题目</p>
-                        <p className={styles.dynamicAbout}>
-                            1、展示爬取到的园区企业的新闻（存放在企服管理的基本信息的企业动态中），按照时间顺序倒序排列；
-                        </p>
-                        <div className={styles.dynamicDescribe}>
-                            <span className={styles.dynamicCome}>来源：来源</span>
-                            <span className={styles.dynamicTime}>时间</span>
-                        </div>
-                    </div>
-                </div>
+                <Breadcrumb className={styles.BreadcrumbSty}>
+                    <Breadcrumb.Item>
+                        <Link to={`/home`}>企服首页</Link>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>企服动态</Breadcrumb.Item>
+                </Breadcrumb>
+                <div className={styles.dynamics}>{this.showRecentNews()}</div>
                 <div className={styles.end}>
-                    <Pagination defaultCurrent={1} total={50} hideOnSinglePage={true} />
+                    <Pagination
+                        defaultCurrent={1}
+                        total={this.state.totalCount}
+                        hideOnSinglePage={true}
+                        onChange={(page, pageSize) => this.pageOnChange(page, pageSize)}
+                    />
                 </div>
             </div>
         )

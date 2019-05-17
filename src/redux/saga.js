@@ -13,6 +13,7 @@ import { effects as outwardEffects } from './outward'
 import { effects as effectsTrademark } from './trademark'
 import { effects as patentEffects } from './patent'
 
+import { effects as intermediary } from './intermediary'
 // 监听action的调用，然后调用异步generate函数
 export function* watchFetchData() {
     yield all([
@@ -28,5 +29,6 @@ export function* watchFetchData() {
         ...outwardEffects,
         ...effectsTrademark,
         ...patentEffects,
+        ...intermediary,
     ])
 }

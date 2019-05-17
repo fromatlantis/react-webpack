@@ -1,29 +1,23 @@
 import React, { PureComponent } from 'react'
-import {} from 'antd'
-import { Crumbs } from '../../components'
+import { Breadcrumb } from 'antd'
+import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import styles from './dynamicDetails.module.css'
-const routes = [
-    {
-        path: '/home',
-        breadcrumbName: '企服首页',
-    },
-    {
-        path: '/dynamicList',
-        breadcrumbName: '企服动态',
-    },
-]
-class dynamicDetails extends PureComponent {
+class DynamicDetails extends PureComponent {
     render() {
-        routes.push({
-            path: '/dynamicDetails/' + this.props.match.params.id,
-            breadcrumbName: '动态详情',
-        })
         return (
             <div className={styles.Container}>
-                <Crumbs routes={routes} />
+                <Breadcrumb className={styles.BreadcrumbSty}>
+                    <Breadcrumb.Item>
+                        <Link to={`/home`}>企服首页</Link>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                        <Link to={`/dynamicList`}>企服动态</Link>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>动态详情</Breadcrumb.Item>
+                </Breadcrumb>
                 <div className={styles.border}>
                     <h1>魅族获国资“输血”珠海虹华进入</h1>
                     <p className={styles.about}>来源：国家新闻网 时间：2019-5-6 11:44:54</p>
@@ -143,4 +137,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(dynamicDetails)
+)(DynamicDetails)

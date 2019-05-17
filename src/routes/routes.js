@@ -49,11 +49,11 @@ const routes = [
         }),
     },
     {
-        path: '/humanResourceService/:id',
+        path: '/HumanResourceService/:id',
         component: Loadable({
             loader: () =>
                 import(
-                    /* webpackChunkName: "humanResourceService" */ '../screens/humanResourceService/humanResourceService'
+                    /* webpackChunkName: "HumanResourceService" */ '../screens/HumanResourceService/humanResourceService'
                 ),
             loading: Loading,
         }),
@@ -69,19 +69,19 @@ const routes = [
         }),
     },
     {
-        path: '/dynamicList',
+        path: '/DynamicList',
         component: Loadable({
             loader: () =>
-                import(/* webpackChunkName: "dynamicList" */ '../screens/dynamicList/dynamicList'),
+                import(/* webpackChunkName: "DynamicList" */ '../screens/DynamicList/dynamicList'),
             loading: Loading,
         }),
     },
     {
-        path: '/dynamicDetails/:id',
+        path: '/DynamicDetails/:id',
         component: Loadable({
             loader: () =>
                 import(
-                    /* webpackChunkName: "dynamicDetails" */ '../screens/dynamicDetails/dynamicDetails'
+                    /* webpackChunkName: "DynamicDetails" */ '../screens/DynamicDetails/dynamicDetails'
                 ),
             loading: Loading,
         }),

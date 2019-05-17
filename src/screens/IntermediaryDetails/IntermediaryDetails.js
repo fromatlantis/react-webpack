@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react'
 import { Icon, Button } from 'antd'
-import { Crumbs } from '../../components'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import styles from './IntermediaryDetails.module.css'
-
-import banner from '../../assets/banner.png'
+import { Breadcrumb } from 'antd'
+import { Link } from 'react-router-dom'
+import request from '../../utils/request'
+import { actions } from '../../redux/intermediary'
 
 const routes1 = [
     {
@@ -54,7 +55,34 @@ class IntermediaryDetails extends PureComponent {
         super()
         this.state = {
             num: 1,
+            pid: {},
+            pidType: {},
         }
+    }
+    componentDidMount() {
+        if (this.props.intermediarys.intermediary && this.props.intermediarys.intermediary.length) {
+        } else {
+            this.props.getServiceTypeList()
+        }
+    }
+    addDemand(pid) {
+        this.props.addDemand({
+            category: this.props.match.params.id,
+            item: this.state.num,
+            companyType: this.props.user.user.type,
+            enterpriseName: this.props.user.user.company_name,
+            email: this.props.user.user.email,
+            address: '李毓轲',
+            contract: this.props.user.user.name,
+            telephone: this.props.user.user.phone,
+            amount: (this.state.num - 0) * (pid.price - 0),
+        })
+    }
+    getDemandList() {
+        this.props.getDemandList({
+            pageSize: 1,
+            pageNo: 1,
+        })
     }
     setnum(num) {
         let that = this
@@ -73,38 +101,63 @@ class IntermediaryDetails extends PureComponent {
             }
         }
     }
+    show(routes) {
+        let items = []
+        for (let i in routes) {
+            if (routes[i].path) {
+                items.push(
+                    <Breadcrumb.Item>
+                        <Link to={routes[i].path}>{routes[i].breadcrumbName}</Link>
+                    </Breadcrumb.Item>,
+                )
+            } else {
+                items.push(<Breadcrumb.Item>{routes[i].breadcrumbName}</Breadcrumb.Item>)
+            }
+        }
+
+        return <Breadcrumb className={styles.BreadcrumbSty}>{items}</Breadcrumb>
+    }
     render() {
         let type = this.props.match.params.type
         let id = this.props.match.params.id
-        let routes = []
-        let routeIne = [
+
+        let { intermediary } = this.props.intermediarys
+        let pid = {}
+        let pidType = {}
+        for (let i in intermediary) {
+            if (intermediary[i].id === id) {
+                pid = intermediary[i]
+            }
+            if (intermediary[i].id === type) {
+                pidType = intermediary[i]
+            }
+        }
+        let routes = [
             {
-                path: '/IntermediaryDetails/' + id + '/' + type,
+                path: '/home',
+                breadcrumbName: '企服首页',
+            },
+            {
+                path: '/humanResourceService/' + pidType.id,
+                breadcrumbName: pidType.typeName,
+            },
+            {
                 breadcrumbName: '详情',
             },
         ]
-        if (type === '4') {
-            routes = [...routes4, ...routeIne]
-        } else if (type === '3') {
-            routes = [...routes3, ...routeIne]
-        } else if (type === '2') {
-            routes = [...routes2, ...routeIne]
-        } else if (type === '1') {
-            routes = [...routes1, ...routeIne]
-        }
         return (
             <div className={styles.Container}>
-                <Crumbs routes={routes} />
+                {this.show(routes)}
                 <div className={styles.Content}>
                     <div className={styles.imgView}>
-                        <img src={banner} alt="" />
+                        <img src={pid.logo} alt="" />
                     </div>
                     <div className={styles.details}>
-                        <h1>法律咨询服务</h1>
-                        <p className={styles.about}>资深法律律师，法律条文不用愁</p>
+                        <h1>{pid.typeName}</h1>
+                        <p className={styles.about}>{pid.description}</p>
                         <div className={styles.moneyView}>
                             <p className={styles.money}>
-                                价 格: <span>¥998</span>
+                                价 格: <span>¥{pid.price}</span>
                             </p>
                         </div>
                         <div className={styles.numView}>
@@ -123,7 +176,11 @@ class IntermediaryDetails extends PureComponent {
                                 onClick={() => this.setnum(0)}
                             />
                         </div>
-                        <Button type="primary" className={styles.yes}>
+                        <Button
+                            type="primary"
+                            className={styles.yes}
+                            onClick={() => this.addDemand(pid)}
+                        >
                             立即下单
                         </Button>
                     </div>
@@ -136,12 +193,17 @@ class IntermediaryDetails extends PureComponent {
 const mapStateToProps = state => {
     return {
         router: state.router,
+        intermediarys: state.intermediary,
+        user: state.authUser,
     }
 }
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             push: push,
+            addDemand: actions('addDemand'),
+            getDemandList: actions('getDemandList'),
+            getServiceTypeList: actions('getServiceTypeList'),
         },
         dispatch,
     )
