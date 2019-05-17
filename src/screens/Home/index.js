@@ -178,7 +178,11 @@ class Home extends PureComponent {
         for (let i in list) {
             if (this.state.size === '查公司') {
                 item.push(
-                    <div className={styles.company} key={list[i].company_id}>
+                    <div
+                        className={styles.company}
+                        key={list[i].company_id}
+                        onClick={() => this.gopush('/companyDetails/' + list[i].company_id)}
+                    >
                         <img className={styles.serviceImg} src={list[i].logo} alt="" />
                         <div className={styles.about}>
                             <h3>{list[i].name}</h3>
@@ -227,7 +231,11 @@ class Home extends PureComponent {
                 )
             } else if (this.state.size === '查法人') {
                 item.push(
-                    <div className={styles.company} key={list[i].company_id}>
+                    <div
+                        className={styles.company}
+                        key={list[i].company_id}
+                        onClick={() => this.gopush('/companyDetails/' + list[i].company_id)}
+                    >
                         <img className={styles.serviceImg} src={list[i].logo} alt="" />
                         <div className={styles.about}>
                             <h3>{list[i].name}</h3>
@@ -276,7 +284,11 @@ class Home extends PureComponent {
                 )
             } else if (this.state.size === '查行业') {
                 item.push(
-                    <div className={styles.company} key={list[i].company_id}>
+                    <div
+                        className={styles.company}
+                        key={list[i].company_id}
+                        onClick={() => this.gopush('/companyDetails/' + list[i].company_id)}
+                    >
                         <img className={styles.serviceImg} src={list[i].logo} alt="" />
                         <div className={styles.about}>
                             <h3>{list[i].name}</h3>

@@ -98,6 +98,7 @@ class Copyright extends PureComponent {
             type: 'set',
         })
     }
+
     handleOk = () => {
         let that = this
         this.form.validateFields((errors, values) => {
@@ -114,6 +115,15 @@ class Copyright extends PureComponent {
                 },
             }
             if (that.state.type === 'add') {
+                let obj = newValue.params
+                for (let i in obj) {
+                    if (obj[i]) {
+                        obj[i] = obj[i].replace(
+                            /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/g,
+                            '',
+                        )
+                    }
+                }
                 that.props.increaseSoftwareCopyrightApprove(newValue)
             } else {
                 let newValue = {
@@ -126,6 +136,15 @@ class Copyright extends PureComponent {
                     authorNationality: values.authorNationality,
                 }
                 newValue = { ...that.state.FormView, ...newValue }
+                let obj = newValue
+                for (let i in obj) {
+                    if (obj[i]) {
+                        obj[i] = obj[i].replace(
+                            /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/g,
+                            '',
+                        )
+                    }
+                }
                 that.changeSoftwareCopyrightApprove(newValue)
             }
         })
@@ -155,27 +174,27 @@ class Copyright extends PureComponent {
             {
                 label: '著作权名称',
                 field: 'fullname',
-                component: <Input />,
+                component: <Input placeholder="著作权名称" />,
             },
             {
                 label: '简称',
                 field: 'simplename',
-                component: <Input />,
+                component: <Input placeholder="简称" />,
             },
             {
                 label: '登记日期',
                 field: 'regtime',
-                component: <Input />,
+                component: <Input placeholder="登记日期" />,
             },
             {
                 label: '登记号',
                 field: 'regnum',
-                component: <Input />,
+                component: <Input placeholder="登记号" />,
             },
             {
                 label: '分类号',
                 field: 'catnum',
-                component: <Input />,
+                component: <Input placeholder="分类号" />,
             },
         ]
         const formItemLayout = {
@@ -200,27 +219,27 @@ class Copyright extends PureComponent {
             {
                 label: '著作权名称',
                 field: 'fullname',
-                component: <Input />,
+                component: <Input placeholder="著作权名称" />,
             },
             {
                 label: '简称',
                 field: 'simplename',
-                component: <Input />,
+                component: <Input placeholder="简称" />,
             },
             {
                 label: '登记日期',
                 field: 'regtime',
-                component: <Input />,
+                component: <Input placeholder="登记日期" />,
             },
             {
                 label: '登记号',
                 field: 'regnum',
-                component: <Input />,
+                component: <Input placeholder="登记号" />,
             },
             {
                 label: '分类号',
                 field: 'catnum',
-                component: <Input />,
+                component: <Input placeholder="分类号" />,
             },
         ]
         const formItemLayout = {
@@ -246,6 +265,15 @@ class Copyright extends PureComponent {
     }
     empty() {
         this.form.resetFields()
+        this.setState({
+            form: {
+                fullname: '',
+                simplename: '',
+                regtime: '',
+                regnum: '',
+                catnum: '',
+            },
+        })
         let that = this
         setTimeout(() => {
             that.DidMount()
@@ -326,7 +354,7 @@ class Copyright extends PureComponent {
     render() {
         return (
             <Card
-                title="投资事件"
+                title="知识产权-软件著作权"
                 bordered={false}
                 extra={
                     <Button type="primary" onClick={this.newInfo}>
@@ -359,7 +387,7 @@ class Copyright extends PureComponent {
                     />
                 </div>
                 <Modal
-                    title="投资事件"
+                    title="软件著作权信息"
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}

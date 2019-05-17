@@ -39,11 +39,11 @@ class Website extends PureComponent {
             //     dataIndex: 'type',
             //     key: 'type',
             // },
-            // {
-            //     title: '主办单位性质',
-            //     dataIndex: 'authorNationality',
-            //     key: 'authorNationality',
-            // },
+            {
+                title: '主办单位性质',
+                dataIndex: 'companyType',
+                key: 'companyType',
+            },
             {
                 title: '备案号',
                 dataIndex: 'liscense',
@@ -64,11 +64,11 @@ class Website extends PureComponent {
             //     dataIndex: 'examineDate',
             //     key: 'comname',
             // },
-            // {
-            //     title: '创建时间',
-            //     dataIndex: 'finishTime',
-            //     key: 'finishTime',
-            // },
+            {
+                title: '创建时间',
+                dataIndex: 'sourceTime',
+                key: 'sourceTime',
+            },
             {
                 title: '操作',
                 dataIndex: 'keyId',
@@ -115,6 +115,15 @@ class Website extends PureComponent {
                 },
             }
             if (that.state.type === 'add') {
+                let obj = newValue.params
+                for (let i in obj) {
+                    if (obj[i]) {
+                        obj[i] = obj[i].replace(
+                            /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/g,
+                            '',
+                        )
+                    }
+                }
                 that.props.increaseWebsiteRecordsApprove(newValue)
             } else {
                 let newValue = {
@@ -125,6 +134,15 @@ class Website extends PureComponent {
                     examineDate: values.examineDate,
                 }
                 newValue = { ...that.state.FormView, ...newValue }
+                let obj = newValue
+                for (let i in obj) {
+                    if (obj[i]) {
+                        obj[i] = obj[i].replace(
+                            /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/g,
+                            '',
+                        )
+                    }
+                }
                 that.changeWebsiteRecordsApprove(newValue)
             }
         })
@@ -146,19 +164,20 @@ class Website extends PureComponent {
             {
                 label: '主办单位/域名/网站',
                 field: 'ym',
-                component: <Input />,
+                component: <Input placeholder="主办单位/域名/网站" />,
             },
-            {
-                label: '机构代码',
-                field: 'undetermined0',
-                component: <Input />,
-            },
+            // {
+            //     label: '机构代码',
+            //     field: 'undetermined0',
+            //     component: <Input />,
+            // },
             {
                 label: '主办单位性质',
                 field: 'companyType',
                 component: (
                     <Select
                         defaultValue="请选择"
+                        placeholder="主办单位性质"
                         style={{ width: 120 }}
                         onChange={() => this.handleChange()}
                     >
@@ -170,36 +189,36 @@ class Website extends PureComponent {
             {
                 label: '备案号',
                 field: 'liscense',
-                component: <Input />,
+                component: <Input placeholder="备案号" />,
             },
             {
                 label: '网站首页',
                 field: 'webSite',
-                component: <Input />,
+                component: <Input placeholder="网站首页" />,
             },
             {
                 label: '审核时间',
                 field: 'examineDate',
-                component: <Input />,
+                component: <Input placeholder="审核时间" />,
             },
-            {
-                label: '状态',
-                field: 'undetermined2',
-                component: (
-                    <Select
-                        defaultValue="请选择"
-                        style={{ width: 120 }}
-                        // onChange={() => this.handleChange()}
-                    >
-                        <Option value="正常">正常</Option>
-                        <Option value="非正常">非正常</Option>
-                    </Select>
-                ),
-            },
+            // {
+            //     label: '状态',
+            //     field: 'undetermined2',
+            //     component: (
+            //         <Select
+            //             defaultValue="请选择"
+            //             style={{ width: 120 }}
+            //             // onChange={() => this.handleChange()}
+            //         >
+            //             <Option value="正常">正常</Option>
+            //             <Option value="非正常">非正常</Option>
+            //         </Select>
+            //     ),
+            // },
             {
                 label: '创建时间',
                 field: 'sourceTime',
-                component: <Input />,
+                component: <Input placeholder="创建时间" />,
             },
         ]
         const formItemLayout = {
@@ -275,7 +294,7 @@ class Website extends PureComponent {
             {
                 label: '主办单位/域名/网站',
                 field: 'ym',
-                component: <Input />,
+                component: <Input placeholder="主办单位/域名/网站" />,
             },
             // {
             //     label: '机构代码',
@@ -302,19 +321,19 @@ class Website extends PureComponent {
             //     component: <Input />,
             // },
             {
-                label: '网站首页',
-                field: 'webSite',
-                component: <Input />,
-            },
-            {
                 label: '备案号',
                 field: 'liscense',
-                component: <Input />,
+                component: <Input placeholder="备案号" />,
+            },
+            {
+                label: '网站首页',
+                field: 'webSite',
+                component: <Input placeholder="网站首页" />,
             },
             {
                 label: '审核时间',
                 field: 'examineDate',
-                component: <Input />,
+                component: <Input placeholder="审核时间" />,
             },
         ]
         const formItemLayout = {
@@ -445,7 +464,7 @@ class Website extends PureComponent {
                     />
                 </div>
                 <Modal
-                    title="知识产权-网站域名"
+                    title="网站域名信息"
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
