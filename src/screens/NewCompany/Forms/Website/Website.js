@@ -427,16 +427,16 @@ class Website extends PureComponent {
             <Card
                 title="知识产权-网站域名"
                 bordered={false}
-                extra={
-                    <div>
-                        {/* <Button type="primary" onClick={this.newInfo}>
-                            预览
-                        </Button>
-                        <Button onClick={this.newInfo} style={{ marginLeft: '10px' }}>
-                            存档
-                        </Button> */}
-                    </div>
-                }
+                // extra={
+                //     <div>
+                //         {/* <Button type="primary" onClick={this.newInfo}>
+                //             预览
+                //         </Button>
+                //         <Button onClick={this.newInfo} style={{ marginLeft: '10px' }}>
+                //             存档
+                //         </Button> */}
+                //     </div>
+                // }
             >
                 <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
                     {this.renderForm('search')}
