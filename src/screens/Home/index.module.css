@@ -143,10 +143,10 @@
     position: relative;
 }
 .more{
-    color:#88d;
+    /* color:#88d; */
     position: absolute;
-    right: 18px;
-    top:8px;
+    right: 4px;
+    top:4px;
 }
 .company{
     padding:15px;
@@ -209,7 +209,7 @@
 }
 .lookMore{
     float: right;
-    color:#88d;
+    /* color:#88d;
     font-size:16px;
-    line-height: 36px;
+    line-height: 36px; */
 }
