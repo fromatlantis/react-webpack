@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import styles from './dynamicDetails.module.css'
+import styles from './DynamicDetails.module.css'
 class DynamicDetails extends PureComponent {
     render() {
         return (

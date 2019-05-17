@@ -7,13 +7,13 @@ import { effects as newCompanyEffects } from './newCompany'
 import { effects as businessEffects } from './business'
 import { effects as financeEffects } from './finance'
 import { effects as membersEffects } from './members'
+import { effects as intermediary } from './intermediary'
 import { effects as newsEffects } from './news'
 import { effects as productEffects } from './product'
 import { effects as outwardEffects } from './outward'
 import { effects as effectsTrademark } from './trademark'
 import { effects as patentEffects } from './patent'
 
-import { effects as intermediary } from './intermediary'
 // 监听action的调用，然后调用异步generate函数
 export function* watchFetchData() {
     yield all([
@@ -23,6 +23,7 @@ export function* watchFetchData() {
         ...businessEffects,
         ...financeEffects,
         ...membersEffects,
+        ...intermediary,
         ...companyDetailsEffects,
         ...newsEffects,
         ...productEffects,

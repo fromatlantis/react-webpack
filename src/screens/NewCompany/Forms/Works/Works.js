@@ -127,17 +127,22 @@ class Works extends PureComponent {
                     authorNationality: values.authorNationality,
                 },
             }
+            let patrn = /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/im
+            let Special = false
             if (that.state.type === 'add') {
                 let obj = newValue.params
                 for (let i in obj) {
                     if (obj[i]) {
-                        obj[i] = obj[i].replace(
-                            /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/g,
-                            '',
-                        )
+                        if (!patrn.test(obj[i])) {
+                            Special = true
+                        }
                     }
                 }
-                that.props.increaseProductTrademarkApprove(newValue)
+                if (Special) {
+                    message.info('不能输入特殊字符哦')
+                } else {
+                    that.props.increaseProductTrademarkApprove(newValue)
+                }
             } else {
                 let newValue = {
                     companyId: sessionStorage.getItem('companyId'),
@@ -152,13 +157,16 @@ class Works extends PureComponent {
                 let obj = newValue
                 for (let i in obj) {
                     if (obj[i]) {
-                        obj[i] = obj[i].replace(
-                            /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/g,
-                            '',
-                        )
+                        if (!patrn.test(obj[i])) {
+                            Special = true
+                        }
                     }
                 }
-                that.changeProductTrademarkApprove(newValue)
+                if (Special) {
+                    message.info('不能输入特殊字符哦')
+                } else {
+                    that.changeProductTrademarkApprove(newValue)
+                }
             }
         })
         this.setState({
