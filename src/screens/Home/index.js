@@ -161,6 +161,15 @@ class Home extends PureComponent {
                     </div>,
                 )
             }
+            let supplement = 4 - (TopIntermediary.length % 4)
+            for (let i = 0; i < supplement; i++) {
+                item.push(
+                    <div
+                        key={i + TopIntermediary.length * 2}
+                        className={styles.servicesnoshadow}
+                    />,
+                )
+            }
             items.push(
                 <div key={1} className={styles.services}>
                     {item}

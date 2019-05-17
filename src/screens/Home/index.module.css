@@ -77,10 +77,12 @@
     justify-content:space-around;
     margin-top:15px;
     margin-bottom:20px;
+        flex-wrap: wrap;
 }
 .service {
     display:flex;
     width:250px;
+    margin: 0 calc((100% - 1000px)/8) 25px;
     height:190px;
     border:1.5px solid #e6e6e6;
     flex-direction:column;
@@ -88,6 +90,15 @@
     justify-content:center;
     box-shadow: 4px 4px 6px rgba(0,0,0,0.05);
 
+}
+.servicesnoshadow {
+    display:flex;
+    width:250px;
+    margin: 0 calc((100% - 1000px)/8) 25px;
+    height:190px;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
 }
 .serviceImg{
     width:65px;
