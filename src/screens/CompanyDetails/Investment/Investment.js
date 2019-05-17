@@ -7,12 +7,16 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { actions } from '../../../redux/companyDetails'
+import moment from 'moment'
 import styles from '../CompanyDetails.module.css'
 
 @connect(
     state => {
         return {
-            InvestmentAbroadList: state.companyDetails.InvestmentAbroadList, //对外投资列表
+            InvestmentAbroadList: state.companyDetails.InvestmentAbroadList.map(item => {
+                item.estiblishTime = moment(parseInt(item.estiblishTime)).format('YYYY-MM-DD') //将毫秒数格式转换的方法
+                return item
+            }), //对外投资列表
         }
     },
     dispatch => {
@@ -32,12 +36,15 @@ class Investment extends PureComponent {
     }
     //生命周期
     componentDidMount = () => {
-        let company_id = this.props.match.params.company_id
+        let company_id = this.props.match
+            ? this.props.match.params.company_id
+            : this.props.company_id
         this.setState({ company_id })
         //对外投资
-        this.props.getInvestmentAbroadList({ companyId: company_id })
+        this.props.getInvestmentAbroadList({ companyId: company_id, limit: 5 })
     }
     render() {
+        const { company_id } = this.state
         return (
             <Fragment>
                 <div className={styles.messageCard}>
@@ -106,7 +113,16 @@ class Investment extends PureComponent {
                     <Card
                         id="Investment:2"
                         title={<span style={{ color: '#1890ff' }}>对外投资</span>}
-                        extra={<Button type="link">展开更多>></Button>}
+                        extra={
+                            <Button
+                                type="link"
+                                onClick={() => {
+                                    this.props.getInvestmentAbroadList({ companyId: company_id })
+                                }}
+                            >
+                                展开更多>>
+                            </Button>
+                        }
                         className={styles.cardSty}
                     >
                         <Table
@@ -157,7 +173,7 @@ class Investment extends PureComponent {
                                     align: 'center',
                                 },
                             ]}
-                            dataSource={this.props.InvestmentAbroadList.resultList}
+                            dataSource={this.props.InvestmentAbroadList}
                         />
                     </Card>
                 </div>
