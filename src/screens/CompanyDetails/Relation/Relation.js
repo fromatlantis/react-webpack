@@ -32,7 +32,9 @@ class Relation extends PureComponent {
     }
     //生命周期
     componentDidMount = () => {
-        let company_id = this.props.match.params.company_id
+        let company_id = this.props.match
+            ? this.props.match.params.company_id
+            : this.props.company_id
         //投资图谱
         this.props.getFirmGraph(company_id)
 
@@ -55,7 +57,23 @@ class Relation extends PureComponent {
     }
 
     render() {
-        console.log('this.props.FirmGraph', this.props.FirmGraph[0])
+        // console.log('this.props.FirmGraph', this.props.FirmGraph)
+        const FirmGraph = this.props.FirmGraph
+        const nodes =
+            FirmGraph.nodes &&
+            FirmGraph.nodes.map(node => ({
+                data: node,
+            }))
+        const edges =
+            FirmGraph.relationships &&
+            FirmGraph.relationships.map(rs => ({
+                data: {
+                    id: rs.id,
+                    source: rs.startNode,
+                    target: rs.endNode,
+                },
+            }))
+        const upFirmGraph = { nodes, edges }
         return (
             <Fragment>
                 <div className={styles.messageCard}>
@@ -74,8 +92,7 @@ class Relation extends PureComponent {
                         className={styles.cardSty}
                     >
                         <div style={{ height: '500px', display: 'flex', flexDirection: 'column' }}>
-                            {/* <Graph elements={this.state.elements} /> */}
-                            {/* <Graph elements={this.props.FirmGraph[0]} /> */}
+                            <Graph elements={upFirmGraph} />
                         </div>
                     </Card>
                 </div>

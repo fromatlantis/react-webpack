@@ -137,7 +137,17 @@ class Home extends PureComponent {
                                 <Button type="link" size="small" onClick={this.assign}>
                                     <IconFont type="iconicon_zhipai" />
                                 </Button>
-                                <Button type="link" size="small">
+                                <Button
+                                    type="link"
+                                    size="small"
+                                    onClick={() => {
+                                        this.props.push(
+                                            `/companyDetails/information/${
+                                                item.company_id
+                                            }/company`,
+                                        )
+                                    }}
+                                >
                                     <IconFont type="icondetails" />
                                 </Button>
                                 <Button

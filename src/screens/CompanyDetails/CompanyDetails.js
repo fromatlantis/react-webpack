@@ -41,11 +41,14 @@ class CompanyDetails extends PureComponent {
         visible: false,
         //企业id
         company_id: '',
+        //确定在哪页跳转的参数
+        type: 'home',
     }
     //生命周期
     componentDidMount = () => {
         let company_id = this.props.match.params.company_id
-        this.setState({ company_id })
+        let type = this.props.match.params.type
+        this.setState({ company_id, type })
         this.props.queryBasicInfoDetial(company_id)
     }
     //导航Menu点击回调
@@ -57,12 +60,13 @@ class CompanyDetails extends PureComponent {
             let element = document.getElementById(e.key)
             if (element) {
                 clearInterval(uiInt)
-                element.scrollIntoView()
+                element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'center' })
             }
         }, 20)
     }
     //导航Menu的便利方法
     renderMenu = data => {
+        const { company_id, type } = this.state
         return data.map((item, index) => {
             if (item.children) {
                 return (
@@ -72,7 +76,7 @@ class CompanyDetails extends PureComponent {
                             <NavLink
                                 exact
                                 className={styles.SubMenuTitle}
-                                to={`/companyDetails/${item.path}/${this.state.company_id}`}
+                                to={`/companyDetails/${item.path}/${company_id}/${type}`}
                             >
                                 {item.title}
                             </NavLink>
@@ -84,7 +88,7 @@ class CompanyDetails extends PureComponent {
             } else {
                 return (
                     <Menu.Item key={`${item.key}`}>
-                        <NavLink to={`/companyDetails/${item.path}/${this.state.company_id}`}>
+                        <NavLink to={`/companyDetails/${item.path}/${company_id}/${type}`}>
                             <span>{item.title}</span>
                         </NavLink>
                     </Menu.Item>
@@ -102,14 +106,36 @@ class CompanyDetails extends PureComponent {
 
     render() {
         const item = this.props.BasicInfoDetial
-        // alert(item.estiblishTime)
-        // alert(moment(item.estiblishTime).format('YYYY-MM-DD'))
+        const d = new Date(item.updateTime)
+        const times =
+            d.getFullYear() +
+            '-' +
+            (d.getMonth() + 1) +
+            '-' +
+            d.getDate() +
+            ' ' +
+            d.getHours() +
+            ':' +
+            d.getMinutes() +
+            ':' +
+            d.getSeconds()
+        const { type } = this.state
         return (
             <Fragment>
                 <Breadcrumb className={styles.BreadcrumbSty}>
-                    <Breadcrumb.Item>
-                        <Link to={`/company`}>企服管理</Link>
-                    </Breadcrumb.Item>
+                    {type === 'home' ? (
+                        <Breadcrumb.Item>
+                            <Link to={`/home`}>企服首页</Link>
+                        </Breadcrumb.Item>
+                    ) : type === 'company' ? (
+                        <Breadcrumb.Item>
+                            <Link to={`/company`}>企服管理</Link>
+                        </Breadcrumb.Item>
+                    ) : (
+                        <Breadcrumb.Item>
+                            <Link to={`/agency/companyRequire`}>中介服务</Link>
+                        </Breadcrumb.Item>
+                    )}
                     <Breadcrumb.Item>企业详情</Breadcrumb.Item>
                 </Breadcrumb>
 
@@ -128,7 +154,7 @@ class CompanyDetails extends PureComponent {
                                     alt=""
                                     style={{ width: 14, height: 14, marginTop: 3 }}
                                 />
-                                <p style={{ padding: '0 10px' }}>更新时间：{item.updateTime}</p>
+                                <p style={{ padding: '0 10px' }}>更新时间：{times}</p>
                                 <Tag color="#2db7f5" onClick={this.showModal}>
                                     发票抬头
                                 </Tag>
@@ -224,7 +250,7 @@ class CompanyDetails extends PureComponent {
                         return (
                             <Route
                                 exact
-                                path={`/companyDetails/${item.path}/:company_id`}
+                                path={`/companyDetails/${item.path}/:company_id/:type`}
                                 component={item.component}
                                 key={index}
                             />

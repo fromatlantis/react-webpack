@@ -27,7 +27,7 @@ export default class Graph extends PureComponent {
                     selector: 'node',
                     style: {
                         'background-color': '#1798f2',
-                        // 'label': 'data(properties.name)',
+                        // label: 'data(properties.name)',
                         // 'background-image': 'data(image)',
                         'background-fit': 'cover cover',
                         'background-image-opacity': 0.5,

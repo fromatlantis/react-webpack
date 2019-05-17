@@ -27,6 +27,12 @@ const model = {
         {
             //获取企业详情信息
             name: 'queryBasicInfoDetial',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    BasicInfoDetial: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'get',
@@ -45,6 +51,12 @@ const model = {
         {
             //获取工商信息GET
             name: 'queryBaseInfoDetial',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    BaseInfoDetial: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'get',
@@ -63,6 +75,12 @@ const model = {
         {
             //获取企业动态（新闻） /POST
             name: 'getRecentNews',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    RecentNews: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
@@ -82,6 +100,12 @@ const model = {
         {
             //获取融资信息分页列表
             name: 'getFinancingList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    FinancingList: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
@@ -101,6 +125,12 @@ const model = {
         {
             // 获取核心人员的分页列表
             name: 'getCoreTeamList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    CoreTeamList: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
@@ -120,6 +150,12 @@ const model = {
         {
             // POST 获取主要产品的详情分页列表
             name: 'getProductInfoList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    ProductInfoList: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
@@ -139,6 +175,12 @@ const model = {
         {
             //POST 获取对外投资列表
             name: 'getInvestmentAbroadList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    InvestmentAbroadList: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
@@ -153,11 +195,22 @@ const model = {
         },
         {
             name: 'getInvestmentAbroadListSuccess',
-            reducer: 'InvestmentAbroadList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    InvestmentAbroadList: action.payload.resultList,
+                }
+            },
         },
         {
             //POST 获取商标信息列表
             name: 'getTrademarkList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    TrademarkList: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
@@ -177,6 +230,12 @@ const model = {
         {
             //POST 获取专利列表
             name: 'getPatentList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    PatentList: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
@@ -196,6 +255,12 @@ const model = {
         {
             //POST 获取软件著作权列表
             name: 'getSoftwareCopyrightList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    SoftwareCopyrightList: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
@@ -215,6 +280,12 @@ const model = {
         {
             //POST 获取产品著作权列表
             name: 'getProductTrademarkList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    ProductTrademarkList: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
@@ -234,6 +305,12 @@ const model = {
         {
             //POST 获取网站备案列表
             name: 'getWebsiteRecordsList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    WebsiteRecordsList: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
@@ -253,6 +330,12 @@ const model = {
         {
             //GET 查询指定企业投资图谱
             name: 'getFirmGraph',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    FirmGraph: [],
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     type: 'get',

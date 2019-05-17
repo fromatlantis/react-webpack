@@ -33,7 +33,9 @@ class News extends PureComponent {
     }
     //生命周期
     componentDidMount = () => {
-        let company_id = this.props.match.params.company_id
+        let company_id = this.props.match
+            ? this.props.match.params.company_id
+            : this.props.company_id
         this.setState({ company_id })
         this.props.getRecentNews({ companyId: company_id, limit: 5 })
     }
@@ -74,9 +76,7 @@ class News extends PureComponent {
                                     actions={[
                                         <NavLink
                                             exact
-                                            to={`/companyDetails/newsDetails/${
-                                                this.state.company_id
-                                            }`}
+                                            to={`/companyDetails/newsDetails/${company_id}/details`}
                                         >
                                             详情
                                         </NavLink>,
