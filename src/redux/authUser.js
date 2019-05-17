@@ -84,7 +84,7 @@ const model = {
                     })
                     if (res.data) {
                         yield put(actions('loginSuccess')(res.data))
-                        yield put(actions('getAuthoritiesByUser')(res.data.user.id))
+                        // yield put(actions('getAuthoritiesByUser')(res.data.user.id))
                     } else {
                         yield put(replace('/login'))
                     }

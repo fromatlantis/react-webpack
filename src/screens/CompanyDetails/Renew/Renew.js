@@ -2,7 +2,7 @@
  * 企服首页/企业详情==> Property 更新记录
  */
 import React, { PureComponent, Fragment } from 'react'
-import { Card, Table } from 'antd'
+import { Card, Table, Button } from 'antd'
 import styles from '../CompanyDetails.module.css'
 
 export default class Renew extends PureComponent {
@@ -13,7 +13,7 @@ export default class Renew extends PureComponent {
                     <Card
                         id="renew:1"
                         title={<span style={{ color: '#1890ff' }}>更新消息</span>}
-                        extra={<a>展开更多>></a>}
+                        extra={<Button type="link">展开更多>></Button>}
                         className={styles.cardSty}
                     >
                         <Table
@@ -65,7 +65,7 @@ export default class Renew extends PureComponent {
                     <Card
                         id="renew:2"
                         title={<span style={{ color: '#1890ff' }}>历史记录</span>}
-                        extra={<a>展开更多>></a>}
+                        extra={<Button type="link">展开更多>></Button>}
                         className={styles.cardSty}
                     >
                         <Table
