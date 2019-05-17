@@ -9,47 +9,6 @@ import { Link } from 'react-router-dom'
 import request from '../../utils/request'
 import { actions } from '../../redux/intermediary'
 
-const routes1 = [
-    {
-        path: '/home',
-        breadcrumbName: '企服首页',
-    },
-    {
-        path: '/humanResourceService/1',
-        breadcrumbName: '知识产权',
-    },
-]
-const routes2 = [
-    {
-        path: '/home',
-        breadcrumbName: '企服首页',
-    },
-    {
-        path: '/humanResourceService/2',
-        breadcrumbName: '代理记账',
-    },
-]
-const routes3 = [
-    {
-        path: '/home',
-        breadcrumbName: '企服首页',
-    },
-    {
-        path: '/humanResourceService/3',
-        breadcrumbName: '法律服务',
-    },
-]
-const routes4 = [
-    {
-        path: '/home',
-        breadcrumbName: '企服首页',
-    },
-    {
-        path: '/humanResourceService/4',
-        breadcrumbName: '人资服务',
-    },
-]
-
 class IntermediaryDetails extends PureComponent {
     constructor() {
         super()

@@ -345,12 +345,14 @@ class Home extends PureComponent {
             keyWord: this.state.searchValue,
             column: '',
         }
-        if (this.state.size === '查公司') {
-            payload.column = 'name'
-        } else if (this.state.size === '查法人') {
-            payload.column = 'legal_person_name'
-        } else if (this.state.size === '查行业') {
-            payload.column = 'industry'
+        if (this.state.searchValue) {
+            if (this.state.size === '查公司') {
+                payload.column = 'name'
+            } else if (this.state.size === '查法人') {
+                payload.column = 'legal_person_name'
+            } else if (this.state.size === '查行业') {
+                payload.column = 'industry'
+            }
         }
         this.searchCompany(payload)
     }
@@ -419,12 +421,12 @@ class Home extends PureComponent {
                         <Divider />
                         <h1>
                             企业动态
-                            <span
+                            <div
                                 className={styles.lookMore}
                                 onClick={() => this.gopush('DynamicList')}
                             >
-                                展开更多>>
-                            </span>
+                                <Button type="link">展开更多>></Button>
+                            </div>
                         </h1>
                         <div className={styles.dynamics}>{this.showRecentNews()}</div>
                     </div>
@@ -437,11 +439,12 @@ class Home extends PureComponent {
                     />
                     {this.state.searchShow ? (
                         <p className={styles.more} onClick={() => this.goback()}>
-                            返回首页 >>
+                            <Button type="link">返回首页 >></Button>
                         </p>
                     ) : (
                         <p className={styles.more} onClick={() => this.lookmore()}>
-                            展开更多 >>
+                            {/* 展开更多 >> */}
+                            <Button type="link">展开更多>></Button>
                         </p>
                     )}
                 </div>
