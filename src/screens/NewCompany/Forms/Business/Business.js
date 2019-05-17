@@ -1,19 +1,40 @@
 import React, { PureComponent } from 'react'
-import { connect } from 'react-redux'
 import { Card, Input, Icon, DatePicker, Select } from 'antd'
 
 import FormView from '../FormView2'
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/business'
+
 import styles from './Business.module.css'
 
 const Option = Select.Option
 
 const mapStateToProps = state => {
     return {
-        baseInfo: state.newCompany.baseInfo,
+        businessInfo: state.business.businessInfo,
     }
 }
-@connect(mapStateToProps)
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            queryBaseInfoDetial: actions('queryBaseInfoDetial'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
 class Business extends PureComponent {
+    componentDidMount = () => {
+        const companyId = sessionStorage.getItem('companyId')
+        if (companyId) {
+            this.props.queryBaseInfoDetial(companyId)
+        }
+    }
     render() {
         const items = [
             {
@@ -124,11 +145,10 @@ class Business extends PureComponent {
                 component: <Input.TextArea autosize={{ minRows: 3, maxRows: 6 }} />,
             },
         ]
-        //const FormView = formView({ items, data: {} })
-        const { baseInfo } = this.props
+        const { businessInfo } = this.props
         return (
             <Card title="工商信息" bordered={false} className={styles.root}>
-                <FormView url="123" layout="inline" items={items} data={baseInfo} />
+                <FormView layout="inline" items={items} data={businessInfo} />
             </Card>
         )
     }

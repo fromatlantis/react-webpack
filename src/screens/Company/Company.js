@@ -118,7 +118,7 @@ class Home extends PureComponent {
     }
     toEdit = item => {
         sessionStorage.setItem('companyId', item.company_id)
-        sessionStorage.setItem('companyName', item.name)
+        //sessionStorage.setItem('companyName', item.name)
         this.props.push('/newCompany/info')
     }
     renderItem = () => {
@@ -244,12 +244,13 @@ class Home extends PureComponent {
                     />
                 </div>
                 <div className={styles.titleChip}>
-                    <Alert message={`总计${company.totalCount}个企业`} type="info" showIcon />
+                    <Alert message={`总计${company.totalCount || 0}个企业`} type="info" showIcon />
                     <div className={styles.toolbar}>
                         <Button onClick={this.batchAssign}>批量指派</Button>
                         <Button
                             type="primary"
                             onClick={() => {
+                                sessionStorage.removeItem('companyId')
                                 this.props.push('newCompany/info')
                             }}
                         >

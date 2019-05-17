@@ -1,6 +1,20 @@
 .searchCard {
-    & :global .ant-form-item {
+    & :global .ant-form-inline .ant-form-item {
         width: 300px;
+    }
+    & :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+        width: 120px;
+        text-align: right;
+    }
+    margin-bottom: 20px;
+}
+.newFormInline {
+    & :global .ant-form-inline .ant-form-item {
+        width: 300px;
+    }
+    & :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+        width: 120px;
+        text-align: right;
     }
 }
 .modalBox {

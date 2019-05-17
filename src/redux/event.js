@@ -4,9 +4,9 @@ import { blaze } from '../utils/blaze'
 import { message } from 'antd'
 
 const model = {
-    namespace: 'finance',
+    namespace: 'event',
     state: {
-        finance: {},
+        event: {},
     },
     actions: [
         {
@@ -44,10 +44,10 @@ const model = {
         },
     ],
 }
-const finance = blaze(model)
+const event = blaze(model)
 // reducer combineReducers使用
-export default finance.reducers
+export default event.reducers
 // action connect组件使用
-export const actions = finance.actions
+export const actions = event.actions
 // effects saga监听副作用函数使用
-export const effects = finance.effects
+export const effects = event.effects

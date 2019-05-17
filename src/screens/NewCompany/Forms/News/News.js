@@ -3,6 +3,25 @@ import { Button, Card, Table, Modal, Input, DatePicker } from 'antd'
 
 import formView from '../FormView'
 
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/news'
+
+const mapStateToProps = state => {
+    return {
+        news: state.news.news,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getRecentNews: actions('getRecentNews'),
+        },
+        dispatch,
+    )
+}
+
 const dataSource = [
     {
         key: '1',
@@ -51,10 +70,23 @@ const columns = [
         width: 300,
     },
 ]
-
-export default class News extends PureComponent {
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class News extends PureComponent {
     state = {
         visible: false,
+    }
+    componentDidMount = () => {
+        const companyId = sessionStorage.getItem('companyId')
+        if (companyId) {
+            this.props.getRecentNews({
+                companyId: sessionStorage.getItem('companyId'),
+                pageNo: 1,
+                pageSize: 10,
+            })
+        }
     }
     newInfo = () => {
         this.setState({
@@ -125,10 +157,12 @@ export default class News extends PureComponent {
         )
     }
     render() {
+        const { news } = this.props
         return (
             <Card title="企业动态" bordered={false}>
-                <Table bordered pagination={false} dataSource={dataSource} columns={columns} />
+                <Table bordered pagination={false} dataSource={news.list} columns={columns} />
             </Card>
         )
     }
 }
+export default News
