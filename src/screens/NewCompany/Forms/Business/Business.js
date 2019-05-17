@@ -20,6 +20,7 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             queryBaseInfoDetial: actions('queryBaseInfoDetial'),
+            changeBaseInfoApprove: actions('changeBaseInfoApprove'),
         },
         dispatch,
     )

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Divider, Modal, Input, Skeleton } from 'antd'
 
-import FormView from '../FormView2'
+import FormView, { SearchView } from '../FormView2'
 import { UploadImg } from 'components'
 
 import styles from './Members.module.css'
@@ -15,12 +15,16 @@ import { actions } from 'reduxDir/members'
 const mapStateToProps = state => {
     return {
         team: state.members.team,
+        detail: state.members.detail,
     }
 }
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             getCoreTeamList: actions('getCoreTeamList'),
+            queryCoreTeamDetail: actions('queryCoreTeamDetail'),
+            increaseCoreTeamApprove: actions('increaseCoreTeamApprove'),
+            changeCoreTeamApprove: actions('changeCoreTeamApprove'),
         },
         dispatch,
     )
@@ -53,23 +57,34 @@ const dataSource = [
 class Members extends PureComponent {
     state = {
         visible: false,
+        isEdit: false,
     }
     componentDidMount() {
-        this.props.getCoreTeamList({
-            companyId: sessionStorage.getItem('companyId'),
-            pageNo: 1,
-            pageSize: 10,
-        })
+        this.props.getCoreTeamList()
     }
 
     newInfo = () => {
         this.setState({
             visible: true,
+            isEdit: false,
         })
     }
     handleOk = () => {
         this.form.validateFields((errors, values) => {
-            console.log(values)
+            if (!errors) {
+                const { isEdit } = this.state
+                const { changeCoreTeamApprove, increaseCoreTeamApprove, detail } = this.props
+                if (isEdit) {
+                    // 编辑
+                    changeCoreTeamApprove({ ...detail, ...values })
+                } else {
+                    // 新增
+                    increaseCoreTeamApprove(values)
+                }
+                this.setState({
+                    visible: false,
+                })
+            }
         })
         this.setState({
             visible: false,
@@ -117,7 +132,7 @@ class Members extends PureComponent {
         return (
             <FormView
                 ref={form => {
-                    this.form = form
+                    this.newForm = form
                 }}
                 items={items}
                 formItemLayout={formItemLayout}
@@ -125,6 +140,32 @@ class Members extends PureComponent {
                 saveBtn={false}
             />
         )
+    }
+    // 查询
+    search = () => {
+        this.form.validateFields((errors, values) => {
+            if (!errors) {
+                this.props.getCoreTeamList(values)
+            }
+        })
+    }
+    handleReset = () => {
+        this.form.resetFields()
+    }
+    // 分页
+    onChange = pageNo => {
+        this.props.getCoreTeamList({ pageNo })
+    }
+    onShowSizeChange = (_, pageSize) => {
+        this.props.getCoreTeamList({ pageNo: 1, pageSize })
+    }
+    // 编辑
+    edit = keyId => {
+        this.props.queryCoreTeamDetail(keyId)
+        this.setState({
+            visible: true,
+            isEdit: true,
+        })
     }
     render() {
         const { team } = this.props
@@ -151,18 +192,27 @@ class Members extends PureComponent {
                 }
             >
                 <div className={styles.searchBox}>
-                    <FormView
+                    <SearchView
+                        ref={form => {
+                            this.form = form
+                        }}
                         formItemLayout={{ labelCol: { span: 6 }, wrapperCol: { span: 18 } }}
                         items={searchItems}
                         layout="inline"
                         saveBtn={false}
                     />
                     <div className={styles.toobar}>
-                        <Button type="ghost">清除</Button>
+                        <Button type="ghost" onClick={this.handleReset}>
+                            清除
+                        </Button>
                         <Divider type="vertical" />
-                        <Button type="primary">查询</Button>
+                        <Button type="primary" onClick={this.search}>
+                            查询
+                        </Button>
                         <Divider type="vertical" />
-                        <Button type="primary">新增</Button>
+                        <Button type="primary" onClick={this.newInfo}>
+                            新增
+                        </Button>
                     </div>
                 </div>
 

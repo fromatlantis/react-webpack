@@ -109,6 +109,22 @@ const model = {
                 }
             },
         },
+        {
+            name: 'changeBasicInfoApprove',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/changeBasicInfoApprove`,
+                    contentType: 'multipart/form-data',
+                    data: {
+                        newContent: action.payload,
+                    },
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                }
+            },
+        },
     ],
 }
 const newCompany = blaze(model)

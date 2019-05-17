@@ -30,6 +30,22 @@ const model = {
             name: 'queryBaseInfoDetialOk',
             reducer: 'businessInfo',
         },
+        {
+            name: 'changeBaseInfoApprove',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/changeBaseInfoApprove`,
+                    contentType: 'multipart/form-data',
+                    data: {
+                        newContent: action.payload,
+                    },
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                }
+            },
+        },
     ],
 }
 const business = blaze(model)

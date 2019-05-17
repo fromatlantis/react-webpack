@@ -7,16 +7,28 @@ const model = {
     namespace: 'finance',
     state: {
         finance: {},
+        searchParams: {
+            pageNo: 1,
+            pageSize: 10,
+        },
     },
     actions: [
         {
             name: 'getFinancingList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    searchParams: { ...state.searchParams, ...action.payload },
+                }
+            },
             *effect(action) {
+                const params = yield select(rootState => rootState.finance.searchParams)
+                params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
                     url: `/enterprise/getFinancingList`,
                     contentType: 'multipart/form-data',
-                    data: action.payload,
+                    data: params,
                 })
                 if (res.code === 1000) {
                     yield put(actions('getFinancingListOk')(res.data))

@@ -54,7 +54,9 @@ class Patent extends PureComponent {
             if (!errors) {
                 const { isEdit } = this.state
                 const { changePatentApprove, increasePatentApprove, detail } = this.props
-                values.applicationTime = moment(values.applicationTime).format(dateStr)
+                if (values.applicationTime) {
+                    values.applicationTime = moment(values.applicationTime).format(dateStr)
+                }
                 if (isEdit) {
                     // 编辑
                     changePatentApprove({ ...detail, ...values })
@@ -128,7 +130,6 @@ class Patent extends PureComponent {
                 formItemLayout={formItemLayout}
                 layout="inline"
                 items={items}
-                type="seacrhForm"
                 saveBtn={false}
             />
         )
@@ -209,6 +210,7 @@ class Patent extends PureComponent {
             />
         )
     }
+    // 编辑
     edit = keyId => {
         this.props.queryPatentDetail(keyId)
         this.setState({
@@ -216,6 +218,7 @@ class Patent extends PureComponent {
             isEdit: true,
         })
     }
+    // 查询
     search = () => {
         this.form.validateFields((errors, values) => {
             if (!errors) {

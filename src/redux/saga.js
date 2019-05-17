@@ -8,7 +8,7 @@ import { effects as financeEffects } from './finance'
 import { effects as membersEffects } from './members'
 import { effects as newsEffects } from './news'
 import { effects as productEffects } from './product'
-
+import { effects as outwardEffects } from './outward'
 import { effects as effectsTrademark } from './trademark'
 import { effects as patentEffects } from './patent'
 
@@ -23,6 +23,7 @@ export function* watchFetchData() {
         ...membersEffects,
         ...newsEffects,
         ...productEffects,
+        ...outwardEffects,
         ...effectsTrademark,
         ...patentEffects,
     ])

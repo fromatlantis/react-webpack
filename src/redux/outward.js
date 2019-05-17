@@ -4,9 +4,9 @@ import { blaze } from '../utils/blaze'
 import { message } from 'antd'
 
 const model = {
-    namespace: 'product',
+    namespace: 'outward',
     state: {
-        product: {},
+        outward: {},
         detail: {},
         searchParams: {
             pageNo: 1,
@@ -15,7 +15,7 @@ const model = {
     },
     actions: [
         {
-            name: 'getProductInfoList',
+            name: 'getInvestmentAbroadList',
             reducer: (state, action) => {
                 return {
                     ...state,
@@ -23,31 +23,31 @@ const model = {
                 }
             },
             *effect(action) {
-                const params = yield select(rootState => rootState.product.searchParams)
+                const params = yield select(rootState => rootState.outward.searchParams)
                 params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/getProductInfoList`,
+                    url: `/enterprise/getInvestmentAbroadList`,
                     contentType: 'multipart/form-data',
                     data: params,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getProductInfoListOk')(res.data))
+                    yield put(actions('getInvestmentAbroadListOk')(res.data))
                 }
             },
         },
         {
-            name: 'getProductInfoListOk',
-            reducer: 'product',
+            name: 'getInvestmentAbroadListOk',
+            reducer: 'outward',
         },
         {
-            name: 'queryProductInfoDetial',
+            name: 'queryInvestmentAbroadDetial',
             *effect(action) {
                 const res = yield call(request, {
-                    url: `/enterprise/queryProductInfoDetial?keyId=${action.payload}`,
+                    url: `/enterprise/queryInvestmentAbroadDetial?keyId=${action.payload}`,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('queryProductInfoDetialOk')(res.data))
+                    yield put(actions('queryInvestmentAbroadDetialOk')(res.data))
                 }
             },
             reducer: (state, action) => {
@@ -58,15 +58,15 @@ const model = {
             },
         },
         {
-            name: 'queryProductInfoDetialOk',
+            name: 'queryInvestmentAbroadDetialOk',
             reducer: 'detail',
         },
         {
-            name: 'increaseProductInfoApprove',
+            name: 'increaseInvestmentAbroadApprove',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/increaseProductInfoApprove`,
+                    url: `/enterprise/increaseInvestmentAbroadApprove`,
                     data: {
                         params: action.payload,
                     },
@@ -77,11 +77,11 @@ const model = {
             },
         },
         {
-            name: 'changeProductInfoApprove',
+            name: 'changeInvestmentAbroadApprove',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/changeProductInfoApprove`,
+                    url: `/enterprise/changeInvestmentAbroadApprove`,
                     contentType: 'multipart/form-data',
                     data: {
                         newContent: action.payload,
@@ -94,10 +94,10 @@ const model = {
         },
     ],
 }
-const product = blaze(model)
+const outward = blaze(model)
 // reducer combineReducers使用
-export default product.reducers
+export default outward.reducers
 // action connect组件使用
-export const actions = product.actions
+export const actions = outward.actions
 // effects saga监听副作用函数使用
-export const effects = product.effects
+export const effects = outward.effects

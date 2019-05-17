@@ -66,14 +66,15 @@ export default Form.create({
         items
             .filter(item => !item.initialValue)
             .forEach(item => {
-                let getValue = data[item.field]
-                if (!getValue) {
-                    getValue = null
-                } else if (item.type === 'date') {
-                    getValue = moment(parseInt(getValue))
-                }
-                fields[item.field] = Form.createFormField({
-                    value: getValue,
+                let { field } = item
+                // let getValue = data[item.field]
+                // if (!getValue) {
+                //     getValue = null
+                // } else if (item.type === 'date') {
+                //     getValue = moment(parseInt(getValue))
+                // }
+                fields[field] = Form.createFormField({
+                    value: data[field] ? data[field] : null,
                 })
             })
         //onsole.log(fields)

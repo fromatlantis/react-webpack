@@ -23,6 +23,7 @@ const mapDispatchToProps = dispatch => {
             saveBasicInfo: actions('saveBasicInfo'),
             queryBasicInfoDetial: actions('queryBasicInfoDetial'),
             loadEnterpriseInfo: actions('loadEnterpriseInfo'),
+            changeBasicInfoApprove: actions('changeBasicInfoApprove'),
         },
         dispatch,
     )
@@ -184,7 +185,9 @@ class Info extends PureComponent {
                 ),
             },
         ]
-        const { loadAll } = this.props
+        const { loadAll, baseInfo } = this.props
+        // 时间处理
+        baseInfo.estiblishTime = moment(parseInt(baseInfo.estiblishTime))
         loadAll === 'yes' &&
             Modal.confirm({
                 title: '是否保存其他信息?',
@@ -198,7 +201,7 @@ class Info extends PureComponent {
             })
         return (
             <Card title="企业信息" bordered={false}>
-                <FormView items={items} data={this.props.baseInfo} onSubmit={this.onSubmit} />
+                <FormView items={items} data={baseInfo} onSubmit={this.onSubmit} />
             </Card>
         )
     }

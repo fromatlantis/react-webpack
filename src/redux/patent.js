@@ -11,7 +11,6 @@ const model = {
         searchParams: {
             pageNo: 1,
             pageSize: 10,
-            companyId: sessionStorage.getItem('companyId'),
         },
     },
     actions: [
@@ -25,6 +24,7 @@ const model = {
             },
             *effect(action) {
                 const params = yield select(rootState => rootState.patent.searchParams)
+                params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
                     url: `/enterprise/getPatentList`,
