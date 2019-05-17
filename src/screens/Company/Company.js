@@ -5,7 +5,19 @@ import { push } from 'connected-react-router'
 import { Link } from 'react-router-dom'
 import { actions } from 'reduxDir/company'
 
-import { Alert, Button, Input, Select, Tag, Modal, Divider, Steps, message, Radio } from 'antd'
+import {
+    Alert,
+    Button,
+    Input,
+    Select,
+    Tag,
+    Modal,
+    Divider,
+    Steps,
+    message,
+    Radio,
+    Upload,
+} from 'antd'
 import { IconFont } from 'components'
 import TransferView from './TransferView'
 import styles from './Company.module.css'
@@ -16,13 +28,6 @@ const Search = Input.Search
 const Step = Steps.Step
 const Option = Select.Option
 
-const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-]
 const steps = [
     {
         title: '上传文件',
@@ -35,11 +40,32 @@ const steps = [
         icon: <IconFont type="iconyulan" />,
     },
 ]
+const Dragger = Upload.Dragger
 
+const uploadProps = {
+    name: 'excelFile',
+    multiple: false,
+    action: '/enterprise/batchImport',
+    onChange(info) {
+        const status = info.file.status
+        if (status !== 'uploading') {
+            console.log(info.file, info.fileList)
+        }
+        if (status === 'done') {
+            message.success(`${info.file.name}上传成功`)
+            console.log(info.file.response)
+        } else if (status === 'error') {
+            message.error(`${info.file.name}上传失败`)
+        }
+    },
+}
 @connect(
     state => {
         return {
             company: state.company.company,
+            directorList: state.company.directorList,
+            companyList: state.company.companyList,
+            importList: state.company.importList,
         }
     },
     dispatch => {
@@ -47,6 +73,10 @@ const steps = [
             {
                 push: push,
                 searchCompany: actions('searchCompany'),
+                getDirectorList: actions('getDirectorList'),
+                getCompanyList: actions('getCompanyList'),
+                assignServiceStaff: actions('assignServiceStaff'),
+                batchImport: actions('batchImport'),
             },
             dispatch,
         )
@@ -77,7 +107,8 @@ class Home extends PureComponent {
             batchAssign: false,
         })
     }
-    assign = () => {
+    assign = companyId => {
+        this.props.getDirectorList({ companyId })
         this.setState({
             assign: true,
         })
@@ -134,11 +165,19 @@ class Home extends PureComponent {
                                 <Tag color="orange">实驻企业</Tag>
                             </div>
                             <div className={styles.toobar}>
-                                <Button type="link" size="small" onClick={this.assign}>
+                                <Button
+                                    type="link"
+                                    size="small"
+                                    onClick={() => {
+                                        this.assign(item.company_id)
+                                    }}
+                                >
                                     <IconFont type="iconicon_zhipai" />
                                 </Button>
                                 <Button type="link" size="small">
-                                    <IconFont type="icondetails" />
+                                    <Link to={`/companyDetails/information/${item.company_id}`}>
+                                        <IconFont type="icondetails" />
+                                    </Link>
                                 </Button>
                                 <Button
                                     type="link"
@@ -250,7 +289,7 @@ class Home extends PureComponent {
                         <Button
                             type="primary"
                             onClick={() => {
-                                sessionStorage.removeItem('companyId')
+                                sessionStorage.setItem('companyId', '')
                                 this.props.push('newCompany/info')
                             }}
                         >
@@ -314,7 +353,18 @@ class Home extends PureComponent {
                             <Step key={item.title} title={item.title} icon={item.icon} />
                         ))}
                     </Steps>
-                    <div className={styles.stepCard}>{steps[current].content}</div>
+                    <div className={styles.stepCard}>
+                        <Dragger {...uploadProps}>
+                            <p className="ant-upload-drag-icon">
+                                <IconFont type="iconxls" />
+                            </p>
+                            <p className="ant-upload-text">将文件拖拽至此区域或点击上传文件</p>
+                            <p className="ant-upload-hint">导入说明：文件必须为XLS或XLSX格式</p>
+                        </Dragger>
+                        <div style={{ padding: '20px', textAlign: 'right' }}>
+                            没有模版？<a href="">下载模版</a>
+                        </div>
+                    </div>
                 </Modal>
             </div>
         )

@@ -36,6 +36,10 @@ class Business extends PureComponent {
             this.props.queryBaseInfoDetial(companyId)
         }
     }
+    onSubmit = values => {
+        console.log(values)
+        this.props.changeBaseInfoApprove(values)
+    }
     render() {
         const items = [
             {
@@ -149,7 +153,12 @@ class Business extends PureComponent {
         const { businessInfo } = this.props
         return (
             <Card title="工商信息" bordered={false} className={styles.root}>
-                <FormView layout="inline" items={items} data={businessInfo} />
+                <FormView
+                    layout="inline"
+                    items={items}
+                    data={businessInfo}
+                    onSubmit={this.onSubmit}
+                />
             </Card>
         )
     }
