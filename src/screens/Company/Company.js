@@ -302,6 +302,7 @@ class Home extends PureComponent {
                         <Button
                             type="primary"
                             onClick={() => {
+                                // 设置companyId默认值，清除redux数据
                                 sessionStorage.setItem('companyId', 'houzai')
                                 this.props.push('newCompany/info')
                             }}
