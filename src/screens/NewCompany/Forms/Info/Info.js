@@ -66,7 +66,9 @@ class Info extends PureComponent {
                         message: '请输入企业名称',
                     },
                 ],
-                component: <AutoComplete disabled={sessionStorage.companyId ? true : false} />,
+                component: (
+                    <AutoComplete disabled={sessionStorage.companyId !== 'houzai' ? true : false} />
+                ),
             },
             {
                 label: '企业logo',
@@ -186,9 +188,9 @@ class Info extends PureComponent {
             },
         ]
         let { loadAll, baseInfo } = this.props
-        if (!sessionStorage.companyId) baseInfo = {} //新增时清空redux数据
         // 时间处理
-        baseInfo.estiblishTime = moment(parseInt(baseInfo.estiblishTime))
+        if (baseInfo.estiblishTime)
+            baseInfo.estiblishTime = moment(parseInt(baseInfo.estiblishTime))
         loadAll === 'yes' &&
             Modal.confirm({
                 title: '是否保存其他信息?',

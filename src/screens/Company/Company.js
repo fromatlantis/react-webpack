@@ -20,6 +20,7 @@ import {
 } from 'antd'
 import { IconFont } from 'components'
 import TransferView from './TransferView'
+import ImportTable from './ImportTable'
 import styles from './Company.module.css'
 
 import avatar from 'assets/hz.png'
@@ -42,23 +43,6 @@ const steps = [
 ]
 const Dragger = Upload.Dragger
 
-const uploadProps = {
-    name: 'excelFile',
-    multiple: false,
-    action: '/enterprise/batchImport',
-    onChange(info) {
-        const status = info.file.status
-        if (status !== 'uploading') {
-            console.log(info.file, info.fileList)
-        }
-        if (status === 'done') {
-            message.success(`${info.file.name}上传成功`)
-            console.log(info.file.response)
-        } else if (status === 'error') {
-            message.error(`${info.file.name}上传失败`)
-        }
-    },
-}
 @connect(
     state => {
         return {
@@ -77,6 +61,7 @@ const uploadProps = {
                 getCompanyList: actions('getCompanyList'),
                 assignServiceStaff: actions('assignServiceStaff'),
                 batchImport: actions('batchImport'),
+                batchLoad: actions('batchLoad'),
             },
             dispatch,
         )
@@ -88,6 +73,7 @@ class Home extends PureComponent {
         assign: false,
         importList: false,
         current: 0,
+        importResponse: [],
     }
     componentDidMount() {
         this.props.searchCompany()
@@ -258,7 +244,26 @@ class Home extends PureComponent {
         })
     }
     render() {
-        let { current } = this.state
+        const uploadProps = {
+            name: 'excelFile',
+            multiple: false,
+            action: '/enterprise/batchImport',
+            onChange: info => {
+                const status = info.file.status
+                if (status !== 'uploading') {
+                    console.log(info.file, info.fileList)
+                }
+                if (status === 'done') {
+                    message.success(`${info.file.name}上传成功`)
+                    this.setState({
+                        importResponse: info.file.response.data,
+                    })
+                } else if (status === 'error') {
+                    message.error(`${info.file.name}上传失败`)
+                }
+            },
+        }
+        let { current, importResponse } = this.state
         const selectBefore = (
             <Select defaultValue="" style={{ width: 110 }}>
                 <Option value="">全部</Option>
@@ -297,7 +302,7 @@ class Home extends PureComponent {
                         <Button
                             type="primary"
                             onClick={() => {
-                                sessionStorage.setItem('companyId', '')
+                                sessionStorage.setItem('companyId', 'houzai')
                                 this.props.push('newCompany/info')
                             }}
                         >
@@ -333,6 +338,7 @@ class Home extends PureComponent {
                     visible={this.state.importList}
                     onOk={this.importListOk}
                     onCancel={this.importListCancel}
+                    width={660}
                     footer={
                         <div className="steps-action">
                             {current < steps.length - 1 && (
@@ -343,7 +349,9 @@ class Home extends PureComponent {
                             {current === steps.length - 1 && (
                                 <Button
                                     type="primary"
-                                    onClick={() => message.success('Processing complete!')}
+                                    onClick={() => {
+                                        this.props.batchLoad(importResponse)
+                                    }}
                                 >
                                     完成
                                 </Button>
@@ -361,18 +369,25 @@ class Home extends PureComponent {
                             <Step key={item.title} title={item.title} icon={item.icon} />
                         ))}
                     </Steps>
-                    <div className={styles.stepCard}>
-                        <Dragger {...uploadProps}>
-                            <p className="ant-upload-drag-icon">
-                                <IconFont type="iconxls" />
-                            </p>
-                            <p className="ant-upload-text">将文件拖拽至此区域或点击上传文件</p>
-                            <p className="ant-upload-hint">导入说明：文件必须为XLS或XLSX格式</p>
-                        </Dragger>
-                        <div style={{ padding: '20px', textAlign: 'right' }}>
-                            没有模版？<a href="">下载模版</a>
+                    {current === 0 && (
+                        <div className={styles.stepCard}>
+                            <Dragger {...uploadProps}>
+                                <p className="ant-upload-drag-icon">
+                                    <IconFont type="iconxls" />
+                                </p>
+                                <p className="ant-upload-text">将文件拖拽至此区域或点击上传文件</p>
+                                <p className="ant-upload-hint">导入说明：文件必须为XLS或XLSX格式</p>
+                            </Dragger>
+                            <div style={{ padding: '20px', textAlign: 'right' }}>
+                                没有模版？<a href="">下载模版</a>
+                            </div>
                         </div>
-                    </div>
+                    )}
+                    {current === 1 && (
+                        <div className={styles.stepCard}>
+                            <ImportTable dataSource={importResponse} />
+                        </div>
+                    )}
                 </Modal>
             </div>
         )

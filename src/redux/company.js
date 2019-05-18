@@ -1,7 +1,7 @@
 import { put, call, select } from 'redux-saga/effects'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
-import { message } from 'antd'
+import { message, notification } from 'antd'
 
 const model = {
     namespace: 'company',
@@ -92,6 +92,29 @@ const model = {
         {
             name: 'batchImportOk',
             reducer: 'importList',
+        },
+        {
+            name: 'batchLoad',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/batchLoad`,
+                    contentType: 'multipart/form-data',
+                    data: {
+                        enterprises: JSON.stringify(action.payload),
+                    },
+                })
+                if (res.code === 1000) {
+                    notification.open({
+                        message: 'Notification Title',
+                        description:
+                            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+                        onClick: () => {
+                            console.log('Notification Clicked!')
+                        },
+                    })
+                }
+            },
         },
     ],
 }

@@ -11,18 +11,18 @@ const model = {
     actions: [
         {
             name: 'queryBaseInfoDetial',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    businessInfo: {},
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     url: `/enterprise/queryBaseInfoDetial?companyId=${action.payload}`,
                 })
                 if (res.code === 1000) {
                     yield put(actions('queryBaseInfoDetialOk')(res.data))
-                }
-            },
-            reducer: (state, action) => {
-                return {
-                    ...state,
-                    businessInfo: {},
                 }
             },
         },
