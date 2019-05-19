@@ -42,11 +42,13 @@ const model = {
         {
             name: 'increaseFinancingApprove',
             *effect(action) {
+                let params = action.payload
+                params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
                     url: `/enterprise/increaseFinancingApprove`,
                     data: {
-                        params: action.payload,
+                        params,
                     },
                 })
                 if (res.code === 1000) {

@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker, Divider } from 'antd'
 
-import { UploadImg } from 'components'
-import FormView, { SearchView } from '../FormView2'
+import { UploadImg, FormView, SearchView } from 'components'
 import logo from 'assets/hz.png'
 
 // redux
@@ -96,7 +95,7 @@ class Product extends PureComponent {
         const items = [
             {
                 label: '产品图片',
-                field: 'avatar',
+                field: 'icon',
                 component: <UploadImg />,
             },
             {
@@ -111,7 +110,7 @@ class Product extends PureComponent {
             },
             {
                 label: '产品介绍',
-                field: 'person',
+                field: 'brief',
                 component: <TextArea />,
             },
         ]
@@ -208,15 +207,7 @@ class Product extends PureComponent {
         ]
         const { product, searchParams } = this.props
         return (
-            <Card
-                title="主要产品"
-                bordered={false}
-                extra={
-                    <Button type="primary" onClick={this.newInfo}>
-                        新增
-                    </Button>
-                }
-            >
+            <Card title="主要产品" bordered={false}>
                 <div
                     style={{
                         display: 'flex',

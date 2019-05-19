@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Form } from 'antd'
-import moment from 'moment'
 
 class FormView extends PureComponent {
     static defaultProps = {
@@ -66,13 +65,14 @@ export default Form.create({
         items
             .filter(item => !item.initialValue)
             .forEach(item => {
+                let { field, formatter } = item
                 let getValue = data[item.field]
                 if (!getValue) {
                     getValue = null
-                } else if (item.type === 'date') {
-                    getValue = moment(parseInt(getValue))
+                } else if (formatter) {
+                    getValue = formatter(getValue, { ...data })
                 }
-                fields[item.field] = Form.createFormField({
+                fields[field] = Form.createFormField({
                     value: getValue,
                 })
             })

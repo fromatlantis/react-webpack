@@ -17,6 +17,7 @@ import {
     message,
     Radio,
     Upload,
+    Pagination,
 } from 'antd'
 import { IconFont } from 'components'
 import TransferView from './TransferView'
@@ -48,7 +49,10 @@ const Dragger = Upload.Dragger
         return {
             company: state.company.company,
             directorList: state.company.directorList,
-            companyList: state.company.companyList,
+            companyList: state.company.companyList.map(item => ({
+                id: item.companyId,
+                name: item.name,
+            })),
             importList: state.company.importList,
         }
     },
@@ -74,11 +78,40 @@ class Home extends PureComponent {
         importList: false,
         current: 0,
         importResponse: [],
+        companyId: null, //指派公司id
+        column: 'name', //查询类型
+        keyWord: '',
+        pageSize: 10,
+        pageNo: 1,
     }
     componentDidMount() {
-        this.props.searchCompany()
+        this.props.searchCompany({ pageNo: 1, pageSize: 10 })
+    }
+    search = keyWord => {
+        let { column, pageSize, pageNo } = this.state
+        this.setState({
+            keyWord,
+        })
+        if (keyWord) {
+            this.props.searchCompany({ column, keyWord, pageNo, pageSize })
+        } else {
+            this.props.searchCompany({ pageNo, pageSize })
+        }
+    }
+    // 分页
+    onPageChange = pageNo => {
+        let { keyWord, column, pageSize } = this.state
+        let params = { pageNo, pageSize }
+        if (keyWord) params = { ...params, keyWord }
+        this.props.searchCompany(params)
+    }
+    onShowSizeChange = (_, pageSize) => {
+        let { keyWord, column } = this.state
+        this.props.searchCompany({ column, keyWord, pageNo: 1, pageSize })
     }
     batchAssign = () => {
+        this.props.getCompanyList()
+        this.props.getDirectorList({ companyId: '123' })
         this.setState({
             batchAssign: true,
         })
@@ -97,9 +130,21 @@ class Home extends PureComponent {
         this.props.getDirectorList({ companyId })
         this.setState({
             assign: true,
+            companyId: companyId,
         })
     }
+    // 确认指派
     assignOk = () => {
+        const { targetKeys } = this.refs.assign.state
+        const { companyId } = this.state
+        const { directorList } = this.props
+        this.props.assignServiceStaff({
+            companyIds: [companyId],
+            userIds: targetKeys,
+            userNames: directorList
+                .filter(item => targetKeys.includes(item.id))
+                .map(item => item.name),
+        })
         this.setState({
             assign: false,
         })
@@ -200,7 +245,7 @@ class Home extends PureComponent {
                                 </p>
                                 <p>
                                     <b>企服负责人：</b>
-                                    <span>王权富贵</span>
+                                    <span>{item.director_name}</span>
                                 </p>
                             </div>
                             <div>
@@ -265,14 +310,19 @@ class Home extends PureComponent {
         }
         let { current, importResponse } = this.state
         const selectBefore = (
-            <Select defaultValue="" style={{ width: 110 }}>
-                <Option value="">全部</Option>
+            <Select
+                defaultValue="name"
+                style={{ width: 110 }}
+                onChange={column => {
+                    this.setState({ column })
+                }}
+            >
                 <Option value="name">查公司</Option>
                 <Option value="legal_person_name">查法人</Option>
                 <Option value="industry">查行业</Option>
             </Select>
         )
-        const { company } = this.props
+        const { company, directorList, companyList } = this.props
         return (
             <div className={styles.root}>
                 <div className={styles.searchBox}>
@@ -290,7 +340,7 @@ class Home extends PureComponent {
                     <Search
                         addonBefore={selectBefore}
                         placeholder="请输入企业名称"
-                        onSearch={value => console.log(value)}
+                        onSearch={this.search}
                         enterButton
                         size="large"
                     />
@@ -303,7 +353,7 @@ class Home extends PureComponent {
                             type="primary"
                             onClick={() => {
                                 // 设置companyId默认值，清除redux数据
-                                sessionStorage.setItem('companyId', 'houzai')
+                                sessionStorage.setItem('companyId', '000000')
                                 this.props.push('newCompany/info')
                             }}
                         >
@@ -313,6 +363,17 @@ class Home extends PureComponent {
                     </div>
                 </div>
                 {this.renderItem()}
+                <div style={{ padding: '15px', display: 'flex', justifyContent: 'flex-end' }}>
+                    <Pagination
+                        showQuickJumper
+                        showSizeChanger
+                        defaultCurrent={1}
+                        total={company.totalCount}
+                        onShowSizeChange={this.onShowSizeChange}
+                        onChange={this.onPageChange}
+                    />
+                </div>
+
                 {/* <List dataSource={data} renderItem={this.renderItem} /> */}
                 <Modal
                     title="批量指派企服人员"
@@ -321,9 +382,17 @@ class Home extends PureComponent {
                     onCancel={this.batchAssignCancel}
                     //footer={null}
                 >
-                    <TransferView titles={['选择企业', '已选企业']} />
+                    <TransferView
+                        titles={['选择企业', '已选企业']}
+                        data={companyList}
+                        ref="batchAssignCompany"
+                    />
                     <Divider dashed />
-                    <TransferView titles={['选择人员', '已选人员']} />
+                    <TransferView
+                        titles={['选择人员', '已选人员']}
+                        data={directorList}
+                        ref="batchAssignPerson"
+                    />
                 </Modal>
                 <Modal
                     title="指派企服人员"
@@ -332,7 +401,11 @@ class Home extends PureComponent {
                     onCancel={this.assignCancel}
                     //footer={null}
                 >
-                    <TransferView titles={['选择人员', '已选人员']} />
+                    <TransferView
+                        titles={['选择人员', '已选人员']}
+                        data={directorList}
+                        ref="assign"
+                    />
                 </Modal>
                 <Modal
                     title="导入"
@@ -351,6 +424,9 @@ class Home extends PureComponent {
                                 <Button
                                     type="primary"
                                     onClick={() => {
+                                        this.setState({
+                                            importList: false,
+                                        })
                                         this.props.batchLoad(importResponse)
                                     }}
                                 >

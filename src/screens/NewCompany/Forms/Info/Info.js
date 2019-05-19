@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Card, Input, Select, DatePicker, Modal } from 'antd'
 import moment from 'moment'
-import { UploadImg } from 'components'
-import FormView from '../FormView2'
+import { UploadImg, FormView } from 'components'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -42,18 +41,19 @@ class Info extends PureComponent {
             this.props.queryBasicInfoDetial(companyId)
         }
     }
-    handleSearch = word => {
-        this.props.getSearchWord(word)
-    }
-    handleChange = word => {
-        this.props.getSearchWord(word)
-        console.log(word)
-    }
     onSubmit = values => {
-        console.log(values)
-        values.companyId = sessionStorage.getItem('companyId')
-        values.estiblishTime = moment(values.estiblishTime).format('YYYY-MM-DD')
-        this.props.saveBasicInfo(values)
+        const companyId = sessionStorage.getItem('companyId')
+        values.estiblishTime = moment(values.estiblishTime.format('YYYY-MM-DD')).format('x')
+        if (companyId === '000000') {
+            // 新增
+            const { baseInfo, saveBasicInfo } = this.props
+            values.companyId = baseInfo.companyId
+            saveBasicInfo(values)
+        } else {
+            // 编辑
+            const { baseInfo, changeBasicInfoApprove } = this.props
+            changeBasicInfoApprove({ ...baseInfo, ...values })
+        }
     }
     render() {
         const items = [
@@ -67,7 +67,7 @@ class Info extends PureComponent {
                     },
                 ],
                 component: (
-                    <AutoComplete disabled={sessionStorage.companyId !== 'houzai' ? true : false} />
+                    <AutoComplete disabled={sessionStorage.companyId !== '000000' ? true : false} />
                 ),
             },
             {
@@ -111,7 +111,9 @@ class Info extends PureComponent {
                         message: '请输入企业名称',
                     },
                 ],
-                type: 'date',
+                formatter: estiblishTime => {
+                    return moment(parseInt(estiblishTime))
+                },
                 component: <DatePicker />,
             },
             {
@@ -189,8 +191,10 @@ class Info extends PureComponent {
         ]
         let { loadAll, baseInfo } = this.props
         // 时间处理
-        if (baseInfo.estiblishTime)
-            baseInfo.estiblishTime = moment(parseInt(baseInfo.estiblishTime))
+        if (baseInfo.estiblishTime) {
+            console.log(baseInfo.estiblishTime)
+            //baseInfo.estiblishTime = moment(parseInt(baseInfo.estiblishTime))
+        }
         loadAll === 'yes' &&
             Modal.confirm({
                 title: '是否保存其他信息?',

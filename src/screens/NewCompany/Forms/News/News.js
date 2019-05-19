@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker } from 'antd'
 
-import formView from '../FormView'
-
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'

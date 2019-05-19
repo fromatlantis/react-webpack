@@ -1,4 +1,4 @@
-import FormView from './FormView/FormView'
+import FormView, { SearchView } from './FormView/FormView'
 import PhoneCard from './PhoneCard/PhoneCard'
 import UploadImg from './UploadImg/UploadImg'
 import DetailView from './DetailView/DetailView'
@@ -10,6 +10,7 @@ import Graph from './Graph/Graph'
 
 export {
     FormView,
+    SearchView,
     PhoneCard,
     UploadImg,
     DetailView,

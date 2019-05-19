@@ -11,6 +11,7 @@ import finance from './finance'
 import members from './members'
 import news from './news'
 import product from './product'
+import event from './event'
 import outward from './outward'
 import trademark from './trademark'
 import patent from './patent'
@@ -27,6 +28,7 @@ export default history =>
         members,
         news,
         product,
+        event,
         outward,
         trademark,
         patent,

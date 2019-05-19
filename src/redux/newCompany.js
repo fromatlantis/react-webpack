@@ -109,6 +109,7 @@ const model = {
                 }
             },
         },
+        // 编辑更新
         {
             name: 'changeBasicInfoApprove',
             *effect(action) {
@@ -117,7 +118,7 @@ const model = {
                     url: `/enterprise/changeBasicInfoApprove`,
                     contentType: 'multipart/form-data',
                     data: {
-                        newContent: action.payload,
+                        newContent: JSON.stringify(action.payload),
                     },
                 })
                 if (res.code === 1000) {

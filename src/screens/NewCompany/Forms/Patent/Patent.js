@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker, Divider, Tooltip } from 'antd'
 import moment from 'moment'
-import FormView, { SearchView } from '../FormView2'
+import { FormView, SearchView } from 'components'
 import styles from '../index.module.css'
 
 // redux
@@ -333,16 +333,7 @@ class Patent extends PureComponent {
         ]
         const { patent, searchParams } = this.props
         return (
-            <Card
-                title="专利信息"
-                style={{ width: 'calc(100vw - 256px)' }}
-                bordered={false}
-                extra={
-                    <Button type="primary" onClick={this.newInfo}>
-                        新增
-                    </Button>
-                }
-            >
+            <Card title="专利信息" style={{ width: 'calc(100vw - 256px)' }} bordered={false}>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>

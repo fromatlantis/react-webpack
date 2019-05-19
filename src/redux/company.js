@@ -2,7 +2,7 @@ import { put, call, select } from 'redux-saga/effects'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message, notification } from 'antd'
-
+import qs from 'qs'
 const model = {
     namespace: 'company',
     state: {
@@ -15,8 +15,9 @@ const model = {
         {
             name: 'searchCompany',
             *effect(action) {
+                console.log(qs.stringify(action.payload))
                 const res = yield call(request, {
-                    url: `/enterprise/searchCompany?pageNo=1&pageSize=10`,
+                    url: `/enterprise/searchCompany?${qs.stringify(action.payload)}`,
                 })
                 if (res.code === 1000) {
                     yield put(actions('searchCompanyOk')(res.data))
@@ -68,6 +69,7 @@ const model = {
                 const res = yield call(request, {
                     type: 'post',
                     url: `/enterprise/assignServiceStaff`,
+                    contentType: 'multipart/form-data',
                     data: action.payload,
                 })
                 if (res.code === 1000) {

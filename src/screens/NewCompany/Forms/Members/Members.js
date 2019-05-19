@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react'
-import { Button, Card, Divider, Modal, Input, Skeleton } from 'antd'
+import { Button, Card, Divider, Modal, Input, Skeleton, Table } from 'antd'
 
-import FormView, { SearchView } from '../FormView2'
+import { FormView, SearchView } from 'components'
 import { UploadImg } from 'components'
 
 import styles from './Members.module.css'
-import avatar from 'assets/avatar.png'
 
 // redux
 import { connect } from 'react-redux'
@@ -16,6 +15,7 @@ const mapStateToProps = state => {
     return {
         team: state.members.team,
         detail: state.members.detail,
+        searchParams: state.members.searchParams,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -31,24 +31,6 @@ const mapDispatchToProps = dispatch => {
 }
 
 const { TextArea } = Input
-const dataSource = [
-    {
-        key: '1',
-        avatar: avatar,
-        name: '马云',
-        duty: '董事会主席',
-        intro:
-            '1988年毕业于杭州师范学院外语系，同年担任杭州电子工业学院英文及国际贸易教师，1995年创办中国第一家互联网商业信息发布网站“中国黄页”，1998年出任中国国际电子商务中心国富通信息技术发展有限公司总经理，1999年创办阿里巴巴，并担任阿里集团CEO、董事局主席。',
-    },
-    {
-        key: '2',
-        avatar: avatar,
-        name: '马化腾',
-        duty: '腾讯科技创始人',
-        intro:
-            '2017年8月7日，腾讯股价盘中再创历史新高价320.6港元，马化腾身家361亿美元成为中国首富。 [3]  2018年4月，获《时代周刊》2018年全球最具影响力人物荣誉。 [4]  2018年10月25日，2019年3月，马化腾以388亿美元财富排名2019年福布斯全球亿万富豪榜第20位。',
-    },
-]
 
 @connect(
     mapStateToProps,
@@ -70,7 +52,7 @@ class Members extends PureComponent {
         })
     }
     handleOk = () => {
-        this.form.validateFields((errors, values) => {
+        this.newForm.validateFields((errors, values) => {
             if (!errors) {
                 const { isEdit } = this.state
                 const { changeCoreTeamApprove, increaseCoreTeamApprove, detail } = this.props
@@ -86,9 +68,6 @@ class Members extends PureComponent {
                 })
             }
         })
-        this.setState({
-            visible: false,
-        })
     }
     handleCancel = () => {
         this.setState({
@@ -99,7 +78,7 @@ class Members extends PureComponent {
         const items = [
             {
                 label: '形象照片',
-                field: 'avatar',
+                field: 'icon',
                 rules: [
                     {
                         required: true,
@@ -115,20 +94,21 @@ class Members extends PureComponent {
             },
             {
                 label: '职务',
-                field: 'duty',
+                field: 'title',
                 component: <Input />,
             },
             {
                 label: '介绍',
-                field: 'person',
-                component: <TextArea />,
+                field: 'description',
+                component: <TextArea autosize={{ minRows: 5 }} />,
             },
         ]
         const formItemLayout = {
             labelCol: { span: 5 },
             wrapperCol: { span: 14 },
         }
-        //const FormView = formView({ items, data: {} })
+        const { isEdit } = this.state
+        const { detail } = this.props
         return (
             <FormView
                 ref={form => {
@@ -136,7 +116,7 @@ class Members extends PureComponent {
                 }}
                 items={items}
                 formItemLayout={formItemLayout}
-                //layout="inline"
+                data={isEdit ? detail : {}}
                 saveBtn={false}
             />
         )
@@ -168,7 +148,6 @@ class Members extends PureComponent {
         })
     }
     render() {
-        const { team } = this.props
         const searchItems = [
             {
                 label: '姓名',
@@ -181,16 +160,51 @@ class Members extends PureComponent {
                 component: <Input />,
             },
         ]
-        return (
-            <Card
-                title="核心人员"
-                bordered={false}
-                extra={
-                    <Button type="primary" onClick={this.newInfo}>
-                        新增
+        const columns = [
+            {
+                title: '形象照片',
+                dataIndex: 'icon',
+                key: 'icon',
+                width: 150,
+                render: icon => <img src={icon} alt="" style={{ width: '120px' }} />,
+            },
+            {
+                title: '姓名',
+                dataIndex: 'name',
+                key: 'name',
+                width: 100,
+            },
+            {
+                title: '职务',
+                dataIndex: 'title',
+                key: 'title',
+                width: 100,
+            },
+            {
+                title: '介绍',
+                dataIndex: 'description',
+                key: 'description',
+            },
+            {
+                title: '操作',
+                dataIndex: 'actions',
+                key: 'actions',
+                width: 100,
+                render: (_, record) => (
+                    <Button
+                        type="link"
+                        onClick={() => {
+                            this.edit(record.keyId)
+                        }}
+                    >
+                        编辑
                     </Button>
-                }
-            >
+                ),
+            },
+        ]
+        const { team, searchParams } = this.props
+        return (
+            <Card title="核心人员" bordered={false}>
                 <div className={styles.searchBox}>
                     <SearchView
                         ref={form => {
@@ -217,33 +231,20 @@ class Members extends PureComponent {
                 </div>
 
                 <Skeleton loading={team.list ? false : true} active avatar>
-                    {(team.list || []).map(item => {
-                        return (
-                            <div className={styles.card} key={item.key}>
-                                <img src={item.icon} alt="" />
-                                <div className={styles.base}>
-                                    <p>
-                                        <b>姓名：</b>
-                                        {item.name}
-                                    </p>
-                                    <p>
-                                        <b>职务：</b>
-                                        {item.title}
-                                    </p>
-                                </div>
-                                <div className={styles.intro}>{item.intro}</div>
-                                <div>
-                                    <Button size="small" type="link">
-                                        编辑
-                                    </Button>
-                                    <Divider type="vertical" />
-                                    <Button size="small" type="link">
-                                        删除
-                                    </Button>
-                                </div>
-                            </div>
-                        )
-                    })}
+                    <Table
+                        bordered
+                        dataSource={team.list}
+                        columns={columns}
+                        pagination={{
+                            current: searchParams.pageNo,
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: team.totalCount,
+                            onShowSizeChange: this.onShowSizeChange,
+                            onChange: this.onChange,
+                        }}
+                    />
                 </Skeleton>
                 <Modal
                     title="核心人员"

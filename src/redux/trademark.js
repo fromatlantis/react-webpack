@@ -64,11 +64,13 @@ const model = {
         {
             name: 'increaseTrademarkApprove',
             *effect(action) {
+                let params = action.payload
+                params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
                     url: `/enterprise/increaseTrademarkApprove`,
                     data: {
-                        params: action.payload,
+                        params,
                     },
                 })
                 if (res.code === 1000) {
@@ -84,7 +86,7 @@ const model = {
                     url: `/enterprise/changeTrademarkApprove`,
                     contentType: 'multipart/form-data',
                     data: {
-                        newContent: action.payload,
+                        newContent: JSON.stringify(action.payload),
                     },
                 })
                 if (res.code === 1000) {

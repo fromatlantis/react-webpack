@@ -1,13 +1,14 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker } from 'antd'
 import moment from 'moment'
-import FormView from '../FormView2'
+import { FormView } from 'components'
 
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/finance'
 
+const dateStr = 'x' //毫秒
 const mapStateToProps = state => {
     return {
         finance: state.finance.finance,
@@ -77,7 +78,7 @@ class Finance extends PureComponent {
                     visible: false,
                 })
                 values.companyId = sessionStorage.getItem('companyId')
-                values.date = values.date.format('YYYY-MM-DD')
+                values.date = moment(values.date.format('YYYY-MM-DD')).format(dateStr)
                 console.log(values)
                 this.props.increaseFinancingApprove(values)
             }

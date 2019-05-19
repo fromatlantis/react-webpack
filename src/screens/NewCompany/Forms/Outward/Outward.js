@@ -1,14 +1,13 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker, Divider, InputNumber } from 'antd'
 import moment from 'moment'
-import FormView from '../FormView2'
+import { FormView, SearchView } from 'components'
 import styles from '../index.module.css'
 
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/outward'
-import { SearchView } from '../../../../components/FormView/FormView'
 
 const dateStr = 'x' //毫秒
 const mapStateToProps = state => {
@@ -49,7 +48,7 @@ class Outward extends PureComponent {
         })
     }
     handleOk = () => {
-        this.form.validateFields((errors, values) => {
+        this.newForm.validateFields((errors, values) => {
             if (!errors) {
                 const { isEdit } = this.state
                 const {
@@ -302,15 +301,7 @@ class Outward extends PureComponent {
         ]
         const { outward, searchParams } = this.props
         return (
-            <Card
-                title="对外投资"
-                bordered={false}
-                extra={
-                    <Button type="primary" onClick={this.newInfo}>
-                        新增
-                    </Button>
-                }
-            >
+            <Card title="对外投资" bordered={false}>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>
