@@ -342,9 +342,9 @@ class Information extends PureComponent {
                                     width: '40%',
                                 },
                                 {
-                                    title: '主要功能',
-                                    dataIndex: 'source',
-                                    key: 'source',
+                                    title: '领域',
+                                    dataIndex: 'classes',
+                                    key: 'classes',
                                     align: 'center',
                                 },
                             ]}

@@ -96,9 +96,9 @@ class Property extends PureComponent {
                                     align: 'center',
                                 },
                                 {
-                                    title: '商标类型',
-                                    dataIndex: 'a',
-                                    key: 'a',
+                                    title: '国际分类',
+                                    dataIndex: 'intCls',
+                                    key: 'intCls',
                                     align: 'center',
                                 },
                                 {
@@ -120,12 +120,6 @@ class Property extends PureComponent {
                                     align: 'center',
                                 },
                                 {
-                                    title: '使用期限',
-                                    dataIndex: 'd',
-                                    key: 'd',
-                                    align: 'center',
-                                },
-                                {
                                     title: '公司',
                                     dataIndex: 'applicantCn',
                                     key: 'applicantCn',
@@ -138,15 +132,9 @@ class Property extends PureComponent {
                                     align: 'center',
                                 },
                                 {
-                                    title: '服务项目',
-                                    dataIndex: 'intCls',
-                                    key: 'intCls',
-                                    align: 'center',
-                                },
-                                {
-                                    title: '代理机构',
-                                    dataIndex: 'j',
-                                    key: 'j',
+                                    title: '申请人',
+                                    dataIndex: 'applicantCn',
+                                    key: 'applicantCn',
                                     align: 'center',
                                 },
                             ]}
@@ -192,12 +180,6 @@ class Property extends PureComponent {
                                     align: 'center',
                                 },
                                 {
-                                    title: '授权日期',
-                                    dataIndex: 'm',
-                                    key: 'm',
-                                    align: 'center',
-                                },
-                                {
                                     title: '专利发明人',
                                     dataIndex: 'inventor',
                                     key: 'inventor',
@@ -227,26 +209,26 @@ class Property extends PureComponent {
                                     key: 'pubnumber',
                                     align: 'center',
                                 },
-                                {
-                                    title: '法律状态',
-                                    dataIndex: 'jigou',
-                                    key: 'jigou',
-                                    align: 'center',
-                                    // width: '15%',
-                                    // render: jigou => (
-                                    //     <Steps direction="vertical" size="small" current={0}>
-                                    //         {jigou.map((item, i) => {
-                                    //             return (
-                                    //                 <Step
-                                    //                     key={i}
-                                    //                     title={item.time}
-                                    //                     description={item.str}
-                                    //                 />
-                                    //             )
-                                    //         })}
-                                    //     </Steps>
-                                    // ),
-                                },
+                                // {
+                                //     title: '法律状态',
+                                //     dataIndex: 'jigou',
+                                //     key: 'jigou',
+                                //     align: 'center',
+                                //     // width: '15%',
+                                //     // render: jigou => (
+                                //     //     <Steps direction="vertical" size="small" current={0}>
+                                //     //         {jigou.map((item, i) => {
+                                //     //             return (
+                                //     //                 <Step
+                                //     //                     key={i}
+                                //     //                     title={item.time}
+                                //     //                     description={item.str}
+                                //     //                 />
+                                //     //             )
+                                //     //         })}
+                                //     //     </Steps>
+                                //     // ),
+                                // },
                                 {
                                     title: '专利说明',
                                     dataIndex: 'abstracts',
@@ -412,12 +394,6 @@ class Property extends PureComponent {
                                     align: 'center',
                                 },
                                 {
-                                    title: '机构代码',
-                                    dataIndex: 'a',
-                                    key: 'a',
-                                    align: 'center',
-                                },
-                                {
                                     title: '主办单位性质',
                                     dataIndex: 'companyType',
                                     key: 'companyType',
@@ -439,12 +415,6 @@ class Property extends PureComponent {
                                     title: '审核时间',
                                     dataIndex: 'examineDate',
                                     key: 'examineDate',
-                                    align: 'center',
-                                },
-                                {
-                                    title: '状态',
-                                    dataIndex: 's',
-                                    key: 's',
                                     align: 'center',
                                 },
                                 {

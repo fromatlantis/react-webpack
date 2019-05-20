@@ -17,6 +17,10 @@ import styles from '../CompanyDetails.module.css'
                 item.estiblishTime = moment(parseInt(item.estiblishTime)).format('YYYY-MM-DD') //将毫秒数格式转换的方法
                 return item
             }), //对外投资列表
+            InvestmentAbroadList: state.companyDetails.InvestmentEventList.map(item => {
+                item.tzdate = moment(parseInt(item.tzdate)).format('YYYY-MM-DD') //将毫秒数格式转换的方法
+                return item
+            }), //投资事件列表
         }
     },
     dispatch => {
@@ -24,6 +28,7 @@ import styles from '../CompanyDetails.module.css'
             {
                 push: push,
                 getInvestmentAbroadList: actions('getInvestmentAbroadList'),
+                getInvestmentEventList: actions('getInvestmentEventList'),
             },
             dispatch,
         )
@@ -42,6 +47,8 @@ class Investment extends PureComponent {
         this.setState({ company_id })
         //对外投资
         this.props.getInvestmentAbroadList({ companyId: company_id, limit: 5 })
+        //投资事件
+        this.props.getInvestmentEventList({ companyId: company_id, limit: 5 })
     }
     render() {
         const { company_id } = this.state
@@ -51,7 +58,16 @@ class Investment extends PureComponent {
                     <Card
                         id="Investment:1"
                         title={<span style={{ color: '#1890ff' }}>投资事件</span>}
-                        extra={<Button type="link">展开更多>></Button>}
+                        extra={
+                            <Button
+                                type="link"
+                                onClick={() => {
+                                    this.props.getInvestmentEventList({ companyId: company_id })
+                                }}
+                            >
+                                展开更多>>
+                            </Button>
+                        }
                         className={styles.cardSty}
                     >
                         <Table
@@ -61,20 +77,26 @@ class Investment extends PureComponent {
                             columns={[
                                 {
                                     title: '投资公司名称',
-                                    dataIndex: 'name',
-                                    key: 'name',
+                                    dataIndex: 'organizationName',
+                                    key: 'organizationName',
                                     align: 'center',
                                 },
                                 {
-                                    title: '执行事务合伙人',
-                                    dataIndex: 'age',
-                                    key: 'age',
+                                    title: '轮次',
+                                    dataIndex: 'lunci',
+                                    key: 'lunci',
                                     align: 'center',
                                 },
                                 {
-                                    title: '注册资本',
-                                    dataIndex: 'address',
-                                    key: 'address',
+                                    title: '投资时间',
+                                    dataIndex: 'tzdate',
+                                    key: 'tzdate',
+                                    align: 'center',
+                                },
+                                {
+                                    title: '业务范围',
+                                    dataIndex: 'yewu',
+                                    key: 'yewu',
                                     align: 'center',
                                 },
                                 {
@@ -84,30 +106,13 @@ class Investment extends PureComponent {
                                     align: 'center',
                                 },
                                 {
-                                    title: '投资比例',
-                                    dataIndex: 'desii',
-                                    key: 'desii',
+                                    title: '股权机构',
+                                    dataIndex: 'd',
+                                    key: 'd',
                                     align: 'center',
                                 },
                             ]}
-                            dataSource={[
-                                {
-                                    key: '1',
-                                    name: 'XX公司',
-                                    age: '张小明',
-                                    address: '1亿美金',
-                                    money: '5000万人民币',
-                                    desii: '23.4%',
-                                },
-                                {
-                                    key: '2',
-                                    name: 'XX公司',
-                                    age: '张小明',
-                                    address: '1亿美金',
-                                    money: '5000万人民币',
-                                    desii: '23.4%',
-                                },
-                            ]}
+                            dataSource={this.props.InvestmentAbroadList}
                         />
                     </Card>
                     <Card
