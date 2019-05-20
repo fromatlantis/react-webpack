@@ -52,19 +52,34 @@ class UploadImg extends Component {
         }
     }
     beforeUpload = file => {
-        console.log(file)
         getBase64(file, imageUrl =>
             this.setState({
                 imageUrl,
                 loading: false,
             }),
         )
+        this.props.onUpload(file)
         return false
     }
     handleChange = info => {
         this.setState({ loading: true })
-        this.triggerChange(info.file)
+        //console.log(info.file.status)
+        if (info.file.status === 'uploading') {
+            this.setState({ loading: true })
+            return
+        }
+        if (info.file.status === 'done') {
+            // Get this url from response in real world.
+            console.log(info.file.originFileObj)
+            getBase64(info.file.originFileObj, imageUrl =>
+                this.setState({
+                    imageUrl,
+                    loading: false,
+                }),
+            )
+        }
     }
+
     render() {
         const uploadButton = (
             <div>
@@ -72,9 +87,8 @@ class UploadImg extends Component {
                 <div className="ant-upload-text">选择图片</div>
             </div>
         )
-        //alert(this.props.value)
-        const { imageUrl } = this.state
-        console.log(imageUrl)
+        const imageUrl = this.state.imageUrl
+        const { url } = this.props
         return (
             <Upload
                 name="avatar"

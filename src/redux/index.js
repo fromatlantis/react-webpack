@@ -4,6 +4,7 @@ import { connectRouter } from 'connected-react-router'
 import authUser from './authUser'
 import companyDetails from './companyDetails'
 import intermediary from './intermediary'
+import agencyRequire from './agencyRequire'
 import company from './company'
 import newCompany from './newCompany'
 import business from './business'
@@ -21,6 +22,7 @@ export default history =>
         router: connectRouter(history),
         authUser,
         companyDetails,
+        agencyRequire,
         company,
         newCompany,
         business,

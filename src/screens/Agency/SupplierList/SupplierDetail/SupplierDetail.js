@@ -1,18 +1,37 @@
 // 企业需求/办理
 import React, { PureComponent } from 'react'
-import { Button, Form, Input, Divider, Table, Select, TreeSelect, Breadcrumb } from 'antd'
+import { Button, Form, Input, Divider, Select, TreeSelect, Breadcrumb, Card, Table } from 'antd'
 import styles from './SupplierDetail.module.css'
 import { Link } from 'react-router-dom'
 
 const { TextArea } = Input
 const TreeNode = TreeSelect.TreeNode
-class supplierDetail extends PureComponent {
-    handleSubmit = e => {
-        e.preventDefault()
+let parm = { pageNo: 1, pageSize: 10 }
+class supplierEdit extends PureComponent {
+    state = {
+        value: undefined,
+    }
+    componentDidMount = () => {
+        let id = this.props.match.params.id
+        this.props.getSupplierList({ id: id })
+        parm.processStatus = '2'
+        parm.recommendSupplier = id
+        this.props.getDemandList(parm)
+    }
+    // table的pageSize改变
+    onShowSizeChange = (pageNo, pageSize) => {
+        parm.pageNo = 1
+        parm.pageSize = pageSize
+        this.props.getDemandList(parm)
+    }
+    // table的pageNo改变
+    onChange = (pageNo, pageSize) => {
+        parm.pageNo = pageNo
+        parm.pageSize = pageSize
+        this.props.getDemandList(parm)
     }
     render() {
         const { getFieldDecorator } = this.props.form
-
         const Option = Select.Option
         const formItemLayout = {
             labelCol: {
@@ -24,41 +43,6 @@ class supplierDetail extends PureComponent {
                 sm: { span: 16 },
             },
         }
-        const data = [
-            {
-                key: 1,
-                supplierType: '启迪智慧',
-                money: '张三',
-                companyType: '11943675888',
-                companyName: '11+94367511@qq.com',
-                companyRelative: '2019-02-09',
-                companyPhone: '知识产权',
-                time: '5分',
-                serverType: '服务类型',
-            },
-            {
-                key: 2,
-                supplierType: '启迪智慧',
-                money: '张三',
-                companyType: '11943675888',
-                companyName: '11+94367511@qq.com',
-                companyRelative: '2019-02-09',
-                companyPhone: '知识产权',
-                time: '5分',
-                serverType: '服务类型',
-            },
-            {
-                key: 3,
-                supplierType: '启迪智慧',
-                money: '张三',
-                companyType: '11943675888',
-                companyName: '11+94367511@qq.com',
-                companyRelative: '2019-02-09',
-                companyPhone: '知识产权',
-                time: '5分',
-                serverType: '服务类型',
-            },
-        ]
         const columns = [
             {
                 title: '序号',
@@ -69,158 +53,149 @@ class supplierDetail extends PureComponent {
             },
             {
                 title: '企业名称',
-                dataIndex: 'supplierType',
-                key: 'supplierType',
+                dataIndex: 'enterpriseName',
+                key: 'enterpriseName',
                 align: 'center',
             },
             {
                 title: '联系人',
-                dataIndex: 'money',
-                key: 'money',
+                dataIndex: 'contract',
+                key: 'contract',
                 align: 'center',
             },
             {
                 title: '联系电话',
-                dataIndex: 'companyType',
-                key: 'companyType',
+                dataIndex: 'telephone',
+                key: 'telephone',
                 align: 'center',
             },
             {
                 title: '邮箱',
-                dataIndex: 'companyName',
-                key: 'companyName',
+                dataIndex: 'email',
+                key: 'email',
                 align: 'center',
             },
             {
                 title: '服务时间',
-                dataIndex: 'companyRelative',
-                key: 'companyRelative',
+                dataIndex: 'responseTime',
+                key: 'responseTime',
                 align: 'center',
             },
             {
                 title: '服务类型',
-                dataIndex: 'serverType',
-                key: 'serverType',
+                dataIndex: 'category',
+                key: 'category',
                 align: 'center',
             },
             {
-                title: '评价',
-                dataIndex: 'companyPhone',
-                key: 'companyPhone',
+                title: '评分',
+                dataIndex: 'score',
+                key: 'score',
                 align: 'center',
             },
             {
                 title: '评价描述',
-                dataIndex: 'time',
-                key: 'time',
+                dataIndex: 'evaluate',
+                key: 'evaluate',
                 align: 'center',
             },
         ]
+        let id = this.props.match.params.id
         return (
-            <div className={styles.container}>
-                <Breadcrumb className={styles.title}>
-                    <Breadcrumb.Item>
-                        <Link to="/agency/supplierList">供应商列表</Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <Link to="/agency/supplierDetail">供应商详情</Link>
-                    </Breadcrumb.Item>
-                </Breadcrumb>
-                {/* <div className={styles.title}>供应商列表/供应商详情</div> */}
-                <Divider />
-                <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                    <Form.Item {...formItemLayout} label="供应商分类:">
-                        {getFieldDecorator('type')(
-                            <TreeSelect
-                                showSearch
-                                style={{ width: 375 }}
-                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                placeholder="Please select"
-                                allowClear
-                                multiple
-                                treeDefaultExpandAll
-                            >
-                                <TreeNode value="parent 1" title="知识产权" key="0-1" />
-                                <TreeNode value="parent 2" title="人资服务" key="random2" />
-                                <TreeNode value="parent 3" title="法律服务" key="random3" />
-                                <TreeNode value="parent 4" title="代理记账" key="random4" />
-                            </TreeSelect>,
-                        )}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="供应商细类:">
-                        {getFieldDecorator('xiFen', {
-                            rules: [{ required: true, message: '请输入' }],
-                        })(
-                            <TreeSelect
-                                showSearch
-                                style={{ width: 375 }}
-                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                placeholder="Please select"
-                                allowClear
-                                multiple
-                                treeDefaultExpandAll
-                            >
-                                <TreeNode value="parent 1" title="知识产权" key="0-1" />
-                                <TreeNode value="parent 2" title="人资服务" key="random2" />
-                                <TreeNode value="parent 3" title="法律服务" key="random3" />
-                                <TreeNode value="parent 4" title="代理记账" key="random4" />
-                            </TreeSelect>,
-                        )}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="供应商名称:">
-                        {getFieldDecorator('spaceName', {
-                            rules: [{ required: true, message: '请输入供应商名称' }],
-                        })(<Input className={styles.inputStyle} disabled />)}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="联系人:">
-                        {getFieldDecorator('spaceName', {
-                            rules: [{ required: true, message: '请输入联系人' }],
-                        })(<Input className={styles.inputStyle} disabled />)}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="联系人电话:">
-                        {getFieldDecorator('spaceName', {
-                            rules: [{ required: true, message: '请输入联系人电话' }],
-                        })(<Input className={styles.inputStyle} disabled />)}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="邮箱:">
-                        {getFieldDecorator('spaceName', {
-                            rules: [{ required: true, message: '请输入邮箱' }],
-                        })(<Input className={styles.inputStyle} disabled />)}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="官网:">
-                        {getFieldDecorator('spaceName', {
-                            rules: [{ required: true, message: '请输入官网地址' }],
-                        })(<Input className={styles.inputStyle} disabled />)}
-                    </Form.Item>
-                    <Form.Item {...formItemLayout} label="供应商简介:" layout="inline">
-                        {getFieldDecorator('synopsis')(
-                            <TextArea rows={6} disabled style={{ width: '85%' }} />,
-                        )}
-                    </Form.Item>
-                </Form>
-                <div className={styles.order}>服务记录：共XX条</div>
-                <Table
-                    style={{ margin: '20px 0' }}
-                    columns={columns}
-                    dataSource={data}
-                    // rowKey={(record, index) => `complete${record.id}${index}`}
-                    // dataSource={this.props.parkNoticeList}
-                    // pagination={{
-                    //     current: pageNo,
-                    //     showSizeChanger: true,
-                    //     showQuickJumper: true,
-                    //     pageSizeOptions: ['10', '15', '20'],
-                    //     total: this.props.total,
-                    //     onShowSizeChange: this.onShowSizeChange.bind(this),
-                    //     onChange: this.onChange.bind(this)
-                    // }}
-                />
-                <div className={styles.btn}>
-                    <Button>取消</Button>
-                </div>
+            <div>
+                <Card
+                    title={
+                        <Breadcrumb>
+                            <Breadcrumb.Item>
+                                <Link to="/agency/supplierList">供应商列表</Link>
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item>
+                                <Link to={`/agency/supplierDetail/${id}`}>供应商详情</Link>
+                            </Breadcrumb.Item>
+                        </Breadcrumb>
+                    }
+                    bordered={false}
+                >
+                    <Form {...formItemLayout}>
+                        <Form.Item {...formItemLayout} label="供应商分类:">
+                            {getFieldDecorator('category', {
+                                rules: [{ required: true, message: '请输入' }],
+                            })(<Input className={styles.inputStyle} disabled />)}
+                        </Form.Item>
+                        <Form.Item {...formItemLayout} label="供应商名称:">
+                            {getFieldDecorator('supplier', {
+                                rules: [{ required: true, message: '请输入供应商名称' }],
+                            })(<Input className={styles.inputStyle} disabled />)}
+                        </Form.Item>
+                        <Form.Item {...formItemLayout} label="联系人:">
+                            {getFieldDecorator('contract', {
+                                rules: [{ required: true, message: '请输入联系人' }],
+                            })(<Input className={styles.inputStyle} disabled />)}
+                        </Form.Item>
+                        <Form.Item {...formItemLayout} label="联系人电话:">
+                            {getFieldDecorator('telephone', {
+                                rules: [
+                                    { required: true, message: '请输入联系方式' },
+                                    {
+                                        pattern: /^1[3,4,5,7,8]\d{9}$|^(\d{3,4}-)?\d{7,8}$/,
+                                        message: '联系方式有误，请重填',
+                                    },
+                                ],
+                            })(<Input className={styles.inputStyle} disabled />)}
+                        </Form.Item>
+                        <Form.Item {...formItemLayout} label="邮箱:">
+                            {getFieldDecorator('email', {
+                                rules: [
+                                    { type: 'email', message: '请输入正确的邮箱' },
+                                    { required: true, message: '请输入邮箱' },
+                                ],
+                            })(<Input className={styles.inputStyle} disabled />)}
+                        </Form.Item>
+                        <Form.Item {...formItemLayout} label="官网:">
+                            {getFieldDecorator('website', {
+                                rules: [{ required: true, message: '请输入官网地址' }],
+                            })(<Input className={styles.inputStyle} disabled />)}
+                        </Form.Item>
+                        <Form.Item {...formItemLayout} label="供应商简介:" layout="inline">
+                            {getFieldDecorator('introduce')(
+                                <TextArea rows={6} style={{ width: '85%' }} disabled />,
+                            )}
+                        </Form.Item>
+                    </Form>
+                    <div className={styles.order}>服务记录：共{this.props.demandTotal}条</div>
+                    <Table
+                        style={{ margin: '20px 0' }}
+                        columns={columns}
+                        rowKey={(record, index) => `complete${record.id}${index}`}
+                        dataSource={this.props.demandList}
+                        pagination={{
+                            // current: pageNo,
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: this.props.demandTotal,
+                            onShowSizeChange: this.onShowSizeChange.bind(this),
+                            onChange: this.onChange.bind(this),
+                        }}
+                    />
+                    <div className={styles.btn}>
+                        <Button href="#/agency/supplierList">取消</Button>
+                    </div>
+                </Card>
             </div>
         )
     }
 }
-
-export default Form.create()(supplierDetail)
+export default Form.create({
+    mapPropsToFields(props) {
+        return {
+            supplier: Form.createFormField({ value: props.supperList.supplier }),
+            contract: Form.createFormField({ value: props.supperList.contract }),
+            telephone: Form.createFormField({ value: props.supperList.telephone }),
+            email: Form.createFormField({ value: props.supperList.email }),
+            website: Form.createFormField({ value: props.supperList.website }),
+            introduce: Form.createFormField({ value: props.supperList.introduce }),
+            category: Form.createFormField({ value: props.supperList.category }),
+        }
+    },
+})(supplierEdit)

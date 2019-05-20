@@ -1,6 +1,4 @@
-.container{
-    padding:15px 15px;
-}
+
 .active{
     background-color: #1E90FF;
     color: #fff;
@@ -46,4 +44,8 @@
 .formList{
     position: relative;
     margin-bottom:20px;
+}
+.containerSup :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+    width: auto;
+    text-align: right;
 }
