@@ -17,7 +17,7 @@ const routes = [
     },
     {
         //企服首页/企业详情
-        path: '/companyDetails/*/:company_id',
+        path: '/companyDetails/*/:company_id/:type',
         component: Loadable({
             loader: () =>
                 import(

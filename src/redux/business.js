@@ -11,6 +11,12 @@ const model = {
     actions: [
         {
             name: 'queryBaseInfoDetial',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    businessInfo: {},
+                }
+            },
             *effect(action) {
                 const res = yield call(request, {
                     url: `/enterprise/queryBaseInfoDetial?companyId=${action.payload}`,
@@ -19,16 +25,26 @@ const model = {
                     yield put(actions('queryBaseInfoDetialOk')(res.data))
                 }
             },
-            reducer: (state, action) => {
-                return {
-                    ...state,
-                    businessInfo: {},
-                }
-            },
         },
         {
             name: 'queryBaseInfoDetialOk',
             reducer: 'businessInfo',
+        },
+        {
+            name: 'changeBaseInfoApprove',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/changeBaseInfoApprove`,
+                    contentType: 'multipart/form-data',
+                    data: {
+                        newContent: JSON.stringify(action.payload),
+                    },
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                }
+            },
         },
     ],
 }

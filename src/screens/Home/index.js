@@ -190,17 +190,21 @@ class Home extends PureComponent {
                     <div
                         className={styles.company}
                         key={list[i].company_id}
-                        onClick={() => this.gopush('/companyDetails/' + list[i].company_id)}
+                        onClick={() =>
+                            this.gopush(
+                                '/companyDetails/information/' + list[i].company_id + '/home',
+                            )
+                        }
                     >
                         <img className={styles.serviceImg} src={list[i].logo} alt="" />
                         <div className={styles.about}>
                             <h3>{list[i].name}</h3>
-                            <div className={styles.companyTypes}>
-                                {/* <Tag color="#87d068">实驻企业</Tag>
+                            {/* <div className={styles.companyTypes}>
+                                <Tag color="#87d068">实驻企业</Tag>
                                 <Tag color="#108ee9">投资机构</Tag>
                                 <Tag color="#108ee9">高新技术企业</Tag>
-                                <Tag color="#108ee9">香港有限港股</Tag> */}
-                            </div>
+                                <Tag color="#108ee9">香港有限港股</Tag>
+                            </div> */}
                             <div className={styles.row}>
                                 <div className={styles.column}>
                                     <p className={styles.columnItem}>
@@ -243,17 +247,21 @@ class Home extends PureComponent {
                     <div
                         className={styles.company}
                         key={list[i].company_id}
-                        onClick={() => this.gopush('/companyDetails/' + list[i].company_id)}
+                        onClick={() =>
+                            this.gopush(
+                                '/companyDetails/information/' + list[i].company_id + '/home',
+                            )
+                        }
                     >
                         <img className={styles.serviceImg} src={list[i].logo} alt="" />
                         <div className={styles.about}>
                             <h3>{list[i].name}</h3>
-                            <div className={styles.companyTypes}>
-                                {/* <Tag color="#87d068">实驻企业</Tag>
+                            {/* <div className={styles.companyTypes}>
+                                <Tag color="#87d068">实驻企业</Tag>
                                 <Tag color="#108ee9">投资机构</Tag>
                                 <Tag color="#108ee9">高新技术企业</Tag>
-                                <Tag color="#108ee9">香港有限港股</Tag> */}
-                            </div>
+                                <Tag color="#108ee9">香港有限港股</Tag>
+                            </div> */}
                             <div className={styles.row}>
                                 <div className={styles.column}>
                                     <p className={styles.columnItem}>
@@ -296,17 +304,21 @@ class Home extends PureComponent {
                     <div
                         className={styles.company}
                         key={list[i].company_id}
-                        onClick={() => this.gopush('/companyDetails/' + list[i].company_id)}
+                        onClick={() =>
+                            this.gopush(
+                                '/companyDetails/information/' + list[i].company_id + '/home',
+                            )
+                        }
                     >
                         <img className={styles.serviceImg} src={list[i].logo} alt="" />
                         <div className={styles.about}>
                             <h3>{list[i].name}</h3>
-                            <div className={styles.companyTypes}>
-                                {/* <Tag color="#87d068">实驻企业</Tag>
+                            {/* <div className={styles.companyTypes}>
+                                <Tag color="#87d068">实驻企业</Tag>
                                 <Tag color="#108ee9">投资机构</Tag>
                                 <Tag color="#108ee9">高新技术企业</Tag>
-                                <Tag color="#108ee9">香港有限港股</Tag> */}
-                            </div>
+                                <Tag color="#108ee9">香港有限港股</Tag>
+                            </div> */}
                             <div className={styles.row}>
                                 <div className={styles.column}>
                                     <p className={styles.columnItem}>

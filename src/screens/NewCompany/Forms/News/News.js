@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker } from 'antd'
 
-import formView from '../FormView'
-
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -75,9 +73,6 @@ const columns = [
     mapDispatchToProps,
 )
 class News extends PureComponent {
-    state = {
-        visible: false,
-    }
     componentDidMount = () => {
         const companyId = sessionStorage.getItem('companyId')
         if (companyId) {
@@ -87,74 +82,6 @@ class News extends PureComponent {
                 pageSize: 10,
             })
         }
-    }
-    newInfo = () => {
-        this.setState({
-            visible: true,
-        })
-    }
-    handleOk = () => {
-        this.form.validateFields((errors, values) => {
-            console.log(values)
-        })
-        this.setState({
-            visible: false,
-        })
-    }
-    handleCancel = () => {
-        this.setState({
-            visible: false,
-        })
-    }
-    renderForm = () => {
-        const items = [
-            {
-                label: '出资方',
-                field: 'name',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入企业名称',
-                    },
-                ],
-                component: <Input />,
-            },
-            {
-                label: '金额',
-                field: 'money',
-                component: <Input />,
-            },
-            {
-                label: '时间',
-                field: 'date',
-                component: <DatePicker />,
-            },
-            {
-                label: '更新人',
-                field: 'person',
-                component: <Input />,
-            },
-            {
-                label: '更新时间',
-                field: 'update',
-                component: <DatePicker />,
-            },
-        ]
-        const formItemLayout = {
-            labelCol: { span: 6 },
-            wrapperCol: { span: 12 },
-        }
-        const FormView = formView({ items, data: {} })
-        return (
-            <FormView
-                ref={form => {
-                    this.form = form
-                }}
-                formItemLayout={formItemLayout}
-                layout="inline"
-                saveBtn={false}
-            />
-        )
     }
     render() {
         const { news } = this.props

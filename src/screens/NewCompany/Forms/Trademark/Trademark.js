@@ -1,89 +1,33 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker, Divider } from 'antd'
-
-import FormView from '../FormView2'
-import styles from './Trademark.module.css'
+import moment from 'moment'
+import { FormView, SearchView } from 'components'
+import styles from '../index.module.css'
 
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/trademark'
 
+const dateStr = 'x' //毫秒
 const mapStateToProps = state => {
     return {
         trademark: state.trademark.trademark,
+        detail: state.trademark.detail,
+        searchParams: state.trademark.searchParams,
     }
 }
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             getTrademarkList: actions('getTrademarkList'),
+            queryTrademarkDetail: actions('queryTrademarkDetail'),
+            increaseTrademarkApprove: actions('increaseTrademarkApprove'),
+            changeTrademarkApprove: actions('changeTrademarkApprove'),
         },
         dispatch,
     )
 }
-
-const dataSource = [
-    {
-        key: '1',
-        tmName: 'REMODEO',
-        tmType: '普通商标',
-        regNo: '36941601',
-        category: '商标注册申请-受理通知书发文-结束',
-        appDate: '2019-03-04',
-        expire: '2022-03-05',
-        company: 'XX有限公司',
-        status: '结束',
-        service: 'REMODEO智能耳机',
-        org: 'xxx事务所',
-    },
-    {
-        key: '2',
-        tmName: 'REMODEO',
-        tmType: '普通商标',
-        regNo: '36941601',
-        category: '商标注册申请-受理通知书发文-结束',
-        appDate: '2019-03-04',
-        expire: '2022-03-05',
-        company: 'XX有限公司',
-        status: '结束',
-        service: 'REMODEO智能耳机',
-        org: 'xxx事务所',
-    },
-]
-
-const columns = [
-    {
-        title: '商标名称',
-        dataIndex: 'tmName',
-        key: 'tmName',
-    },
-    {
-        title: '注册号',
-        dataIndex: 'regNo',
-        key: 'regNo',
-    },
-    {
-        title: '状态',
-        dataIndex: 'category',
-        key: 'category',
-    },
-    {
-        title: '申请时间',
-        dataIndex: 'appDate',
-        key: 'appDate',
-    },
-    {
-        title: '申请进度',
-        dataIndex: 'status',
-        key: 'status',
-    },
-    {
-        title: '操作',
-        dataIndex: 'update',
-        key: 'update',
-    },
-]
 @connect(
     mapStateToProps,
     mapDispatchToProps,
@@ -91,28 +35,40 @@ const columns = [
 class Trademark extends PureComponent {
     state = {
         visible: false,
+        isEdit: false,
     }
     componentDidMount = () => {
         const companyId = sessionStorage.getItem('companyId')
+        console.log(moment(1547049600000).format('YYYY-MM-DD'))
         if (companyId) {
-            this.props.getTrademarkList({
-                companyId: sessionStorage.getItem('companyId'),
-                pageNo: 1,
-                pageSize: 10,
-            })
+            this.props.getTrademarkList()
         }
     }
     newInfo = () => {
         this.setState({
             visible: true,
+            isEdit: false,
         })
     }
     handleOk = () => {
-        this.form.validateFields((errors, values) => {
-            console.log(values)
-        })
-        this.setState({
-            visible: false,
+        this.newForm.validateFields((errors, values) => {
+            if (!errors) {
+                const { isEdit } = this.state
+                const { changeTrademarkApprove, increaseTrademarkApprove, detail } = this.props
+                if (values.appDate) {
+                    values.appDate = moment(values.appDate.format('YYYY-MM-DD')).format(dateStr)
+                }
+                if (isEdit) {
+                    // 编辑
+                    changeTrademarkApprove({ ...detail, ...values })
+                } else {
+                    // 新增
+                    increaseTrademarkApprove(values)
+                }
+                this.setState({
+                    visible: false,
+                })
+            }
         })
     }
     handleCancel = () => {
@@ -133,9 +89,19 @@ class Trademark extends PureComponent {
                 component: <Input />,
             },
             {
+                label: '状态',
+                field: 'category',
+                component: <Input />,
+            },
+            {
                 label: '申请时间',
                 field: 'appDate',
                 component: <DatePicker />,
+            },
+            {
+                label: '申请进度',
+                field: 'status',
+                component: <Input />,
             },
         ]
         const formItemLayout = {
@@ -144,7 +110,7 @@ class Trademark extends PureComponent {
         }
         //const FormView = formView({ items, data: {} })
         return (
-            <FormView
+            <SearchView
                 ref={form => {
                     this.form = form
                 }}
@@ -172,56 +138,149 @@ class Trademark extends PureComponent {
                 field: 'appDate',
                 component: <DatePicker />,
             },
+            {
+                label: '状态',
+                field: 'category',
+                component: <Input />,
+            },
+            {
+                label: '申请进度',
+                field: 'status',
+                component: <Input />,
+            },
         ]
         const formItemLayout = {
             labelCol: { span: 5 },
             wrapperCol: { span: 14 },
         }
-        //const FormView = formView({ items, data: {} })
+        const { detail } = this.props
+        const { isEdit } = this.state
+        // 时间处理
+        detail.appDate = moment(detail.appDate, dateStr)
         return (
             <FormView
                 ref={form => {
-                    this.form = form
+                    this.newForm = form
                 }}
                 items={items}
+                data={isEdit ? detail : {}}
                 formItemLayout={formItemLayout}
-                //layout="inline"
                 saveBtn={false}
             />
         )
     }
-    render() {
-        const { trademark } = this.props
-        return (
-            <Card
-                title="商标信息"
-                className={styles.root}
-                bordered={false}
-                extra={
-                    <Button type="primary" onClick={this.newInfo}>
-                        新增
-                    </Button>
+    // 分页
+    onChange = pageNo => {
+        this.props.getTrademarkList({ pageNo })
+    }
+    onShowSizeChange = (_, pageSize) => {
+        this.props.getTrademarkList({ pageNo: 1, pageSize })
+    }
+    // 编辑
+    edit = keyId => {
+        this.props.queryTrademarkDetail(keyId)
+        this.setState({
+            visible: true,
+            isEdit: true,
+        })
+    }
+    // 查询
+    search = () => {
+        this.form.validateFields((errors, values) => {
+            if (!errors) {
+                if (values.appDate) {
+                    // 先转换为日期再格式化
+                    values.appDate = moment(values.appDate.format('YYYY-MM-DD')).format(dateStr)
                 }
-            >
+                this.props.getTrademarkList(values)
+            }
+        })
+    }
+    handleReset = () => {
+        this.form.resetFields()
+    }
+    render() {
+        const columns = [
+            {
+                title: '商标名称',
+                dataIndex: 'tmName',
+                key: 'tmName',
+            },
+            {
+                title: '注册号',
+                dataIndex: 'regNo',
+                key: 'regNo',
+            },
+            {
+                title: '状态',
+                dataIndex: 'category',
+                key: 'category',
+            },
+            {
+                title: '申请时间',
+                dataIndex: 'appDate',
+                key: 'appDate',
+                render: appDate => <span>{moment(parseInt(appDate)).format('YYYY-MM-DD')}</span>,
+            },
+            {
+                title: '申请进度',
+                dataIndex: 'status',
+                key: 'status',
+            },
+            {
+                title: '操作',
+                dataIndex: 'actions',
+                key: 'actions',
+                render: (_, record) => (
+                    <Button
+                        type="link"
+                        onClick={() => {
+                            this.edit(record.keyId)
+                        }}
+                    >
+                        编辑
+                    </Button>
+                ),
+            },
+        ]
+        const { trademark, searchParams } = this.props
+        return (
+            <Card title="商标信息" bordered={false}>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                        <Button type="ghost">清除</Button>
+                        <Button type="ghost" onClick={this.handleReset}>
+                            清除
+                        </Button>
                         <Divider type="vertical" />
-                        <Button type="primary">查询</Button>
+                        <Button type="primary" onClick={this.search}>
+                            查询
+                        </Button>
                         <Divider type="vertical" />
                         <Button type="primary" onClick={this.newInfo}>
                             新增
                         </Button>
                     </div>
                 </div>
-                <Table bordered pagination={false} dataSource={trademark.list} columns={columns} />
+                <Table
+                    bordered
+                    dataSource={trademark.list}
+                    columns={columns}
+                    pagination={{
+                        current: searchParams.pageNo,
+                        showSizeChanger: true,
+                        showQuickJumper: true,
+                        pageSizeOptions: ['10', '15', '20'],
+                        total: trademark.totalCount,
+                        onShowSizeChange: this.onShowSizeChange,
+                        onChange: this.onChange,
+                    }}
+                />
                 <Modal
                     title="商标信息"
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                    //footer={null}
                 >
                     {this.renderNewForm()}
                 </Modal>

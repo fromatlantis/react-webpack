@@ -1,16 +1,18 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker } from 'antd'
 import moment from 'moment'
-import FormView from '../FormView2'
+import { FormView } from 'components'
 
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/finance'
 
+const dateStr = 'x' //毫秒
 const mapStateToProps = state => {
     return {
         finance: state.finance.finance,
+        searchParams: state.finance.searchParams,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -61,11 +63,7 @@ class Finance extends PureComponent {
         visible: false,
     }
     componentDidMount() {
-        this.props.getFinancingList({
-            companyId: sessionStorage.getItem('companyId'),
-            pageNo: 1,
-            pageSize: 10,
-        })
+        this.props.getFinancingList()
     }
 
     newInfo = () => {
@@ -80,7 +78,7 @@ class Finance extends PureComponent {
                     visible: false,
                 })
                 values.companyId = sessionStorage.getItem('companyId')
-                values.date = moment(values.date).format('YYYY-MM-DD')
+                values.date = moment(values.date.format('YYYY-MM-DD')).format(dateStr)
                 console.log(values)
                 this.props.increaseFinancingApprove(values)
             }
@@ -96,34 +94,16 @@ class Finance extends PureComponent {
             {
                 label: '出资方',
                 field: 'investorName',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入信息',
-                    },
-                ],
                 component: <Input />,
             },
             {
                 label: '金额',
                 field: 'money',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入信息',
-                    },
-                ],
                 component: <Input />,
             },
             {
                 label: '时间',
                 field: 'date',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入信息',
-                    },
-                ],
                 component: <DatePicker />,
             },
             // {
@@ -154,8 +134,15 @@ class Finance extends PureComponent {
             />
         )
     }
+    // 分页
+    onChange = pageNo => {
+        this.props.getFinancingList({ pageNo })
+    }
+    onShowSizeChange = (_, pageSize) => {
+        this.props.getFinancingList({ pageNo: 1, pageSize })
+    }
     render() {
-        const { finance } = this.props
+        const { finance, searchParams } = this.props
         return (
             <Card
                 title="融资信息"
@@ -166,7 +153,20 @@ class Finance extends PureComponent {
                     </Button>
                 }
             >
-                <Table bordered pagination={false} dataSource={finance.list} columns={columns} />
+                <Table
+                    bordered
+                    dataSource={finance.list}
+                    columns={columns}
+                    pagination={{
+                        current: searchParams.pageNo,
+                        showSizeChanger: true,
+                        showQuickJumper: true,
+                        pageSizeOptions: ['10', '15', '20'],
+                        total: finance.totalCount,
+                        onShowSizeChange: this.onShowSizeChange,
+                        onChange: this.onChange,
+                    }}
+                />
                 <Modal
                     //className={styles.modalBox}
                     title="融资信息"

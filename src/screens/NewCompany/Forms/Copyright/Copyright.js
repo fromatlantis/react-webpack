@@ -353,15 +353,7 @@ class Copyright extends PureComponent {
     }
     render() {
         return (
-            <Card
-                title="知识产权-软件著作权"
-                bordered={false}
-                extra={
-                    <Button type="primary" onClick={this.newInfo}>
-                        新增
-                    </Button>
-                }
-            >
+            <Card title="知识产权-软件著作权" bordered={false}>
                 <div className={styles.searchCard} style={{ marginBottom: '20px' }}>
                     {this.renderForm('search')}
                 </div>

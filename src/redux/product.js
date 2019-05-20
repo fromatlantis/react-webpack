@@ -7,16 +7,29 @@ const model = {
     namespace: 'product',
     state: {
         product: {},
+        detail: {},
+        searchParams: {
+            pageNo: 1,
+            pageSize: 10,
+        },
     },
     actions: [
         {
             name: 'getProductInfoList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    searchParams: { ...state.searchParams, ...action.payload },
+                }
+            },
             *effect(action) {
+                const params = yield select(rootState => rootState.product.searchParams)
+                params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
                     url: `/enterprise/getProductInfoList`,
                     contentType: 'multipart/form-data',
-                    data: action.payload,
+                    data: params,
                 })
                 if (res.code === 1000) {
                     yield put(actions('getProductInfoListOk')(res.data))
@@ -28,12 +41,52 @@ const model = {
             reducer: 'product',
         },
         {
+            name: 'queryProductInfoDetial',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/queryProductInfoDetial?keyId=${action.payload}`,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('queryProductInfoDetialOk')(res.data))
+                }
+            },
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    detail: {},
+                }
+            },
+        },
+        {
+            name: 'queryProductInfoDetialOk',
+            reducer: 'detail',
+        },
+        {
             name: 'increaseProductInfoApprove',
             *effect(action) {
+                let params = action.payload
+                params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
                     url: `/enterprise/increaseProductInfoApprove`,
-                    data: action.payload,
+                    contentType: 'multipart/form-data',
+                    data: params,
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                }
+            },
+        },
+        {
+            name: 'changeProductInfoApprove',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/changeProductInfoApprove`,
+                    contentType: 'multipart/form-data',
+                    data: {
+                        newContent: JSON.stringify(action.payload),
+                    },
                 })
                 if (res.code === 1000) {
                     message.success('保存成功')
