@@ -203,33 +203,38 @@ class Works extends PureComponent {
                 field: 'fullname',
                 component: <Input placeholder="著作权名称" />,
             },
+            // {
+            //     label: '作品著权类别',
+            //     field: 'type',
+            //     component: (
+            //         <Select
+            //             defaultValue="请选择"
+            //             placeholder="请选择"
+            //             style={{ width: 120 }}
+            //             onChange={() => this.handleChange()}
+            //         >
+            //             <Option value="音乐">音乐</Option>
+            //             <Option value="美术">美术</Option>
+            //             <Option value="文字">文字</Option>
+            //             <Option value="汇编">汇编</Option>
+            //             <Option value="影视">影视</Option>
+            //             <Option value="戏剧">戏剧</Option>
+            //             <Option value="舞蹈">舞蹈</Option>
+            //             <Option value="建筑">建筑</Option>
+            //             <Option value="工程设计图">工程设计图</Option>
+            //             <Option value="产品设计图">产品设计图</Option>
+            //             <Option value="地图、示意图">地图、示意图</Option>
+            //             <Option value="摄影">摄影</Option>
+            //             <Option value="计算机软件">计算机软件</Option>
+            //             <Option value="模型">模型</Option>
+            //             <Option value="其他">其他</Option>
+            //         </Select>
+            //     ),
+            // },
             {
                 label: '作品著权类别',
                 field: 'type',
-                component: (
-                    <Select
-                        defaultValue="请选择"
-                        placeholder="请选择"
-                        style={{ width: 120 }}
-                        onChange={() => this.handleChange()}
-                    >
-                        <Option value="音乐">音乐</Option>
-                        <Option value="美术">美术</Option>
-                        <Option value="文字">文字</Option>
-                        <Option value="汇编">汇编</Option>
-                        <Option value="影视">影视</Option>
-                        <Option value="戏剧">戏剧</Option>
-                        <Option value="舞蹈">舞蹈</Option>
-                        <Option value="建筑">建筑</Option>
-                        <Option value="工程设计图">工程设计图</Option>
-                        <Option value="产品设计图">产品设计图</Option>
-                        <Option value="地图、示意图">地图、示意图</Option>
-                        <Option value="摄影">摄影</Option>
-                        <Option value="计算机软件">计算机软件</Option>
-                        <Option value="模型">模型</Option>
-                        <Option value="其他">其他</Option>
-                    </Select>
-                ),
+                component: <Input placeholder="作品著权类别" />,
             },
             {
                 label: '著作权人',
@@ -301,31 +306,36 @@ class Works extends PureComponent {
             {
                 label: '著作权类别',
                 field: 'type',
-                component: (
-                    <Select
-                        placeholder="著作权类别"
-                        defaultValue="请选择"
-                        style={{ width: 120 }}
-                        onChange={() => this.handleChange()}
-                    >
-                        <Option value="音乐">音乐</Option>
-                        <Option value="美术">美术</Option>
-                        <Option value="文字">文字</Option>
-                        <Option value="汇编">汇编</Option>
-                        <Option value="影视">影视</Option>
-                        <Option value="戏剧">戏剧</Option>
-                        <Option value="舞蹈">舞蹈</Option>
-                        <Option value="建筑">建筑</Option>
-                        <Option value="工程设计图">工程设计图</Option>
-                        <Option value="产品设计图">产品设计图</Option>
-                        <Option value="地图、示意图">地图、示意图</Option>
-                        <Option value="摄影">摄影</Option>
-                        <Option value="计算机软件">计算机软件</Option>
-                        <Option value="模型">模型</Option>
-                        <Option value="其他">其他</Option>
-                    </Select>
-                ),
+                component: <Input placeholder="著作权类别" />,
             },
+            // {
+            //     label: '著作权类别',
+            //     field: 'type',
+            //     component: (
+            //         <Select
+            //             placeholder="著作权类别"
+            //             defaultValue="请选择"
+            //             style={{ width: 120 }}
+            //             onChange={() => this.handleChange()}
+            //         >
+            //             <Option value="音乐">音乐</Option>
+            //             <Option value="美术">美术</Option>
+            //             <Option value="文字">文字</Option>
+            //             <Option value="汇编">汇编</Option>
+            //             <Option value="影视">影视</Option>
+            //             <Option value="戏剧">戏剧</Option>
+            //             <Option value="舞蹈">舞蹈</Option>
+            //             <Option value="建筑">建筑</Option>
+            //             <Option value="工程设计图">工程设计图</Option>
+            //             <Option value="产品设计图">产品设计图</Option>
+            //             <Option value="地图、示意图">地图、示意图</Option>
+            //             <Option value="摄影">摄影</Option>
+            //             <Option value="计算机软件">计算机软件</Option>
+            //             <Option value="模型">模型</Option>
+            //             <Option value="其他">其他</Option>
+            //         </Select>
+            //     ),
+            // },
             // {
             //     label: '著作权人',
             //     field: 'authorNationality',
