@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
-import { Pagination, Button, Card, Table, Modal, Input, Select, message } from 'antd'
-import formView from '../FormView'
+import { Pagination, Button, Card, Table, Modal, Divider, Input, Select, message } from 'antd'
+import moment from 'moment'
+import { FormView, SearchView } from 'components'
+// import formView from '../FormView'
 import styles from '../index.module.css'
 import request from '../../../../utils/request'
 import { bindActionCreators } from 'redux'
@@ -18,6 +20,7 @@ class Website extends PureComponent {
             webSite: '',
             liscense: '',
             examineDate: '',
+            companyType: '',
         },
         type: '',
         sessionStorageItem: {},
@@ -103,7 +106,7 @@ class Website extends PureComponent {
     }
     handleOk = () => {
         let that = this
-        this.form.validateFields((errors, values) => {
+        this.newForm.validateFields((errors, values) => {
             values.companyId = sessionStorage.getItem('companyId')
             let newValue = {
                 params: {
@@ -112,43 +115,40 @@ class Website extends PureComponent {
                     liscense: values.liscense,
                     webSite: values.webSite,
                     examineDate: values.examineDate,
+                    companyType: values.companyType,
                 },
             }
             if (that.state.type === 'add') {
-                let obj = newValue.params
-                for (let i in obj) {
-                    if (obj[i]) {
-                        obj[i] = obj[i].replace(
-                            /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/g,
-                            '',
-                        )
-                    }
-                }
-                that.props.increaseWebsiteRecordsApprove(newValue)
+                that.increaseWebsiteRecordsApprove(newValue)
             } else {
                 let newValue = {
                     companyId: sessionStorage.getItem('companyId'),
-                    ym: values.ym,
-                    liscense: values.liscense,
-                    webSite: values.webSite,
-                    examineDate: values.examineDate,
+                    ym: values.ym || that.state.FormView.ym,
+                    liscense: values.liscense || that.state.FormView.liscense,
+                    webSite: values.webSite || that.state.FormView.webSite,
+                    examineDate: values.examineDate || that.state.FormView.examineDate,
+                    companyType: values.companyType || that.state.FormView.companyType,
                 }
                 newValue = { ...that.state.FormView, ...newValue }
-                let obj = newValue
-                for (let i in obj) {
-                    if (obj[i]) {
-                        obj[i] = obj[i].replace(
-                            /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/g,
-                            '',
-                        )
-                    }
-                }
+                console.log(newValue, values, '===============')
                 that.changeWebsiteRecordsApprove(newValue)
             }
         })
         this.setState({
             visible: false,
         })
+    }
+    async increaseWebsiteRecordsApprove(data) {
+        var result = await request({
+            type: 'post',
+            url: '/enterprise/increaseWebsiteRecordsApprove',
+            data,
+        })
+        if (result.code === 1000) {
+            message.success('成功')
+        } else {
+            message.error(result.message)
+        }
     }
     handleCancel = () => {
         this.setState({
@@ -222,21 +222,32 @@ class Website extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 12 },
-            wrapperCol: { span: 10 },
+            labelCol: { span: 3 },
+            wrapperCol: { span: 12 },
         }
-        const FormView = formView({ items, data: this.state.FormView })
         return (
             <FormView
                 ref={form => {
-                    this.form = form
+                    this.newForm = form
                 }}
+                items={items}
+                data={this.state.FormView}
                 formItemLayout={formItemLayout}
-                layout="inline"
-                // saveBtn={type === 'search' ? false : true}
                 saveBtn={false}
             />
         )
+        // const FormView = formView({ items, data: this.state.FormView })
+        // return (
+        //     <FormView
+        //         ref={form => {
+        //             this.form = form
+        //         }}
+        //         formItemLayout={formItemLayout}
+        //         layout="inline"
+        //         // saveBtn={type === 'search' ? false : true}
+        //         saveBtn={false}
+        //     />
+        // )
     }
     empty() {
         this.form.resetFields()
@@ -246,6 +257,7 @@ class Website extends PureComponent {
                 ym: '',
                 liscense: '',
                 examineDate: '',
+                companyType: '',
             },
         })
         let that = this
@@ -263,6 +275,7 @@ class Website extends PureComponent {
                     webSite: values.webSite,
                     liscense: values.liscense,
                     examineDate: values.examineDate,
+                    companyType: values.companyType,
                 },
             })
             setTimeout(() => {
@@ -301,20 +314,20 @@ class Website extends PureComponent {
             //     field: 'type',
             //     component: <Input />,
             // },
-            // {
-            //     label: '主办单位性质',
-            //     field: 'type',
-            //     component: (
-            //         <Select
-            //             defaultValue="请选择"
-            //             style={{ width: 120 }}
-            //             onChange={() => this.handleChange()}
-            //         >
-            //             <Option value="企业">企业</Option>
-            //             <Option value="个人">个人</Option>
-            //         </Select>
-            //     ),
-            // },
+            {
+                label: '主办单位性质',
+                field: 'companyType',
+                component: (
+                    <Select
+                        defaultValue="请选择"
+                        style={{ width: 120 }}
+                        onChange={() => this.handleChange()}
+                    >
+                        <Option value="企业">企业</Option>
+                        <Option value="个人">个人</Option>
+                    </Select>
+                ),
+            },
             // {
             //     label: '备案号',
             //     field: 'liscense',
@@ -337,25 +350,36 @@ class Website extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 12 },
-            wrapperCol: { span: 10 },
+            labelCol: { span: 3 },
+            wrapperCol: { span: 12 },
         }
-        const FormView = formView({ items, data: this.state.form })
         return (
-            <FormView
+            <SearchView
                 ref={form => {
                     this.form = form
                 }}
+                items={items}
                 formItemLayout={formItemLayout}
                 layout="inline"
-                // saveBtn={type === 'search' ? false : true}
                 saveBtn={false}
-                emptyBtn={true}
-                empty={() => this.empty()}
-                query={() => this.query()}
-                add={() => this.add()}
             />
         )
+        // const FormView = formView({ items, data: this.state.form })
+        // return (
+        //     <FormView
+        //         ref={form => {
+        //             this.form = form
+        //         }}
+        //         formItemLayout={formItemLayout}
+        //         layout="inline"
+        //         // saveBtn={type === 'search' ? false : true}
+        //         saveBtn={false}
+        //         emptyBtn={true}
+        //         empty={() => this.empty()}
+        //         query={() => this.query()}
+        //         add={() => this.add()}
+        //     />
+        // )
     }
     componentDidMount() {
         this.DidMount()
@@ -379,6 +403,7 @@ class Website extends PureComponent {
                 webSite: this.state.form.webSite,
                 liscense: this.state.form.liscense,
                 examineDate: this.state.form.examineDate,
+                companyType: this.state.form.companyType,
             },
             contentType: 'multipart/form-data',
         })
@@ -438,8 +463,28 @@ class Website extends PureComponent {
                 //     </div>
                 // }
             >
-                <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
+                {/* <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
                     {this.renderForm('search')}
+                </div> */}
+                <div className={styles.searchCard}>
+                    {this.renderForm('search')}
+                    <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                        <Button type="ghost" onClick={() => this.empty()}>
+                            清除
+                        </Button>
+                        <Divider type="vertical" />
+                        <Button
+                            type="primary"
+                            onClick={() => this.query()}
+                            style={{ background: 'rgb(50,200,100)' }}
+                        >
+                            查询
+                        </Button>
+                        <Divider type="vertical" />
+                        <Button type="primary" onClick={() => this.add()}>
+                            新增
+                        </Button>
+                    </div>
                 </div>
                 <Table
                     bordered

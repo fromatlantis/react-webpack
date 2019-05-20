@@ -45,7 +45,7 @@ const model = {
                     contentType: 'multipart/form-data',
                 })
                 if (res.code === 1000) {
-                    message.success('成功')
+                    // message.success('成功')
                 }
             },
         },

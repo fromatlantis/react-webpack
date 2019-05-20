@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Icon, Button } from 'antd'
+import { Icon, Button, message } from 'antd'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
@@ -24,18 +24,29 @@ class IntermediaryDetails extends PureComponent {
             this.props.getServiceTypeList()
         }
     }
-    addDemand(pid) {
-        this.props.addDemand({
-            category: this.props.match.params.id,
-            item: this.state.num,
-            companyType: this.props.user.user.type,
-            enterpriseName: this.props.user.user.company_name,
-            email: this.props.user.user.email,
-            address: '李毓轲',
-            contract: this.props.user.user.name,
-            telephone: this.props.user.user.phone,
-            amount: (this.state.num - 0) * (pid.price - 0),
+    async addDemand(pid) {
+        var result = await request({
+            type: 'post',
+            url: '/enterprise/addDemand',
+            contentType: 'multipart/form-data',
+            data: {
+                category: this.props.match.params.id,
+                item: this.state.num,
+                companyType: this.props.user.user.type,
+                enterpriseName: this.props.user.user.company_name,
+                email: this.props.user.user.email,
+                address: '',
+                contract: this.props.user.user.name,
+                telephone: this.props.user.user.phone,
+                amount: (this.state.num - 0) * (pid.price - 0),
+            },
         })
+
+        if (result.code === 1000) {
+            message.success('成功')
+        } else {
+            message.error(result.message)
+        }
     }
     getDemandList() {
         this.props.getDemandList({

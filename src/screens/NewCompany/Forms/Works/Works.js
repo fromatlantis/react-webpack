@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
-import { message, Button, Card, Table, Modal, Input, Select, Pagination } from 'antd'
-import formView from '../FormView'
+import { message, Button, Card, Table, Modal, Divider, Input, Select, Pagination } from 'antd'
+import moment from 'moment'
+import { FormView, SearchView } from 'components'
+// import formView from '../FormView'
 import styles from '../index.module.css'
 import request from '../../../../utils/request'
 import { bindActionCreators } from 'redux'
@@ -114,7 +116,7 @@ class Works extends PureComponent {
     }
     handleOk = () => {
         let that = this
-        this.form.validateFields((errors, values) => {
+        this.newForm.validateFields((errors, values) => {
             values.companyId = sessionStorage.getItem('companyId')
             let newValue = {
                 params: {
@@ -127,22 +129,8 @@ class Works extends PureComponent {
                     authorNationality: values.authorNationality,
                 },
             }
-            let patrn = /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/im
-            let Special = false
             if (that.state.type === 'add') {
-                let obj = newValue.params
-                for (let i in obj) {
-                    if (obj[i]) {
-                        if (!patrn.test(obj[i])) {
-                            Special = true
-                        }
-                    }
-                }
-                if (Special) {
-                    message.info('不能输入特殊字符哦')
-                } else {
-                    that.props.increaseProductTrademarkApprove(newValue)
-                }
+                that.increaseProductTrademarkApprove(newValue)
             } else {
                 let newValue = {
                     companyId: sessionStorage.getItem('companyId'),
@@ -154,24 +142,24 @@ class Works extends PureComponent {
                     authorNationality: values.authorNationality,
                 }
                 newValue = { ...that.state.FormView, ...newValue }
-                let obj = newValue
-                for (let i in obj) {
-                    if (obj[i]) {
-                        if (!patrn.test(obj[i])) {
-                            Special = true
-                        }
-                    }
-                }
-                if (Special) {
-                    message.info('不能输入特殊字符哦')
-                } else {
-                    that.changeProductTrademarkApprove(newValue)
-                }
+                that.changeProductTrademarkApprove(newValue)
             }
         })
         this.setState({
             visible: false,
         })
+    }
+    async increaseProductTrademarkApprove(data) {
+        var result = await request({
+            type: 'post',
+            url: '/enterprise/increaseProductTrademarkApprove',
+            data,
+        })
+        if (result.code === 1000) {
+            message.success('成功')
+        } else {
+            message.error(result.message)
+        }
     }
     async changeProductTrademarkApprove(data) {
         var result = await request({
@@ -183,7 +171,11 @@ class Works extends PureComponent {
             },
             contentType: 'multipart/form-data',
         })
-        message.info(result.message)
+        if (result.code === 1000) {
+            message.success('成功')
+        } else {
+            message.error(result.message)
+        }
     }
     handleCancel = () => {
         this.setState({
@@ -223,7 +215,7 @@ class Works extends PureComponent {
                     >
                         <Option value="音乐">音乐</Option>
                         <Option value="美术">美术</Option>
-                        <Option value="文学">文学</Option>
+                        <Option value="文字">文字</Option>
                         <Option value="汇编">汇编</Option>
                         <Option value="影视">影视</Option>
                         <Option value="戏剧">戏剧</Option>
@@ -261,21 +253,32 @@ class Works extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 14 },
+            labelCol: { span: 3 },
+            wrapperCol: { span: 12 },
         }
-        const FormView = formView({ items, data: this.state.FormView })
         return (
             <FormView
                 ref={form => {
-                    this.form = form
+                    this.newForm = form
                 }}
+                items={items}
+                data={this.state.FormView}
                 formItemLayout={formItemLayout}
-                layout="inline"
-                // saveBtn={type === 'search' ? false : true}
                 saveBtn={false}
             />
         )
+        // const FormView = formView({ items, data: this.state.FormView })
+        // return (
+        //     <FormView
+        //         ref={form => {
+        //             this.form = form
+        //         }}
+        //         formItemLayout={formItemLayout}
+        //         layout="inline"
+        //         // saveBtn={type === 'search' ? false : true}
+        //         saveBtn={false}
+        //     />
+        // )
     }
     renderForm = type => {
         const items = [
@@ -307,7 +310,7 @@ class Works extends PureComponent {
                     >
                         <Option value="音乐">音乐</Option>
                         <Option value="美术">美术</Option>
-                        <Option value="文学">文学</Option>
+                        <Option value="文字">文字</Option>
                         <Option value="汇编">汇编</Option>
                         <Option value="影视">影视</Option>
                         <Option value="戏剧">戏剧</Option>
@@ -345,25 +348,36 @@ class Works extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 14 },
+            labelCol: { span: 3 },
+            wrapperCol: { span: 12 },
         }
-        const FormView = formView({ items, data: this.state.form })
         return (
-            <FormView
+            <SearchView
                 ref={form => {
                     this.form = form
                 }}
+                items={items}
                 formItemLayout={formItemLayout}
                 layout="inline"
-                // saveBtn={type === 'search' ? false : true}
                 saveBtn={false}
-                emptyBtn={true}
-                empty={() => this.empty()}
-                query={() => this.query()}
-                add={() => this.add()}
             />
         )
+        // const FormView = formView({ items, data: this.state.form })
+        // return (
+        //     <FormView
+        //         ref={form => {
+        //             this.form = form
+        //         }}
+        //         formItemLayout={formItemLayout}
+        //         layout="inline"
+        //         // saveBtn={type === 'search' ? false : true}
+        //         saveBtn={false}
+        //         emptyBtn={true}
+        //         empty={() => this.empty()}
+        //         query={() => this.query()}
+        //         add={() => this.add()}
+        //     />
+        // )
     }
     empty() {
         this.form.resetFields()
@@ -471,8 +485,28 @@ class Works extends PureComponent {
                 //     </div>
                 // }
             >
-                <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
+                {/* <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
                     {this.renderForm('search')}
+                </div> */}
+                <div className={styles.searchCard}>
+                    {this.renderForm('search')}
+                    <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                        <Button type="ghost" onClick={() => this.empty()}>
+                            清除
+                        </Button>
+                        <Divider type="vertical" />
+                        <Button
+                            type="primary"
+                            onClick={() => this.query()}
+                            style={{ background: 'rgb(50,200,100)' }}
+                        >
+                            查询
+                        </Button>
+                        <Divider type="vertical" />
+                        <Button type="primary" onClick={() => this.add()}>
+                            新增
+                        </Button>
+                    </div>
                 </div>
                 <Table
                     bordered
