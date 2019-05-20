@@ -1,7 +1,18 @@
 import React, { PureComponent } from 'react'
-import { Button, Card, Table, Modal, Input, DatePicker, Divider, message, Pagination } from 'antd'
+import {
+    Button,
+    Card,
+    Table,
+    Modal,
+    Input,
+    DatePicker,
+    TimePicker,
+    Divider,
+    message,
+    Pagination,
+} from 'antd'
 import moment from 'moment'
-import { FormView, SearchView } from 'components'
+import { FormView, SearchView } from 'components' //毫秒
 
 // import formView from '../FormView'
 import styles from '../index.module.css'
@@ -10,6 +21,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { actions } from '../../../../redux/intermediary'
+const dateStr = 'x' //毫秒
 
 class Copyright extends PureComponent {
     state = {
@@ -93,6 +105,9 @@ class Copyright extends PureComponent {
             url: '/enterprise/querySoftwareCopyrightDetail?keyId=' + keyId,
         })
         let res = result.data
+        if (res.regtime) {
+            res.regtime = moment(res.regtime, dateStr)
+        }
         this.setState({
             visible: true,
             keyId: keyId,
@@ -104,6 +119,11 @@ class Copyright extends PureComponent {
     handleOk = () => {
         let that = this
         this.newForm.validateFields((errors, values) => {
+            if (values.regtime) {
+                values.regtime = moment(values.regtime.format('YYYY-MM-DD hh:mm:ss')).format(
+                    dateStr,
+                )
+            }
             values.companyId = sessionStorage.getItem('companyId')
             let newValue = {
                 params: {
@@ -185,8 +205,9 @@ class Copyright extends PureComponent {
             {
                 label: '登记日期',
                 field: 'regtime',
-                component: <Input placeholder="登记日期" />,
+                component: <DatePicker />,
             },
+
             {
                 label: '登记号',
                 field: 'regnum',
@@ -241,7 +262,7 @@ class Copyright extends PureComponent {
             {
                 label: '登记日期',
                 field: 'regtime',
-                component: <Input placeholder="登记日期" />,
+                component: <DatePicker placeholder="登记日期" />,
             },
             {
                 label: '登记号',
@@ -305,6 +326,9 @@ class Copyright extends PureComponent {
     query() {
         let that = this
         this.form.validateFields((errors, values) => {
+            if (values.regtime) {
+                values.regtime = moment(values.regtime.format('YYYY-MM-DD')).format(dateStr)
+            }
             values.pageNo = 1
             that.setState({
                 form: {
@@ -356,6 +380,14 @@ class Copyright extends PureComponent {
             contentType: 'multipart/form-data',
         })
         if (result.code === 1000) {
+            // regtime
+            for (let i = 0; i < result.data.list.length; i++) {
+                if (result.data.list[i].regtime) {
+                    result.data.list[i].regtime = moment(result.data.list[i].regtime).format(
+                        'YYYY-MM-DD hh:mm:ss',
+                    )
+                }
+            }
             this.setState({
                 List: result.data,
                 page: req.pageNo,

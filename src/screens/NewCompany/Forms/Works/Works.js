@@ -1,5 +1,16 @@
 import React, { PureComponent } from 'react'
-import { message, Button, Card, Table, Modal, Divider, Input, Select, Pagination } from 'antd'
+import {
+    message,
+    Button,
+    Card,
+    Table,
+    Modal,
+    Divider,
+    DatePicker,
+    Input,
+    Select,
+    Pagination,
+} from 'antd'
 import moment from 'moment'
 import { FormView, SearchView } from 'components'
 // import formView from '../FormView'
@@ -10,7 +21,7 @@ import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { actions } from '../../../../redux/intermediary'
 const Option = Select.Option
-
+const dateStr = 'x' //毫秒
 class Works extends PureComponent {
     state = {
         page: 1,
@@ -107,6 +118,14 @@ class Works extends PureComponent {
             url: '/enterprise/queryProductTrademarkDetail?keyId=' + keyId,
         })
         let res = result.data
+        if (res.regtime) {
+            res.regtime = moment(res.regtime, dateStr)
+        }
+        if (res.finishTime) {
+            let time = new Date(res.finishTime)
+            time = Date.parse(time)
+            res.finishTime = moment(time, dateStr)
+        }
         this.setState({
             visible: true,
             keyId: keyId,
@@ -117,6 +136,18 @@ class Works extends PureComponent {
     handleOk = () => {
         let that = this
         this.newForm.validateFields((errors, values) => {
+            if (values.regtime) {
+                values.regtime = moment(values.regtime.format('YYYY-MM-DD hh:mm:ss')).format(
+                    dateStr,
+                )
+            }
+            if (values.finishTime) {
+                values.finishTime = moment(values.finishTime.format('YYYY-MM-DD hh:mm:ss')).format(
+                    'YYYY-MM-DD ',
+                )
+            }
+            console.log(values.finishTime)
+
             values.companyId = sessionStorage.getItem('companyId')
             let newValue = {
                 params: {
@@ -244,7 +275,7 @@ class Works extends PureComponent {
             {
                 label: '登记日期',
                 field: 'regtime',
-                component: <Input placeholder="登记日期" />,
+                component: <DatePicker placeholder="登记日期" />,
             },
             {
                 label: '登记号',
@@ -254,7 +285,7 @@ class Works extends PureComponent {
             {
                 label: '完成创作时间',
                 field: 'finishTime',
-                component: <Input placeholder="完成创作时间" />,
+                component: <DatePicker placeholder="完成创作时间" />,
             },
         ]
         const formItemLayout = {
@@ -344,7 +375,7 @@ class Works extends PureComponent {
             {
                 label: '登记日期',
                 field: 'regtime',
-                component: <Input placeholder="登记日期" />,
+                component: <DatePicker placeholder="登记日期" />,
             },
             {
                 label: '登记号',
@@ -354,7 +385,7 @@ class Works extends PureComponent {
             {
                 label: '完成创作时间',
                 field: 'finishTime',
-                component: <Input placeholder="完成创作时间" />,
+                component: <DatePicker placeholder="完成创作时间" />,
             },
         ]
         const formItemLayout = {
@@ -408,6 +439,12 @@ class Works extends PureComponent {
     query() {
         let that = this
         this.form.validateFields((errors, values) => {
+            if (values.regtime) {
+                values.regtime = moment(values.regtime.format('YYYY-MM-DD')).format(dateStr)
+            }
+            if (values.finishTime) {
+                values.finishTime = moment(values.finishTime).format('YYYY-MM-DD')
+            }
             values.pageNo = 1
             that.setState({
                 form: {
@@ -460,6 +497,18 @@ class Works extends PureComponent {
             contentType: 'multipart/form-data',
         })
         if (result.code === 1000) {
+            for (let i = 0; i < result.data.list.length; i++) {
+                if (result.data.list[i].regtime) {
+                    result.data.list[i].regtime = moment(result.data.list[i].regtime).format(
+                        'YYYY-MM-DD hh:mm:ss',
+                    )
+                }
+                if (result.data.list[i].finishTime) {
+                    result.data.list[i].finishTime = moment(result.data.list[i].finishTime).format(
+                        'YYYY-MM-DD hh:mm:ss',
+                    )
+                }
+            }
             this.setState({
                 sessionStorageItem,
                 List: result.data,
