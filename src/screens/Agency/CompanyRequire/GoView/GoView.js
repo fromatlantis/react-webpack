@@ -1,6 +1,6 @@
 // 企业需求/办理
 import React, { PureComponent } from 'react'
-import { Button, Card, Form, Input, Divider, Steps, Table, Select, Breadcrumb } from 'antd'
+import { Button, Card, Form, Input, Divider, Steps, Table, Select, Breadcrumb, Rate } from 'antd'
 import styles from './GoView.module.css'
 import { Link } from 'react-router-dom'
 
@@ -36,44 +36,45 @@ class GoHandle extends PureComponent {
             },
             {
                 title: '供应商类型',
-                dataIndex: 'supplierType',
-                key: 'supplierType',
+                dataIndex: 'type_name',
+                key: 'type_name',
                 align: 'center',
             },
             {
                 title: '供应商名称',
-                dataIndex: 'money',
-                key: 'money',
-                align: 'center',
-            },
-            {
-                title: '提供的服务',
-                dataIndex: 'companyType',
-                key: 'companyType',
+                dataIndex: 'supplier',
+                key: 'supplier',
                 align: 'center',
             },
             {
                 title: '服务的次数',
-                dataIndex: 'companyName',
-                key: 'companyName',
+                dataIndex: 'serviceTimes',
+                key: 'serviceTimes',
                 align: 'center',
             },
             {
                 title: '总评分(满分5分)',
-                dataIndex: 'companyRelative',
-                key: 'companyRelative',
+                dataIndex: 'score',
+                key: 'score',
+                align: 'center',
+                render: (text, record) => <span key={record}>{text ? text : '-'}</span>,
+            },
+            {
+                title: '提供的服务',
+                dataIndex: 'category',
+                key: 'category',
                 align: 'center',
             },
             {
-                title: '联系人',
-                dataIndex: 'companyPhone',
-                key: 'companyPhone',
+                title: '供应商联系人',
+                dataIndex: 'contract',
+                key: 'contract',
                 align: 'center',
             },
             {
                 title: '联系电话',
-                dataIndex: 'time',
-                key: 'time',
+                dataIndex: 'telephone',
+                key: 'telephone',
                 align: 'center',
             },
             {
@@ -108,53 +109,50 @@ class GoHandle extends PureComponent {
             },
             {
                 title: '供应商类型',
-                dataIndex: 'supplierType',
-                key: 'supplierType',
+                dataIndex: 'type_name',
+                key: 'type_name',
                 align: 'center',
             },
             {
                 title: '供应商名称',
-                dataIndex: 'money',
-                key: 'money',
-                align: 'center',
-            },
-            {
-                title: '提供的服务',
-                dataIndex: 'companyType',
-                key: 'companyType',
+                dataIndex: 'supplier',
+                key: 'supplier',
                 align: 'center',
             },
             {
                 title: '服务的次数',
-                dataIndex: 'companyName',
-                key: 'companyName',
+                dataIndex: 'serviceTimes',
+                key: 'serviceTimes',
                 align: 'center',
             },
             {
                 title: '总评分(满分5分)',
-                dataIndex: 'companyRelative',
-                key: 'companyRelative',
+                dataIndex: 'score',
+                key: 'score',
+                align: 'center',
+                render: (text, record) => <span key={record}>{text ? text : '-'}</span>,
+            },
+            {
+                title: '提供的服务',
+                dataIndex: 'category',
+                key: 'category',
                 align: 'center',
             },
             {
-                title: '联系人',
-                dataIndex: 'companyPhone',
-                key: 'companyPhone',
+                title: '供应商联系人',
+                dataIndex: 'contract',
+                key: 'contract',
                 align: 'center',
             },
             {
                 title: '联系电话',
-                dataIndex: 'time',
-                key: 'time',
+                dataIndex: 'telephone',
+                key: 'telephone',
                 align: 'center',
             },
         ]
-        const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-            },
-        }
         let id = parseFloat(this.props.match.params.id)
+        let score = this.props.demandList.score
         return (
             <div className={styles.handleContainer}>
                 <Card
@@ -165,7 +163,11 @@ class GoHandle extends PureComponent {
                                     <Link to="/agency/companyRequire">企业需求</Link>
                                 </Breadcrumb.Item>
                                 <Breadcrumb.Item>
-                                    <Link to={`/agency/goView/${id}`}>查看</Link>
+                                    <Link to={`/agency/goView/${id}`}>
+                                        {this.props.demandList.processStatus === '1'
+                                            ? '已办理'
+                                            : '完成'}
+                                    </Link>
                                 </Breadcrumb.Item>
                             </Breadcrumb>
                             <div style={{ marginTop: 15 }}>办理进度</div>
@@ -231,15 +233,33 @@ class GoHandle extends PureComponent {
                     <Table
                         className={styles.commonLeft}
                         style={{ margin: '20px 0' }}
+                        rowKey={(record, index) => `${record.id}`}
                         columns={
                             this.props.demandList.processStatus === '1' ? columns : finishColumns
                         }
                         dataSource={this.props.supperList}
+                        pagination={false}
                     />
                 </Card>
-                {/* <Card title="评价结果" bordered={false}>
-
-                </Card> */}
+                <Card
+                    style={{
+                        display: this.props.demandList.processStatus === '2' ? 'block' : 'none',
+                    }}
+                    title="评价结果"
+                    bordered={false}
+                >
+                    <div style={{ marginBottom: 8 }}>
+                        <span className={styles.finishSty}>评价分数:</span>
+                        <Rate allowHalf value={score ? score : 0} disabled />
+                        <span style={{ marginLeft: 3 }}>{score ? score + '分' : ''}</span>
+                    </div>
+                    <div>
+                        <span className={styles.finishSty}>评价描述:</span>
+                        <span>
+                            {this.props.demandList.evaluate ? this.props.demandList.evaluate : '-'}
+                        </span>
+                    </div>
+                </Card>
             </div>
         )
     }

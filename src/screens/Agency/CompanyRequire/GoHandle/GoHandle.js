@@ -14,6 +14,7 @@ import {
 } from 'antd'
 import styles from './GoHandle.module.css'
 import { Link } from 'react-router-dom'
+import FormView, { SearchView } from '../../../../components/FormView/FormView'
 
 const Step = Steps.Step
 const TreeNode = TreeSelect.TreeNode
@@ -21,6 +22,7 @@ let page = { pageNo: 1, pageSize: 10 }
 class GoHandle extends PureComponent {
     state = {
         selectRow: [],
+        // lian: true,
     }
     componentDidMount = () => {
         let id = this.props.match.params.id
@@ -28,18 +30,88 @@ class GoHandle extends PureComponent {
         this.props.getSupplierList(page)
         this.props.getServiceTypeList()
     }
+
+    renderForm = type => {
+        const items = [
+            {
+                label: '供应商分类',
+                field: 'typeId',
+                initialValue: this.props.demandList.typeId,
+                component: (
+                    <TreeSelect
+                        showSearch
+                        style={{ width: 160 }}
+                        dropdownStyle={{ maxHeight: 200, overflow: 'auto' }}
+                        placeholder="请选择"
+                        allowClear
+                        treeDefaultExpandAll
+                    >
+                        {this.nodeText().map(item => {
+                            return (
+                                <TreeNode
+                                    value={item.parent.key}
+                                    title={item.parent.typeName}
+                                    key={item.parent.key}
+                                />
+                            )
+                        })}
+                    </TreeSelect>
+                ),
+            },
+            {
+                label: '供应商名称',
+                field: 'supplier',
+                component: <Input />,
+            },
+            {
+                label: '供应商联系人',
+                field: 'contract',
+                component: <Input />,
+            },
+            {
+                component: <Button onClick={this.clearInput}>清空</Button>,
+            },
+            {
+                component: (
+                    <Button type="primary" onClick={this.handleSubmit} style={{ margin: '0 10px' }}>
+                        查询
+                    </Button>
+                ),
+            },
+            {
+                component: (
+                    <Button type="primary" onClick={this.moreRecom}>
+                        批量推荐
+                    </Button>
+                ),
+            },
+        ]
+        const formItemLayout = {
+            labelCol: { span: 3 },
+            wrapperCol: { span: 12 },
+        }
+        return (
+            <SearchView
+                ref={form => {
+                    this.form = form
+                }}
+                formItemLayout={formItemLayout}
+                layout="inline"
+                items={items}
+                type="seacrhForm"
+                saveBtn={false}
+            />
+        )
+    }
+
     formParms = () => {
         let params = {}
-        let that = this
-        this.props.form.validateFields((err, fieldsValue) => {
-            // if (err) {
-            //     return
-            // }
-            params = fieldsValue
-            if (fieldsValue.typeId) {
-                params.typeId = fieldsValue.typeId
-                that.props.updateType({ key: params.typeId })
+        this.form.validateFields((err, fieldsValue) => {
+            if (err) {
+                return
             }
+            params = fieldsValue
+            params.typeId = fieldsValue.typeId
         })
         return params
     }
@@ -58,8 +130,20 @@ class GoHandle extends PureComponent {
         this.props.getSupplierList(parm)
     }
     clearInput = () => {
-        // this.props.updateType({ key: '' })
-        this.props.form.resetFields()
+        // this.setState({ lian: false })
+        this.form.resetFields()
+        // let parm = this.formParms()
+        // parm.pageNo = 1
+        // parm.pageSize = 10
+        this.form.validateFields((err, fieldsValue) => {
+            if (err) {
+                return
+            }
+            fieldsValue.pageNo = 1
+            fieldsValue.pageSize = 10
+            fieldsValue.typeId = this.props.demandList.typeId
+            this.props.getSupplierList(fieldsValue)
+        })
     }
     handleSubmit = () => {
         let parm = this.formParms()
@@ -161,12 +245,13 @@ class GoHandle extends PureComponent {
                 key: 'serviceTimes',
                 align: 'center',
             },
-            // {
-            //     title: '总评分(满分5分)',
-            //     dataIndex: 'totalScore',
-            //     key: 'totalScore',
-            //     align: 'center',
-            // },
+            {
+                title: '总评分(满分5分)',
+                dataIndex: 'score',
+                key: 'score',
+                align: 'center',
+                render: (text, record) => <span key={record}>{text ? text : '-'}</span>,
+            },
             {
                 title: '提供的服务',
                 dataIndex: 'category',
@@ -207,7 +292,6 @@ class GoHandle extends PureComponent {
             },
         ]
         let id = parseFloat(this.props.match.params.id)
-        console.log('////////', this.props.demandList.typeId)
         return (
             <div className={styles.handleContainer}>
                 <Card
@@ -235,95 +319,49 @@ class GoHandle extends PureComponent {
                 <Card title="订单信息" bordered={false}>
                     <Form {...formItemLayout}>
                         <Form.Item {...formItemLayout} label="中介服务类型:">
-                            {getFieldDecorator('cateTemp', {
-                                rules: [{ required: true, message: '请输入中介服务类型' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('cateTemp')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="服务数目:">
-                            {getFieldDecorator('item', {
-                                rules: [{ required: true, message: '请输入服务数目' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('item')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="企业名称:">
-                            {getFieldDecorator('enterpriseName', {
-                                rules: [{ required: true, message: '请输入企业名称' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('enterpriseName')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="企业邮箱:">
-                            {getFieldDecorator('email', {
-                                rules: [{ required: true, message: '请输入企业邮箱' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('email')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="企业地址:">
-                            {getFieldDecorator('address', {
-                                rules: [{ required: true, message: '请输入企业地址' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('address')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="官网:">
-                            {getFieldDecorator('spaceName', {
-                                rules: [{ required: true, message: '请输入官网地址' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('spaceName')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="联系人:">
-                            {getFieldDecorator('nameTemp', {
-                                rules: [{ required: true, message: '请输入联系人名字' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('nameTemp')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="联系方式:">
-                            {getFieldDecorator('telephone', {
-                                rules: [{ required: true, message: '请输入联系方式' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('telephone')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                     </Form>
                 </Card>
                 <Card title="匹配的供应商" bordered={false}>
-                    <Form layout="inline" style={{ position: 'relative' }}>
-                        <Form.Item {...formItemLayout} label="供应商分类:">
-                            {getFieldDecorator('typeId')(
-                                <TreeSelect
-                                    showSearch
-                                    style={{ width: 200 }}
-                                    dropdownStyle={{ maxHeight: 200, overflow: 'auto' }}
-                                    placeholder="请选择"
-                                    allowClear
-                                    treeDefaultExpandAll
-                                >
-                                    {this.nodeText().map(item => {
-                                        return (
-                                            <TreeNode
-                                                value={item.parent.key}
-                                                title={item.parent.typeName}
-                                                key={item.parent.key}
-                                            />
-                                        )
-                                    })}
-                                </TreeSelect>,
-                            )}
-                        </Form.Item>
-                        <Form.Item label="供应商名称：">
-                            {getFieldDecorator('supplier')(
-                                <Input placeholder="请输入" style={{ width: 200 }} />,
-                            )}
-                        </Form.Item>
-                        <Form.Item label="供应商联系人：">
-                            {getFieldDecorator('contract')(
-                                <Input placeholder="请输入" style={{ width: 200 }} />,
-                            )}
-                        </Form.Item>
-                        <div className={styles.btnStyle}>
-                            <Button onClick={this.clearInput}>清空</Button>
-                            <Button
-                                type="primary"
-                                onClick={this.handleSubmit}
-                                style={{ margin: '0 10px' }}
-                            >
-                                查询
-                            </Button>
-                            <Button type="primary" onClick={this.moreRecom}>
-                                批量推荐
-                            </Button>
-                        </div>
-                    </Form>
+                    {this.renderForm('search')}
                     <Table
                         className={styles.commonLeft}
                         style={{ margin: '20px 0' }}
@@ -351,7 +389,6 @@ export default Form.create({
     mapPropsToFields(props) {
         return {
             cateTemp: Form.createFormField({ value: props.demandList.category }),
-            typeId: Form.createFormField({ value: props.demandList.typeId }),
             telephone: Form.createFormField({ value: props.demandList.telephone }),
             address: Form.createFormField({ value: props.demandList.address }),
             email: Form.createFormField({ value: props.demandList.email }),

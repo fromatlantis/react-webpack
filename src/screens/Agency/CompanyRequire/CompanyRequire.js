@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react'
 import { Menu, Icon, Form, Input, Button, Table, Select, Tabs } from 'antd'
 import { Link } from 'react-router-dom'
 import styles from './CompanyRequire.module.css'
-import ListClick from '../../../components/ListClick/ListClick'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -17,7 +16,8 @@ const page = {
 class Agency extends PureComponent {
     state = {
         tabKey: '0',
-        typeId: '',
+        addTypes: [],
+        allActive: true,
     }
     componentDidMount = () => {
         this.props.getServiceTypeList()
@@ -32,8 +32,8 @@ class Agency extends PureComponent {
             }
             params = fieldsValue
             params.processStatus = this.state.tabKey
-            if (this.state.typeId && this.state.typeId !== 'undefined') {
-                params.typeId = this.state.typeId
+            if (this.state.addTypes.length > 0) {
+                params.typeId = this.state.addTypes.join(',')
             }
         })
         return params
@@ -60,7 +60,7 @@ class Agency extends PureComponent {
     }
     // 点击清除按钮
     clearInput = () => {
-        this.listClick.updateAll()
+        this.setState({ allActive: true, addTypes: [] })
         this.props.form.resetFields()
         let parm = this.formParms()
         parm.pageNo = 1
@@ -82,20 +82,41 @@ class Agency extends PureComponent {
         parm.pageSize = pageSize
         this.props.getDemandList(parm)
     }
-    getTypeId = num => {
-        this.setState({
-            typeId: num,
-        })
+    addServeType = id => {
+        this.setState({ allActive: false })
+        let type = true
+        let { addTypes } = this.state
+        let oldaddTypes = []
+        let newaddTypes = []
+        for (let i in addTypes) {
+            if (addTypes[i] == id) {
+                type = false
+            } else {
+                newaddTypes.push(addTypes[i])
+            }
+            oldaddTypes.push(addTypes[i])
+        }
+        if (type) {
+            oldaddTypes.push(id)
+            this.setState({
+                addTypes: oldaddTypes,
+            })
+        } else {
+            this.setState({
+                addTypes: newaddTypes,
+            })
+        }
     }
-    onRef = ref => {
-        this.listClick = ref
+    allType = () => {
+        this.setState({ addTypes: [], allActive: !this.state.allActive })
     }
     render() {
+        let that = this
         const { getFieldDecorator } = this.props.form
+        const { addTypes, allActive } = this.state
         const serList = this.props.ServiceTypeList.filter(item => {
             return item.level === '1'
         })
-        serList.unshift({ typeName: '全部', id: 'undefined' })
         const Option = Select.Option
         const columns = [
             {
@@ -116,12 +137,18 @@ class Agency extends PureComponent {
                 dataIndex: 'amount',
                 key: 'amount',
                 align: 'center',
+                render: (text, record) => <span key={text}>{record.item * parseFloat(text)}</span>,
             },
             {
                 title: '企业名称',
                 dataIndex: 'enterpriseName',
                 key: 'enterpriseName',
                 align: 'center',
+                render: (text, record) => (
+                    <Link key={text} to={`/companyDetails/information/${record.companyId}/company`}>
+                        {text}
+                    </Link>
+                ),
             },
             {
                 title: '企业联系人',
@@ -172,12 +199,18 @@ class Agency extends PureComponent {
                 dataIndex: 'amount',
                 key: 'amount',
                 align: 'center',
+                render: (text, record) => <span key={text}>{record.item * parseFloat(text)}</span>,
             },
             {
                 title: '企业名称',
                 dataIndex: 'enterpriseName',
                 key: 'enterpriseName',
                 align: 'center',
+                render: (text, record) => (
+                    <Link key={text} to={`/companyDetails/information/${record.companyId}/agency`}>
+                        {text}
+                    </Link>
+                ),
             },
             {
                 title: '企业联系人',
@@ -217,12 +250,39 @@ class Agency extends PureComponent {
         return (
             <div className={styles.containerR}>
                 <div className={styles.typeTitle}>
-                    <ListClick
-                        onRef={this.onRef}
-                        data={serList}
-                        getId={id => this.getTypeId(id)}
-                        title="供应商类型："
-                    />
+                    <span style={{ marginRight: 5 }}>供应商类型：</span>
+                    <span
+                        className={`${styles.typeBut} ${allActive ? styles.active : ''}`}
+                        onClick={this.allType}
+                    >
+                        全部
+                    </span>
+                    {serList.map((item, i) => {
+                        let newitem = addTypes.filter(itemType => {
+                            return item.id == itemType
+                        })
+                        if (!newitem.length) {
+                            return (
+                                <span
+                                    key={i}
+                                    onClick={() => that.addServeType(item.id)}
+                                    className={styles.typeBut}
+                                >
+                                    {item.typeName}
+                                </span>
+                            )
+                        } else {
+                            return (
+                                <span
+                                    key={i}
+                                    onClick={() => that.addServeType(item.id)}
+                                    className={`${styles.active} ${styles.typeBut}`}
+                                >
+                                    {item.typeName}
+                                </span>
+                            )
+                        }
+                    })}
                 </div>
                 <Form layout="inline" onSubmit={this.handleSubmit}>
                     <Form.Item label="企业名称：">

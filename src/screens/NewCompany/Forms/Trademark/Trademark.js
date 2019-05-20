@@ -1,8 +1,27 @@
 import React, { PureComponent } from 'react'
-import { Button, Card, Table, Modal, Input, DatePicker } from 'antd'
+import { Button, Card, Table, Modal, Input, DatePicker, Divider } from 'antd'
 
-import formView from '../FormView'
-import styles from '../index.module.css'
+import FormView from '../FormView2'
+import styles from './Trademark.module.css'
+
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/trademark'
+
+const mapStateToProps = state => {
+    return {
+        trademark: state.trademark.trademark,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getTrademarkList: actions('getTrademarkList'),
+        },
+        dispatch,
+    )
+}
 
 const dataSource = [
     {
@@ -40,11 +59,6 @@ const columns = [
         key: 'tmName',
     },
     {
-        title: '商标类型',
-        dataIndex: 'tmType',
-        key: 'tmType',
-    },
-    {
         title: '注册号',
         dataIndex: 'regNo',
         key: 'regNo',
@@ -60,29 +74,9 @@ const columns = [
         key: 'appDate',
     },
     {
-        title: '使用期限',
-        dataIndex: 'expire',
-        key: 'expire',
-    },
-    {
-        title: '公司',
-        dataIndex: 'company',
-        key: 'company',
-    },
-    {
         title: '申请进度',
         dataIndex: 'status',
         key: 'status',
-    },
-    {
-        title: '服务项目',
-        dataIndex: 'service',
-        key: 'service',
-    },
-    {
-        title: '代理机构',
-        dataIndex: 'org',
-        key: 'org',
     },
     {
         title: '操作',
@@ -90,10 +84,23 @@ const columns = [
         key: 'update',
     },
 ]
-
-export default class Trademark extends PureComponent {
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Trademark extends PureComponent {
     state = {
         visible: false,
+    }
+    componentDidMount = () => {
+        const companyId = sessionStorage.getItem('companyId')
+        if (companyId) {
+            this.props.getTrademarkList({
+                companyId: sessionStorage.getItem('companyId'),
+                pageNo: 1,
+                pageSize: 10,
+            })
+        }
     }
     newInfo = () => {
         this.setState({
@@ -116,34 +123,18 @@ export default class Trademark extends PureComponent {
     renderForm = type => {
         const items = [
             {
-                label: '出资方',
-                field: 'name',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入企业名称',
-                    },
-                ],
+                label: '商标名称',
+                field: 'tmName',
                 component: <Input />,
             },
             {
-                label: '金额',
-                field: 'money',
+                label: '注册号',
+                field: 'regNo',
                 component: <Input />,
             },
             {
-                label: '时间',
-                field: 'date',
-                component: <DatePicker />,
-            },
-            {
-                label: '更新人',
-                field: 'person',
-                component: <Input />,
-            },
-            {
-                label: '更新时间',
-                field: 'update',
+                label: '申请时间',
+                field: 'appDate',
                 component: <DatePicker />,
             },
         ]
@@ -151,22 +142,60 @@ export default class Trademark extends PureComponent {
             labelCol: { span: 3 },
             wrapperCol: { span: 12 },
         }
-        const FormView = formView({ items, data: {} })
+        //const FormView = formView({ items, data: {} })
         return (
             <FormView
                 ref={form => {
                     this.form = form
                 }}
+                items={items}
                 formItemLayout={formItemLayout}
                 layout="inline"
-                saveBtn={type === 'search' ? false : true}
+                saveBtn={false}
+            />
+        )
+    }
+    renderNewForm = () => {
+        const items = [
+            {
+                label: '商标名称',
+                field: 'tmName',
+                component: <Input />,
+            },
+            {
+                label: '注册号',
+                field: 'regNo',
+                component: <Input />,
+            },
+            {
+                label: '申请时间',
+                field: 'appDate',
+                component: <DatePicker />,
+            },
+        ]
+        const formItemLayout = {
+            labelCol: { span: 5 },
+            wrapperCol: { span: 14 },
+        }
+        //const FormView = formView({ items, data: {} })
+        return (
+            <FormView
+                ref={form => {
+                    this.form = form
+                }}
+                items={items}
+                formItemLayout={formItemLayout}
+                //layout="inline"
+                saveBtn={false}
             />
         )
     }
     render() {
+        const { trademark } = this.props
         return (
             <Card
                 title="商标信息"
+                className={styles.root}
                 bordered={false}
                 extra={
                     <Button type="primary" onClick={this.newInfo}>
@@ -174,8 +203,19 @@ export default class Trademark extends PureComponent {
                     </Button>
                 }
             >
-                <div className={styles.searchCard}>{this.renderForm('search')}</div>
-                <Table bordered pagination={false} dataSource={dataSource} columns={columns} />
+                <div className={styles.searchCard}>
+                    {this.renderForm('search')}
+                    <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                        <Button type="ghost">清除</Button>
+                        <Divider type="vertical" />
+                        <Button type="primary">查询</Button>
+                        <Divider type="vertical" />
+                        <Button type="primary" onClick={this.newInfo}>
+                            新增
+                        </Button>
+                    </div>
+                </div>
+                <Table bordered pagination={false} dataSource={trademark.list} columns={columns} />
                 <Modal
                     title="商标信息"
                     visible={this.state.visible}
@@ -183,9 +223,10 @@ export default class Trademark extends PureComponent {
                     onCancel={this.handleCancel}
                     //footer={null}
                 >
-                    {this.renderForm()}
+                    {this.renderNewForm()}
                 </Modal>
             </Card>
         )
     }
 }
+export default Trademark

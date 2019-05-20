@@ -1,17 +1,19 @@
 import React, { PureComponent } from 'react'
-import { Card, Form, Input, Button, Table, Select, Divider, Breadcrumb } from 'antd'
+import { Card, Form, Input, Button, Table, Select, Divider, Breadcrumb, Modal } from 'antd'
 import { Link } from 'react-router-dom'
 import styles from './SupplierList.module.css'
-import ListClick from '../../../components/ListClick/ListClick'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from '../../../redux/agencyRequire'
 
 let page = { pageNo: 1, pageSize: 10 }
+const confirm = Modal.confirm
 class SupplierList extends PureComponent {
     state = {
         typeId: '',
+        addTypes: [],
+        allActive: true,
     }
     componentDidMount = () => {
         this.props.getSupplierList(page)
@@ -24,8 +26,8 @@ class SupplierList extends PureComponent {
                 return
             }
             params = fieldsValue
-            if (this.state.typeId && this.state.typeId !== 'undefined') {
-                params.typeId = this.state.typeId
+            if (this.state.addTypes.length > 0) {
+                params.typeId = this.state.addTypes.join(',')
             }
         })
         return params
@@ -51,13 +53,36 @@ class SupplierList extends PureComponent {
         parm.pageSize = 10
         this.props.getSupplierList(parm)
     }
-    getTypeId = num => {
-        this.setState({
-            typeId: num,
-        })
+    addServeType = id => {
+        this.setState({ allActive: false })
+        let type = true
+        let { addTypes } = this.state
+        let oldaddTypes = []
+        let newaddTypes = []
+        for (let i in addTypes) {
+            if (addTypes[i] == id) {
+                type = false
+            } else {
+                newaddTypes.push(addTypes[i])
+            }
+            oldaddTypes.push(addTypes[i])
+        }
+        if (type) {
+            oldaddTypes.push(id)
+            this.setState({
+                addTypes: oldaddTypes,
+            })
+        } else {
+            this.setState({
+                addTypes: newaddTypes,
+            })
+        }
+    }
+    allType = () => {
+        this.setState({ addTypes: [], allActive: !this.state.allActive })
     }
     clearInput = () => {
-        this.listClick.updateAll()
+        this.setState({ allActive: true, addTypes: [] })
         this.props.form.resetFields()
         let parm = this.formParms()
         parm.pageNo = 1
@@ -65,17 +90,22 @@ class SupplierList extends PureComponent {
         parm.typeId = undefined
         this.props.getSupplierList(parm)
     }
-    onRef = ref => {
-        this.listClick = ref
-    }
     underSupp = id => {
-        let parm = this.formParms()
-        parm.pageNo = 1
-        parm.pageSize = 10
-        this.props.undercarriageSupplier({ id: id, parm: parm })
+        let that = this
+        confirm({
+            title: '确定要下架吗',
+            onOk() {
+                let parm = that.formParms()
+                parm.pageNo = 1
+                parm.pageSize = 10
+                that.props.undercarriageSupplier({ id: id, parm: parm })
+            },
+            onCancel() {},
+        })
     }
     render() {
-        // 供应商分类默认是上面那个
+        let that = this
+        const { addTypes, allActive } = this.state
         const { getFieldDecorator } = this.props.form
         const columns = [
             {
@@ -103,12 +133,13 @@ class SupplierList extends PureComponent {
                 key: 'serviceTimes',
                 align: 'center',
             },
-            // {
-            //     title: '总评分(满分5分)',
-            //     dataIndex: 'totalScore',
-            //     key: 'totalScore',
-            //     align: 'center',
-            // },
+            {
+                title: '总评分(满分5分)',
+                dataIndex: 'score',
+                key: 'score',
+                align: 'center',
+                render: (text, record) => <span key={record}>{text ? text : '-'}</span>,
+            },
             {
                 title: '提供的服务',
                 dataIndex: 'category',
@@ -151,17 +182,43 @@ class SupplierList extends PureComponent {
         const serList = this.props.ServiceTypeList.filter(item => {
             return item.level === '1'
         })
-        serList.unshift({ typeName: '全部', id: 'undefined' })
         return (
             <div className={styles.containerSup}>
                 <Card title="供应商列表" bordered={false}>
                     <div className={styles.typeTitle}>
-                        <ListClick
-                            onRef={this.onRef}
-                            data={serList}
-                            getId={id => this.getTypeId(id)}
-                            title="供应商类型："
-                        />
+                        <span style={{ marginRight: 5 }}>供应商类型：</span>
+                        <span
+                            className={`${styles.typeBut} ${allActive ? styles.active : ''}`}
+                            onClick={this.allType}
+                        >
+                            全部
+                        </span>
+                        {serList.map((item, i) => {
+                            let newitem = addTypes.filter(itemType => {
+                                return item.id == itemType
+                            })
+                            if (!newitem.length) {
+                                return (
+                                    <span
+                                        key={i}
+                                        onClick={() => that.addServeType(item.id)}
+                                        className={styles.typeBut}
+                                    >
+                                        {item.typeName}
+                                    </span>
+                                )
+                            } else {
+                                return (
+                                    <span
+                                        key={i}
+                                        onClick={() => that.addServeType(item.id)}
+                                        className={`${styles.active} ${styles.typeBut}`}
+                                    >
+                                        {item.typeName}
+                                    </span>
+                                )
+                            }
+                        })}
                     </div>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
                         <Form.Item label="供应商名称：">

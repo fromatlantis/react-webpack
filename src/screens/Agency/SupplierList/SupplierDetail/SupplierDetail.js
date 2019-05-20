@@ -88,24 +88,19 @@ class supplierEdit extends PureComponent {
                 align: 'center',
             },
             {
-                title: '评价',
-                dataIndex: 'evaluation',
-                key: 'evaluation',
+                title: '评分',
+                dataIndex: 'score',
+                key: 'score',
                 align: 'center',
             },
             {
                 title: '评价描述',
-                dataIndex: 'description',
-                key: 'description',
+                dataIndex: 'evaluate',
+                key: 'evaluate',
                 align: 'center',
             },
         ]
         let id = this.props.match.params.id
-        const list = this.props.demandList.map(item => {
-            item.evaluation = '不错哦'
-            item.description = '继续加油哦'
-            return item
-        })
         return (
             <div>
                 <Card
@@ -172,7 +167,7 @@ class supplierEdit extends PureComponent {
                         style={{ margin: '20px 0' }}
                         columns={columns}
                         rowKey={(record, index) => `complete${record.id}${index}`}
-                        dataSource={list}
+                        dataSource={this.props.demandList}
                         pagination={{
                             // current: pageNo,
                             showSizeChanger: true,

@@ -48,7 +48,6 @@ class supplierEdit extends PureComponent {
         e.preventDefault()
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                // console.log('用户输入的是', values)
                 values.category = values.category.join(',')
                 this.props.addSupplier(values)
             }
@@ -85,15 +84,15 @@ class supplierEdit extends PureComponent {
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                         <Form.Item {...formItemLayout} label="供应商分类:">
                             {getFieldDecorator('category', {
-                                rules: [{ required: true, message: '请输入供应商分类' }],
+                                rules: [{ required: true, message: '请输入正确的供应商分类' }],
                             })(
                                 <TreeSelect
                                     showSearch
+                                    allowClear
+                                    multiple
+                                    treeDefaultExpandAll
                                     style={{ width: 375 }}
                                     dropdownStyle={{ maxHeight: 200, overflow: 'auto' }}
-                                    placeholder="Please select"
-                                    allowClear
-                                    treeDefaultExpandAll
                                 >
                                     {this.nodeText().map(item => {
                                         if (item.items.length > 0) {

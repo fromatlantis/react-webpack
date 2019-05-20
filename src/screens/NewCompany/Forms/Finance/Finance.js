@@ -1,33 +1,34 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker } from 'antd'
+import moment from 'moment'
+import FormView from '../FormView2'
 
-import formView from '../FormView'
-import styles from '../index.module.css'
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/finance'
 
-const dataSource = [
-    {
-        key: '1',
-        date: '2019-05-20',
-        money: 520,
-        investor: '涂山',
-        person: '东方月初',
-        update: '2019-05-20',
-    },
-    {
-        key: '2',
-        date: '2019-05-20',
-        money: 520,
-        investor: '涂山',
-        person: '东方月初',
-        update: '2019-05-20',
-    },
-]
+const mapStateToProps = state => {
+    return {
+        finance: state.finance.finance,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getFinancingList: actions('getFinancingList'),
+            increaseFinancingApprove: actions('increaseFinancingApprove'),
+        },
+        dispatch,
+    )
+}
 
 const columns = [
     {
         title: '时间',
         dataIndex: 'date',
         key: 'date',
+        render: date => <span>{moment(date).format('YYYY-MM-DD')}</span>,
     },
     {
         title: '金额',
@@ -36,8 +37,8 @@ const columns = [
     },
     {
         title: '出资方',
-        dataIndex: 'investor',
-        key: 'investor',
+        dataIndex: 'investorName',
+        key: 'investorName',
     },
     {
         title: '更新人',
@@ -51,10 +52,22 @@ const columns = [
     },
 ]
 
-export default class Finance extends PureComponent {
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Finance extends PureComponent {
     state = {
         visible: false,
     }
+    componentDidMount() {
+        this.props.getFinancingList({
+            companyId: sessionStorage.getItem('companyId'),
+            pageNo: 1,
+            pageSize: 10,
+        })
+    }
+
     newInfo = () => {
         this.setState({
             visible: true,
@@ -62,10 +75,15 @@ export default class Finance extends PureComponent {
     }
     handleOk = () => {
         this.form.validateFields((errors, values) => {
-            console.log(values)
-        })
-        this.setState({
-            visible: false,
+            if (!errors) {
+                this.setState({
+                    visible: false,
+                })
+                values.companyId = sessionStorage.getItem('companyId')
+                values.date = moment(values.date).format('YYYY-MM-DD')
+                console.log(values)
+                this.props.increaseFinancingApprove(values)
+            }
         })
     }
     handleCancel = () => {
@@ -77,11 +95,11 @@ export default class Finance extends PureComponent {
         const items = [
             {
                 label: '出资方',
-                field: 'name',
+                field: 'investorName',
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -89,41 +107,55 @@ export default class Finance extends PureComponent {
             {
                 label: '金额',
                 field: 'money',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入信息',
+                    },
+                ],
                 component: <Input />,
             },
             {
                 label: '时间',
                 field: 'date',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入信息',
+                    },
+                ],
                 component: <DatePicker />,
             },
-            {
-                label: '更新人',
-                field: 'person',
-                component: <Input />,
-            },
-            {
-                label: '更新时间',
-                field: 'update',
-                component: <DatePicker />,
-            },
+            // {
+            //     label: '更新人',
+            //     field: 'person',
+            //     component: <Input />,
+            // },
+            // {
+            //     label: '更新时间',
+            //     field: 'update',
+            //     component: <DatePicker />,
+            // },
         ]
         const formItemLayout = {
             labelCol: { span: 6 },
             wrapperCol: { span: 12 },
         }
-        const FormView = formView({ items, data: {} })
+        //const FormView = formView({ items, data: {} })
         return (
             <FormView
                 ref={form => {
                     this.form = form
                 }}
+                items={items}
                 formItemLayout={formItemLayout}
-                layout="inline"
+                //layout="inline"
                 saveBtn={false}
             />
         )
     }
     render() {
+        const { finance } = this.props
         return (
             <Card
                 title="融资信息"
@@ -134,9 +166,9 @@ export default class Finance extends PureComponent {
                     </Button>
                 }
             >
-                <Table bordered pagination={false} dataSource={dataSource} columns={columns} />
+                <Table bordered pagination={false} dataSource={finance.list} columns={columns} />
                 <Modal
-                    className={styles.modalBox}
+                    //className={styles.modalBox}
                     title="融资信息"
                     visible={this.state.visible}
                     onOk={this.handleOk}
@@ -149,3 +181,4 @@ export default class Finance extends PureComponent {
         )
     }
 }
+export default Finance

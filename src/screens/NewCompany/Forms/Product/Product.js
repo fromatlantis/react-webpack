@@ -5,6 +5,26 @@ import { UploadImg } from 'components'
 import formView from '../FormView'
 import logo from 'assets/hz.png'
 
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/product'
+
+const mapStateToProps = state => {
+    return {
+        product: state.product.product,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getProductInfoList: actions('getProductInfoList'),
+            increaseProductInfoApprove: actions('increaseProductInfoApprove'),
+        },
+        dispatch,
+    )
+}
+
 const { TextArea } = Input
 const dataSource = [
     {
@@ -56,10 +76,20 @@ const columns = [
         key: 'update',
     },
 ]
-
-export default class Product extends PureComponent {
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Product extends PureComponent {
     state = {
         visible: false,
+    }
+    componentDidMount = () => {
+        this.props.getProductInfoList({
+            companyId: sessionStorage.getItem('companyId'),
+            pageNo: 1,
+            pageSize: 10,
+        })
     }
     newInfo = () => {
         this.setState({
@@ -109,8 +139,8 @@ export default class Product extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 6 },
-            wrapperCol: { span: 16 },
+            labelCol: { span: 5 },
+            wrapperCol: { span: 14 },
         }
         const FormView = formView({ items, data: {} })
         return (
@@ -119,12 +149,13 @@ export default class Product extends PureComponent {
                     this.form = form
                 }}
                 formItemLayout={formItemLayout}
-                layout="inline"
+                //layout="inline"
                 saveBtn={false}
             />
         )
     }
     render() {
+        const { product } = this.props
         return (
             <Card
                 title="主要产品"
@@ -135,7 +166,7 @@ export default class Product extends PureComponent {
                     </Button>
                 }
             >
-                <Table bordered pagination={false} dataSource={dataSource} columns={columns} />
+                <Table bordered pagination={false} dataSource={product.list} columns={columns} />
                 <Modal
                     title="主要产品"
                     visible={this.state.visible}
@@ -149,3 +180,4 @@ export default class Product extends PureComponent {
         )
     }
 }
+export default Product

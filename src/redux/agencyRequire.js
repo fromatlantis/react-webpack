@@ -144,14 +144,10 @@ const model = {
         {
             name: 'getSupplierListSuccess',
             reducer: (state, action) => {
-                console.log('......', action.payload)
-                let newdemandList = state.demandList
-                newdemandList[0].typeId = action.payload.key
                 return {
                     ...state,
                     supperList: action.payload.resultList,
                     supperListTotal: action.payload.totalCount,
-                    demandList: newdemandList,
                 }
             },
         },

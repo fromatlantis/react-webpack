@@ -1,11 +1,30 @@
 import React, { PureComponent } from 'react'
-import { Button, Card, Divider, Modal, Input } from 'antd'
+import { Button, Card, Divider, Modal, Input, Skeleton } from 'antd'
 
-import formView from '../FormView'
+import FormView from '../FormView2'
 import { UploadImg } from 'components'
 
 import styles from './Members.module.css'
 import avatar from 'assets/avatar.png'
+
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/members'
+
+const mapStateToProps = state => {
+    return {
+        team: state.members.team,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getCoreTeamList: actions('getCoreTeamList'),
+        },
+        dispatch,
+    )
+}
 
 const { TextArea } = Input
 const dataSource = [
@@ -27,10 +46,22 @@ const dataSource = [
     },
 ]
 
-export default class Members extends PureComponent {
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Members extends PureComponent {
     state = {
         visible: false,
     }
+    componentDidMount() {
+        this.props.getCoreTeamList({
+            companyId: sessionStorage.getItem('companyId'),
+            pageNo: 1,
+            pageSize: 10,
+        })
+    }
+
     newInfo = () => {
         this.setState({
             visible: true,
@@ -49,7 +80,7 @@ export default class Members extends PureComponent {
             visible: false,
         })
     }
-    renderForm = () => {
+    renderNewForm = () => {
         const items = [
             {
                 label: '形象照片',
@@ -79,22 +110,36 @@ export default class Members extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 6 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 5 },
+            wrapperCol: { span: 14 },
         }
-        const FormView = formView({ items, data: {} })
+        //const FormView = formView({ items, data: {} })
         return (
             <FormView
                 ref={form => {
                     this.form = form
                 }}
+                items={items}
                 formItemLayout={formItemLayout}
-                layout="inline"
+                //layout="inline"
                 saveBtn={false}
             />
         )
     }
     render() {
+        const { team } = this.props
+        const searchItems = [
+            {
+                label: '姓名',
+                field: 'name',
+                component: <Input />,
+            },
+            {
+                label: '职务',
+                field: 'title',
+                component: <Input />,
+            },
+        ]
         return (
             <Card
                 title="核心人员"
@@ -105,27 +150,51 @@ export default class Members extends PureComponent {
                     </Button>
                 }
             >
-                {dataSource.map(item => {
-                    return (
-                        <div className={styles.card} key={item.key}>
-                            <img src={avatar} alt="" />
-                            <div className={styles.base}>
-                                <p>{item.name}</p>
-                                <p>{item.duty}</p>
+                <div className={styles.searchBox}>
+                    <FormView
+                        formItemLayout={{ labelCol: { span: 6 }, wrapperCol: { span: 18 } }}
+                        items={searchItems}
+                        layout="inline"
+                        saveBtn={false}
+                    />
+                    <div className={styles.toobar}>
+                        <Button type="ghost">清除</Button>
+                        <Divider type="vertical" />
+                        <Button type="primary">查询</Button>
+                        <Divider type="vertical" />
+                        <Button type="primary">新增</Button>
+                    </div>
+                </div>
+
+                <Skeleton loading={team.list ? false : true} active avatar>
+                    {(team.list || []).map(item => {
+                        return (
+                            <div className={styles.card} key={item.key}>
+                                <img src={item.icon} alt="" />
+                                <div className={styles.base}>
+                                    <p>
+                                        <b>姓名：</b>
+                                        {item.name}
+                                    </p>
+                                    <p>
+                                        <b>职务：</b>
+                                        {item.title}
+                                    </p>
+                                </div>
+                                <div className={styles.intro}>{item.intro}</div>
+                                <div>
+                                    <Button size="small" type="link">
+                                        编辑
+                                    </Button>
+                                    <Divider type="vertical" />
+                                    <Button size="small" type="link">
+                                        删除
+                                    </Button>
+                                </div>
                             </div>
-                            <div className={styles.intro}>{item.intro}</div>
-                            <div>
-                                <Button size="small" type="link">
-                                    编辑
-                                </Button>
-                                <Divider type="vertical" />
-                                <Button size="small" type="link">
-                                    删除
-                                </Button>
-                            </div>
-                        </div>
-                    )
-                })}
+                        )
+                    })}
+                </Skeleton>
                 <Modal
                     title="核心人员"
                     visible={this.state.visible}
@@ -133,9 +202,10 @@ export default class Members extends PureComponent {
                     onCancel={this.handleCancel}
                     //footer={null}
                 >
-                    {this.renderForm()}
+                    {this.renderNewForm()}
                 </Modal>
             </Card>
         )
     }
 }
+export default Members
