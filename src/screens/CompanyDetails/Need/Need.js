@@ -12,7 +12,7 @@ import { actions } from '../../../redux/agencyRequire'
 class Need extends PureComponent {
     componentWillReceiveProps(nextProps) {
         if (this.props.BasicInfoDetial !== nextProps.BasicInfoDetial) {
-            console.log('dsf', nextProps.BasicInfoDetial)
+            //console.log('dsf', nextProps.BasicInfoDetial)
             if (nextProps.BasicInfoDetial.name) {
                 this.props.getDemandList({ enterpriseName: nextProps.BasicInfoDetial.name })
             }

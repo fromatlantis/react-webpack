@@ -1,6 +1,19 @@
 import React, { PureComponent } from 'react'
-import { message, Button, Card, Table, Modal, Input, Select, Pagination } from 'antd'
-import formView from '../FormView'
+import {
+    message,
+    Button,
+    Card,
+    Table,
+    Modal,
+    Divider,
+    DatePicker,
+    Input,
+    Select,
+    Pagination,
+} from 'antd'
+import moment from 'moment'
+import { FormView, SearchView } from 'components'
+// import formView from '../FormView'
 import styles from '../index.module.css'
 import request from '../../../../utils/request'
 import { bindActionCreators } from 'redux'
@@ -9,6 +22,7 @@ import { push } from 'connected-react-router'
 import { actions } from '../../../../redux/intermediary'
 import Toolbar from '../../Toolbar/Toolbar'
 const Option = Select.Option
+const dateStr = 'x' //毫秒
 class Works extends PureComponent {
     state = {
         page: 1,
@@ -105,6 +119,14 @@ class Works extends PureComponent {
             url: '/enterprise/queryProductTrademarkDetail?keyId=' + keyId,
         })
         let res = result.data
+        if (res.regtime) {
+            res.regtime = moment(res.regtime, dateStr)
+        }
+        if (res.finishTime) {
+            let time = new Date(res.finishTime)
+            time = Date.parse(time)
+            res.finishTime = moment(time, dateStr)
+        }
         this.setState({
             visible: true,
             keyId: keyId,
@@ -114,7 +136,19 @@ class Works extends PureComponent {
     }
     handleOk = () => {
         let that = this
-        this.form.validateFields((errors, values) => {
+        this.newForm.validateFields((errors, values) => {
+            if (values.regtime) {
+                values.regtime = moment(values.regtime.format('YYYY-MM-DD hh:mm:ss')).format(
+                    dateStr,
+                )
+            }
+            if (values.finishTime) {
+                values.finishTime = moment(values.finishTime.format('YYYY-MM-DD hh:mm:ss')).format(
+                    'YYYY-MM-DD ',
+                )
+            }
+            console.log(values.finishTime)
+
             values.companyId = sessionStorage.getItem('companyId')
             let newValue = {
                 params: {
@@ -127,22 +161,8 @@ class Works extends PureComponent {
                     authorNationality: values.authorNationality,
                 },
             }
-            let patrn = /[`~!@#$%^&*_+<>?:"{},\/;'[\]·！#￥——：；“”‘、，|《。》？、【】[\] ]/im
-            let Special = false
             if (that.state.type === 'add') {
-                let obj = newValue.params
-                for (let i in obj) {
-                    if (obj[i]) {
-                        if (!patrn.test(obj[i])) {
-                            Special = true
-                        }
-                    }
-                }
-                if (Special) {
-                    message.info('不能输入特殊字符哦')
-                } else {
-                    that.props.increaseProductTrademarkApprove(newValue)
-                }
+                that.increaseProductTrademarkApprove(newValue)
             } else {
                 let newValue = {
                     companyId: sessionStorage.getItem('companyId'),
@@ -154,24 +174,24 @@ class Works extends PureComponent {
                     authorNationality: values.authorNationality,
                 }
                 newValue = { ...that.state.FormView, ...newValue }
-                let obj = newValue
-                for (let i in obj) {
-                    if (obj[i]) {
-                        if (!patrn.test(obj[i])) {
-                            Special = true
-                        }
-                    }
-                }
-                if (Special) {
-                    message.info('不能输入特殊字符哦')
-                } else {
-                    that.changeProductTrademarkApprove(newValue)
-                }
+                that.changeProductTrademarkApprove(newValue)
             }
         })
         this.setState({
             visible: false,
         })
+    }
+    async increaseProductTrademarkApprove(data) {
+        var result = await request({
+            type: 'post',
+            url: '/enterprise/increaseProductTrademarkApprove',
+            data,
+        })
+        if (result.code === 1000) {
+            message.success('成功')
+        } else {
+            message.error(result.message)
+        }
     }
     async changeProductTrademarkApprove(data) {
         var result = await request({
@@ -183,7 +203,11 @@ class Works extends PureComponent {
             },
             contentType: 'multipart/form-data',
         })
-        message.info(result.message)
+        if (result.code === 1000) {
+            message.success('成功')
+        } else {
+            message.error(result.message)
+        }
     }
     handleCancel = () => {
         this.setState({
@@ -211,33 +235,38 @@ class Works extends PureComponent {
                 field: 'fullname',
                 component: <Input placeholder="著作权名称" />,
             },
+            // {
+            //     label: '作品著权类别',
+            //     field: 'type',
+            //     component: (
+            //         <Select
+            //             defaultValue="请选择"
+            //             placeholder="请选择"
+            //             style={{ width: 120 }}
+            //             onChange={() => this.handleChange()}
+            //         >
+            //             <Option value="音乐">音乐</Option>
+            //             <Option value="美术">美术</Option>
+            //             <Option value="文字">文字</Option>
+            //             <Option value="汇编">汇编</Option>
+            //             <Option value="影视">影视</Option>
+            //             <Option value="戏剧">戏剧</Option>
+            //             <Option value="舞蹈">舞蹈</Option>
+            //             <Option value="建筑">建筑</Option>
+            //             <Option value="工程设计图">工程设计图</Option>
+            //             <Option value="产品设计图">产品设计图</Option>
+            //             <Option value="地图、示意图">地图、示意图</Option>
+            //             <Option value="摄影">摄影</Option>
+            //             <Option value="计算机软件">计算机软件</Option>
+            //             <Option value="模型">模型</Option>
+            //             <Option value="其他">其他</Option>
+            //         </Select>
+            //     ),
+            // },
             {
                 label: '作品著权类别',
                 field: 'type',
-                component: (
-                    <Select
-                        defaultValue="请选择"
-                        placeholder="请选择"
-                        style={{ width: 120 }}
-                        onChange={() => this.handleChange()}
-                    >
-                        <Option value="音乐">音乐</Option>
-                        <Option value="美术">美术</Option>
-                        <Option value="文学">文学</Option>
-                        <Option value="汇编">汇编</Option>
-                        <Option value="影视">影视</Option>
-                        <Option value="戏剧">戏剧</Option>
-                        <Option value="舞蹈">舞蹈</Option>
-                        <Option value="建筑">建筑</Option>
-                        <Option value="工程设计图">工程设计图</Option>
-                        <Option value="产品设计图">产品设计图</Option>
-                        <Option value="地图、示意图">地图、示意图</Option>
-                        <Option value="摄影">摄影</Option>
-                        <Option value="计算机软件">计算机软件</Option>
-                        <Option value="模型">模型</Option>
-                        <Option value="其他">其他</Option>
-                    </Select>
-                ),
+                component: <Input placeholder="作品著权类别" />,
             },
             {
                 label: '著作权人',
@@ -247,7 +276,7 @@ class Works extends PureComponent {
             {
                 label: '登记日期',
                 field: 'regtime',
-                component: <Input placeholder="登记日期" />,
+                component: <DatePicker placeholder="登记日期" />,
             },
             {
                 label: '登记号',
@@ -257,25 +286,36 @@ class Works extends PureComponent {
             {
                 label: '完成创作时间',
                 field: 'finishTime',
-                component: <Input placeholder="完成创作时间" />,
+                component: <DatePicker placeholder="完成创作时间" />,
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 14 },
+            labelCol: { span: 3 },
+            wrapperCol: { span: 12 },
         }
-        const FormView = formView({ items, data: this.state.FormView })
         return (
             <FormView
                 ref={form => {
-                    this.form = form
+                    this.newForm = form
                 }}
+                items={items}
+                data={this.state.FormView}
                 formItemLayout={formItemLayout}
-                layout="inline"
-                // saveBtn={type === 'search' ? false : true}
                 saveBtn={false}
             />
         )
+        // const FormView = formView({ items, data: this.state.FormView })
+        // return (
+        //     <FormView
+        //         ref={form => {
+        //             this.form = form
+        //         }}
+        //         formItemLayout={formItemLayout}
+        //         layout="inline"
+        //         // saveBtn={type === 'search' ? false : true}
+        //         saveBtn={false}
+        //     />
+        // )
     }
     renderForm = type => {
         const items = [
@@ -298,31 +338,36 @@ class Works extends PureComponent {
             {
                 label: '著作权类别',
                 field: 'type',
-                component: (
-                    <Select
-                        placeholder="著作权类别"
-                        defaultValue="请选择"
-                        style={{ width: 120 }}
-                        onChange={() => this.handleChange()}
-                    >
-                        <Option value="音乐">音乐</Option>
-                        <Option value="美术">美术</Option>
-                        <Option value="文学">文学</Option>
-                        <Option value="汇编">汇编</Option>
-                        <Option value="影视">影视</Option>
-                        <Option value="戏剧">戏剧</Option>
-                        <Option value="舞蹈">舞蹈</Option>
-                        <Option value="建筑">建筑</Option>
-                        <Option value="工程设计图">工程设计图</Option>
-                        <Option value="产品设计图">产品设计图</Option>
-                        <Option value="地图、示意图">地图、示意图</Option>
-                        <Option value="摄影">摄影</Option>
-                        <Option value="计算机软件">计算机软件</Option>
-                        <Option value="模型">模型</Option>
-                        <Option value="其他">其他</Option>
-                    </Select>
-                ),
+                component: <Input placeholder="著作权类别" />,
             },
+            // {
+            //     label: '著作权类别',
+            //     field: 'type',
+            //     component: (
+            //         <Select
+            //             placeholder="著作权类别"
+            //             defaultValue="请选择"
+            //             style={{ width: 120 }}
+            //             onChange={() => this.handleChange()}
+            //         >
+            //             <Option value="音乐">音乐</Option>
+            //             <Option value="美术">美术</Option>
+            //             <Option value="文字">文字</Option>
+            //             <Option value="汇编">汇编</Option>
+            //             <Option value="影视">影视</Option>
+            //             <Option value="戏剧">戏剧</Option>
+            //             <Option value="舞蹈">舞蹈</Option>
+            //             <Option value="建筑">建筑</Option>
+            //             <Option value="工程设计图">工程设计图</Option>
+            //             <Option value="产品设计图">产品设计图</Option>
+            //             <Option value="地图、示意图">地图、示意图</Option>
+            //             <Option value="摄影">摄影</Option>
+            //             <Option value="计算机软件">计算机软件</Option>
+            //             <Option value="模型">模型</Option>
+            //             <Option value="其他">其他</Option>
+            //         </Select>
+            //     ),
+            // },
             // {
             //     label: '著作权人',
             //     field: 'authorNationality',
@@ -331,7 +376,7 @@ class Works extends PureComponent {
             {
                 label: '登记日期',
                 field: 'regtime',
-                component: <Input placeholder="登记日期" />,
+                component: <DatePicker placeholder="登记日期" />,
             },
             {
                 label: '登记号',
@@ -341,29 +386,40 @@ class Works extends PureComponent {
             {
                 label: '完成创作时间',
                 field: 'finishTime',
-                component: <Input placeholder="完成创作时间" />,
+                component: <DatePicker placeholder="完成创作时间" />,
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 14 },
+            labelCol: { span: 3 },
+            wrapperCol: { span: 12 },
         }
-        const FormView = formView({ items, data: this.state.form })
         return (
-            <FormView
+            <SearchView
                 ref={form => {
                     this.form = form
                 }}
+                items={items}
                 formItemLayout={formItemLayout}
                 layout="inline"
-                // saveBtn={type === 'search' ? false : true}
                 saveBtn={false}
-                emptyBtn={true}
-                empty={() => this.empty()}
-                query={() => this.query()}
-                add={() => this.add()}
             />
         )
+        // const FormView = formView({ items, data: this.state.form })
+        // return (
+        //     <FormView
+        //         ref={form => {
+        //             this.form = form
+        //         }}
+        //         formItemLayout={formItemLayout}
+        //         layout="inline"
+        //         // saveBtn={type === 'search' ? false : true}
+        //         saveBtn={false}
+        //         emptyBtn={true}
+        //         empty={() => this.empty()}
+        //         query={() => this.query()}
+        //         add={() => this.add()}
+        //     />
+        // )
     }
     empty() {
         this.form.resetFields()
@@ -384,6 +440,12 @@ class Works extends PureComponent {
     query() {
         let that = this
         this.form.validateFields((errors, values) => {
+            if (values.regtime) {
+                values.regtime = moment(values.regtime.format('YYYY-MM-DD')).format(dateStr)
+            }
+            if (values.finishTime) {
+                values.finishTime = moment(values.finishTime).format('YYYY-MM-DD')
+            }
             values.pageNo = 1
             that.setState({
                 form: {
@@ -436,6 +498,18 @@ class Works extends PureComponent {
             contentType: 'multipart/form-data',
         })
         if (result.code === 1000) {
+            for (let i = 0; i < result.data.list.length; i++) {
+                if (result.data.list[i].regtime) {
+                    result.data.list[i].regtime = moment(result.data.list[i].regtime).format(
+                        'YYYY-MM-DD hh:mm:ss',
+                    )
+                }
+                if (result.data.list[i].finishTime) {
+                    result.data.list[i].finishTime = moment(result.data.list[i].finishTime).format(
+                        'YYYY-MM-DD hh:mm:ss',
+                    )
+                }
+            }
             this.setState({
                 sessionStorageItem,
                 List: result.data,
@@ -458,8 +532,28 @@ class Works extends PureComponent {
     render() {
         return (
             <Card title="知识产权-作品著作权" bordered={false} extra={<Toolbar />}>
-                <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
+                {/* <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
                     {this.renderForm('search')}
+                </div> */}
+                <div className={styles.searchCard}>
+                    {this.renderForm('search')}
+                    <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                        <Button type="ghost" onClick={() => this.empty()}>
+                            清除
+                        </Button>
+                        <Divider type="vertical" />
+                        <Button
+                            type="primary"
+                            onClick={() => this.query()}
+                            style={{ background: 'rgb(50,200,100)' }}
+                        >
+                            查询
+                        </Button>
+                        <Divider type="vertical" />
+                        <Button type="primary" onClick={() => this.add()}>
+                            新增
+                        </Button>
+                    </div>
                 </div>
                 <Table
                     bordered
