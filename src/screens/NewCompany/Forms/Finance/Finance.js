@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react'
-import { Button, Card, Table, Modal, Input, DatePicker } from 'antd'
+import { Button, Card, Table, Modal, Input, DatePicker, Divider } from 'antd'
 import moment from 'moment'
 import { FormView } from 'components'
-
+import Toolbar from '../../Toolbar/Toolbar'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -148,9 +148,16 @@ class Finance extends PureComponent {
                 title="融资信息"
                 bordered={false}
                 extra={
-                    <Button type="primary" onClick={this.newInfo}>
-                        新增
-                    </Button>
+                    <div style={{ display: 'flex' }}>
+                        <Button
+                            type="primary"
+                            onClick={this.newInfo}
+                            style={{ marginRight: '15px' }}
+                        >
+                            新增
+                        </Button>
+                        <Toolbar />
+                    </div>
                 }
             >
                 <Table

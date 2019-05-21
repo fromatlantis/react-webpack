@@ -36,8 +36,10 @@ class News extends PureComponent {
         let company_id = this.props.match
             ? this.props.match.params.company_id
             : this.props.company_id
-        this.setState({ company_id })
-        this.props.getRecentNews({ companyId: company_id, limit: 5 })
+        if (company_id) {
+            this.setState({ company_id })
+            this.props.getRecentNews({ companyId: company_id, limit: 5 })
+        }
     }
 
     render() {

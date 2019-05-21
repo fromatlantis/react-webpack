@@ -44,17 +44,19 @@ class Information extends PureComponent {
         let company_id = this.props.match
             ? this.props.match.params.company_id
             : this.props.company_id
-        this.setState({ company_id })
-        //get工商信息
-        this.props.queryBaseInfoDetial(company_id)
-        //企业动态
-        this.props.getRecentNews({ companyId: company_id, limit: 5 })
-        //融资历程
-        this.props.getFinancingList({ companyId: company_id, limit: 5 })
-        //核心人员
-        this.props.getCoreTeamList({ companyId: company_id, limit: 5 })
-        //主要产品
-        this.props.getProductInfoList({ companyId: company_id, limit: 5 })
+        if (company_id) {
+            this.setState({ company_id })
+            //get工商信息
+            this.props.queryBaseInfoDetial(company_id)
+            //企业动态
+            this.props.getRecentNews({ companyId: company_id, limit: 5 })
+            //融资历程
+            this.props.getFinancingList({ companyId: company_id, limit: 5 })
+            //核心人员
+            this.props.getCoreTeamList({ companyId: company_id, limit: 5 })
+            //主要产品
+            this.props.getProductInfoList({ companyId: company_id, limit: 5 })
+        }
     }
     render() {
         const { company_id } = this.state
@@ -80,7 +82,7 @@ class Information extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -238,7 +240,7 @@ class Information extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -280,7 +282,7 @@ class Information extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -324,7 +326,7 @@ class Information extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {

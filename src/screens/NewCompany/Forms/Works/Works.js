@@ -7,8 +7,8 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { actions } from '../../../../redux/intermediary'
+import Toolbar from '../../Toolbar/Toolbar'
 const Option = Select.Option
-
 class Works extends PureComponent {
     state = {
         page: 1,
@@ -457,20 +457,7 @@ class Works extends PureComponent {
     }
     render() {
         return (
-            <Card
-                title="知识产权-作品著作权"
-                bordered={false}
-                // extra={
-                //     <div>
-                //         {/* <Button type="primary" onClick={this.newInfo}>
-                //             预览
-                //         </Button>
-                //         <Button onClick={this.newInfo} style={{ marginLeft: '10px' }}>
-                //             存档
-                //         </Button> */}
-                //     </div>
-                // }
-            >
+            <Card title="知识产权-作品著作权" bordered={false} extra={<Toolbar />}>
                 <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
                     {this.renderForm('search')}
                 </div>

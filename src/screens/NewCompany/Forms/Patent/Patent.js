@@ -3,7 +3,7 @@ import { Button, Card, Table, Modal, Input, DatePicker, Divider, Tooltip } from 
 import moment from 'moment'
 import { FormView, SearchView } from 'components'
 import styles from '../index.module.css'
-
+import Toolbar from '../../Toolbar/Toolbar'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -333,7 +333,12 @@ class Patent extends PureComponent {
         ]
         const { patent, searchParams } = this.props
         return (
-            <Card title="专利信息" style={{ width: 'calc(100vw - 256px)' }} bordered={false}>
+            <Card
+                title="专利信息"
+                style={{ width: 'calc(100vw - 256px)' }}
+                bordered={false}
+                extra={<Toolbar />}
+            >
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>

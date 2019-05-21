@@ -35,25 +35,27 @@ class Relation extends PureComponent {
         let company_id = this.props.match
             ? this.props.match.params.company_id
             : this.props.company_id
-        //投资图谱
-        this.props.getFirmGraph(company_id)
+        if (company_id) {
+            //投资图谱
+            this.props.getFirmGraph(company_id)
 
-        import('./mock').then(data => {
-            let result = data.default
-            const nodes = result.nodes.map(node => ({
-                data: node,
-            }))
-            const edges = result.relationships.map(rs => ({
-                data: {
-                    id: rs.id,
-                    source: rs.startNode,
-                    target: rs.endNode,
-                },
-            }))
-            this.setState({
-                elements: { nodes, edges },
+            import('./mock').then(data => {
+                let result = data.default
+                const nodes = result.nodes.map(node => ({
+                    data: node,
+                }))
+                const edges = result.relationships.map(rs => ({
+                    data: {
+                        id: rs.id,
+                        source: rs.startNode,
+                        target: rs.endNode,
+                    },
+                }))
+                this.setState({
+                    elements: { nodes, edges },
+                })
             })
-        })
+        }
     }
 
     render() {

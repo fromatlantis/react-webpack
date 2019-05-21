@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker, Divider } from 'antd'
-
 import { UploadImg, FormView, SearchView } from 'components'
 import logo from 'assets/hz.png'
-
+import Toolbar from '../../Toolbar/Toolbar'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -207,7 +206,7 @@ class Product extends PureComponent {
         ]
         const { product, searchParams } = this.props
         return (
-            <Card title="主要产品" bordered={false}>
+            <Card title="主要产品" bordered={false} extra={<Toolbar />}>
                 <div
                     style={{
                         display: 'flex',

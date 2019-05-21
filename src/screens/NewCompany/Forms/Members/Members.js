@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Divider, Modal, Input, Skeleton, Table } from 'antd'
-
+import Toolbar from '../../Toolbar/Toolbar'
 import { FormView, SearchView } from 'components'
 import { UploadImg } from 'components'
-
 import styles from './Members.module.css'
 
 // redux
@@ -204,7 +203,7 @@ class Members extends PureComponent {
         ]
         const { team, searchParams } = this.props
         return (
-            <Card title="核心人员" bordered={false}>
+            <Card title="核心人员" bordered={false} extra={<Toolbar />}>
                 <div className={styles.searchBox}>
                     <SearchView
                         ref={form => {

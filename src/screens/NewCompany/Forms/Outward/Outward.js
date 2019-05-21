@@ -3,7 +3,7 @@ import { Button, Card, Table, Modal, Input, DatePicker, Divider, InputNumber } f
 import moment from 'moment'
 import { FormView, SearchView } from 'components'
 import styles from '../index.module.css'
-
+import Toolbar from '../../Toolbar/Toolbar'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -301,7 +301,7 @@ class Outward extends PureComponent {
         ]
         const { outward, searchParams } = this.props
         return (
-            <Card title="对外投资" bordered={false}>
+            <Card title="对外投资" bordered={false} extra={<Toolbar />}>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>

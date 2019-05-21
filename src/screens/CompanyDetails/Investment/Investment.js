@@ -39,9 +39,11 @@ class Investment extends PureComponent {
         let company_id = this.props.match
             ? this.props.match.params.company_id
             : this.props.company_id
-        this.setState({ company_id })
-        //对外投资
-        this.props.getInvestmentAbroadList({ companyId: company_id, limit: 5 })
+        if (company_id) {
+            this.setState({ company_id })
+            //对外投资
+            this.props.getInvestmentAbroadList({ companyId: company_id, limit: 5 })
+        }
     }
     render() {
         const { company_id } = this.state
@@ -56,7 +58,7 @@ class Investment extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -127,7 +129,7 @@ class Investment extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {

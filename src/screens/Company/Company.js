@@ -111,12 +111,22 @@ class Home extends PureComponent {
     }
     batchAssign = () => {
         this.props.getCompanyList()
-        this.props.getDirectorList({ companyId: '123' })
+        this.props.getDirectorList()
         this.setState({
             batchAssign: true,
         })
     }
     batchAssignOk = () => {
+        const companyIds = this.refs.batchAssignCompany.state.targetKeys
+        const { targetKeys } = this.refs.batchAssignPerson.state
+        const { directorList } = this.props
+        this.props.assignServiceStaff({
+            companyIds: companyIds,
+            userIds: targetKeys,
+            userNames: directorList
+                .filter(item => targetKeys.includes(item.id))
+                .map(item => item.name),
+        })
         this.setState({
             batchAssign: false,
         })
@@ -127,7 +137,7 @@ class Home extends PureComponent {
         })
     }
     assign = companyId => {
-        this.props.getDirectorList({ companyId })
+        this.props.getDirectorList(companyId)
         this.setState({
             assign: true,
             companyId: companyId,
@@ -187,7 +197,7 @@ class Home extends PureComponent {
         const { company } = this.props
         return (company.list || []).map(item => {
             return (
-                <div className={styles.itemCard}>
+                <div className={styles.itemCard} key={item.company_id}>
                     <img src={item.logo} alt="logo" />
                     <div className={styles.intro}>
                         <div className={styles.title}>
@@ -269,7 +279,11 @@ class Home extends PureComponent {
                                 </p>
                                 <p>
                                     <b>官网：</b>
-                                    <a href={`http://${item.website_list}`}>
+                                    <a
+                                        href={`http://${item.website_list}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
                                         {`http://${item.website_list}`}
                                     </a>
                                 </p>
@@ -279,8 +293,9 @@ class Home extends PureComponent {
                                 </p>
                             </div>
                             <ul className={styles.status}>
-                                <Tag color="green">在线</Tag>
-                                <Tag color="volcano">已指派</Tag>
+                                <Tag color="green">{item.reg_status}</Tag>
+                                {item.director_name && <Tag color="volcano">已指派</Tag>}
+                                {!item.director_name && <Tag color="blue">未指派</Tag>}
                             </ul>
                         </div>
                     </div>

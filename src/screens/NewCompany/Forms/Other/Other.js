@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Card, Input } from 'antd'
 import { FormView } from 'components'
-
+import Toolbar from '../../Toolbar/Toolbar'
 const { TextArea } = Input
 
 export default class Other extends PureComponent {
@@ -23,7 +23,7 @@ export default class Other extends PureComponent {
             },
         ]
         return (
-            <Card title="其他信息" bordered={false}>
+            <Card title="其他信息" bordered={false} extra={<Toolbar />}>
                 <FormView items={items} />
             </Card>
         )

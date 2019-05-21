@@ -2,7 +2,7 @@
  * 企服首页（企服管理）/企业详情==> Property 知识产权
  */
 import React, { PureComponent, Fragment } from 'react'
-import { Card, Table, Steps, Button } from 'antd'
+import { Card, Table, Steps, Button, Tooltip } from 'antd'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
@@ -52,17 +52,19 @@ class Property extends PureComponent {
         let company_id = this.props.match
             ? this.props.match.params.company_id
             : this.props.company_id
-        this.setState({ company_id })
-        //商标信息
-        this.props.getTrademarkList({ companyId: company_id, limit: 5 })
-        //专利信息
-        this.props.getPatentList({ companyId: company_id, limit: 3 })
-        //软件著作权
-        this.props.getSoftwareCopyrightList({ companyId: company_id, limit: 5 })
-        //作品著作权
-        this.props.getProductTrademarkList({ companyId: company_id, limit: 5 })
-        //网站域名
-        this.props.getWebsiteRecordsList({ companyId: company_id, limit: 5 })
+        if (company_id) {
+            this.setState({ company_id })
+            //商标信息
+            this.props.getTrademarkList({ companyId: company_id, limit: 5 })
+            //专利信息
+            this.props.getPatentList({ companyId: company_id, limit: 3 })
+            //软件著作权
+            this.props.getSoftwareCopyrightList({ companyId: company_id, limit: 5 })
+            //作品著作权
+            this.props.getProductTrademarkList({ companyId: company_id, limit: 5 })
+            //网站域名
+            this.props.getWebsiteRecordsList({ companyId: company_id, limit: 5 })
+        }
     }
     render() {
         const { company_id } = this.state
@@ -86,7 +88,7 @@ class Property extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -170,7 +172,8 @@ class Property extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
+                            scroll={{ x: 2200 }}
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -178,60 +181,71 @@ class Property extends PureComponent {
                                     dataIndex: 'patentName',
                                     key: 'patentName',
                                     align: 'center',
+                                    fixed: 'left',
+                                    width: 200,
                                 },
                                 {
                                     title: '申请号',
                                     dataIndex: 'appnumber',
                                     key: 'appnumber',
                                     align: 'center',
+                                    width: 200,
                                 },
                                 {
                                     title: '申请日期',
                                     dataIndex: 'applicationTime',
                                     key: 'applicationTime',
                                     align: 'center',
+                                    width: 200,
                                 },
                                 {
                                     title: '授权日期',
                                     dataIndex: 'm',
                                     key: 'm',
                                     align: 'center',
+                                    width: 200,
                                 },
                                 {
                                     title: '专利发明人',
                                     dataIndex: 'inventor',
                                     key: 'inventor',
                                     align: 'center',
+                                    width: 200,
                                 },
                                 {
                                     title: '专利申请人',
                                     dataIndex: 'applicantName',
                                     key: 'applicantName',
                                     align: 'center',
+                                    width: 200,
                                 },
                                 {
                                     title: '专利类型',
                                     dataIndex: 'patentType',
                                     key: 'patentType',
                                     align: 'center',
+                                    width: 200,
                                 },
                                 {
                                     title: '专利代理机构',
                                     dataIndex: 'agency',
                                     key: 'agency',
                                     align: 'center',
+                                    width: 200,
                                 },
                                 {
                                     title: '公开（公告）号',
                                     dataIndex: 'pubnumber',
                                     key: 'pubnumber',
                                     align: 'center',
+                                    width: 200,
                                 },
                                 {
                                     title: '法律状态',
                                     dataIndex: 'jigou',
                                     key: 'jigou',
                                     align: 'center',
+                                    width: 200,
                                     // width: '15%',
                                     // render: jigou => (
                                     //     <Steps direction="vertical" size="small" current={0}>
@@ -252,6 +266,14 @@ class Property extends PureComponent {
                                     dataIndex: 'abstracts',
                                     key: 'abstracts',
                                     align: 'center',
+                                    width: 200,
+                                    render: abstracts => {
+                                        return (
+                                            <Tooltip placement="left" title={abstracts}>
+                                                <span>{abstracts.substring(0, 26)}...</span>
+                                            </Tooltip>
+                                        )
+                                    },
                                 },
                             ]}
                             dataSource={this.props.PatentList}
@@ -282,7 +304,7 @@ class Property extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -342,7 +364,7 @@ class Property extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -402,7 +424,7 @@ class Property extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
