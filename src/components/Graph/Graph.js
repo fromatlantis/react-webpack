@@ -10,62 +10,6 @@ export default class Graph extends PureComponent {
                 nodes: nodes,
                 edges: edges,
             },
-            //   elements: [
-            //     { // list of graph elements to start with  node a
-            //       data: {
-            //         id: 'a',
-            //         image: 'images/baitu.png',
-            //       },
-            //       selected: true
-            //     }, { // node b
-            //       data: {
-            //         id: 'b',
-            //         image: 'images/bianfu.png'
-            //       }
-            //     }, {
-            //       data: {
-            //         id: 'c',
-            //           image: 'images/daxiang.png'
-            //       }
-            //     }, {
-            //       data: {
-            //         id: 'd',
-            //         image: 'images/bianselong.png'
-            //       }
-            //     }, {
-            //       data: {
-            //         id: 'e',
-            //         image: 'images/dashu.png'
-            //       }
-            //     }, {
-            //       data: {
-            //         id: 'f',
-            //         image: 'images/hashiqi.png'
-            //       }
-            //     }, {
-            //       data: {
-            //         id: 'g',
-            //         image: 'images/dog.png'
-            //       }
-            //     }, {
-            //       data: {
-            //         id: 'h',
-            //         image: 'images/gongji.png'
-            //       }
-            //     }, { // edge ab
-            //       data: {
-            //         id: 'ab',
-            //         source: 'a',
-            //         target: 'b'
-            //       }
-            //     }, {
-            //       data: {
-            //         id: 'bc',
-            //         source: 'b',
-            //         target: 'c'
-            //       }
-            //     }
-            //   ],
             zoom: 1,
             minZoom: 0.1,
             maxZoom: 2,
@@ -83,7 +27,7 @@ export default class Graph extends PureComponent {
                     selector: 'node',
                     style: {
                         'background-color': '#1798f2',
-                        // 'label': 'data(properties.name)',
+                        // label: 'data(properties.name)',
                         // 'background-image': 'data(image)',
                         'background-fit': 'cover cover',
                         'background-image-opacity': 0.5,

@@ -4,9 +4,9 @@ import { blaze } from '../utils/blaze'
 import { message } from 'antd'
 
 const model = {
-    namespace: 'trademark',
+    namespace: 'outward',
     state: {
-        trademark: {},
+        outward: {},
         detail: {},
         searchParams: {
             pageNo: 1,
@@ -15,7 +15,7 @@ const model = {
     },
     actions: [
         {
-            name: 'getTrademarkList',
+            name: 'getInvestmentAbroadList',
             reducer: (state, action) => {
                 return {
                     ...state,
@@ -23,31 +23,31 @@ const model = {
                 }
             },
             *effect(action) {
-                const params = yield select(rootState => rootState.trademark.searchParams)
+                const params = yield select(rootState => rootState.outward.searchParams)
                 params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/getTrademarkList`,
+                    url: `/enterprise/getInvestmentAbroadList`,
                     contentType: 'multipart/form-data',
                     data: params,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getTrademarkListOk')(res.data))
+                    yield put(actions('getInvestmentAbroadListOk')(res.data))
                 }
             },
         },
         {
-            name: 'getTrademarkListOk',
-            reducer: 'trademark',
+            name: 'getInvestmentAbroadListOk',
+            reducer: 'outward',
         },
         {
-            name: 'queryTrademarkDetail',
+            name: 'queryInvestmentAbroadDetial',
             *effect(action) {
                 const res = yield call(request, {
-                    url: `/enterprise/queryTrademarkDetail?keyId=${action.payload}`,
+                    url: `/enterprise/queryInvestmentAbroadDetial?keyId=${action.payload}`,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('queryTrademarkDetailOk')(res.data))
+                    yield put(actions('queryInvestmentAbroadDetialOk')(res.data))
                 }
             },
             reducer: (state, action) => {
@@ -58,17 +58,17 @@ const model = {
             },
         },
         {
-            name: 'queryTrademarkDetailOk',
+            name: 'queryInvestmentAbroadDetialOk',
             reducer: 'detail',
         },
         {
-            name: 'increaseTrademarkApprove',
+            name: 'increaseInvestmentAbroadApprove',
             *effect(action) {
                 let params = action.payload
                 params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/increaseTrademarkApprove`,
+                    url: `/enterprise/increaseInvestmentAbroadApprove`,
                     data: {
                         params,
                     },
@@ -79,11 +79,11 @@ const model = {
             },
         },
         {
-            name: 'changeTrademarkApprove',
+            name: 'changeInvestmentAbroadApprove',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/changeTrademarkApprove`,
+                    url: `/enterprise/changeInvestmentAbroadApprove`,
                     contentType: 'multipart/form-data',
                     data: {
                         newContent: JSON.stringify(action.payload),
@@ -96,10 +96,10 @@ const model = {
         },
     ],
 }
-const trademark = blaze(model)
+const outward = blaze(model)
 // reducer combineReducers使用
-export default trademark.reducers
+export default outward.reducers
 // action connect组件使用
-export const actions = trademark.actions
+export const actions = outward.actions
 // effects saga监听副作用函数使用
-export const effects = trademark.effects
+export const effects = outward.effects

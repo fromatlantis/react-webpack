@@ -44,18 +44,17 @@ class SearchTree extends React.Component {
     }
     // 编辑父节点表单
     parentForm = type => {
-        const { logo } = this.state.parentFilter
         const items = [
             {
                 label: '服务LOGO:',
-                // field: 'icon',
+                field: 'logoFile',
                 rules: [
                     {
                         required: true,
                         message: '请输入服务的LOGO',
                     },
                 ],
-                component: <UploadImg key={logo} onUpload={this.parentEditClick} url={logo} />,
+                component: <UploadImg />,
             },
             {
                 label: '名称:',
@@ -74,6 +73,10 @@ class SearchTree extends React.Component {
             wrapperCol: { span: 14 },
         }
         const parentFilter = this.state.parentFilter
+
+        if (parentFilter) {
+            parentFilter.logoFile = parentFilter.logo
+        }
         return (
             <FormView
                 ref={form => {
@@ -94,7 +97,7 @@ class SearchTree extends React.Component {
         const items = [
             {
                 label: '服务LOGO:',
-                // field: 'icon',
+                field: 'logoFile',
                 rules: [
                     {
                         required: true,
@@ -104,7 +107,7 @@ class SearchTree extends React.Component {
                 component: temp ? (
                     <img src={logo} alt="" className={styles.detailImg} />
                 ) : (
-                    <UploadImg key={logo} onUpload={this.childEditImg} url={logo} />
+                    <UploadImg />
                 ),
             },
             {
@@ -132,7 +135,7 @@ class SearchTree extends React.Component {
                         <Radio
                             value="1"
                             onChange={e => {
-                                this.setState({ priceVisi: '1' })
+                                this.setState({ priceVisi: e.target.value })
                             }}
                             disabled={this.state.disabledModal}
                         >
@@ -140,7 +143,7 @@ class SearchTree extends React.Component {
                         </Radio>
                         <Radio
                             onChange={e => {
-                                this.setState({ priceVisi: '*' })
+                                this.setState({ priceVisi: e.target.value })
                             }}
                             value="*"
                             disabled={this.state.disabledModal}
@@ -187,6 +190,9 @@ class SearchTree extends React.Component {
             wrapperCol: { span: 14 },
         }
         const childFilter = this.state.childFilter
+        if (childFilter) {
+            childFilter.logoFile = childFilter.logo
+        }
         return (
             <FormView
                 ref={form => {
@@ -275,11 +281,6 @@ class SearchTree extends React.Component {
     }
     // 父节点添加Ok
     addHandleOk = () => {
-        let logo = this.state.icon
-        if (logo === null) {
-            this.openNotification()
-            return
-        }
         this.props.form.validateFields((err, fieldsValue) => {
             if (!err) {
                 this.setState({
@@ -290,7 +291,6 @@ class SearchTree extends React.Component {
                 fieldsValue.description = '*'
                 fieldsValue.level = '1'
                 fieldsValue.pid = '0'
-                fieldsValue.logo = logo
                 this.props.addServiceType(fieldsValue)
             }
         })
@@ -304,7 +304,7 @@ class SearchTree extends React.Component {
             })
             return
         }
-        let logo = this.state.childEditIcon
+        // let logo = this.state.childEditIcon
         let parentId = this.state.parentId
         let id = this.state.selfId
         let priceVisi = this.state.priceVisi
@@ -315,7 +315,7 @@ class SearchTree extends React.Component {
                     visible: false,
                 })
                 fieldsValue.level = '2'
-                fieldsValue.logoFile = logo
+                // fieldsValue.logoFile = logo
                 fieldsValue.pic = parentId
                 fieldsValue.id = id
                 fieldsValue.priceVisitable = priceVisi
@@ -330,7 +330,7 @@ class SearchTree extends React.Component {
     }
     // 父节点编辑OK
     parentEditOk = () => {
-        let logo = this.state.parentEditIcon
+        // let logo = this.state.parentEditIcon
         let selfId = this.state.selfId
         this.parentEditForm.validateFields((err, fieldsValue) => {
             if (!err) {
@@ -342,13 +342,13 @@ class SearchTree extends React.Component {
                 fieldsValue.description = '*'
                 fieldsValue.level = '1'
                 fieldsValue.pid = '0'
-                fieldsValue.logoFile = logo
+                // fieldsValue.logoFile = fieldsValue.logo
                 fieldsValue.id = selfId
                 this.props.updateServiceType(fieldsValue)
             }
         })
     }
-    // 父节点编辑OK
+    // 父节点编辑cancel
     parentEditCancel = () => {
         this.setState({
             parentEditvisible: false,
@@ -565,12 +565,14 @@ class SearchTree extends React.Component {
                     >
                         <Form>
                             <Form.Item label="服务LOGO：" {...formItemLayout}>
-                                {this.state.visibleF ? (
-                                    <UploadImg
-                                        onUpload={that.addImgOnClick}
-                                        //  url={coverPlot}
-                                    />
-                                ) : null}
+                                {/* {this.state.visibleF ? (
+                                    {getFieldDecorator('logo', {
+                                        rules: [{ required: true, message: '请输入名称' }],
+                                    })(<UploadImg/>
+                                ) : null} */}
+                                {getFieldDecorator('logo', {
+                                    rules: [{ required: true, message: '请输入服务LOGO' }],
+                                })(<UploadImg />)}
                             </Form.Item>
                             <Form.Item {...formItemLayout} label="名称：" layout="inline">
                                 {getFieldDecorator('typeName', {

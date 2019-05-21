@@ -4,37 +4,89 @@ import { blaze } from '../utils/blaze'
 import { message } from 'antd'
 
 const model = {
-    namespace: 'event',
+    namespace: 'outward',
     state: {
         event: {},
+        detail: {},
+        searchParams: {
+            pageNo: 1,
+            pageSize: 10,
+        },
     },
     actions: [
         {
-            name: 'getFinancingList',
+            name: 'getInvestmentEventList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    searchParams: { ...state.searchParams, ...action.payload },
+                }
+            },
             *effect(action) {
+                const params = yield select(rootState => rootState.event.searchParams)
+                params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/getFinancingList`,
+                    url: `/enterprise/getInvestmentEventList`,
                     contentType: 'multipart/form-data',
-                    data: action.payload,
+                    data: params,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getFinancingListOk')(res.data))
+                    yield put(actions('getInvestmentEventListOk')(res.data))
                 }
             },
         },
         {
-            name: 'getFinancingListOk',
-            reducer: 'finance',
+            name: 'getInvestmentEventListOk',
+            reducer: 'event',
         },
         {
-            name: 'increaseFinancingApprove',
+            name: 'queryInvestmentEventDetial',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/queryInvestmentEventDetial?keyId=${action.payload}`,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('queryInvestmentEventDetialOk')(res.data))
+                }
+            },
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    detail: {},
+                }
+            },
+        },
+        {
+            name: 'queryInvestmentEventDetialOk',
+            reducer: 'detail',
+        },
+        {
+            name: 'increaseInvestmentEventApprove',
+            *effect(action) {
+                let params = action.payload
+                params.companyId = sessionStorage.getItem('companyId')
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/increaseInvestmentEventApprove`,
+                    data: {
+                        params,
+                    },
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                }
+            },
+        },
+        {
+            name: 'changeInvestmentEventApprove',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/increaseFinancingApprove`,
+                    url: `/enterprise/changeInvestmentEventApprove`,
+                    contentType: 'multipart/form-data',
                     data: {
-                        params: action.payload,
+                        newContent: JSON.stringify(action.payload),
                     },
                 })
                 if (res.code === 1000) {

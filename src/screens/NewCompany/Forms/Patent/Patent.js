@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker, Divider, Tooltip } from 'antd'
 import moment from 'moment'
-import FormView, { SearchView } from '../FormView2'
+import { FormView, SearchView } from 'components'
 import styles from '../index.module.css'
 
 // redux
@@ -54,7 +54,9 @@ class Patent extends PureComponent {
             if (!errors) {
                 const { isEdit } = this.state
                 const { changePatentApprove, increasePatentApprove, detail } = this.props
-                values.applicationTime = moment(values.applicationTime).format(dateStr)
+                if (values.applicationTime) {
+                    values.applicationTime = moment(values.applicationTime).format(dateStr)
+                }
                 if (isEdit) {
                     // 编辑
                     changePatentApprove({ ...detail, ...values })
@@ -128,7 +130,6 @@ class Patent extends PureComponent {
                 formItemLayout={formItemLayout}
                 layout="inline"
                 items={items}
-                type="seacrhForm"
                 saveBtn={false}
             />
         )
@@ -209,6 +210,7 @@ class Patent extends PureComponent {
             />
         )
     }
+    // 编辑
     edit = keyId => {
         this.props.queryPatentDetail(keyId)
         this.setState({
@@ -216,6 +218,7 @@ class Patent extends PureComponent {
             isEdit: true,
         })
     }
+    // 查询
     search = () => {
         this.form.validateFields((errors, values) => {
             if (!errors) {
@@ -330,16 +333,7 @@ class Patent extends PureComponent {
         ]
         const { patent, searchParams } = this.props
         return (
-            <Card
-                title="专利信息"
-                style={{ width: 'calc(100vw - 256px)' }}
-                bordered={false}
-                extra={
-                    <Button type="primary" onClick={this.newInfo}>
-                        新增
-                    </Button>
-                }
-            >
+            <Card title="专利信息" style={{ width: 'calc(100vw - 256px)' }} bordered={false}>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>

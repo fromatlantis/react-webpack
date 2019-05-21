@@ -38,7 +38,15 @@
     text-align: center;
 }
 
-
+/* 面包屑导航 */
+.BreadcrumbSty{
+    padding: 20px 40px;
+}
+.serviceImg{
+    max-width: 200px;
+    max-height: 100px;
+    margin-left: 20px;
+}
 
 
 

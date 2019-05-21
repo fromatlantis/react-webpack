@@ -2,7 +2,7 @@
  * 企服首页/企业详情==> Advice 改进建议
  */
 import React, { PureComponent, Fragment } from 'react'
-import { Card, Table } from 'antd'
+import { Card, Table, Button } from 'antd'
 import styles from '../CompanyDetails.module.css'
 
 export default class Advice extends PureComponent {
@@ -13,7 +13,7 @@ export default class Advice extends PureComponent {
                     <Card
                         id="advice"
                         title={<span style={{ color: '#1890ff' }}>改进建议</span>}
-                        extra={<a>展开更多>></a>}
+                        extra={<Button type="link">展开更多>></Button>}
                         className={styles.cardSty}
                     >
                         <Table

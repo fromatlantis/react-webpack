@@ -15,14 +15,24 @@ const oriTargetKeys = mockData.filter(item => +item.key % 3 > 1).map(item => ite
 
 export default class TransferView extends React.PureComponent {
     state = {
-        targetKeys: oriTargetKeys,
+        targetKeys: [],
         selectedKeys: [],
         disabled: false,
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (this.props.data !== nextProps.data) {
+            const ids = nextProps.data.filter(item => item.isAssigned).map(item => item.id)
+            this.setState({
+                targetKeys: ids,
+                selectedKeys: ids,
+            })
+        }
+    }
+
     handleChange = (nextTargetKeys, direction, moveKeys) => {
         this.setState({ targetKeys: nextTargetKeys })
-
+        //this.props.onChange(nextTargetKeys)
         console.log('targetKeys: ', nextTargetKeys)
         console.log('direction: ', direction)
         console.log('moveKeys: ', moveKeys)
@@ -49,15 +59,16 @@ export default class TransferView extends React.PureComponent {
         return (
             <div>
                 <Transfer
-                    dataSource={mockData}
+                    rowKey={record => record.id}
+                    dataSource={this.props.data}
                     titles={this.props.titles}
                     operations={['添加', '移除']}
                     targetKeys={targetKeys}
                     selectedKeys={selectedKeys}
                     onChange={this.handleChange}
                     onSelectChange={this.handleSelectChange}
-                    onScroll={this.handleScroll}
-                    render={item => item.title}
+                    //onScroll={this.handleScroll}
+                    render={record => record.name}
                     disabled={disabled}
                 />
             </div>

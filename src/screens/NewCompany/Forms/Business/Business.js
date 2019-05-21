@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Card, Input, Icon, DatePicker, Select } from 'antd'
-
-import FormView from '../FormView2'
+import moment from 'moment'
+import { FormView } from 'components'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -20,6 +20,7 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             queryBaseInfoDetial: actions('queryBaseInfoDetial'),
+            changeBaseInfoApprove: actions('changeBaseInfoApprove'),
         },
         dispatch,
     )
@@ -35,6 +36,24 @@ class Business extends PureComponent {
             this.props.queryBaseInfoDetial(companyId)
         }
     }
+    onSubmit = values => {
+        const { businessInfo } = this.props
+        // 时间处理
+        let { estiblishTime, fromTime, toTime, approvedTime } = values
+        if (estiblishTime) {
+            values.estiblishTime = estiblishTime.format('x')
+        }
+        if (fromTime) {
+            values.fromTime = fromTime.format('x')
+        }
+        if (toTime) {
+            values.toTime = toTime.format('x')
+        }
+        if (approvedTime) {
+            values.approvedTime = approvedTime.format('x')
+        }
+        this.props.changeBaseInfoApprove({ ...businessInfo, ...values })
+    }
     render() {
         const items = [
             {
@@ -45,7 +64,10 @@ class Business extends PureComponent {
             {
                 label: '成立日期',
                 field: 'estiblishTime',
-                component: <Input />,
+                formatter: estiblishTime => {
+                    return moment(parseInt(estiblishTime))
+                },
+                component: <DatePicker />,
             },
             {
                 label: '营业状态',
@@ -118,20 +140,34 @@ class Business extends PureComponent {
                 field: 'regLocation',
                 component: <Input />,
             },
+            // {
+            //     label: '省份简称',
+            //     field: 'base',
+            //     component: <Input />,
+            // },
             {
-                label: '所属地区',
-                field: 'base',
-                component: <Input />,
+                label: '经营开始时间',
+                field: 'fromTime',
+                formatter: fromTime => {
+                    return moment(parseInt(fromTime))
+                },
+                component: <DatePicker />,
             },
             {
-                label: '营业期限',
+                label: '经营结束时间',
                 field: 'toTime',
-                component: <Input />,
+                formatter: toTime => {
+                    return moment(parseInt(toTime))
+                },
+                component: <DatePicker />,
             },
             {
                 label: '核准日期',
                 field: 'approvedTime',
-                component: <Input />,
+                formatter: approvedTime => {
+                    return moment(parseInt(approvedTime))
+                },
+                component: <DatePicker />,
             },
             {
                 label: '登记机关',
@@ -148,7 +184,12 @@ class Business extends PureComponent {
         const { businessInfo } = this.props
         return (
             <Card title="工商信息" bordered={false} className={styles.root}>
-                <FormView layout="inline" items={items} data={businessInfo} />
+                <FormView
+                    layout="inline"
+                    items={items}
+                    data={businessInfo}
+                    onSubmit={this.onSubmit}
+                />
             </Card>
         )
     }

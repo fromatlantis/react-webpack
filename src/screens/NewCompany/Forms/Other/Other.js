@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Card, Input } from 'antd'
-
-import formView from '../FormView'
+import { FormView } from 'components'
 
 const { TextArea } = Input
 
@@ -23,10 +22,9 @@ export default class Other extends PureComponent {
                 component: <TextArea autosize={{ minRows: 6 }} />,
             },
         ]
-        const FormView = formView({ items, data: { name: '123' } })
         return (
             <Card title="其他信息" bordered={false}>
-                <FormView url="123" />
+                <FormView items={items} />
             </Card>
         )
     }
