@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Button, Card, Table, Modal, Input, DatePicker, Divider, Tooltip } from 'antd'
+import { Button, Card, Table, Modal, Input, DatePicker, Divider, Tooltip, Select } from 'antd'
 import moment from 'moment'
 import { FormView, SearchView } from 'components'
 import styles from '../index.module.css'
@@ -8,13 +8,14 @@ import Toolbar from '../../Toolbar/Toolbar'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/patent'
-
+import { actions as dictionaryActions } from 'reduxDir/dictionary'
 const dateStr = 'YYYY.MM.DD'
 const mapStateToProps = state => {
     return {
         patent: state.patent.patent,
         detail: state.patent.detail,
         searchParams: state.patent.searchParams,
+        PATENT_TYPE: state.dictionary.PATENT_TYPE,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -24,6 +25,7 @@ const mapDispatchToProps = dispatch => {
             queryPatentDetail: actions('queryPatentDetail'),
             increasePatentApprove: actions('increasePatentApprove'),
             changePatentApprove: actions('changePatentApprove'),
+            getDictionary: dictionaryActions('getDictionary'),
         },
         dispatch,
     )
@@ -41,6 +43,7 @@ class Patent extends PureComponent {
         const companyId = sessionStorage.getItem('companyId')
         if (companyId) {
             this.props.getPatentList()
+            this.props.getDictionary('PATENT_TYPE')
         }
     }
     newInfo = () => {
@@ -105,7 +108,15 @@ class Patent extends PureComponent {
             {
                 label: '专利类型',
                 field: 'patentType',
-                component: <Input />,
+                component: (
+                    <Select placeholder="请选择">
+                        {this.props.PATENT_TYPE.map((item, index) => (
+                            <Select.Option value={item.value} key={index}>
+                                {item.type}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                ),
             },
             {
                 label: '专利代理机构',
@@ -170,7 +181,15 @@ class Patent extends PureComponent {
             {
                 label: '专利类型',
                 field: 'patentType',
-                component: <Input />,
+                component: (
+                    <Select placeholder="请选择">
+                        {this.props.PATENT_TYPE.map((item, index) => (
+                            <Select.Option value={item.value} key={index}>
+                                {item.type}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                ),
             },
             {
                 label: '专利代理机构',

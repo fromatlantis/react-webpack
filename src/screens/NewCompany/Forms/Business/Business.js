@@ -7,6 +7,7 @@ import Toolbar from '../../Toolbar/Toolbar'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/business'
+import { actions as dictionaryActions } from 'reduxDir/dictionary'
 
 import styles from './Business.module.css'
 
@@ -15,6 +16,10 @@ const Option = Select.Option
 const mapStateToProps = state => {
     return {
         businessInfo: state.business.businessInfo,
+        BUSINESS_STATUS: state.dictionary.BUSINESS_STATUS,
+        COMPANY_TYPE: state.dictionary.COMPANY_TYPE,
+        INDUSTRY: state.dictionary.INDUSTRY,
+        PROVINCE: state.dictionary.PROVINCE,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -22,6 +27,7 @@ const mapDispatchToProps = dispatch => {
         {
             queryBaseInfoDetial: actions('queryBaseInfoDetial'),
             changeBaseInfoApprove: actions('changeBaseInfoApprove'),
+            getDictionary: dictionaryActions('getDictionary'),
         },
         dispatch,
     )
@@ -34,7 +40,12 @@ class Business extends PureComponent {
     componentDidMount = () => {
         const companyId = sessionStorage.getItem('companyId')
         if (companyId) {
-            this.props.queryBaseInfoDetial(companyId)
+            const { queryBaseInfoDetial, getDictionary } = this.props
+            queryBaseInfoDetial(companyId)
+            getDictionary('BUSINESS_STATUS')
+            getDictionary('COMPANY_TYPE')
+            getDictionary('INDUSTRY')
+            getDictionary('PROVINCE')
         }
     }
     onSubmit = values => {
@@ -56,6 +67,7 @@ class Business extends PureComponent {
         this.props.changeBaseInfoApprove({ ...businessInfo, ...values })
     }
     render() {
+        const { BUSINESS_STATUS, COMPANY_TYPE, INDUSTRY, PROVINCE } = this.props
         const items = [
             {
                 label: '法定代表人',
@@ -75,9 +87,11 @@ class Business extends PureComponent {
                 field: 'regStatus',
                 component: (
                     <Select>
-                        <Option value="jack">Jack</Option>
-                        <Option value="lucy">Lucy</Option>
-                        <Option value="Yiminghe">yiminghe</Option>
+                        {BUSINESS_STATUS.map((item, index) => (
+                            <Option value={item.value} key={index}>
+                                {item.type}
+                            </Option>
+                        ))}
                     </Select>
                 ),
             },
@@ -94,7 +108,15 @@ class Business extends PureComponent {
             {
                 label: '企业类型',
                 field: 'companyOrgType',
-                component: <Input />,
+                component: (
+                    <Select>
+                        {COMPANY_TYPE.map((item, index) => (
+                            <Option value={item.value} key={index}>
+                                {item.type}
+                            </Option>
+                        ))}
+                    </Select>
+                ),
             },
             {
                 label: '参保人数',
@@ -104,7 +126,15 @@ class Business extends PureComponent {
             {
                 label: '所属行业',
                 field: 'industry',
-                component: <Input />,
+                component: (
+                    <Select>
+                        {INDUSTRY.map((item, index) => (
+                            <Option value={item.value} key={index}>
+                                {item.type}
+                            </Option>
+                        ))}
+                    </Select>
+                ),
             },
             {
                 label: '统一社会信用代码',
@@ -174,6 +204,19 @@ class Business extends PureComponent {
                 label: '登记机关',
                 field: 'regInstitute',
                 component: <Input />,
+            },
+            {
+                label: '所属地区',
+                field: 'base',
+                component: (
+                    <Select>
+                        {PROVINCE.map((item, index) => (
+                            <Option value={item.value} key={index}>
+                                {item.type}
+                            </Option>
+                        ))}
+                    </Select>
+                ),
             },
             {
                 label: '经营范围',

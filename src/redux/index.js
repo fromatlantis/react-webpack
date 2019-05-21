@@ -16,6 +16,7 @@ import event from './event'
 import outward from './outward'
 import trademark from './trademark'
 import patent from './patent'
+import dictionary from './dictionary'
 
 export default history =>
     combineReducers({
@@ -35,4 +36,5 @@ export default history =>
         trademark,
         patent,
         intermediary,
+        dictionary,
     })
