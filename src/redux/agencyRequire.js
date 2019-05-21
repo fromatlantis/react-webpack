@@ -15,6 +15,8 @@ const model = {
         supperList: [],
         supperListTotal: null,
         editTypeList: [],
+        demandTotal: null,
+        recommendList: [],
     },
     actions: [
         //获取需求列表
@@ -29,15 +31,29 @@ const model = {
                     data: action.payload,
                 })
                 if (res.data) {
-                    if (action.payload.supplier) {
+                    if (
+                        (res.data.resultList[0].processStatus === '2' && action.payload.supplier) ||
+                        (action.payload.supplier &&
+                            res.data.resultList[0].processStatus === '1' &&
+                            res.data.resultList[0].recommendSupplier)
+                    ) {
+                        console.log('这是状态为2，，或者为1且存在')
                         yield put(
                             actions('getSupplierList')({
-                                id:
-                                    res.data.resultList[0].recommendSupplier === ''
-                                        ? 'undefine'
-                                        : res.data.resultList[0].recommendSupplier,
+                                id: res.data.resultList[0].recommendSupplier,
                                 pageNo: 1,
                                 pageSize: 10,
+                            }),
+                        )
+                    }
+                    if (
+                        res.data.resultList[0].processStatus === '1' &&
+                        action.payload.supplier &&
+                        !res.data.resultList[0].recommendSupplier
+                    ) {
+                        yield put(
+                            actions('getRecommendSupplierList')({
+                                demandId: res.data.resultList[0].id,
                             }),
                         )
                     }
@@ -46,6 +62,7 @@ const model = {
                             actions('getSupplierList')({
                                 pageNo: 1,
                                 pageSize: 10,
+                                flag: '1',
                                 typeId: res.data.resultList[0].typeId,
                             }),
                         )
@@ -121,7 +138,16 @@ const model = {
                     data: action.payload,
                 })
                 if (res.data) {
-                    message.success('推荐成功')
+                    yield put(actions('getRecommendSupplierListSuccess')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getRecommendSupplierListSuccess',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    recommendList: action.payload,
                 }
             },
         },

@@ -7,6 +7,7 @@ const mapStateToProps = state => {
     return {
         demandList: state.agencyRequire.demandList[0] || state.agencyRequire.demandList,
         supperList: state.agencyRequire.supperList,
+        recommendList: state.agencyRequire.recommendList,
     }
 }
 
@@ -16,6 +17,7 @@ const mapDispatchToProps = dispatch => {
             getDemandList: actions('getDemandList'),
             getSupplierList: actions('getSupplierList'),
             finishOrder: actions('finishOrder'),
+            getRecommendSupplierList: actions('getRecommendSupplierList'),
         },
         dispatch,
     )
