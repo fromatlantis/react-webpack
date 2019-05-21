@@ -88,8 +88,8 @@ const model = {
                     } else {
                         //yield put(replace('/login'))
                         redirectLogin({
-                            type: 1,
-                            storeurl: false,
+                            type: 0,
+                            storeurl: true,
                         })
                     }
                 } catch (err) {}
