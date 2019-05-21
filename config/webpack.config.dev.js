@@ -144,6 +144,7 @@ module.exports = {
       'Theme': path.resolve(__dirname, '../src/theme/theme.module.css'),
       'ThemeVariables': path.resolve(__dirname, '../src/theme/variables.css'),
       'assets': path.resolve(__dirname, '../src/assets'),
+      'components': path.resolve(__dirname, '../src/components'),
       'reduxDir': path.resolve(__dirname, '../src/redux'),
     },
     plugins: [

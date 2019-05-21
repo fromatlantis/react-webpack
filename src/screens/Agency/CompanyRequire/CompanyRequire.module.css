@@ -1,0 +1,39 @@
+.containerR{
+    padding: 16px 24px 0 24px;
+}
+.typeTitle{
+    margin-bottom:15px;
+    display: flex;
+    flex-direction: row;
+}
+.typeBut{
+    display: inline-block;
+    margin-right: 13px;
+    float: left;
+    padding: 1px 8px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.typeList{
+    margin-bottom:10px;
+}
+.btn{
+    position: absolute;
+    right: 10px;
+    top:0px;
+}
+.formStyle{
+    position: relative;
+    margin-left: 12px;
+    margin-bottom:25px;
+}
+.active{
+    background-color: #1E90FF;
+    color: #fff;
+}
+.containerR :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+    width: 80px !important;
+    text-align: right;
+}
+

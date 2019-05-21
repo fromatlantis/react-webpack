@@ -1,0 +1,51 @@
+
+.active{
+    background-color: #1E90FF;
+    color: #fff;
+}
+.inputWidth{
+    width:240px;
+}
+.typeTitle{
+    margin-bottom:20px;
+    display: flex;
+    flex-direction: row;
+}
+.typeBut{
+    display: inline-block;
+    margin-right: 13px;
+    float: left;
+    padding: 1px 8px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.editType{
+    display: inline-block;
+    margin-right: 13px;
+    float: left;
+    padding: 1px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px dashed #ccc;
+}
+.addBtn{
+    margin-right: 8px;
+}
+.totalBtn{
+    position: absolute;
+    top: 0;
+    right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 25px;
+}
+.formList{
+    position: relative;
+    margin-bottom:20px;
+}
+.containerSup :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+    width: auto;
+    text-align: right;
+}

@@ -1,0 +1,36 @@
+.searchCard {
+    & :global .ant-form-inline .ant-form-item {
+        width: 300px;
+    }
+    & :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+        width: 120px;
+        text-align: right;
+    }
+    margin-bottom: 20px;
+}
+.newFormInline {
+    & :global .ant-form-inline .ant-form-item {
+        width: 300px;
+    }
+    & :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+        width: 120px;
+        text-align: right;
+    }
+}
+.modalBox {
+    & :global .ant-form-item {
+        width: 100%;
+    }
+}
+.formLabel {
+    color: rgba(0, 0, 0, 0.85);
+    width: 12.5%;
+    & .required {
+        display: inline-block;
+        margin-right: 4px;
+        color: #f5222d;
+        font-size: 14px;
+        font-family: SimSun, sans-serif;
+        line-height: 1;
+    }
+}

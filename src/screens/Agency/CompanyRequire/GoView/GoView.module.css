@@ -1,0 +1,22 @@
+
+.inputStyle{
+    width:50%;
+}
+.order{
+    margin-top:20px;
+}
+.commonLeft{
+    margin-left:15px;
+}
+.btnStyle{
+    margin-top:8px;
+    display: flex;
+    justify-content: flex-end;
+}
+.handleContainer :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+    width: auto !important;
+    text-align: right;
+}
+.finishSty{
+    margin-right:6px;
+}

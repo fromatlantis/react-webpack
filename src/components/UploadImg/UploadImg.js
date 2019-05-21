@@ -46,6 +46,7 @@ class UploadImg extends Component {
     triggerChange = changedValue => {
         // Should provide an event to pass value to Form.
         const onChange = this.props.onChange
+        console.log(changedValue)
         if (onChange) {
             onChange(changedValue)
         }
@@ -84,7 +85,11 @@ class UploadImg extends Component {
                 beforeUpload={this.beforeUpload}
                 onChange={this.handleChange}
             >
-                {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+                {imageUrl ? (
+                    <img src={imageUrl} style={{ width: 120 }} alt="avatar" />
+                ) : (
+                    uploadButton
+                )}
             </Upload>
         )
     }

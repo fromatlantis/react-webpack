@@ -11,12 +11,23 @@ const routes = [
             role: 'home',
         },
         component: Loadable({
-            loader: () => import(/* webpackChunkName: "home" */ '../screens/Home'),
+            loader: () => import(/* webpackChunkName: "Home" */ '../screens/Home'),
             loading: Loading,
         }),
     },
     {
-        path: '/admin',
+        //企服首页/企业详情
+        path: '/companyDetails/*/:company_id/:type',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "companyDetails" */ '../screens/CompanyDetails/CompanyDetails'
+                ),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/company',
         name: '企服管理',
         icon: 'appstore',
         navAttr: {
@@ -24,7 +35,76 @@ const routes = [
             role: 'home',
         },
         component: Loadable({
-            loader: () => import(/* webpackChunkName: "admin" */ '../screens/Admin/Admin'),
+            loader: () => import(/* webpackChunkName: "Company" */ '../screens/Company/Company'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/newCompany/*',
+        name: '新增',
+        component: Loadable({
+            loader: () =>
+                import(/* webpackChunkName: "NewCompany" */ '../screens/NewCompany/NewCompany'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/HumanResourceService/:id',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "HumanResourceService" */ '../screens/HumanResourceService/HumanResourceService'
+                ),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/IntermediaryDetails/:id/:type',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "IntermediaryDetails" */ '../screens/IntermediaryDetails/IntermediaryDetails'
+                ),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/DynamicList',
+        component: Loadable({
+            loader: () =>
+                import(/* webpackChunkName: "DynamicList" */ '../screens/DynamicList/DynamicList'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/DynamicDetails/:id',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "DynamicDetails" */ '../screens/DynamicDetails/DynamicDetails'
+                ),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/agency/*',
+        name: '中介服务',
+        icon: 'appstore',
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "agency" */ '../screens/Agency/Agency'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/agency/companyRequire',
+        name: '中介服务',
+        icon: 'appstore',
+        navAttr: {
+            index: 1,
+            role: 'home',
+        },
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "agency" */ '../screens/Agency/Agency'),
             loading: Loading,
         }),
     },
@@ -60,7 +140,7 @@ export const getNav = auths => {
             }
         })
     //return navs
-    console.log(filterByAuths(navs, auths))
+    // console.log(filterByAuths(navs, auths))
     return filterByAuths(navs, auths)
 }
 // 首个路由
