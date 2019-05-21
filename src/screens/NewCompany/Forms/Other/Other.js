@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react'
 import { Card, Input, Form } from 'antd'
 import { FormView } from 'components'
-
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from '../../../../redux/newCompany'
 
+import Toolbar from '../../Toolbar/Toolbar'
 const { TextArea } = Input
 
 class Other extends PureComponent {

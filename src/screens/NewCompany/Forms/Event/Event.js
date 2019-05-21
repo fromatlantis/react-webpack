@@ -3,7 +3,7 @@ import { Button, Card, Table, Modal, Input, DatePicker, Divider } from 'antd'
 import moment from 'moment'
 import { FormView, SearchView } from 'components'
 import styles from '../index.module.css'
-
+import Toolbar from '../../Toolbar/Toolbar'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -224,7 +224,7 @@ class Event extends PureComponent {
         ]
         const { event, searchParams } = this.props
         return (
-            <Card title="投资事件" bordered={false}>
+            <Card title="投资事件" bordered={false} extra={<Toolbar />}>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>

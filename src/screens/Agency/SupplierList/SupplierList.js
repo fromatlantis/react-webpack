@@ -171,7 +171,10 @@ class SupplierList extends PureComponent {
                         <Divider type="vertical" />
                         <span
                             onClick={() => this.underSupp(record.id)}
-                            style={{ color: '#0099CC', cursor: 'pointer' }}
+                            style={{
+                                color: record.flag === '1' ? '#0099CC' : 'red',
+                                cursor: 'pointer',
+                            }}
                         >
                             {record.flag === '1' ? '下架' : '上架'}
                         </span>

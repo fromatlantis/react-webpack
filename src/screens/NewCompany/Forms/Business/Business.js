@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import { Card, Input, Icon, DatePicker, Select } from 'antd'
 import moment from 'moment'
 import { FormView } from 'components'
+import Toolbar from '../../Toolbar/Toolbar'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -183,7 +184,7 @@ class Business extends PureComponent {
         ]
         const { businessInfo } = this.props
         return (
-            <Card title="工商信息" bordered={false} className={styles.root}>
+            <Card title="工商信息" bordered={false} className={styles.root} extra={<Toolbar />}>
                 <FormView
                     layout="inline"
                     items={items}

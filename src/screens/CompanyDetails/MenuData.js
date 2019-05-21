@@ -77,21 +77,22 @@ export const menuData = [
         title: '企业关系',
         icon: '',
         path: 'relation',
+        key: 'relation',
         component: Relation,
-        children: [
-            {
-                title: '企业图谱',
-                path: 'relation',
-                key: 'relation:1',
-                component: Relation,
-            },
-            {
-                title: '投资图谱',
-                path: 'relation',
-                key: 'relation:2',
-                component: Relation,
-            },
-        ],
+        // children: [
+        //     {
+        //         title: '企业图谱',
+        //         path: 'relation',
+        //         key: 'relation:1',
+        //         component: Relation,
+        //     },
+        //     {
+        //         title: '投资图谱',
+        //         path: 'relation',
+        //         key: 'relation:2',
+        //         component: Relation,
+        //     },
+        // ],
     },
     {
         title: '知识产权',

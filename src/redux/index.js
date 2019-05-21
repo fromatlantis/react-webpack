@@ -21,8 +21,8 @@ export default history =>
     combineReducers({
         router: connectRouter(history),
         authUser,
-        agencyRequire,
         companyDetails,
+        agencyRequire,
         company,
         newCompany,
         business,

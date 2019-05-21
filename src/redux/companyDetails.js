@@ -9,7 +9,7 @@ import { blaze } from '../utils/blaze'
 const model = {
     namespace: 'companyDetails',
     state: {
-        BasicInfoDetial: [], //企业详情信息
+        BasicInfoDetial: {}, //企业详情信息
         BaseInfoDetial: [], //工商信息
         RecentNews: [], //企业动态（新闻）
         FinancingList: [], //融资信息分页列表
@@ -22,6 +22,7 @@ const model = {
         ProductTrademarkList: [], //产品著作权列表
         WebsiteRecordsList: [], //网站备案列表
         FirmGraph: [], //指定企业投资图谱
+        InvestmentEventList: [], //投资事件列表
     },
     actions: [
         {
@@ -350,6 +351,31 @@ const model = {
         {
             name: 'getFirmGraphSuccess',
             reducer: 'FirmGraph',
+        },
+        {
+            //POST 获取投资事件列表
+            name: 'getInvestmentEventList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    InvestmentEventList: [],
+                }
+            },
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/getInvestmentEventList`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.data) {
+                    yield put(actions('getInvestmentEventListSuccess')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getInvestmentEventListSuccess',
+            reducer: 'InvestmentEventList',
         },
     ],
 }

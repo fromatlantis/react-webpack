@@ -1,8 +1,8 @@
 import { all } from 'redux-saga/effects'
 
 import { effects } from './authUser'
-import { effects as agencyRequire } from './agencyRequire'
 import { effects as companyDetailsEffects } from './companyDetails'
+import { effects as agencyRequire } from './agencyRequire'
 import { effects as companyEffects } from './company'
 import { effects as newCompanyEffects } from './newCompany'
 import { effects as businessEffects } from './business'
@@ -34,7 +34,7 @@ export function* watchFetchData() {
         ...outwardEffects,
         ...effectsTrademark,
         ...patentEffects,
-        ...agencyRequire,
         ...intermediary,
+        ...agencyRequire,
     ])
 }
