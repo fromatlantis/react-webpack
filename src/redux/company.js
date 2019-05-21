@@ -4,6 +4,7 @@ import { blaze } from '../utils/blaze'
 import { message, notification } from 'antd'
 import qs from 'qs'
 import { actions as companyDetailsActions } from './companyDetails'
+import { actions as requireActions } from './agencyRequire'
 const model = {
     namespace: 'company',
     state: {
@@ -194,10 +195,10 @@ const model = {
                     yield put(
                         companyDetailsActions('getFirmGraphSuccess')(JSON.parse(firmGraph.graph)),
                     )
-                    yield put(actions('getChangesListOk')(changesApprove))
-                    yield put(actions('getSuggestionListOk')(suggestion))
-                    yield put(actions('getOtherInfoListOk')(otherInfo))
-                    //yield put(actions('getChangesListOk')(demand))
+                    yield put(companyDetailsActions('getChangesListOk')(changesApprove))
+                    yield put(companyDetailsActions('getSuggestionListOk')(suggestion))
+                    yield put(companyDetailsActions('getOtherInfoListOk')(otherInfo))
+                    yield put(requireActions('getDemandListSuccess')(demand))
                     //yield put(actions('getArchivesDetailOk')(res.data))
                 }
             },
