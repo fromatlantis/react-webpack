@@ -154,7 +154,10 @@ class CompanyDetails extends PureComponent {
                                     alt=""
                                     style={{ width: 14, height: 14, marginTop: 3 }}
                                 />
-                                <p style={{ padding: '0 10px' }}>更新时间：{times}</p>
+                                <p style={{ padding: '0 10px' }}>
+                                    更新时间：
+                                    {moment(item.updateTime).format('YYYY-MM-DD HH:mm:ss')}
+                                </p>
                                 <Tag color="#2db7f5" onClick={this.showModal}>
                                     发票抬头
                                 </Tag>
@@ -181,7 +184,7 @@ class CompanyDetails extends PureComponent {
                                     <div>联系电话：{item.phoneNumber}</div>
                                 </Col>
                                 <Col span={7}>
-                                    <div>官网：http://www.example.com</div>
+                                    <div>官网：{item.websiteList}</div>
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginTop: 6 }}>
@@ -191,10 +194,10 @@ class CompanyDetails extends PureComponent {
                             </Row>
                             <Row gutter={16} style={{ marginTop: 6 }}>
                                 <Col span={7}>
-                                    <div>企服负责人：小红</div>
+                                    <div>企服负责人：{item.directorName}</div>
                                 </Col>
                                 <Col span={7}>
-                                    <div>跟踪状态：在业</div>
+                                    <div>跟踪状态：{item.regStatus}</div>
                                 </Col>
                             </Row>
                         </div>
