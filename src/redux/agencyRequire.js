@@ -15,6 +15,8 @@ const model = {
         supperList: [],
         supperListTotal: null,
         editTypeList: [],
+        demandTotal: null,
+        recommendList: [],
     },
     actions: [
         //获取需求列表
@@ -24,31 +26,47 @@ const model = {
                 const res = yield call(request, {
                     type: 'post',
                     url: '/enterprise/getDemandList',
-                    // url: '192.168.1.113/24:8843/getDemandList',
                     contentType: 'multipart/form-data',
                     data: action.payload,
                 })
                 if (res.data) {
-                    if (action.payload.supplier) {
-                        yield put(
-                            actions('getSupplierList')({
-                                id:
-                                    res.data.resultList[0].recommendSupplier === ''
-                                        ? 'undefine'
-                                        : res.data.resultList[0].recommendSupplier,
-                                pageNo: 1,
-                                pageSize: 10,
-                            }),
-                        )
-                    }
-                    if (action.payload.handleList) {
-                        yield put(
-                            actions('getSupplierList')({
-                                pageNo: 1,
-                                pageSize: 10,
-                                typeId: res.data.resultList[0].typeId,
-                            }),
-                        )
+                    if (res.data.resultList.length > 0) {
+                        if (
+                            (res.data.resultList[0].processStatus === '2' &&
+                                action.payload.supplier) ||
+                            (action.payload.supplier &&
+                                res.data.resultList[0].processStatus === '1' &&
+                                res.data.resultList[0].recommendSupplier)
+                        ) {
+                            yield put(
+                                actions('getSupplierList')({
+                                    id: res.data.resultList[0].recommendSupplier,
+                                    pageNo: 1,
+                                    pageSize: 10,
+                                }),
+                            )
+                        }
+                        if (
+                            res.data.resultList[0].processStatus === '1' &&
+                            action.payload.supplier &&
+                            !res.data.resultList[0].recommendSupplier
+                        ) {
+                            yield put(
+                                actions('getRecommendSupplierList')({
+                                    demandId: res.data.resultList[0].id,
+                                }),
+                            )
+                        }
+                        if (action.payload.handleList) {
+                            yield put(
+                                actions('getSupplierList')({
+                                    pageNo: 1,
+                                    pageSize: 10,
+                                    flag: '1',
+                                    typeId: res.data.resultList[0].typeId,
+                                }),
+                            )
+                        }
                     }
                     yield put(actions('getDemandListSuccess')(res.data))
                 }
@@ -121,7 +139,16 @@ const model = {
                     data: action.payload,
                 })
                 if (res.data) {
-                    message.success('推荐成功')
+                    yield put(actions('getRecommendSupplierListSuccess')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getRecommendSupplierListSuccess',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    recommendList: action.payload,
                 }
             },
         },

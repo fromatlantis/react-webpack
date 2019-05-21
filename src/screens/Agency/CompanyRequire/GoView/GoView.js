@@ -13,6 +13,94 @@ class GoHandle extends PureComponent {
     handleSubmit = e => {
         e.preventDefault()
     }
+    tableColumn = () => {
+        let status = this.props.demandList.processStatus
+        let recommend = this.props.demandList.recommendSupplier
+        const publiccolumns = [
+            {
+                title: '序号',
+                key: 'num',
+                dataIndex: 'num',
+                align: 'center',
+                render: (text, record, index) => <span key={text}>{index + 1}</span>,
+            },
+            {
+                title: '供应商类型',
+                dataIndex: 'type_name',
+                key: 'type_name',
+                align: 'center',
+            },
+            {
+                title: '供应商名称',
+                dataIndex: 'supplier',
+                key: 'supplier',
+                align: 'center',
+            },
+            {
+                title: '服务的次数',
+                dataIndex: 'serviceTimes',
+                key: 'serviceTimes',
+                align: 'center',
+            },
+            {
+                title: '总评分(满分5分)',
+                dataIndex: 'score',
+                key: 'score',
+                align: 'center',
+                render: (text, record) => <span key={record}>{text ? text : '-'}</span>,
+            },
+            {
+                title: '提供的服务',
+                dataIndex: 'category',
+                key: 'category',
+                align: 'center',
+            },
+            {
+                title: '供应商联系人',
+                dataIndex: 'contract',
+                key: 'contract',
+                align: 'center',
+            },
+            {
+                title: '联系电话',
+                dataIndex: 'telephone',
+                key: 'telephone',
+                align: 'center',
+            },
+        ]
+        let banHandle = [
+            {
+                title: '操作',
+                dataIndex: 'handle',
+                key: 'handle',
+                align: 'center',
+                render: (text, record) => (
+                    <span key={record}>
+                        <span
+                            style={{ color: '#0099CC', cursor: 'pointer' }}
+                            onClick={() => {
+                                this.props.finishOrder({
+                                    demandId: this.props.match.params.id,
+                                    supplierId: record.id,
+                                })
+                            }}
+                        >
+                            完成
+                        </span>
+                    </span>
+                ),
+            },
+        ]
+        if (status === '1') {
+            if (recommend) {
+                return [...publiccolumns, ...banHandle]
+            } else {
+                return publiccolumns
+            }
+        } else {
+            return publiccolumns
+        }
+    }
     render() {
         const { getFieldDecorator } = this.props.form
         const Option = Select.Option
@@ -153,6 +241,8 @@ class GoHandle extends PureComponent {
         ]
         let id = parseFloat(this.props.match.params.id)
         let score = this.props.demandList.score
+        let status = this.props.demandList.processStatus
+        let recommend = this.props.demandList.recommendSupplier
         return (
             <div className={styles.handleContainer}>
                 <Card
@@ -235,9 +325,14 @@ class GoHandle extends PureComponent {
                         style={{ margin: '20px 0' }}
                         rowKey={(record, index) => `${record.id}`}
                         columns={
-                            this.props.demandList.processStatus === '1' ? columns : finishColumns
+                            // status === '1' ? columns : finishColumns
+                            this.tableColumn()
                         }
-                        dataSource={this.props.supperList}
+                        dataSource={
+                            status === '1' && !recommend
+                                ? this.props.recommendList
+                                : this.props.supperList
+                        }
                         pagination={false}
                     />
                 </Card>

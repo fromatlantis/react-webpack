@@ -126,6 +126,36 @@ const model = {
                 }
             },
         },
+        // 保存改进建议
+        {
+            name: 'increaseSuggestion',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/increaseSuggestion`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('改进建议保存成功')
+                }
+            },
+        },
+        // 保存其他信息
+        {
+            name: 'increaseOtherInfo',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/increaseOtherInfo`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('其他信息保存成功')
+                }
+            },
+        },
     ],
 }
 const newCompany = blaze(model)

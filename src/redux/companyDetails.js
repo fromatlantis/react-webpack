@@ -9,7 +9,7 @@ import { blaze } from '../utils/blaze'
 const model = {
     namespace: 'companyDetails',
     state: {
-        BasicInfoDetial: [], //企业详情信息
+        BasicInfoDetial: {}, //企业详情信息
         BaseInfoDetial: [], //工商信息
         RecentNews: [], //企业动态（新闻）
         FinancingList: [], //融资信息分页列表

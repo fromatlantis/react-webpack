@@ -18,7 +18,7 @@ import FormView, { SearchView } from '../../../../components/FormView/FormView'
 
 const Step = Steps.Step
 const TreeNode = TreeSelect.TreeNode
-let page = { pageNo: 1, pageSize: 10 }
+let page = { pageNo: 1, pageSize: 10, flag: '1' }
 class GoHandle extends PureComponent {
     state = {
         selectRow: [],
@@ -27,7 +27,7 @@ class GoHandle extends PureComponent {
     componentDidMount = () => {
         let id = this.props.match.params.id
         this.props.getDemandList({ id: id, handleList: true })
-        this.props.getSupplierList(page)
+        // this.props.getSupplierList(page)
         this.props.getServiceTypeList()
     }
 
@@ -111,6 +111,7 @@ class GoHandle extends PureComponent {
                 return
             }
             params = fieldsValue
+            params.flag = '1'
             params.typeId = fieldsValue.typeId
         })
         return params
@@ -141,6 +142,7 @@ class GoHandle extends PureComponent {
             }
             fieldsValue.pageNo = 1
             fieldsValue.pageSize = 10
+            fieldsValue.flag = '1'
             fieldsValue.typeId = this.props.demandList.typeId
             this.props.getSupplierList(fieldsValue)
         })
