@@ -44,6 +44,7 @@ class Information extends PureComponent {
         let company_id = this.props.match
             ? this.props.match.params.company_id
             : this.props.company_id
+        // 查看档案详情时没有company_id
         if (company_id) {
             this.setState({ company_id })
             //get工商信息
@@ -68,14 +69,16 @@ class Information extends PureComponent {
                         id="information:1"
                         title={<span style={{ color: '#1890ff' }}>企业动态</span>}
                         extra={
-                            <Button
-                                type="link"
-                                onClick={() => {
-                                    this.props.getRecentNews({ companyId: company_id })
-                                }}
-                            >
-                                展开更多>>
-                            </Button>
+                            company_id && (
+                                <Button
+                                    type="link"
+                                    onClick={() => {
+                                        this.props.getRecentNews({ companyId: company_id })
+                                    }}
+                                >
+                                    展开更多>>
+                                </Button>
+                            )
                         }
                         className={styles.cardSty}
                         // tabList={[{ key: '企业动态', tab: '企业动态' }]}
@@ -227,14 +230,16 @@ class Information extends PureComponent {
                         id="information:3"
                         title={<span style={{ color: '#1890ff' }}>融资历程</span>}
                         extra={
-                            <Button
-                                type="link"
-                                onClick={() => {
-                                    this.props.getFinancingList({ companyId: company_id })
-                                }}
-                            >
-                                展开更多>>
-                            </Button>
+                            company_id && (
+                                <Button
+                                    type="link"
+                                    onClick={() => {
+                                        this.props.getFinancingList({ companyId: company_id })
+                                    }}
+                                >
+                                    展开更多>>
+                                </Button>
+                            )
                         }
                         className={styles.cardSty}
                     >
@@ -269,14 +274,16 @@ class Information extends PureComponent {
                         id="information:4"
                         title={<span style={{ color: '#1890ff' }}>核心人员</span>}
                         extra={
-                            <Button
-                                type="link"
-                                onClick={() => {
-                                    this.props.getCoreTeamList({ companyId: company_id })
-                                }}
-                            >
-                                展开更多>>
-                            </Button>
+                            company_id && (
+                                <Button
+                                    type="link"
+                                    onClick={() => {
+                                        this.props.getCoreTeamList({ companyId: company_id })
+                                    }}
+                                >
+                                    展开更多>>
+                                </Button>
+                            )
                         }
                         className={styles.cardSty}
                     >
@@ -313,14 +320,16 @@ class Information extends PureComponent {
                         id="information:5"
                         title={<span style={{ color: '#1890ff' }}>主要产品</span>}
                         extra={
-                            <Button
-                                type="link"
-                                onClick={() => {
-                                    this.props.getProductInfoList({ companyId: company_id })
-                                }}
-                            >
-                                展开更多>>
-                            </Button>
+                            company_id && (
+                                <Button
+                                    type="link"
+                                    onClick={() => {
+                                        this.props.getProductInfoList({ companyId: company_id })
+                                    }}
+                                >
+                                    展开更多>>
+                                </Button>
+                            )
                         }
                         className={styles.cardSty}
                     >
@@ -344,9 +353,9 @@ class Information extends PureComponent {
                                     width: '40%',
                                 },
                                 {
-                                    title: '主要功能',
-                                    dataIndex: 'source',
-                                    key: 'source',
+                                    title: '领域',
+                                    dataIndex: 'classes',
+                                    key: 'classes',
                                     align: 'center',
                                 },
                             ]}

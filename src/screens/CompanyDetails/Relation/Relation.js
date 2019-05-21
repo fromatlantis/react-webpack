@@ -39,22 +39,22 @@ class Relation extends PureComponent {
             //投资图谱
             this.props.getFirmGraph(company_id)
 
-            import('./mock').then(data => {
-                let result = data.default
-                const nodes = result.nodes.map(node => ({
-                    data: node,
-                }))
-                const edges = result.relationships.map(rs => ({
-                    data: {
-                        id: rs.id,
-                        source: rs.startNode,
-                        target: rs.endNode,
-                    },
-                }))
-                this.setState({
-                    elements: { nodes, edges },
-                })
-            })
+            // import('./mock').then(data => {
+            //     let result = data.default
+            //     const nodes = result.nodes.map(node => ({
+            //         data: node,
+            //     }))
+            //     const edges = result.relationships.map(rs => ({
+            //         data: {
+            //             id: rs.id,
+            //             source: rs.startNode,
+            //             target: rs.endNode,
+            //         },
+            //     }))
+            //     this.setState({
+            //         elements: { nodes, edges },
+            //     })
+            // })
         }
     }
 
@@ -79,7 +79,7 @@ class Relation extends PureComponent {
         return (
             <Fragment>
                 <div className={styles.messageCard}>
-                    <Card
+                    {/* <Card
                         id="relation:1"
                         tabList={[{ key: '企业图谱', tab: '企业图谱' }]}
                         className={styles.cardSty}
@@ -87,7 +87,7 @@ class Relation extends PureComponent {
                         <div style={{ height: '500px', display: 'flex', flexDirection: 'column' }}>
                             <Graph elements={this.state.elements} />
                         </div>
-                    </Card>
+                    </Card> */}
                     <Card
                         id="relation:2"
                         tabList={[{ key: '投资图谱', tab: '投资图谱' }]}

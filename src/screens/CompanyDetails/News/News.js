@@ -58,14 +58,16 @@ class News extends PureComponent {
                             </div>
                         }
                         extra={
-                            <Button
-                                type="link"
-                                onClick={() => {
-                                    this.props.getRecentNews({ companyId: company_id })
-                                }}
-                            >
-                                展开更多>>
-                            </Button>
+                            company_id && (
+                                <Button
+                                    type="link"
+                                    onClick={() => {
+                                        this.props.getRecentNews({ companyId: company_id })
+                                    }}
+                                >
+                                    展开更多>>
+                                </Button>
+                            )
                         }
                         className={styles.cardSty}
                     >
