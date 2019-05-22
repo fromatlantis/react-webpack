@@ -15,15 +15,9 @@ const Step = Steps.Step
 @connect(
     state => {
         return {
-            TrademarkList: state.companyDetails.TrademarkList.map(item => {
-                item.appDate = moment(parseInt(item.appDate)).format('YYYY-MM-DD') //将毫秒数格式转换的方法
-                return item
-            }), //商标信息列表
+            TrademarkList: state.companyDetails.TrademarkList, //商标信息列表
             PatentList: state.companyDetails.PatentList, //专利列表
-            SoftwareCopyrightList: state.companyDetails.SoftwareCopyrightList.map(item => {
-                item.regtime = moment(parseInt(item.regtime)).format('YYYY-MM-DD')
-                return item
-            }), //软件著作权列表
+            SoftwareCopyrightList: state.companyDetails.SoftwareCopyrightList, //软件著作权列表
             ProductTrademarkList: state.companyDetails.ProductTrademarkList, //产品著作权列表
             WebsiteRecordsList: state.companyDetails.WebsiteRecordsList, //网站备案列表
         }
@@ -122,6 +116,11 @@ class Property extends PureComponent {
                                     dataIndex: 'appDate',
                                     key: 'appDate',
                                     align: 'center',
+                                    render: appDate => (
+                                        <span>
+                                            {moment(parseInt(appDate)).format('YYYY-MM-DD')}
+                                        </span>
+                                    ),
                                 },
                                 // {
                                 //     title: '公司',
@@ -318,6 +317,11 @@ class Property extends PureComponent {
                                     dataIndex: 'regtime',
                                     key: 'regtime',
                                     align: 'center',
+                                    render: regtime => (
+                                        <span>
+                                            {moment(parseInt(regtime)).format('YYYY-MM-DD')}
+                                        </span>
+                                    ),
                                 },
                                 {
                                     title: '登记号',

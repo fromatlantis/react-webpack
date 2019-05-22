@@ -23,6 +23,10 @@ const model = {
         WebsiteRecordsList: [], //网站备案列表
         FirmGraph: [], //指定企业投资图谱
         InvestmentEventList: [], //投资事件列表
+        changesList: [], //更新消息
+        changeRecords: [], //历史记录
+        suggestionList: [], //建议
+        otherInfoList: [], //其他
     },
     actions: [
         {
@@ -376,6 +380,94 @@ const model = {
         {
             name: 'getInvestmentEventListSuccess',
             reducer: 'InvestmentEventList',
+        },
+        // 更新消息
+        {
+            name: 'getChangesList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    changesList: [],
+                }
+            },
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/getChangesList?companyId=${action.payload}`,
+                })
+                if (res.data) {
+                    yield put(actions('getChangesListOk')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getChangesListOk',
+            reducer: 'changesList',
+        },
+        // 历史记录
+        {
+            name: 'companyChangeRecords',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    changeRecords: [],
+                }
+            },
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/companyChangeRecords?companyId=${action.payload}`,
+                })
+                if (res.data) {
+                    yield put(actions('companyChangeRecordsOk')(res.data))
+                }
+            },
+        },
+        {
+            name: 'companyChangeRecordsOk',
+            reducer: 'changeRecords',
+        },
+        // 改进建议
+        {
+            name: 'getSuggestionList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    suggestionList: [],
+                }
+            },
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/getSuggestionList?companyId=${action.payload}`,
+                })
+                if (res.data) {
+                    yield put(actions('getSuggestionListOk')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getSuggestionListOk',
+            reducer: 'suggestionList',
+        },
+        // 其他信息
+        {
+            name: 'getOtherInfoList',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    otherInfoList: [],
+                }
+            },
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/getOtherInfoList?companyId=${action.payload}`,
+                })
+                if (res.data) {
+                    yield put(actions('getOtherInfoListOk')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getOtherInfoListOk',
+            reducer: 'otherInfoList',
         },
     ],
 }

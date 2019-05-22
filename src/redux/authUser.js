@@ -86,7 +86,11 @@ const model = {
                         yield put(actions('loginSuccess')(res.data))
                         // yield put(actions('getAuthoritiesByUser')(res.data.user.id))
                     } else {
-                        yield put(replace('/login'))
+                        //yield put(replace('/login'))
+                        redirectLogin({
+                            type: 0,
+                            storeurl: true,
+                        })
                     }
                 } catch (err) {}
             },

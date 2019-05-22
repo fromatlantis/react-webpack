@@ -4,21 +4,52 @@
 import React, { PureComponent, Fragment } from 'react'
 import { Card, Table, Button } from 'antd'
 import styles from '../CompanyDetails.module.css'
+import moment from 'moment'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { actions } from '../../../redux/companyDetails'
 
-export default class Renew extends PureComponent {
+@connect(
+    state => {
+        return {
+            changesList: state.companyDetails.changesList,
+            changeRecords: state.companyDetails.changeRecords,
+        }
+    },
+    dispatch => {
+        return bindActionCreators(
+            {
+                getChangesList: actions('getChangesList'),
+                companyChangeRecords: actions('companyChangeRecords'),
+            },
+            dispatch,
+        )
+    },
+)
+class Renew extends PureComponent {
+    componentDidMount() {
+        let company_id = this.props.match
+            ? this.props.match.params.company_id
+            : this.props.company_id
+        if (company_id) {
+            this.props.getChangesList(company_id)
+            this.props.companyChangeRecords(company_id)
+        }
+    }
     render() {
+        const { changesList, changeRecords } = this.props
         return (
             <Fragment>
                 <div className={styles.messageCard}>
                     <Card
                         id="renew:1"
                         title={<span style={{ color: '#1890ff' }}>更新消息</span>}
-                        extra={<Button type="link">展开更多>></Button>}
+                        // extra={<Button type="link">展开更多>></Button>}
                         className={styles.cardSty}
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            //pagination={false} //分页器
                             columns={[
                                 {
                                     title: '序号',
@@ -29,48 +60,40 @@ export default class Renew extends PureComponent {
                                 },
                                 {
                                     title: '更新项',
-                                    dataIndex: 'name',
-                                    key: 'name',
+                                    dataIndex: 'changeItem',
+                                    key: 'changeItem',
                                     align: 'center',
                                 },
                                 {
                                     title: '更新时间',
-                                    dataIndex: 'age',
-                                    key: 'age',
+                                    dataIndex: 'changeTime',
+                                    key: 'changeTime',
                                     align: 'center',
+                                    render: changeTime => (
+                                        <span>
+                                            {moment(changeTime).format('YYYY-MM-DD HH:mm:ss')}
+                                        </span>
+                                    ),
                                 },
                                 {
-                                    title: '消息内容',
-                                    dataIndex: 'address',
-                                    key: 'address',
+                                    title: '公司名称',
+                                    dataIndex: 'name',
+                                    key: 'name',
                                     align: 'center',
                                 },
                             ]}
-                            dataSource={[
-                                {
-                                    key: '1',
-                                    name: '投资关系',
-                                    age: '2018-10-01',
-                                    address: '张三投资本公司一亿美金',
-                                },
-                                {
-                                    key: '2',
-                                    name: '投资关系',
-                                    age: '2018-10-01',
-                                    address: '张三投资本公司一亿美金',
-                                },
-                            ]}
+                            dataSource={changesList}
                         />
                     </Card>
                     <Card
                         id="renew:2"
                         title={<span style={{ color: '#1890ff' }}>历史记录</span>}
-                        extra={<Button type="link">展开更多>></Button>}
+                        // extra={<Button type="link">展开更多>></Button>}
                         className={styles.cardSty}
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             columns={[
                                 {
                                     title: '序号',
@@ -81,57 +104,45 @@ export default class Renew extends PureComponent {
                                 },
                                 {
                                     title: '变更日期',
-                                    dataIndex: 'name',
-                                    key: 'name',
+                                    dataIndex: 'changeTime',
+                                    key: 'changeTime',
                                     align: 'center',
+                                    width: 120,
                                 },
                                 {
                                     title: '变更项',
-                                    dataIndex: 'age',
-                                    key: 'age',
+                                    dataIndex: 'changeItem',
+                                    key: 'changeItem',
                                     align: 'center',
                                 },
                                 {
                                     title: '变更方式',
-                                    dataIndex: 'address',
-                                    key: 'address',
+                                    dataIndex: 'type',
+                                    key: 'type',
                                     align: 'center',
+                                    render: () => <span>爬取信息</span>,
+                                    width: 100,
                                 },
                                 {
                                     title: '变更前',
-                                    dataIndex: 'money',
-                                    key: 'money',
+                                    dataIndex: 'contentBefore',
+                                    key: 'contentBefore',
                                     align: 'center',
+                                    render: contentBefore => (
+                                        <span dangerouslySetInnerHTML={{ __html: contentBefore }} />
+                                    ),
                                 },
                                 {
                                     title: '变更后',
-                                    dataIndex: 'duess',
-                                    key: 'duess',
+                                    dataIndex: 'contentAfter',
+                                    key: 'contentAfter',
                                     align: 'center',
+                                    render: contentAfter => (
+                                        <span dangerouslySetInnerHTML={{ __html: contentAfter }} />
+                                    ),
                                 },
                             ]}
-                            dataSource={[
-                                {
-                                    key: '1',
-                                    name: '2018-10-01',
-                                    age: '投资人',
-                                    address: '爬取信息',
-                                    money: '2019-04-03',
-                                    duess:
-                                        '吴明辉,自然人股东闵启阳,自然人股东【退出】董斌,自然人股东',
-                                    data: '吴明辉,自然人股东董斌,自然人股东',
-                                },
-                                {
-                                    key: '2',
-                                    name: '2018-10-01',
-                                    age: '投资人',
-                                    address: '爬取信息',
-                                    money: '2019-04-03',
-                                    duess:
-                                        '吴明辉,自然人股东闵启阳,自然人股东【退出】董斌,自然人股东',
-                                    data: '吴明辉,自然人股东董斌,自然人股东',
-                                },
-                            ]}
+                            dataSource={changeRecords.items}
                         />
                     </Card>
                 </div>
@@ -139,3 +150,4 @@ export default class Renew extends PureComponent {
         )
     }
 }
+export default Renew

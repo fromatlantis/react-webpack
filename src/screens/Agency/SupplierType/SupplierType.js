@@ -149,6 +149,7 @@ class SearchTree extends React.Component {
                 ref={form => {
                     this.addform = form
                 }}
+                onChange={this.handleFormChange}
                 formItemLayout={formItemLayout}
                 items={this.state.nodeNum === '2' ? [...items, ...item2] : items}
                 saveBtn={false}
@@ -160,7 +161,7 @@ class SearchTree extends React.Component {
         const items = [
             {
                 label: '服务LOGO:',
-                field: 'logoFile',
+                field: 'logo',
                 rules: [
                     {
                         required: true,
@@ -186,10 +187,6 @@ class SearchTree extends React.Component {
             wrapperCol: { span: 14 },
         }
         const parentFilter = this.state.parentFilter
-
-        if (parentFilter) {
-            parentFilter.logoFile = parentFilter.logo
-        }
         return (
             <FormView
                 ref={form => {
@@ -210,7 +207,7 @@ class SearchTree extends React.Component {
         const items = [
             {
                 label: '服务LOGO:',
-                field: 'logoFile',
+                field: 'logo',
                 rules: temp
                     ? ''
                     : [
@@ -275,7 +272,7 @@ class SearchTree extends React.Component {
             {
                 label: '金额:',
                 rules:
-                    !temp || priceVisi === '1'
+                    priceVisi === '1'
                         ? [
                               {
                                   required: true,
@@ -315,15 +312,13 @@ class SearchTree extends React.Component {
             wrapperCol: { span: 14 },
         }
         const childFilter = this.state.childFilter
-        if (childFilter) {
-            childFilter.logoFile = childFilter.logo
-        }
         return (
             <FormView
                 ref={form => {
                     this.newForm = form
                 }}
                 formItemLayout={formItemLayout}
+                onChange={this.handleFormChange}
                 items={items}
                 data={childFilter}
                 saveBtn={false}
@@ -455,6 +450,7 @@ class SearchTree extends React.Component {
         let priceVisi = this.state.priceVisi
         // 子节点编辑
         this.newForm.validateFields((err, fieldsValue) => {
+            console.log('lalla', err)
             if (!err) {
                 this.setState({
                     visible: false,
@@ -552,7 +548,6 @@ class SearchTree extends React.Component {
     handleFormChange = changedFields => {
         const { childFilter } = this.state
         const field = Object.values(changedFields)[0]
-        console.log({ ...childFilter, [field.name]: field.value })
         this.setState({
             childFilter: { ...childFilter, [field.name]: field.value },
         })

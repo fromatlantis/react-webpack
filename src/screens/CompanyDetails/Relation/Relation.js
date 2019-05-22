@@ -38,7 +38,6 @@ class Relation extends PureComponent {
         if (company_id) {
             //投资图谱
             this.props.getFirmGraph(company_id)
-
             // import('./mock').then(data => {
             //     let result = data.default
             //     const nodes = result.nodes.map(node => ({

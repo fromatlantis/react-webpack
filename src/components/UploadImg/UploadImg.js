@@ -29,6 +29,7 @@ class UploadImg extends Component {
         if ('value' in nextProps) {
             const value = nextProps.value
             // 如果传过来的是File对象，转换成base64
+            console.log(value)
             if (value && typeof value === 'object') {
                 getBase64(value, imageUrl => {
                     this.setState({
@@ -46,19 +47,20 @@ class UploadImg extends Component {
     triggerChange = changedValue => {
         // Should provide an event to pass value to Form.
         const onChange = this.props.onChange
-        console.log(changedValue)
+        //console.log(changedValue)
         if (onChange) {
             onChange(changedValue)
         }
     }
     beforeUpload = file => {
-        console.log(file)
-        getBase64(file, imageUrl =>
+        //console.log(file)
+        getBase64(file, imageUrl => {
+            //this.triggerChange(imageUrl)
             this.setState({
                 imageUrl,
                 loading: false,
-            }),
-        )
+            })
+        })
         return false
     }
     handleChange = info => {
@@ -74,7 +76,7 @@ class UploadImg extends Component {
         )
         //alert(this.props.value)
         const { imageUrl } = this.state
-        console.log(imageUrl)
+        //console.log(imageUrl)
         return (
             <Upload
                 name="avatar"

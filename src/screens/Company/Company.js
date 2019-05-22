@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { push } from 'connected-react-router'
 import { Link } from 'react-router-dom'
 import { actions } from 'reduxDir/company'
-
+import moment from 'moment'
 import {
     Alert,
     Button,
@@ -275,7 +275,9 @@ class Home extends PureComponent {
                             <div>
                                 <p>
                                     <b>成立时间：</b>
-                                    <span>{item.estiblish_time}</span>
+                                    <span>
+                                        {moment(parseInt(item.estiblish_time)).format('YYYY-MM-DD')}
+                                    </span>
                                 </p>
                                 <p>
                                     <b>官网：</b>
