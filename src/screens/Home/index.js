@@ -244,7 +244,7 @@ class Home extends PureComponent {
                             </div>
                         </div>
                         <Tag color="green" className={styles.companyType}>
-                            在业
+                            {list[i].reg_status}
                         </Tag>
                     </div>,
                 )
