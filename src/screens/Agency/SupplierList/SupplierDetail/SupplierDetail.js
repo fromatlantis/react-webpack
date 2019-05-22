@@ -118,43 +118,34 @@ class supplierEdit extends PureComponent {
                 >
                     <Form {...formItemLayout}>
                         <Form.Item {...formItemLayout} label="供应商分类:">
-                            {getFieldDecorator('category', {
-                                rules: [{ required: true, message: '请输入' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('category')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="供应商名称:">
-                            {getFieldDecorator('supplier', {
-                                rules: [{ required: true, message: '请输入供应商名称' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('supplier')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="联系人:">
-                            {getFieldDecorator('contract', {
-                                rules: [{ required: true, message: '请输入联系人' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('contract')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="联系人电话:">
-                            {getFieldDecorator('telephone', {
-                                rules: [
-                                    { required: true, message: '请输入联系方式' },
-                                    {
-                                        pattern: /^1[3,4,5,7,8]\d{9}$|^(\d{3,4}-)?\d{7,8}$/,
-                                        message: '联系方式有误，请重填',
-                                    },
-                                ],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('telephone')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="邮箱:">
-                            {getFieldDecorator('email', {
-                                rules: [
-                                    { type: 'email', message: '请输入正确的邮箱' },
-                                    { required: true, message: '请输入邮箱' },
-                                ],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('email')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="官网:">
-                            {getFieldDecorator('website', {
-                                rules: [{ required: true, message: '请输入官网地址' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('website')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="供应商简介:" layout="inline">
                             {getFieldDecorator('introduce')(

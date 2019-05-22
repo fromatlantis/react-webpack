@@ -278,44 +278,44 @@ class GoHandle extends PureComponent {
                 <Card title="订单信息" bordered={false}>
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                         <Form.Item {...formItemLayout} label="中介服务类型:">
-                            {getFieldDecorator('category', {
-                                rules: [{ required: true, message: '请输入中介服务类型' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('category')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="服务数目:">
-                            {getFieldDecorator('item', {
-                                rules: [{ required: true, message: '请输入服务数目' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('item')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="企业名称:">
-                            {getFieldDecorator('enterpriseName', {
-                                rules: [{ required: true, message: '请输入企业名称' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('enterpriseName')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="企业邮箱:">
-                            {getFieldDecorator('email', {
-                                rules: [{ required: true, message: '请输入企业邮箱' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('email')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="企业地址:">
-                            {getFieldDecorator('address', {
-                                rules: [{ required: true, message: '请输入企业地址' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('address')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="官网:">
-                            {getFieldDecorator('spaceName', {
-                                rules: [{ required: true, message: '请输入官网地址' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('spaceName')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="联系人:">
-                            {getFieldDecorator('contract', {
-                                rules: [{ required: true, message: '请输入联系人名字' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('contract')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="联系方式:">
-                            {getFieldDecorator('telephone', {
-                                rules: [{ required: true, message: '请输入联系方式' }],
-                            })(<Input className={styles.inputStyle} disabled />)}
+                            {getFieldDecorator('telephone')(
+                                <Input className={styles.inputStyle} disabled />,
+                            )}
                         </Form.Item>
                     </Form>
                 </Card>

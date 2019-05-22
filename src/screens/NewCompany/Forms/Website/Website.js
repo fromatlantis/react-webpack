@@ -64,11 +64,11 @@ class Website extends PureComponent {
             //     dataIndex: 'examineDate',
             //     key: 'comname',
             // },
-            {
-                title: '创建时间',
-                dataIndex: 'sourceTime',
-                key: 'sourceTime',
-            },
+            // {
+            //     title: '创建时间',
+            //     dataIndex: 'sourceTime',
+            //     key: 'sourceTime',
+            // },
             {
                 title: '操作',
                 dataIndex: 'keyId',
@@ -215,11 +215,11 @@ class Website extends PureComponent {
             //         </Select>
             //     ),
             // },
-            {
-                label: '创建时间',
-                field: 'sourceTime',
-                component: <Input placeholder="创建时间" />,
-            },
+            // {
+            //     label: '创建时间',
+            //     field: 'sourceTime',
+            //     component: <Input placeholder="创建时间" />,
+            // },
         ]
         const formItemLayout = {
             labelCol: { span: 12 },

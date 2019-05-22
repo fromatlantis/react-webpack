@@ -11,6 +11,7 @@ import {
     Radio,
     Breadcrumb,
     Card,
+    Select,
 } from 'antd'
 import styles from './SupplierType.module.css'
 import UploadImg from '../../../components/UploadImg/UploadImg'
@@ -21,6 +22,7 @@ const Search = Input.Search
 const { TextArea } = Input
 const RadioGroup = Radio.Group
 const confirm = Modal.confirm
+const Option = Select.Option
 class SearchTree extends React.Component {
     componentDidMount = () => {
         this.props.getServiceTypeList()
@@ -32,15 +34,126 @@ class SearchTree extends React.Component {
         visible: false,
         visibleF: false,
         parentEditvisible: false,
-        icon: null,
-        childEditIcon: null,
-        parentEditIcon: null,
         parentId: '',
         childFilter: '',
         parentFilter: '',
         selfId: '',
         disabledModal: false,
-        priceVisi: '',
+        priceVisi: '1',
+        nodeNum: '1', //添加一级还是二级，默认一级
+    }
+    // 添加之前先选择添加一级还是二级
+    selectHandle = value => {
+        this.setState({ nodeNum: value })
+    }
+    // 父节点/子节点的添加
+    addNode = type => {
+        const priceVisi = this.state.priceVisi
+        let lian = {}
+        const items = [
+            {
+                label: '节点级别',
+                component: (
+                    <Select
+                        value={this.state.nodeNum}
+                        style={{ width: 120 }}
+                        onChange={this.selectHandle}
+                    >
+                        <Option value="1">同级</Option>
+                        <Option value="2">子级</Option>
+                    </Select>
+                ),
+            },
+            {
+                label: '服务LOGO:',
+                field: 'logo',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入服务的LOGO',
+                    },
+                ],
+                component: <UploadImg />,
+            },
+            {
+                label: '名称:',
+                field: 'typeName',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入名称',
+                    },
+                ],
+                component: <Input placeholder="输入名称" />,
+            },
+        ]
+        const item2 = [
+            {
+                label: '是否显示金额:',
+                // field: 'priceVisitable',
+                rules: [
+                    {
+                        required: true,
+                        message: '请选择是否显示金额',
+                    },
+                ],
+                component: (
+                    <RadioGroup
+                        onChange={e => {
+                            this.setState({ priceVisi: e.target.value })
+                        }}
+                        value={priceVisi}
+                    >
+                        <Radio value="1">是</Radio>
+                        <Radio value="*">否</Radio>
+                    </RadioGroup>
+                ),
+            },
+            {
+                label: '金额:',
+                rules:
+                    priceVisi === '1'
+                        ? [
+                              {
+                                  required: true,
+                                  message: '请输入金额',
+                              },
+                              {
+                                  pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                                  message: '金额输入有误，请重填',
+                              },
+                          ]
+                        : '',
+                field: 'price',
+                component: <Input disabled={priceVisi !== '1'} />,
+            },
+            {
+                label: '服务描述:',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入服务描述',
+                    },
+                ],
+                field: 'description',
+                style: { marginTop: '5px' },
+                component: <Input.TextArea autosize={{ minRows: 4, maxRows: 6 }} />,
+            },
+        ]
+        const formItemLayout = {
+            labelCol: { span: 5 },
+            wrapperCol: { span: 14 },
+        }
+        return (
+            <FormView
+                ref={form => {
+                    this.addform = form
+                }}
+                formItemLayout={formItemLayout}
+                items={this.state.nodeNum === '2' ? [...items, ...item2] : items}
+                saveBtn={false}
+            />
+        )
     }
     // 编辑父节点表单
     parentForm = type => {
@@ -98,12 +211,14 @@ class SearchTree extends React.Component {
             {
                 label: '服务LOGO:',
                 field: 'logoFile',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入服务的LOGO',
-                    },
-                ],
+                rules: temp
+                    ? ''
+                    : [
+                          {
+                              required: true,
+                              message: '请输入服务的LOGO',
+                          },
+                      ],
                 component: temp ? (
                     <img src={logo} alt="" className={styles.detailImg} />
                 ) : (
@@ -113,23 +228,27 @@ class SearchTree extends React.Component {
             {
                 label: '名称:',
                 field: 'typeName',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入名称',
-                    },
-                ],
+                rules: temp
+                    ? ''
+                    : [
+                          {
+                              required: true,
+                              message: '请输入名称',
+                          },
+                      ],
                 component: <Input placeholder="输入名称" disabled={this.state.disabledModal} />,
             },
             {
                 label: '是否显示金额:',
                 // field: 'priceVisitable',
-                rules: [
-                    {
-                        required: true,
-                        message: '请选择是否显示金额',
-                    },
-                ],
+                rules: temp
+                    ? ''
+                    : [
+                          {
+                              required: true,
+                              message: '请选择是否显示金额',
+                          },
+                      ],
                 component: (
                     <RadioGroup value={priceVisi}>
                         <Radio
@@ -156,11 +275,15 @@ class SearchTree extends React.Component {
             {
                 label: '金额:',
                 rules:
-                    priceVisi === '1'
+                    !temp || priceVisi === '1'
                         ? [
                               {
                                   required: true,
                                   message: '请输入金额',
+                              },
+                              {
+                                  pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                                  message: '金额输入有误，请重填',
                               },
                           ]
                         : '',
@@ -169,12 +292,14 @@ class SearchTree extends React.Component {
             },
             {
                 label: '服务描述:',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入服务描述',
-                    },
-                ],
+                rules: temp
+                    ? ''
+                    : [
+                          {
+                              required: true,
+                              message: '请输入服务描述',
+                          },
+                      ],
                 field: 'description',
                 style: { marginTop: '5px' },
                 component: (
@@ -233,10 +358,11 @@ class SearchTree extends React.Component {
         return newList
     }
     // 父节点添加
-    addModalOne = () => {
+    addModalOne = id => {
         this.setState({
             visibleF: true,
-            icon: null,
+            parentId: id, //父节点的id
+            nodeNum: '1',
         })
     }
     // 点击编辑父节点弹窗
@@ -249,7 +375,6 @@ class SearchTree extends React.Component {
             parentFilter: parentFilter[0],
             selfId: id,
             disabledModal: false,
-            parentEditIcon: null,
         })
     }
     // 点击编辑子节点弹窗
@@ -263,7 +388,6 @@ class SearchTree extends React.Component {
             childFilter: childFilter[0],
             selfId: selfId,
             disabledModal: false,
-            childEditIcon: null,
             priceVisi: childFilter[0].priceVisitable,
         })
     }
@@ -277,23 +401,45 @@ class SearchTree extends React.Component {
             childFilter: childFilter[0],
             disabledModal: true,
             visible: true,
+            priceVisi: childFilter[0].priceVisitable,
         })
     }
     // 父节点添加Ok
     addHandleOk = () => {
-        this.props.form.validateFields((err, fieldsValue) => {
-            if (!err) {
-                this.setState({
-                    visibleF: false,
-                })
-                fieldsValue.priceVisitable = '*'
-                fieldsValue.price = '*'
-                fieldsValue.description = '*'
-                fieldsValue.level = '1'
-                fieldsValue.pid = '0'
-                this.props.addServiceType(fieldsValue)
-            }
-        })
+        if (this.state.nodeNum === '1') {
+            // 添加父节点
+            this.addform.validateFields((err, fieldsValue) => {
+                if (!err) {
+                    this.setState({
+                        visibleF: false,
+                    })
+                    fieldsValue.priceVisitable = '*'
+                    fieldsValue.price = '*'
+                    fieldsValue.description = '*'
+                    fieldsValue.level = '1'
+                    fieldsValue.pid = '0'
+                    this.props.addServiceType(fieldsValue)
+                }
+            })
+        } else {
+            // 添加子节点
+            let parentId = this.state.parentId
+            let priceVisi = this.state.priceVisi
+            this.addform.validateFields((err, fieldsValue) => {
+                if (!err) {
+                    this.setState({
+                        visibleF: false,
+                    })
+                    if (!fieldsValue.price) {
+                        fieldsValue.price = '*'
+                    }
+                    fieldsValue.priceVisitable = priceVisi
+                    fieldsValue.level = '2'
+                    fieldsValue.pid = parentId
+                    this.props.addServiceType(fieldsValue)
+                }
+            })
+        }
     }
     // 子节点编辑/详情的OK
     handleOk = e => {
@@ -304,7 +450,6 @@ class SearchTree extends React.Component {
             })
             return
         }
-        // let logo = this.state.childEditIcon
         let parentId = this.state.parentId
         let id = this.state.selfId
         let priceVisi = this.state.priceVisi
@@ -314,6 +459,9 @@ class SearchTree extends React.Component {
                 this.setState({
                     visible: false,
                 })
+                if (!fieldsValue.price) {
+                    fieldsValue.price = '*'
+                }
                 fieldsValue.level = '2'
                 // fieldsValue.logoFile = logo
                 fieldsValue.pic = parentId
@@ -330,7 +478,6 @@ class SearchTree extends React.Component {
     }
     // 父节点编辑OK
     parentEditOk = () => {
-        // let logo = this.state.parentEditIcon
         let selfId = this.state.selfId
         this.parentEditForm.validateFields((err, fieldsValue) => {
             if (!err) {
@@ -377,24 +524,6 @@ class SearchTree extends React.Component {
             icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
         })
     }
-    // 添加父节点时，上传图片
-    addImgOnClick = file => {
-        this.setState({
-            icon: file,
-        })
-    }
-    // 子节点编辑上传图片
-    childEditImg = file => {
-        this.setState({
-            childEditIcon: file,
-        })
-    }
-    // 父节点编辑上传图片
-    parentEditClick = file => {
-        this.setState({
-            parentEditIcon: file,
-        })
-    }
     onChange = e => {
         const value = e.target.value
         const expandedKeys = []
@@ -420,20 +549,18 @@ class SearchTree extends React.Component {
             onCancel() {},
         })
     }
+    handleFormChange = changedFields => {
+        const { childFilter } = this.state
+        const field = Object.values(changedFields)[0]
+        console.log({ ...childFilter, [field.name]: field.value })
+        this.setState({
+            childFilter: { ...childFilter, [field.name]: field.value },
+        })
+    }
     render() {
         const that = this
         const { searchValue, expandedKeys, autoExpandParent } = this.state
         const { getFieldDecorator } = this.props.form
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 6 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 15 },
-            },
-        }
         const lianLoop = data =>
             data.map(item => {
                 let text = item.parent.typeName
@@ -456,7 +583,10 @@ class SearchTree extends React.Component {
                                 }}
                                 type="minus-circle"
                             />
-                            <Icon onClick={this.addModalOne} type="plus-circle" />
+                            <Icon
+                                onClick={() => this.addModalOne(item.parent.key)}
+                                type="plus-circle"
+                            />
                         </div>
                     ) : (
                         <div>
@@ -469,7 +599,10 @@ class SearchTree extends React.Component {
                                 }}
                                 type="minus-circle"
                             />
-                            <Icon onClick={this.addModalOne} type="plus-circle" />
+                            <Icon
+                                onClick={() => this.addModalOne(item.parent.key)}
+                                type="plus-circle"
+                            />
                         </div>
                     )
                 if (item.items.length > 0) {
@@ -563,23 +696,7 @@ class SearchTree extends React.Component {
                         onOk={this.addHandleOk}
                         onCancel={this.addHandleCancel}
                     >
-                        <Form>
-                            <Form.Item label="服务LOGO：" {...formItemLayout}>
-                                {/* {this.state.visibleF ? (
-                                    {getFieldDecorator('logo', {
-                                        rules: [{ required: true, message: '请输入名称' }],
-                                    })(<UploadImg/>
-                                ) : null} */}
-                                {getFieldDecorator('logo', {
-                                    rules: [{ required: true, message: '请输入服务LOGO' }],
-                                })(<UploadImg />)}
-                            </Form.Item>
-                            <Form.Item {...formItemLayout} label="名称：" layout="inline">
-                                {getFieldDecorator('typeName', {
-                                    rules: [{ required: true, message: '请输入名称' }],
-                                })(<Input placeholder="输入名称" className={styles.inputChip} />)}
-                            </Form.Item>
-                        </Form>
+                        {this.addNode()}
                     </Modal>
                     {/* 子节点编辑和详情 */}
                     <Modal
@@ -606,15 +723,4 @@ class SearchTree extends React.Component {
         )
     }
 }
-export default Form.create({
-    mapPropsToFields(props) {
-        return {
-            // description: Form.createFormField({ value: treeId.description }),
-            // price: Form.createFormField({ value: treeId.price }),
-            // priceVisitable: Form.createFormField({
-            //     value: treeId.priceVisitable,
-            // }),
-            // typeName: Form.createFormField({ value: treeId.typeName }),
-        }
-    },
-})(SearchTree)
+export default Form.create()(SearchTree)
