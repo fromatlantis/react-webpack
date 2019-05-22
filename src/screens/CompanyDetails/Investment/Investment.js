@@ -13,14 +13,8 @@ import styles from '../CompanyDetails.module.css'
 @connect(
     state => {
         return {
-            InvestmentAbroadList: state.companyDetails.InvestmentAbroadList.map(item => {
-                item.estiblishTime = moment(parseInt(item.estiblishTime)).format('YYYY-MM-DD') //将毫秒数格式转换的方法
-                return item
-            }), //对外投资列表
-            InvestmentEventList: state.companyDetails.InvestmentEventList.map(item => {
-                item.tzdate = moment(parseInt(item.tzdate)).format('YYYY-MM-DD') //将毫秒数格式转换的方法
-                return item
-            }), //投资事件列表
+            InvestmentAbroadList: state.companyDetails.InvestmentAbroadList, //对外投资列表
+            InvestmentEventList: state.companyDetails.InvestmentEventList, //投资事件列表
         }
     },
     dispatch => {
@@ -96,6 +90,9 @@ class Investment extends PureComponent {
                                     dataIndex: 'tzdate',
                                     key: 'tzdate',
                                     align: 'center',
+                                    render: tzdate => (
+                                        <span>{moment(parseInt(tzdate)).format('YYYY-MM-DD')}</span>
+                                    ),
                                 },
                                 {
                                     title: '业务范围',
@@ -162,7 +159,7 @@ class Investment extends PureComponent {
                                     align: 'center',
                                 },
                                 {
-                                    title: '投资数额',
+                                    title: '投资数额(万)',
                                     dataIndex: 'amount',
                                     key: 'amount',
                                     align: 'center',
@@ -178,6 +175,11 @@ class Investment extends PureComponent {
                                     dataIndex: 'estiblishTime',
                                     key: 'estiblishTime',
                                     align: 'center',
+                                    render: estiblishTime => (
+                                        <span>
+                                            {moment(parseInt(estiblishTime)).format('YYYY-MM-DD')}
+                                        </span>
+                                    ),
                                 },
                                 {
                                     title: '状态',
