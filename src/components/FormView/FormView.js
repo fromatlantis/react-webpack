@@ -60,6 +60,11 @@ class FormView extends PureComponent {
 }
 export default Form.create({
     //name: 'register',
+    onFieldsChange(props, changedFields) {
+        if (props.onChange) {
+            props.onChange(changedFields)
+        }
+    },
     mapPropsToFields({ items = [], data = {} }) {
         const fields = {}
         items
@@ -76,7 +81,6 @@ export default Form.create({
                     value: getValue,
                 })
             })
-        //onsole.log(fields)
         return fields
     },
 })(FormView)

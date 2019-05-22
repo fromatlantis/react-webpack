@@ -106,19 +106,6 @@ class CompanyDetails extends PureComponent {
 
     render() {
         const item = this.props.BasicInfoDetial
-        const d = new Date(item.updateTime)
-        const times =
-            d.getFullYear() +
-            '-' +
-            (d.getMonth() + 1) +
-            '-' +
-            d.getDate() +
-            ' ' +
-            d.getHours() +
-            ':' +
-            d.getMinutes() +
-            ':' +
-            d.getSeconds()
         const { type } = this.state
         return (
             <Fragment>

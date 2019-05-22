@@ -59,8 +59,9 @@ class Toolbar extends PureComponent {
     }
     render() {
         const { archivesDetail } = this.props
+        const companyId = sessionStorage.getItem('companyId')
         return (
-            <div>
+            <div style={{ display: companyId === '000000' ? 'none' : 'block' }}>
                 <Button type="primary" style={{ marginRight: '15px' }} onClick={this.preview}>
                     预览
                 </Button>
