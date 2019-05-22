@@ -250,9 +250,12 @@ class Information extends PureComponent {
                             columns={[
                                 {
                                     title: '时间',
-                                    dataIndex: 'sourceTime',
-                                    key: 'sourceTime',
+                                    dataIndex: 'date',
+                                    key: 'date',
                                     align: 'center',
+                                    render: date => (
+                                        <span>{moment(date).format('YYYY-MM-DD')}</span>
+                                    ),
                                 },
                                 {
                                     title: '金额',
