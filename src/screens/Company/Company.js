@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { actions } from 'reduxDir/company'
 import moment from 'moment'
 import {
+    Avatar,
     Alert,
     Button,
     Input,
@@ -198,7 +199,7 @@ class Home extends PureComponent {
         return (company.list || []).map(item => {
             return (
                 <div className={styles.itemCard} key={item.company_id}>
-                    <img src={item.logo} alt="logo" />
+                    <Avatar className={styles.avatar} src={item.logo} shape="square" size={100} />
                     <div className={styles.intro}>
                         <div className={styles.title}>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -281,13 +282,15 @@ class Home extends PureComponent {
                                 </p>
                                 <p>
                                     <b>官网：</b>
-                                    <a
-                                        href={`http://${item.website_list}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {`http://${item.website_list}`}
-                                    </a>
+                                    {item.website_list && (
+                                        <a
+                                            href={`http://${item.website_list}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {`http://${item.website_list}`}
+                                        </a>
+                                    )}
                                 </p>
                                 <p>
                                     <b>企业地址：</b>

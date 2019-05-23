@@ -64,7 +64,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: (
@@ -77,7 +77,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <UploadImg />,
@@ -88,7 +88,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -109,7 +109,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 formatter: estiblishTime => {
@@ -123,7 +123,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -134,7 +134,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -145,7 +145,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -156,7 +156,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -167,7 +167,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -179,7 +179,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业类型',
+                        message: '请输入信息',
                     },
                 ],
                 component: (
