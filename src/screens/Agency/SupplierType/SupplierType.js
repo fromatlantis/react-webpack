@@ -272,7 +272,7 @@ class SearchTree extends React.Component {
             {
                 label: '金额:',
                 rules:
-                    priceVisi === '1'
+                    priceVisi === '1' && !temp
                         ? [
                               {
                                   required: true,
