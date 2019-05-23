@@ -110,6 +110,9 @@ class Agency extends PureComponent {
     allType = () => {
         this.setState({ addTypes: [], allActive: !this.state.allActive })
     }
+    gotoDetail = name => {
+        this.props.getCompanyIdByName(name)
+    }
     render() {
         let that = this
         const { getFieldDecorator } = this.props.form
@@ -145,9 +148,14 @@ class Agency extends PureComponent {
                 key: 'enterpriseName',
                 align: 'center',
                 render: (text, record) => (
-                    <Link key={text} to={`/companyDetails/information/${record.companyId}/agency`}>
+                    <Button
+                        type="link"
+                        onClick={() => {
+                            this.gotoDetail(text)
+                        }}
+                    >
                         {text}
-                    </Link>
+                    </Button>
                 ),
             },
             {
@@ -207,9 +215,14 @@ class Agency extends PureComponent {
                 key: 'enterpriseName',
                 align: 'center',
                 render: (text, record) => (
-                    <Link key={text} to={`/companyDetails/information/${record.companyId}/agency`}>
+                    <Button
+                        type="link"
+                        onClick={() => {
+                            this.gotoDetail(text)
+                        }}
+                    >
                         {text}
-                    </Link>
+                    </Button>
                 ),
             },
             {
@@ -349,6 +362,7 @@ const mapDispatchToProps = dispatch => {
         {
             getDemandList: actions('getDemandList'),
             getServiceTypeList: actions('getServiceTypeList'),
+            getCompanyIdByName: actions('getCompanyIdByName'),
         },
         dispatch,
     )

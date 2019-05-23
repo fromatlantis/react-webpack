@@ -2,7 +2,7 @@
  * 中介服务-企业需求
  */
 import { put, call, select } from 'redux-saga/effects'
-import { replace, goBack } from 'connected-react-router'
+import { replace, goBack, push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
@@ -314,6 +314,22 @@ const model = {
                 return {
                     ...state,
                     demandList: newdemandList,
+                }
+            },
+        },
+        // 点击公司名称跳转到公司详情
+        {
+            name: 'getCompanyIdByName',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/getCompanyIdByName?name=${action.payload}`,
+                })
+                if (res.code === 1000) {
+                    if (res.data) {
+                        yield put(push(`/companyDetails/information/${res.data}/agency`))
+                    } else {
+                        message.warning('没有找到对应的公司')
+                    }
                 }
             },
         },
