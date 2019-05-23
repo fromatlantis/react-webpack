@@ -135,12 +135,14 @@ class Product extends PureComponent {
         this.form.validateFields((errors, values) => {
             if (!errors) {
                 console.log(values)
+                values.pageNo = 1
                 this.props.getProductInfoList(values)
             }
         })
     }
     handleReset = () => {
         this.form.resetFields()
+        this.search()
     }
     // 分页
     onChange = pageNo => {
@@ -192,6 +194,7 @@ class Product extends PureComponent {
                 title: '操作',
                 dataIndex: 'actions',
                 key: 'actions',
+                align: 'center',
                 render: (_, record) => (
                     <Button
                         type="link"
@@ -214,12 +217,13 @@ class Product extends PureComponent {
                         marginBottom: '20px',
                     }}
                 >
-                    <SearchView
+                    <FormView
                         ref={form => {
                             this.form = form
                         }}
                         formItemLayout={{}}
                         items={searchItems}
+                        data={searchParams}
                         layout="inline"
                         saveBtn={false}
                     />
@@ -228,7 +232,11 @@ class Product extends PureComponent {
                             清除
                         </Button>
                         <Divider type="vertical" />
-                        <Button type="primary" onClick={this.search}>
+                        <Button
+                            type="primary"
+                            onClick={this.search}
+                            style={{ background: 'rgb(50,200,100)' }}
+                        >
                             查询
                         </Button>
                         <Divider type="vertical" />

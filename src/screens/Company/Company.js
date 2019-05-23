@@ -94,9 +94,9 @@ class Home extends PureComponent {
             keyWord,
         })
         if (keyWord) {
-            this.props.searchCompany({ column, keyWord, pageNo, pageSize })
+            this.props.searchCompany({ column, keyWord, pageNo: 1, pageSize })
         } else {
-            this.props.searchCompany({ pageNo, pageSize })
+            this.props.searchCompany({ pageNo: 1, pageSize })
         }
     }
     // 分页
@@ -108,7 +108,9 @@ class Home extends PureComponent {
     }
     onShowSizeChange = (_, pageSize) => {
         let { keyWord, column } = this.state
-        this.props.searchCompany({ column, keyWord, pageNo: 1, pageSize })
+        let params = { pageNo: 1, pageSize }
+        if (keyWord) params = { ...params, keyWord }
+        this.props.searchCompany(params)
     }
     batchAssign = () => {
         this.props.getCompanyList()

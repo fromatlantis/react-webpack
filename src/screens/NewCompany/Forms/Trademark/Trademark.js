@@ -39,7 +39,6 @@ class Trademark extends PureComponent {
     }
     componentDidMount = () => {
         const companyId = sessionStorage.getItem('companyId')
-        console.log(moment(1547049600000).format('YYYY-MM-DD'))
         if (companyId) {
             this.props.getTrademarkList()
         }
@@ -110,13 +109,14 @@ class Trademark extends PureComponent {
         }
         //const FormView = formView({ items, data: {} })
         return (
-            <SearchView
+            <FormView
                 ref={form => {
                     this.form = form
                 }}
                 items={items}
                 formItemLayout={formItemLayout}
                 layout="inline"
+                data={this.props.searchParams}
                 saveBtn={false}
             />
         )
@@ -192,12 +192,14 @@ class Trademark extends PureComponent {
                     // 先转换为日期再格式化
                     values.appDate = moment(values.appDate.format('YYYY-MM-DD')).format(dateStr)
                 }
+                values.pageNo = 1
                 this.props.getTrademarkList(values)
             }
         })
     }
     handleReset = () => {
         this.form.resetFields()
+        this.search()
     }
     render() {
         const columns = [
@@ -231,6 +233,7 @@ class Trademark extends PureComponent {
                 title: '操作',
                 dataIndex: 'actions',
                 key: 'actions',
+                align: 'center',
                 render: (_, record) => (
                     <Button
                         type="link"
@@ -253,7 +256,11 @@ class Trademark extends PureComponent {
                             清除
                         </Button>
                         <Divider type="vertical" />
-                        <Button type="primary" onClick={this.search}>
+                        <Button
+                            type="primary"
+                            onClick={this.search}
+                            style={{ background: 'rgb(50,200,100)' }}
+                        >
                             查询
                         </Button>
                         <Divider type="vertical" />

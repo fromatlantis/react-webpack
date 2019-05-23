@@ -145,11 +145,11 @@ class SearchTree extends React.Component {
             wrapperCol: { span: 14 },
         }
         return (
-            <FormView
+            <SearchView
                 ref={form => {
                     this.addform = form
                 }}
-                onChange={this.handleFormChange}
+                //onChange={this.handleFormChange}
                 formItemLayout={formItemLayout}
                 items={this.state.nodeNum === '2' ? [...items, ...item2] : items}
                 saveBtn={false}
@@ -414,6 +414,8 @@ class SearchTree extends React.Component {
                     fieldsValue.level = '1'
                     fieldsValue.pid = '0'
                     this.props.addServiceType(fieldsValue)
+                    // 清空表单项
+                    this.addform.resetFields()
                 }
             })
         } else {
@@ -432,6 +434,8 @@ class SearchTree extends React.Component {
                     fieldsValue.level = '2'
                     fieldsValue.pid = parentId
                     this.props.addServiceType(fieldsValue)
+                    // 清空表单项
+                    this.addform.resetFields()
                 }
             })
         }

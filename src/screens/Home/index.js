@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react'
 import { message, Button, Input, Icon, Tag, Pagination, Divider, Alert } from 'antd'
 import styles from './index.module.css'
-import chuizi from '../../assets/home/chuizi.png'
-import jizhang from '../../assets/home/jizhang.png'
-import renzizhuanyuan from '../../assets/home/renzizhuanyuan.png'
-import zhishichanquanzizhu from '../../assets/home/zhishichanquanzizhu.png'
+
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { actions } from '../../redux/intermediary'

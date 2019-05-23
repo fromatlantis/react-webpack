@@ -5,11 +5,11 @@
     margin-bottom:15px;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 .typeBut{
-    display: inline-block;
     margin-right: 13px;
-    float: left;
+    margin-bottom: 9px;
     padding: 1px 8px;
     cursor: pointer;
     border: 1px solid #ccc;

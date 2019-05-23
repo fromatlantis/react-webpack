@@ -134,13 +134,14 @@ class Patent extends PureComponent {
             wrapperCol: { span: 12 },
         }
         return (
-            <SearchView
+            <FormView
                 ref={form => {
                     this.form = form
                 }}
                 formItemLayout={formItemLayout}
                 layout="inline"
                 items={items}
+                data={this.props.searchParams}
                 saveBtn={false}
             />
         )
@@ -244,12 +245,14 @@ class Patent extends PureComponent {
                 if (values.applicationTime) {
                     values.applicationTime = moment(values.applicationTime).format(dateStr)
                 }
+                values.pageNo = 1
                 this.props.getPatentList(values)
             }
         })
     }
     handleReset = () => {
         this.form.resetFields()
+        this.search()
     }
     // 分页
     onChange = pageNo => {
@@ -337,6 +340,7 @@ class Patent extends PureComponent {
                 dataIndex: 'action',
                 key: 'action',
                 fixed: 'right',
+                align: 'center',
                 width: 100,
                 render: (_, record) => (
                     <Button
@@ -365,7 +369,11 @@ class Patent extends PureComponent {
                             清除
                         </Button>
                         <Divider type="vertical" />
-                        <Button type="primary" onClick={this.search}>
+                        <Button
+                            type="primary"
+                            onClick={this.search}
+                            style={{ background: 'rgb(50,200,100)' }}
+                        >
                             查询
                         </Button>
                         <Divider type="vertical" />
