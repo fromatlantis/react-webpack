@@ -145,7 +145,7 @@ class Agency extends PureComponent {
                 key: 'enterpriseName',
                 align: 'center',
                 render: (text, record) => (
-                    <Link key={text} to={`/companyDetails/information/${record.companyId}/company`}>
+                    <Link key={text} to={`/companyDetails/information/${record.companyId}/agency`}>
                         {text}
                     </Link>
                 ),
