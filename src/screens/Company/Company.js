@@ -314,7 +314,7 @@ class Home extends PureComponent {
         const uploadProps = {
             name: 'excelFile',
             multiple: false,
-            action: '/enterprise/batchImport',
+            action: '/houzai/enterprise/batchImport',
             onChange: info => {
                 const status = info.file.status
                 if (status !== 'uploading') {
