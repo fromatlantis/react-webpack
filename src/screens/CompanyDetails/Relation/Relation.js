@@ -14,7 +14,6 @@ import styles from '../CompanyDetails.module.css'
     state => {
         return {
             FirmGraph: state.companyDetails.FirmGraph, //指定企业投资图谱
-            BasicInfoDetial: state.companyDetails.BasicInfoDetial, //企业详情信息
         }
     },
     dispatch => {
@@ -60,10 +59,6 @@ class Relation extends PureComponent {
 
     render() {
         // console.log('this.props.FirmGraph', this.props.FirmGraph)
-        // 2353058204
-        let company_id = this.props.match
-            ? this.props.match.params.company_id
-            : this.props.company_id
         const FirmGraph = this.props.FirmGraph
         const nodes =
             FirmGraph.nodes &&
@@ -80,25 +75,6 @@ class Relation extends PureComponent {
                 },
             }))
         const upFirmGraph = { nodes, edges }
-        let company_Id = 0
-        let elementscompany_Id = 0
-        for (let i in upFirmGraph.nodes) {
-            if (upFirmGraph.nodes[i].data.properties.name == this.props.BasicInfoDetial.name) {
-                company_Id = upFirmGraph.nodes[i].data.id
-            }
-        }
-        // for (let i in this.state.elements.nodes) {
-        //     console.log(this.state.elements.nodes[i].data.properties.name)
-        //     if (
-        //         this.state.elements.nodes[i].data.properties.name == this.props.BasicInfoDetial.name
-        //     ) {
-        //         elementscompany_Id = this.state.elements.nodes[i].data.id
-        //     }
-        // }
-        // console.log(
-        //     elementscompany_Id,
-        //     'elementscompany_Idelementscompany_Idelementscompany_Idelementscompany_Id',
-        // )
         return (
             <Fragment>
                 <div className={styles.messageCard}>
@@ -108,7 +84,7 @@ class Relation extends PureComponent {
                         className={styles.cardSty}
                     >
                         <div style={{ height: '500px', display: 'flex', flexDirection: 'column' }}>
-                            {/* <Graph elements={this.state.elements} company_Id={elementscompany_Id} /> */}
+                            <Graph elements={this.state.elements} />
                         </div>
                     </Card> */}
                     <Card
@@ -116,8 +92,8 @@ class Relation extends PureComponent {
                         tabList={[{ key: '投资图谱', tab: '投资图谱' }]}
                         className={styles.cardSty}
                     >
-                        <div style={{ height: '750px', display: 'flex', flexDirection: 'column' }}>
-                            <Graph elements={upFirmGraph} company_Id={company_Id} />
+                        <div style={{ height: '500px', display: 'flex', flexDirection: 'column' }}>
+                            <Graph elements={upFirmGraph} />
                         </div>
                     </Card>
                 </div>
