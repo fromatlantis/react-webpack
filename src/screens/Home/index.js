@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { message, Button, Input, Icon, Tag, Pagination, Divider, Alert } from 'antd'
+import { Select, message, Button, Input, Icon, Avatar, Tag, Pagination, Divider, Alert } from 'antd'
 import styles from './index.module.css'
 
 import { bindActionCreators } from 'redux'
@@ -8,9 +8,8 @@ import { actions } from '../../redux/intermediary'
 import { push } from 'connected-react-router'
 import request from '../../utils/request'
 import moment from 'moment'
-
+const Option = Select.Option
 const Search = Input.Search
-
 class Home extends PureComponent {
     constructor() {
         super()
@@ -196,7 +195,13 @@ class Home extends PureComponent {
                             )
                         }
                     >
-                        <img className={styles.serviceImg} src={list[i].logo} alt="" />
+                        <Avatar
+                            shape="square"
+                            size={100}
+                            src={list[i].logo}
+                            className={styles.serviceImg}
+                        />
+                        {/* <img className={styles.serviceImg} src={list[i].logo} alt="" /> */}
                         <div className={styles.about}>
                             <h3>{list[i].name}</h3>
                             {/* <div className={styles.companyTypes}>
@@ -256,7 +261,13 @@ class Home extends PureComponent {
                             )
                         }
                     >
-                        <img className={styles.serviceImg} src={list[i].logo} alt="" />
+                        <Avatar
+                            shape="square"
+                            size={100}
+                            src={list[i].logo}
+                            className={styles.serviceImg}
+                        />
+                        {/* <img className={styles.serviceImg} src={list[i].logo} alt="" /> */}
                         <div className={styles.about}>
                             <h3>{list[i].name}</h3>
                             {/* <div className={styles.companyTypes}>
@@ -313,7 +324,13 @@ class Home extends PureComponent {
                             )
                         }
                     >
-                        <img className={styles.serviceImg} src={list[i].logo} alt="" />
+                        <Avatar
+                            shape="square"
+                            size={100}
+                            src={list[i].logo}
+                            className={styles.serviceImg}
+                        />
+                        {/* <img className={styles.serviceImg} src={list[i].logo} alt="" /> */}
                         <div className={styles.about}>
                             <h3>{list[i].name}</h3>
                             {/* <div className={styles.companyTypes}>
@@ -325,7 +342,7 @@ class Home extends PureComponent {
                             <div className={styles.row}>
                                 <div className={styles.column}>
                                     <p className={styles.columnItem}>
-                                        法人：{list[i].legal_person_name}
+                                        法11111人：{list[i].legal_person_name}
                                     </p>
                                     <p className={styles.columnItem}>邮箱：{list[i].email}</p>
                                     <p className={styles.columnItem}>
@@ -406,9 +423,22 @@ class Home extends PureComponent {
     }
     render() {
         const { size } = this.state
+        const selectBefore = (
+            <Select
+                defaultValue="查公司"
+                style={{ width: 110 }}
+                onChange={size => {
+                    this.setState({ size })
+                }}
+            >
+                <Option value="查公司">查公司</Option>
+                <Option value="查法人">查法人</Option>
+                <Option value="查行业">查行业</Option>
+            </Select>
+        )
         return (
             <div className={styles.Container}>
-                <div className={styles.radio}>
+                {/* <div className={styles.radio}>
                     <div className={styles.flex}>
                         <Button
                             onClick={() => this.buttonClick('查公司')}
@@ -429,14 +459,21 @@ class Home extends PureComponent {
                             查行业
                         </Button>
                     </div>
-                </div>
+                </div> */}
                 <div className={styles.searchView}>
                     <Search
-                        placeholder="请输入企业名称、老板名称等"
+                        addonBefore={selectBefore}
+                        placeholder="请输入企业名称"
                         onSearch={value => this.search(value)}
                         enterButton
                         size="large"
                     />
+                    {/* <Search
+                        placeholder="请输入企业名称、老板名称等"
+                        onSearch={value => this.search(value)}
+                        enterButton
+                        size="large"
+                    /> */}
                 </div>
                 <Divider />
                 {this.state.searchShow ? null : (

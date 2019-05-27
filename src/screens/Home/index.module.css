@@ -61,7 +61,8 @@
 
 }
 .searchView{
-    width:100%;
+    width:60%;
+    margin-left: 20%;
     padding:35px 0 45px;
 }
 .dividingLine{
@@ -104,6 +105,10 @@
     width:65px;
     height:65px;
     margin-bottom:15px;
+}
+.serviceImg img{
+    width:65px;
+    height:65px;
 }
 .dynamics{
     display:flex;
@@ -179,6 +184,7 @@
     flex:1;
     display:flex;
     flex-direction:column;
+    margin-left: 15px;
 }
 .column{
     display:flex;
