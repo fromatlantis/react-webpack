@@ -14,6 +14,7 @@ import {
 import moment from 'moment'
 import { FormView, SearchView } from 'components'
 // import formView from '../FormView'
+import Toolbar from '../../Toolbar/Toolbar'
 import styles from '../index.module.css'
 import request from '../../../../utils/request'
 import { bindActionCreators } from 'redux'
@@ -78,11 +79,11 @@ class Website extends PureComponent {
             //     dataIndex: 'examineDate',
             //     key: 'comname',
             // },
-            {
-                title: '创建时间',
-                dataIndex: 'sourceTime',
-                key: 'sourceTime',
-            },
+            // {
+            //     title: '创建时间',
+            //     dataIndex: 'sourceTime',
+            //     key: 'sourceTime',
+            // },
             {
                 title: '操作',
                 dataIndex: 'keyId',
@@ -237,11 +238,11 @@ class Website extends PureComponent {
             //         </Select>
             //     ),
             // },
-            {
-                label: '创建时间',
-                field: 'sourceTime',
-                component: <DatePicker placeholder="创建时间" />,
-            },
+            // {
+            //     label: '创建时间',
+            //     field: 'sourceTime',
+            //     component: <Input placeholder="创建时间" />,
+            // },
         ]
         const formItemLayout = {
             labelCol: { span: 3 },
@@ -516,20 +517,7 @@ class Website extends PureComponent {
     }
     render() {
         return (
-            <Card
-                title="知识产权-网站域名"
-                bordered={false}
-                // extra={
-                //     <div>
-                //         {/* <Button type="primary" onClick={this.newInfo}>
-                //             预览
-                //         </Button>
-                //         <Button onClick={this.newInfo} style={{ marginLeft: '10px' }}>
-                //             存档
-                //         </Button> */}
-                //     </div>
-                // }
-            >
+            <Card title="知识产权-网站域名" bordered={false} extra={<Toolbar />}>
                 {/* <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
                     {this.renderForm('search')}
                 </div> */}

@@ -90,6 +90,15 @@ const routes = [
         path: '/agency/*',
         name: '中介服务',
         icon: 'appstore',
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "agency" */ '../screens/Agency/Agency'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/agency/companyRequire',
+        name: '中介服务',
+        icon: 'appstore',
         navAttr: {
             index: 1,
             role: 'home',

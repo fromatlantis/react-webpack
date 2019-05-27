@@ -1,15 +1,15 @@
-.container{
-    padding: 15px 15px;
+.containerR{
+    padding: 16px 24px 0 24px;
 }
 .typeTitle{
     margin-bottom:15px;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 .typeBut{
-    display: inline-block;
     margin-right: 13px;
-    float: left;
+    margin-bottom: 9px;
     padding: 1px 8px;
     cursor: pointer;
     border: 1px solid #ccc;
@@ -28,3 +28,12 @@
     margin-left: 12px;
     margin-bottom:25px;
 }
+.active{
+    background-color: #1E90FF;
+    color: #fff;
+}
+.containerR :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+    width: 80px !important;
+    text-align: right;
+}
+

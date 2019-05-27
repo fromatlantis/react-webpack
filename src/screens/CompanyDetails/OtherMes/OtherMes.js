@@ -5,20 +5,48 @@ import React, { PureComponent, Fragment } from 'react'
 import { Card, Table, Button } from 'antd'
 import styles from '../CompanyDetails.module.css'
 
-export default class OtherMes extends PureComponent {
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { actions } from '../../../redux/companyDetails'
+
+@connect(
+    state => {
+        return {
+            otherInfoList: state.companyDetails.otherInfoList, //指定企业投资图谱
+        }
+    },
+    dispatch => {
+        return bindActionCreators(
+            {
+                getOtherInfoList: actions('getOtherInfoList'),
+            },
+            dispatch,
+        )
+    },
+)
+class OtherMes extends PureComponent {
+    componentDidMount() {
+        let company_id = this.props.match
+            ? this.props.match.params.company_id
+            : this.props.company_id
+        if (company_id) {
+            this.props.getOtherInfoList(company_id)
+        }
+    }
     render() {
+        const { otherInfoList } = this.props
         return (
             <Fragment>
                 <div className={styles.messageCard}>
                     <Card
                         id="otherMes"
                         title={<span style={{ color: '#1890ff' }}>其他信息</span>}
-                        extra={<Button type="link">展开更多>></Button>}
+                        // extra={<Button type="link">展开更多>></Button>}
                         className={styles.cardSty}
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            //pagination={false} //分页器
                             columns={[
                                 {
                                     title: '序号',
@@ -29,39 +57,24 @@ export default class OtherMes extends PureComponent {
                                 },
                                 {
                                     title: '提出人',
-                                    dataIndex: 'name',
-                                    key: 'name',
+                                    dataIndex: 'submitterName',
+                                    key: 'submitterName',
                                     align: 'center',
                                 },
                                 {
                                     title: '提出时间',
-                                    dataIndex: 'age',
-                                    key: 'age',
+                                    dataIndex: 'createTime',
+                                    key: 'createTime',
                                     align: 'center',
                                 },
                                 {
                                     title: '信息内容',
-                                    dataIndex: 'address',
-                                    key: 'address',
+                                    dataIndex: 'content',
+                                    key: 'content',
                                     align: 'center',
                                 },
                             ]}
-                            dataSource={[
-                                {
-                                    key: '1',
-                                    name: '张三',
-                                    age: '2019-5-6 14:02:09    ',
-                                    address:
-                                        '其他信息其他信息其他信息其他信息其他信息其他信息其他信息其他信息',
-                                },
-                                {
-                                    key: '2',
-                                    name: '张三',
-                                    age: '2019-5-6 14:02:09    ',
-                                    address:
-                                        '其他信息其他信息其他信息其他信息其他信息其他信息其他信息其他信息',
-                                },
-                            ]}
+                            dataSource={otherInfoList}
                         />
                     </Card>
                 </div>
@@ -69,3 +82,4 @@ export default class OtherMes extends PureComponent {
         )
     }
 }
+export default OtherMes

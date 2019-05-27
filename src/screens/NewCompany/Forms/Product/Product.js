@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Table, Modal, Input, DatePicker, Divider } from 'antd'
-
 import { UploadImg, FormView, SearchView } from 'components'
 import logo from 'assets/hz.png'
-
+import Toolbar from '../../Toolbar/Toolbar'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -136,12 +135,14 @@ class Product extends PureComponent {
         this.form.validateFields((errors, values) => {
             if (!errors) {
                 console.log(values)
+                values.pageNo = 1
                 this.props.getProductInfoList(values)
             }
         })
     }
     handleReset = () => {
         this.form.resetFields()
+        this.search()
     }
     // 分页
     onChange = pageNo => {
@@ -193,6 +194,7 @@ class Product extends PureComponent {
                 title: '操作',
                 dataIndex: 'actions',
                 key: 'actions',
+                align: 'center',
                 render: (_, record) => (
                     <Button
                         type="link"
@@ -207,7 +209,7 @@ class Product extends PureComponent {
         ]
         const { product, searchParams } = this.props
         return (
-            <Card title="主要产品" bordered={false}>
+            <Card title="主要产品" bordered={false} extra={<Toolbar />}>
                 <div
                     style={{
                         display: 'flex',
@@ -215,12 +217,13 @@ class Product extends PureComponent {
                         marginBottom: '20px',
                     }}
                 >
-                    <SearchView
+                    <FormView
                         ref={form => {
                             this.form = form
                         }}
                         formItemLayout={{}}
                         items={searchItems}
+                        data={searchParams}
                         layout="inline"
                         saveBtn={false}
                     />
@@ -229,7 +232,11 @@ class Product extends PureComponent {
                             清除
                         </Button>
                         <Divider type="vertical" />
-                        <Button type="primary" onClick={this.search}>
+                        <Button
+                            type="primary"
+                            onClick={this.search}
+                            style={{ background: 'rgb(50,200,100)' }}
+                        >
                             查询
                         </Button>
                         <Divider type="vertical" />

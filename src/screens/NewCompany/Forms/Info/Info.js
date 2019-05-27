@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/newCompany'
 
 import AutoComplete from './AutoComplete'
+import Toolbar from '../../Toolbar/Toolbar'
 
 const Option = Select.Option
 const mapStateToProps = state => {
@@ -63,7 +64,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: (
@@ -76,7 +77,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <UploadImg />,
@@ -87,7 +88,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -108,7 +109,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 formatter: estiblishTime => {
@@ -122,7 +123,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -133,7 +134,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -144,7 +145,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -155,7 +156,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -166,7 +167,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请输入信息',
                     },
                 ],
                 component: <Input />,
@@ -178,7 +179,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业类型',
+                        message: '请输入信息',
                     },
                 ],
                 component: (
@@ -207,7 +208,7 @@ class Info extends PureComponent {
                 },
             })
         return (
-            <Card title="企业信息" bordered={false}>
+            <Card title="企业信息" bordered={false} extra={<Toolbar />}>
                 <FormView items={items} data={baseInfo} onSubmit={this.onSubmit} />
             </Card>
         )

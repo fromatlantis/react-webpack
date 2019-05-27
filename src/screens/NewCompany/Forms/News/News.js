@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
-import { Button, Card, Table, Modal, Input, DatePicker } from 'antd'
-
+import { Card, Table } from 'antd'
+import Toolbar from '../../Toolbar/Toolbar'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -19,26 +19,6 @@ const mapDispatchToProps = dispatch => {
         dispatch,
     )
 }
-
-const dataSource = [
-    {
-        key: '1',
-        source: '国家新闻网',
-        time: '2019-05-20',
-        publisher: '东方月初',
-        title: '关于XX的新闻',
-        content:
-            '新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容',
-    },
-    {
-        source: '国家新闻网',
-        time: '2019-05-20',
-        publisher: '王权富贵',
-        title: '关于XX的新闻',
-        content:
-            '新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容新闻内容',
-    },
-]
 
 const columns = [
     {
@@ -86,7 +66,7 @@ class News extends PureComponent {
     render() {
         const { news } = this.props
         return (
-            <Card title="企业动态" bordered={false}>
+            <Card title="企业动态" bordered={false} extra={<Toolbar />}>
                 <Table bordered pagination={false} dataSource={news.list} columns={columns} />
             </Card>
         )

@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Select, message, Button, Input, Icon, Avatar, Tag, Pagination, Divider, Alert } from 'antd'
 import styles from './index.module.css'
-import chuizi from '../../assets/home/chuizi.png'
-import jizhang from '../../assets/home/jizhang.png'
-import renzizhuanyuan from '../../assets/home/renzizhuanyuan.png'
-import zhishichanquanzizhu from '../../assets/home/zhishichanquanzizhu.png'
+
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { actions } from '../../redux/intermediary'
@@ -13,7 +10,6 @@ import request from '../../utils/request'
 import moment from 'moment'
 const Option = Select.Option
 const Search = Input.Search
-
 class Home extends PureComponent {
     constructor() {
         super()
@@ -163,13 +159,15 @@ class Home extends PureComponent {
                 )
             }
             let supplement = 4 - (TopIntermediary.length % 4)
-            for (let i = 0; i < supplement; i++) {
-                item.push(
-                    <div
-                        key={i + TopIntermediary.length * 2}
-                        className={styles.servicesnoshadow}
-                    />,
-                )
+            if (supplement < 4) {
+                for (let i = 0; i < supplement; i++) {
+                    item.push(
+                        <div
+                            key={i + TopIntermediary.length * 2}
+                            className={styles.servicesnoshadow}
+                        />,
+                    )
+                }
             }
             items.push(
                 <div key={1} className={styles.services}>
@@ -235,7 +233,10 @@ class Home extends PureComponent {
                                 </div>
                                 <div className={styles.column}>
                                     <p className={styles.columnItem}>
-                                        成立时间：{list[i].estiblish_time}
+                                        成立时间：
+                                        {moment(parseInt(list[i].estiblish_time)).format(
+                                            'YYYY-MM-DD',
+                                        )}
                                     </p>
                                     <p className={styles.columnItem}>
                                         官网：{list[i].website_list}

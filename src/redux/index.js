@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import { connectRouter } from 'connected-react-router'
 
 import authUser from './authUser'
+import agencyRequire from './agencyRequire'
 import companyDetails from './companyDetails'
 import intermediary from './intermediary'
 import company from './company'
@@ -15,12 +16,14 @@ import event from './event'
 import outward from './outward'
 import trademark from './trademark'
 import patent from './patent'
+import dictionary from './dictionary'
 
 export default history =>
     combineReducers({
         router: connectRouter(history),
         authUser,
         companyDetails,
+        agencyRequire,
         company,
         newCompany,
         business,
@@ -33,4 +36,5 @@ export default history =>
         trademark,
         patent,
         intermediary,
+        dictionary,
     })

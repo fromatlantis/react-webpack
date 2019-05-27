@@ -3,7 +3,7 @@ import { Button, Card, Table, Modal, Input, DatePicker, Divider, InputNumber } f
 import moment from 'moment'
 import { FormView, SearchView } from 'components'
 import styles from '../index.module.css'
-
+import Toolbar from '../../Toolbar/Toolbar'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -129,13 +129,14 @@ class Outward extends PureComponent {
             wrapperCol: { span: 12 },
         }
         return (
-            <SearchView
+            <FormView
                 ref={form => {
                     this.form = form
                 }}
                 items={items}
                 formItemLayout={formItemLayout}
                 layout="inline"
+                data={this.props.searchParams}
                 saveBtn={false}
             />
         )
@@ -218,12 +219,14 @@ class Outward extends PureComponent {
                 if (values.percent) {
                     values.percent = values.percent + '.00'
                 }
+                values.pageNo = 1
                 this.props.getInvestmentAbroadList(values)
             }
         })
     }
     handleReset = () => {
         this.form.resetFields()
+        this.search()
     }
     // 分页
     onChange = pageNo => {
@@ -287,6 +290,7 @@ class Outward extends PureComponent {
                 title: '操作',
                 dataIndex: 'actions',
                 key: 'actions',
+                align: 'center',
                 render: (_, record) => (
                     <Button
                         type="link"
@@ -301,7 +305,7 @@ class Outward extends PureComponent {
         ]
         const { outward, searchParams } = this.props
         return (
-            <Card title="对外投资" bordered={false}>
+            <Card title="对外投资" bordered={false} extra={<Toolbar />}>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>
@@ -309,7 +313,11 @@ class Outward extends PureComponent {
                             清除
                         </Button>
                         <Divider type="vertical" />
-                        <Button type="primary" onClick={this.search}>
+                        <Button
+                            type="primary"
+                            onClick={this.search}
+                            style={{ background: 'rgb(50,200,100)' }}
+                        >
                             查询
                         </Button>
                         <Divider type="vertical" />

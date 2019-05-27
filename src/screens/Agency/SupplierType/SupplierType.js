@@ -1,387 +1,725 @@
 import React, { PureComponent } from 'react'
-import { Tree, Input, Divider, Icon, Modal, Button, Form, Radio, Breadcrumb } from 'antd'
+import {
+    Tree,
+    Input,
+    Divider,
+    Icon,
+    Modal,
+    Button,
+    notification,
+    Form,
+    Radio,
+    Breadcrumb,
+    Card,
+    Select,
+} from 'antd'
 import styles from './SupplierType.module.css'
 import UploadImg from '../../../components/UploadImg/UploadImg'
+import FormView, { SearchView } from '../../../components/FormView/FormView'
 
 const { TreeNode } = Tree
 const Search = Input.Search
 const { TextArea } = Input
 const RadioGroup = Radio.Group
-
-const x = 3
-const y = 2
-const z = 0
-const gData = []
-
-const lian = [
-    {
-        title: '知识产权',
-        key: '知识产权',
-        children: [
-            { title: '知识产权1', key: '知识产权1' },
-            { title: '知识产权2', key: '知识产权2' },
-            { title: '知识产权3', key: '知识产权3' },
-        ],
-    },
-    {
-        title: '法律服务',
-        key: '法律服务',
-        children: [
-            { title: '法律服务1', key: '法律服务1' },
-            { title: '法律服务2', key: '法律服务2' },
-            { title: '法律服务3', key: '法律服务3' },
-        ],
-    },
-    {
-        title: '人力资源',
-        key: '人力资源',
-        children: [
-            { title: '人力资源1', key: '人力资源1' },
-            { title: '人力资源2', key: '人力资源2' },
-            { title: '人力资源3', key: '人力资源3' },
-        ],
-    },
-]
-
-// 创建树上的节点
-const generateData = (_level, _preKey, _tns) => {
-    const preKey = _preKey || '0'
-    const tns = _tns || gData
-    const children = []
-    for (let i = 0; i < x; i++) {
-        const key = `${preKey}-${i}`
-        tns.push({ title: key, key })
-        if (i < y) {
-            children.push(key)
-        }
-    }
-    if (_level < 0) {
-        return tns
-    }
-    const level = _level - 1
-    children.forEach((key, index) => {
-        tns[index].children = []
-        return generateData(level, key, tns[index].children)
-    })
-}
-generateData(z)
-
-//获取树上所有的节点
-const dataList = []
-const generateList = data => {
-    for (let i = 0; i < data.length; i++) {
-        const node = data[i]
-        const key = node.key
-        dataList.push({ key, title: key })
-        if (node.children) {
-            generateList(node.children)
-        }
-    }
-}
-generateList(lian)
-
-// 点击搜索之后，符合的，则自动展开
-const getParentKey = (key, tree) => {
-    console.log('穿过来的key', key)
-    let parentKey
-    for (let i = 0; i < tree.length; i++) {
-        const node = tree[i]
-        if (node.children) {
-            if (node.children.some(item => item.key === key)) {
-                parentKey = node.key
-            } else if (getParentKey(key, node.children)) {
-                parentKey = getParentKey(key, node.children)
-            }
-        }
-    }
-    return parentKey
-}
-
+const confirm = Modal.confirm
+const Option = Select.Option
 class SearchTree extends React.Component {
+    componentDidMount = () => {
+        this.props.getServiceTypeList()
+    }
     state = {
         expandedKeys: [],
         searchValue: '',
         autoExpandParent: true,
         visible: false,
-        oneVis: true,
+        visibleF: false,
+        parentEditvisible: false,
+        parentId: '',
+        childFilter: '',
+        parentFilter: '',
+        selfId: '',
+        disabledModal: false,
+        priceVisi: '1',
+        nodeNum: '1', //添加一级还是二级，默认一级
     }
-    editModalOne = e => {
-        e.stopPropagation()
+    // 添加之前先选择添加一级还是二级
+    selectHandle = value => {
+        this.setState({ nodeNum: value })
+    }
+    // 父节点/子节点的添加
+    addNode = type => {
+        const priceVisi = this.state.priceVisi
+        let lian = {}
+        const items = [
+            {
+                label: '节点级别',
+                component: (
+                    <Select
+                        value={this.state.nodeNum}
+                        style={{ width: 120 }}
+                        onChange={this.selectHandle}
+                    >
+                        <Option value="1">同级</Option>
+                        <Option value="2">子级</Option>
+                    </Select>
+                ),
+            },
+            {
+                label: '服务LOGO:',
+                field: 'logo',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入服务的LOGO',
+                    },
+                ],
+                component: <UploadImg />,
+            },
+            {
+                label: '名称:',
+                field: 'typeName',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入名称',
+                    },
+                ],
+                component: <Input placeholder="输入名称" />,
+            },
+        ]
+        const item2 = [
+            {
+                label: '是否显示金额:',
+                // field: 'priceVisitable',
+                rules: [
+                    {
+                        required: true,
+                        message: '请选择是否显示金额',
+                    },
+                ],
+                component: (
+                    <RadioGroup
+                        onChange={e => {
+                            this.setState({ priceVisi: e.target.value })
+                        }}
+                        value={priceVisi}
+                    >
+                        <Radio value="1">是</Radio>
+                        <Radio value="*">否</Radio>
+                    </RadioGroup>
+                ),
+            },
+            {
+                label: '金额:',
+                rules:
+                    priceVisi === '1'
+                        ? [
+                              {
+                                  required: true,
+                                  message: '请输入金额',
+                              },
+                              {
+                                  pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                                  message: '金额输入有误，请重填',
+                              },
+                          ]
+                        : '',
+                field: 'price',
+                component: <Input disabled={priceVisi !== '1'} />,
+            },
+            {
+                label: '服务描述:',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入服务描述',
+                    },
+                ],
+                field: 'description',
+                style: { marginTop: '5px' },
+                component: <Input.TextArea autosize={{ minRows: 4, maxRows: 6 }} />,
+            },
+        ]
+        const formItemLayout = {
+            labelCol: { span: 5 },
+            wrapperCol: { span: 14 },
+        }
+        return (
+            <SearchView
+                ref={form => {
+                    this.addform = form
+                }}
+                //onChange={this.handleFormChange}
+                formItemLayout={formItemLayout}
+                items={this.state.nodeNum === '2' ? [...items, ...item2] : items}
+                saveBtn={false}
+            />
+        )
+    }
+    // 编辑父节点表单
+    parentForm = type => {
+        const items = [
+            {
+                label: '服务LOGO:',
+                field: 'logo',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入服务的LOGO',
+                    },
+                ],
+                component: <UploadImg />,
+            },
+            {
+                label: '名称:',
+                field: 'typeName',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入名称',
+                    },
+                ],
+                component: <Input placeholder="输入名称" />,
+            },
+        ]
+        const formItemLayout = {
+            labelCol: { span: 5 },
+            wrapperCol: { span: 14 },
+        }
+        const parentFilter = this.state.parentFilter
+        return (
+            <FormView
+                ref={form => {
+                    this.parentEditForm = form
+                }}
+                formItemLayout={formItemLayout}
+                items={items}
+                data={parentFilter}
+                saveBtn={false}
+            />
+        )
+    }
+    // (编辑/详情)子节点表单
+    renderNewForm = type => {
+        const { logo } = this.state.childFilter
+        const priceVisi = this.state.priceVisi
+        let temp = this.state.disabledModal
+        const items = [
+            {
+                label: '服务LOGO:',
+                field: 'logo',
+                rules: temp
+                    ? ''
+                    : [
+                          {
+                              required: true,
+                              message: '请输入服务的LOGO',
+                          },
+                      ],
+                component: temp ? (
+                    <img src={logo} alt="" className={styles.detailImg} />
+                ) : (
+                    <UploadImg />
+                ),
+            },
+            {
+                label: '名称:',
+                field: 'typeName',
+                rules: temp
+                    ? ''
+                    : [
+                          {
+                              required: true,
+                              message: '请输入名称',
+                          },
+                      ],
+                component: <Input placeholder="输入名称" disabled={this.state.disabledModal} />,
+            },
+            {
+                label: '是否显示金额:',
+                // field: 'priceVisitable',
+                rules: temp
+                    ? ''
+                    : [
+                          {
+                              required: true,
+                              message: '请选择是否显示金额',
+                          },
+                      ],
+                component: (
+                    <RadioGroup value={priceVisi}>
+                        <Radio
+                            value="1"
+                            onChange={e => {
+                                this.setState({ priceVisi: e.target.value })
+                            }}
+                            disabled={this.state.disabledModal}
+                        >
+                            是
+                        </Radio>
+                        <Radio
+                            onChange={e => {
+                                this.setState({ priceVisi: e.target.value })
+                            }}
+                            value="*"
+                            disabled={this.state.disabledModal}
+                        >
+                            否
+                        </Radio>
+                    </RadioGroup>
+                ),
+            },
+            {
+                label: '金额:',
+                rules:
+                    priceVisi === '1' && !temp
+                        ? [
+                              {
+                                  required: true,
+                                  message: '请输入金额',
+                              },
+                              {
+                                  pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                                  message: '金额输入有误，请重填',
+                              },
+                          ]
+                        : '',
+                field: 'price',
+                component: <Input disabled={this.state.disabledModal || priceVisi !== '1'} />,
+            },
+            {
+                label: '服务描述:',
+                rules: temp
+                    ? ''
+                    : [
+                          {
+                              required: true,
+                              message: '请输入服务描述',
+                          },
+                      ],
+                field: 'description',
+                style: { marginTop: '5px' },
+                component: (
+                    <Input.TextArea
+                        disabled={this.state.disabledModal}
+                        autosize={{ minRows: 4, maxRows: 6 }}
+                    />
+                ),
+            },
+        ]
+        const formItemLayout = {
+            labelCol: { span: 5 },
+            wrapperCol: { span: 14 },
+        }
+        const childFilter = this.state.childFilter
+        return (
+            <FormView
+                ref={form => {
+                    this.newForm = form
+                }}
+                formItemLayout={formItemLayout}
+                onChange={this.handleFormChange}
+                items={items}
+                data={childFilter}
+                saveBtn={false}
+            />
+        )
+    }
+    // 处理接口返回的数据
+    nodeText = () => {
+        let ServiceTypeList = this.props.ServiceTypeList
+        let keys = [],
+            newList = []
+        ServiceTypeList.filter(item => {
+            return item.level === '1'
+        }).map(child => {
+            if (keys.indexOf(child.id) < 0) {
+                keys.push({ key: child.id, typeName: child.typeName })
+            }
+            return true
+        })
+        let temp = ServiceTypeList.filter(item => {
+            return item.level === '2'
+        })
+        keys.forEach(parent => {
+            let items = []
+            temp.forEach(child => {
+                if (parent.key === child.pid) {
+                    items.push(child)
+                }
+            })
+            newList.push({ parent, items })
+        })
+        return newList
+    }
+    // 父节点添加
+    addModalOne = id => {
         this.setState({
-            visible: true,
-            oneVis: false,
+            visibleF: true,
+            parentId: id, //父节点的id
+            nodeNum: '1',
         })
     }
-    editModalChild = e => {
-        console.log('二级目录，显示的内容应该多一点哦')
+    // 点击编辑父节点弹窗
+    editModalOne = id => {
+        let parentFilter = this.props.ServiceTypeList.filter(item => {
+            return item.id === id
+        })
         this.setState({
-            visible: true,
-            oneVis: true,
+            parentEditvisible: true,
+            parentFilter: parentFilter[0],
+            selfId: id,
+            disabledModal: false,
         })
     }
-
+    // 点击编辑子节点弹窗
+    editModalChild = (selfId, pic) => {
+        let childFilter = this.props.ServiceTypeList.filter(item => {
+            return item.id === selfId
+        })
+        this.setState({
+            visible: true,
+            parentId: pic,
+            childFilter: childFilter[0],
+            selfId: selfId,
+            disabledModal: false,
+            priceVisi: childFilter[0].priceVisitable,
+        })
+    }
+    // 子节点详情
+    detailModal = (selfId, pic) => {
+        let childFilter = this.props.ServiceTypeList.filter(item => {
+            return item.id === selfId
+        })
+        this.setState({
+            parentId: pic,
+            childFilter: childFilter[0],
+            disabledModal: true,
+            visible: true,
+            priceVisi: childFilter[0].priceVisitable,
+        })
+    }
+    // 父节点添加Ok
+    addHandleOk = () => {
+        if (this.state.nodeNum === '1') {
+            // 添加父节点
+            this.addform.validateFields((err, fieldsValue) => {
+                if (!err) {
+                    this.setState({
+                        visibleF: false,
+                    })
+                    fieldsValue.priceVisitable = '*'
+                    fieldsValue.price = '*'
+                    fieldsValue.description = '*'
+                    fieldsValue.level = '1'
+                    fieldsValue.pid = '0'
+                    this.props.addServiceType(fieldsValue)
+                    // 清空表单项
+                    this.addform.resetFields()
+                }
+            })
+        } else {
+            // 添加子节点
+            let parentId = this.state.parentId
+            let priceVisi = this.state.priceVisi
+            this.addform.validateFields((err, fieldsValue) => {
+                if (!err) {
+                    this.setState({
+                        visibleF: false,
+                    })
+                    if (!fieldsValue.price) {
+                        fieldsValue.price = '*'
+                    }
+                    fieldsValue.priceVisitable = priceVisi
+                    fieldsValue.level = '2'
+                    fieldsValue.pid = parentId
+                    this.props.addServiceType(fieldsValue)
+                    // 清空表单项
+                    this.addform.resetFields()
+                }
+            })
+        }
+    }
+    // 子节点编辑/详情的OK
     handleOk = e => {
-        console.log(e)
+        // 详情
+        if (this.state.disabledModal) {
+            this.setState({
+                visible: false,
+            })
+            return
+        }
+        let parentId = this.state.parentId
+        let id = this.state.selfId
+        let priceVisi = this.state.priceVisi
+        // 子节点编辑
+        this.newForm.validateFields((err, fieldsValue) => {
+            console.log('lalla', err)
+            if (!err) {
+                this.setState({
+                    visible: false,
+                })
+                if (!fieldsValue.price) {
+                    fieldsValue.price = '*'
+                }
+                fieldsValue.level = '2'
+                // fieldsValue.logoFile = logo
+                fieldsValue.pic = parentId
+                fieldsValue.id = id
+                fieldsValue.priceVisitable = priceVisi
+                this.props.updateServiceType(fieldsValue)
+            }
+        })
+    }
+    addHandleCancel = () => {
         this.setState({
-            visible: false,
+            visibleF: false,
+        })
+    }
+    // 父节点编辑OK
+    parentEditOk = () => {
+        let selfId = this.state.selfId
+        this.parentEditForm.validateFields((err, fieldsValue) => {
+            if (!err) {
+                this.setState({
+                    parentEditvisible: false,
+                })
+                fieldsValue.priceVisitable = '*'
+                fieldsValue.price = '*'
+                fieldsValue.description = '*'
+                fieldsValue.level = '1'
+                fieldsValue.pid = '0'
+                // fieldsValue.logoFile = fieldsValue.logo
+                fieldsValue.id = selfId
+                this.props.updateServiceType(fieldsValue)
+            }
+        })
+    }
+    // 父节点编辑cancel
+    parentEditCancel = () => {
+        this.setState({
+            parentEditvisible: false,
         })
     }
 
     handleCancel = e => {
-        console.log(e)
+        // console.log(e)
         this.setState({
             visible: false,
         })
     }
     onExpand = expandedKeys => {
-        console.log('展开或者收起时触发', expandedKeys)
         this.setState({
             expandedKeys,
             autoExpandParent: false,
         })
     }
-
+    //提醒用户上传图片
+    openNotification = () => {
+        notification.open({
+            message: '智慧园区提醒您：',
+            description: '请上传服务LOGO！',
+            placement: 'topLeft',
+            duration: 2,
+            icon: <Icon type="smile" style={{ color: '#108ee9' }} />,
+        })
+    }
     onChange = e => {
         const value = e.target.value
-        console.log('搜索的内容是：', value)
-        const expandedKeys = lian
-            .map(item => {
-                if (item.title.indexOf(value) > -1) {
-                    return getParentKey(item.key, lian)
-                }
-                return null
-            })
-            .filter((item, i, self) => item && self.indexOf(item) === i)
-        let haha = lian.map(item => {
-            if (item.title.indexOf(value) > -1) {
-                return getParentKey(item.key, lian)
+        const expandedKeys = []
+        this.props.ServiceTypeList.map(item => {
+            if (item.typeName.indexOf(value) > -1) {
+                expandedKeys.push(item.id)
             }
-            return null
         })
-        console.log('展开的是', haha)
         this.setState({
             expandedKeys,
             searchValue: value,
             autoExpandParent: true,
         })
     }
+    // 删除节点
+    deleteNode = id => {
+        let that = this
+        confirm({
+            title: '确定要删除吗',
+            onOk() {
+                that.props.deleteServiceType({ id: id })
+            },
+            onCancel() {},
+        })
+    }
+    handleFormChange = changedFields => {
+        const { childFilter } = this.state
+        const field = Object.values(changedFields)[0]
+        this.setState({
+            childFilter: { ...childFilter, [field.name]: field.value },
+        })
+    }
     render() {
+        const that = this
         const { searchValue, expandedKeys, autoExpandParent } = this.state
         const { getFieldDecorator } = this.props.form
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 6 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 15 },
-            },
-        }
-
         const lianLoop = data =>
             data.map(item => {
-                const index = item.title.indexOf(searchValue)
-                const beforeStr = item.title.substr(0, index)
-                const afterStr = item.title.substr(index + searchValue.length)
+                let text = item.parent.typeName
+                const indexF = text.indexOf(searchValue)
+                const beforeStrF = text.substr(0, indexF)
+                const afterStrF = text.substr(indexF + searchValue.length)
                 const title =
-                    index > -1 ? (
+                    indexF > -1 ? (
                         <div>
                             <span className={styles.treeName}>
-                                {beforeStr}
+                                {beforeStrF}
                                 <span style={{ color: '#f50' }}>{searchValue}</span>
-                                {afterStr}
+                                {afterStrF}
                             </span>
-                            <Icon type="edit" onClick={this.editModalChild} />
-                            <Icon className={styles.iconMinus} type="minus-circle" />
-                            <Icon onClick={this.editModalChild} type="bars" />
+                            <Icon type="edit" onClick={() => this.editModalOne(item.parent.key)} />
+                            <Icon
+                                className={styles.iconMinus}
+                                onClick={() => {
+                                    this.deleteNode(item.parent.key)
+                                }}
+                                type="minus-circle"
+                            />
+                            <Icon
+                                onClick={() => this.addModalOne(item.parent.key)}
+                                type="plus-circle"
+                            />
                         </div>
                     ) : (
                         <div>
-                            <span className={styles.treeName}>
-                                {beforeStr}
-                                <span style={{ color: '#f50' }}>{item.title}</span>
-                                {afterStr}
-                            </span>
-                            <Icon type="edit" onClick={this.editModalChild} />
-                            <Icon className={styles.iconMinus} type="minus-circle" />
-                            <Icon onClick={this.editModalChild} type="bars" />
+                            <span className={styles.treeName}>{item.parent.typeName}</span>
+                            <Icon type="edit" onClick={() => this.editModalOne(item.parent.key)} />
+                            <Icon
+                                className={styles.iconMinus}
+                                onClick={() => {
+                                    this.deleteNode(item.parent.key)
+                                }}
+                                type="minus-circle"
+                            />
+                            <Icon
+                                onClick={() => this.addModalOne(item.parent.key)}
+                                type="plus-circle"
+                            />
                         </div>
                     )
-                if (item.children) {
-                    let title =
-                        index > -1 ? (
-                            <div>
-                                <span className={styles.treeName}>
-                                    {beforeStr}
-                                    <span style={{ color: '#f50' }}>{searchValue}</span>
-                                    {afterStr}
-                                </span>
-                                <Icon type="edit" onClick={this.editModalOne} />
-                                <Icon className={styles.iconMinus} type="minus-circle" />
-                                <Icon onClick={this.editModalOne} type="plus-circle" />
-                            </div>
-                        ) : (
-                            <div>
-                                <span className={styles.treeName}>
-                                    {beforeStr}
-                                    <span style={{ color: '#f50' }}>{item.title}</span>
-                                    {afterStr}
-                                </span>
-                                <Icon type="edit" onClick={this.editModalOne} />
-                                <Icon className={styles.iconMinus} type="minus-circle" />
-                                <Icon onClick={this.editModalOne} type="plus-circle" />
-                            </div>
-                        )
+                if (item.items.length > 0) {
                     return (
-                        <TreeNode key={item.key} title={title}>
-                            {lianLoop(item.children)}
+                        <TreeNode key={item.parent.key} title={title}>
+                            {item.items.map(type => {
+                                let text = type.typeName
+                                let indexChild = text.indexOf(searchValue)
+                                let beforeStrChild = text.substr(0, indexChild)
+                                let afterStrChild = text.substr(indexChild + searchValue.length)
+                                const childTitle =
+                                    indexChild > -1 ? (
+                                        <div>
+                                            <span className={styles.treeName}>
+                                                {beforeStrChild}
+                                                <span style={{ color: '#f50' }}>{searchValue}</span>
+                                                {afterStrChild}
+                                            </span>
+                                            <Icon
+                                                type="edit"
+                                                onClick={() =>
+                                                    this.editModalChild(type.id, item.parent.key)
+                                                }
+                                            />
+                                            <Icon
+                                                className={styles.iconMinus}
+                                                onClick={() => this.deleteNode(type.id)}
+                                                type="minus-circle"
+                                            />
+                                            <Icon
+                                                onClick={() =>
+                                                    this.detailModal(type.id, item.parent.key)
+                                                }
+                                                type="bars"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <span className={styles.treeName}>{type.typeName}</span>
+                                            <Icon
+                                                type="edit"
+                                                onClick={() =>
+                                                    this.editModalChild(type.id, item.parent.key)
+                                                }
+                                            />
+                                            <Icon
+                                                className={styles.iconMinus}
+                                                onClick={() => this.deleteNode(type.id)}
+                                                type="minus-circle"
+                                            />
+                                            <Icon
+                                                onClick={() =>
+                                                    this.detailModal(type.id, item.parent.key)
+                                                }
+                                                type="bars"
+                                            />
+                                        </div>
+                                    )
+                                return <TreeNode key={type.id} title={childTitle} />
+                            })}
                         </TreeNode>
                     )
+                } else {
+                    return <TreeNode key={item.parent.key} title={title} />
                 }
-                return <TreeNode key={item.key} title={title} />
             })
-
-        // const loop = data =>
-        //     data.map(item => {
-        //         const index = item.title.indexOf(searchValue)
-        //         const beforeStr = item.title.substr(0, index)
-        //         const afterStr = item.title.substr(index + searchValue.length)
-        //         const title =
-        //             index > -1 ? (
-        //                 <div>
-        //                     <span className={styles.treeName}>
-        //                         {beforeStr}
-        //                         <span style={{ color: '#f50' }}>{searchValue}</span>
-        //                         {afterStr}
-        //                     </span>
-        //                     <Icon type="edit" onClick={this.editModalOne} />
-        //                     <Icon className={styles.iconMinus} type="minus-circle" />
-        //                     <Icon onClick={this.editModalOne} type="plus-circle" />
-        //                 </div>
-        //             ) : (
-        //                 <div>
-        //                     <span className={styles.treeName}>
-        //                         {beforeStr}
-        //                         <span style={{ color: '#f50' }}>{item.title}</span>
-        //                         {afterStr}
-        //                     </span>
-        //                     <Icon type="edit" onClick={this.editModalOne} />
-        //                     <Icon className={styles.iconMinus} type="minus-circle" />
-        //                     <Icon onClick={this.editModalOne} type="plus-circle" />
-        //                 </div>
-        //             )
-        //         if (item.children) {
-        //             return (
-        //                 <TreeNode key={item.key} title={title}>
-        //                     {loop(item.children)}
-        //                 </TreeNode>
-        //             )
-        //         }
-        //         return <TreeNode key={item.key} title={title} />
-        //     })
         return (
-            <div className={styles.container}>
-                <Breadcrumb className={styles.title}>
-                    <Breadcrumb.Item>供应商类型</Breadcrumb.Item>
-                </Breadcrumb>
-                <Divider />
-                <div style={{ paddingLeft: 10 }}>
-                    <Search
-                        style={{ marginBottom: 8, width: 350 }}
-                        placeholder="Search"
-                        onChange={this.onChange}
-                    />
-                    <Tree
-                        onExpand={this.onExpand}
-                        expandedKeys={expandedKeys}
-                        autoExpandParent={autoExpandParent}
-                    >
-                        {lianLoop(lian)}
-                    </Tree>
-                </div>
-                {/* 编辑 */}
-                <Modal
-                    style={{ width: 250 }}
-                    title="供应商类型"
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                >
-                    <Form onSubmit={this.handleSubmit}>
-                        <Form.Item label="封面图：" {...formItemLayout}>
-                            {getFieldDecorator('icon')(
-                                <UploadImg
-                                    onUpload={this.ImgOnClick}
-                                    //  url={coverPlot}
-                                />,
-                            )}
-                        </Form.Item>
-                        <Form.Item {...formItemLayout} label="名称：" layout="inline">
-                            {getFieldDecorator('title', {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入名称',
-                                    },
-                                ],
-                            })(<Input placeholder="输入名称" className={styles.inputChip} />)}
-                        </Form.Item>
-                        {this.state.oneVis ? (
-                            <div>
-                                <Form.Item
-                                    {...formItemLayout}
-                                    label="是否显示金额："
-                                    layout="inline"
-                                >
-                                    {getFieldDecorator('title', {
-                                        rules: [
-                                            {
-                                                required: true,
-                                                message: '请选择是否显示金额',
-                                            },
-                                        ],
-                                    })(
-                                        <RadioGroup>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={2}>否</Radio>
-                                        </RadioGroup>,
-                                    )}
-                                </Form.Item>
-                                <Form.Item {...formItemLayout} label="金额：" layout="inline">
-                                    {getFieldDecorator('title', {
-                                        rules: [
-                                            {
-                                                required: true,
-                                                message: '请输入金额',
-                                            },
-                                        ],
-                                    })(
-                                        <Input
-                                            placeholder="输入金额"
-                                            className={styles.inputChip}
-                                        />,
-                                    )}
-                                </Form.Item>
-                                <Form.Item {...formItemLayout} label="服务描述:" layout="inline">
-                                    {getFieldDecorator('synopsis', {
-                                        rules: [
-                                            {
-                                                required: true,
-                                                message: '请输入服务描述！',
-                                            },
-                                        ],
-                                    })(<TextArea rows={6} />)}
-                                </Form.Item>
-                            </div>
-                        ) : (
-                            ''
+            <div>
+                <Card title="供应商类型" bordered={false}>
+                    <div style={{ paddingLeft: 10 }}>
+                        <Search
+                            style={{ marginBottom: 8, width: 350 }}
+                            placeholder="Search"
+                            onChange={this.onChange}
+                        />
+                        {this.props.ServiceTypeList && (
+                            <Tree
+                                onExpand={this.onExpand}
+                                expandedKeys={expandedKeys}
+                                autoExpandParent={autoExpandParent}
+                            >
+                                {lianLoop(this.nodeText())}
+                            </Tree>
                         )}
-                    </Form>
-                </Modal>
+                    </div>
+                    {/* 添加父节点 */}
+                    <Modal
+                        style={{ width: 250 }}
+                        title="供应商类型"
+                        visible={this.state.visibleF}
+                        onOk={this.addHandleOk}
+                        onCancel={this.addHandleCancel}
+                    >
+                        {this.addNode()}
+                    </Modal>
+                    {/* 子节点编辑和详情 */}
+                    <Modal
+                        style={{ width: 250 }}
+                        title="供应商类型"
+                        visible={this.state.visible}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                    >
+                        {this.renderNewForm()}
+                    </Modal>
+                    {/* 父节点编辑 */}
+                    <Modal
+                        style={{ width: 250 }}
+                        title="供应商类型"
+                        visible={this.state.parentEditvisible}
+                        onOk={this.parentEditOk}
+                        onCancel={this.parentEditCancel}
+                    >
+                        {this.parentForm()}
+                    </Modal>
+                </Card>
             </div>
         )
     }
 }
-
 export default Form.create()(SearchTree)

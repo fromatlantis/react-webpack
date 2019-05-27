@@ -3,14 +3,21 @@ import styles from './ListClick.module.css'
 
 class ListClick extends Component {
     state = {
-        activeKey: '',
+        activeKey: 'undefined',
         navTitle: [],
         spot: true,
+    }
+    componentDidMount() {
+        this.props.onRef(this)
+    }
+    updateAll = () => {
+        this.setState({ activeKey: 'undefined' })
+        this.props.getId('undefined')
     }
     componentWillReceiveProps(nextProps) {
         if (nextProps.data.length !== this.state.navTitle.length) {
             let list = nextProps.data.filter((item, i) => {
-                return i < 6
+                return i <= 6
             })
             this.setState({
                 activeKey: this.state.activeKey ? this.state.activeKey : '',
@@ -38,33 +45,33 @@ class ListClick extends Component {
         const title = this.props.title || ''
         return (
             <div style={{ position: 'relative', lineHeight: 2, overflow: 'hidden' }}>
-                <span style={{ position: 'absolute', top: 4, left: 0, fontWeight: 'bold' }}>
-                    {title}
-                </span>
+                <span style={{ position: 'absolute', top: 4, left: 0 }}>{title}</span>
                 <div style={{ paddingLeft: 80 }}>
                     {this.state.navTitle.map((item, i) => {
                         return (
                             <span
                                 key={i}
-                                style={{
-                                    marginRight: '13px',
-                                    fontSize: '15px',
-                                    float: 'left',
-                                    padding: '4px 6px',
-                                    cursor: 'pointer',
-                                }}
                                 onClick={() => {
-                                    this.titleClick(item.Ids, item.Names)
+                                    // this.titleClick(item.Ids, item.Names)
+                                    this.titleClick(item.id, item.typeName)
                                 }}
-                                className={this.state.activeKey === item.Ids ? styles.active : ''}
+                                className={`${styles.typeBut} ${
+                                    this.state.activeKey === item.id ? styles.active : ''
+                                }`}
                             >
-                                {item.Names}
+                                {item.typeName}
                             </span>
                         )
                     })}
                     <span
                         onClick={this.allList}
-                        style={{ margin: 2, display: this.state.spot ? 'inline-block' : 'none' }}
+                        style={{
+                            margin: 2,
+                            display:
+                                this.state.spot && this.state.navTitle.length > 6
+                                    ? 'inline-block'
+                                    : 'none',
+                        }}
                     >
                         ···
                     </span>

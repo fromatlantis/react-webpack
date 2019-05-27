@@ -4,8 +4,9 @@ import { bindActionCreators } from 'redux'
 import { push } from 'connected-react-router'
 import { Link } from 'react-router-dom'
 import { actions } from 'reduxDir/company'
-
+import moment from 'moment'
 import {
+    Avatar,
     Alert,
     Button,
     Input,
@@ -93,9 +94,9 @@ class Home extends PureComponent {
             keyWord,
         })
         if (keyWord) {
-            this.props.searchCompany({ column, keyWord, pageNo, pageSize })
+            this.props.searchCompany({ column, keyWord, pageNo: 1, pageSize })
         } else {
-            this.props.searchCompany({ pageNo, pageSize })
+            this.props.searchCompany({ pageNo: 1, pageSize })
         }
     }
     // 分页
@@ -107,16 +108,28 @@ class Home extends PureComponent {
     }
     onShowSizeChange = (_, pageSize) => {
         let { keyWord, column } = this.state
-        this.props.searchCompany({ column, keyWord, pageNo: 1, pageSize })
+        let params = { pageNo: 1, pageSize }
+        if (keyWord) params = { ...params, keyWord }
+        this.props.searchCompany(params)
     }
     batchAssign = () => {
         this.props.getCompanyList()
-        this.props.getDirectorList({ companyId: '123' })
+        this.props.getDirectorList()
         this.setState({
             batchAssign: true,
         })
     }
     batchAssignOk = () => {
+        const companyIds = this.refs.batchAssignCompany.state.targetKeys
+        const { targetKeys } = this.refs.batchAssignPerson.state
+        const { directorList } = this.props
+        this.props.assignServiceStaff({
+            companyIds: companyIds,
+            userIds: targetKeys,
+            userNames: directorList
+                .filter(item => targetKeys.includes(item.id))
+                .map(item => item.name),
+        })
         this.setState({
             batchAssign: false,
         })
@@ -127,7 +140,7 @@ class Home extends PureComponent {
         })
     }
     assign = companyId => {
-        this.props.getDirectorList({ companyId })
+        this.props.getDirectorList(companyId)
         this.setState({
             assign: true,
             companyId: companyId,
@@ -187,8 +200,8 @@ class Home extends PureComponent {
         const { company } = this.props
         return (company.list || []).map(item => {
             return (
-                <div className={styles.itemCard}>
-                    <img src={item.logo} alt="logo" />
+                <div className={styles.itemCard} key={item.company_id}>
+                    <Avatar className={styles.avatar} src={item.logo} shape="square" size={100} />
                     <div className={styles.intro}>
                         <div className={styles.title}>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -265,13 +278,21 @@ class Home extends PureComponent {
                             <div>
                                 <p>
                                     <b>成立时间：</b>
-                                    <span>{item.estiblish_time}</span>
+                                    <span>
+                                        {moment(parseInt(item.estiblish_time)).format('YYYY-MM-DD')}
+                                    </span>
                                 </p>
                                 <p>
                                     <b>官网：</b>
-                                    <a href={`http://${item.website_list}`}>
-                                        {`http://${item.website_list}`}
-                                    </a>
+                                    {item.website_list && (
+                                        <a
+                                            href={`http://${item.website_list}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {`http://${item.website_list}`}
+                                        </a>
+                                    )}
                                 </p>
                                 <p>
                                     <b>企业地址：</b>
@@ -279,8 +300,9 @@ class Home extends PureComponent {
                                 </p>
                             </div>
                             <ul className={styles.status}>
-                                <Tag color="green">在线</Tag>
-                                <Tag color="volcano">已指派</Tag>
+                                <Tag color="green">{item.reg_status}</Tag>
+                                {item.director_name && <Tag color="volcano">已指派</Tag>}
+                                {!item.director_name && <Tag color="blue">未指派</Tag>}
                             </ul>
                         </div>
                     </div>
@@ -292,7 +314,7 @@ class Home extends PureComponent {
         const uploadProps = {
             name: 'excelFile',
             multiple: false,
-            action: '/enterprise/batchImport',
+            action: '/houzai/enterprise/batchImport',
             onChange: info => {
                 const status = info.file.status
                 if (status !== 'uploading') {

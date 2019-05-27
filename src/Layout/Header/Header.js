@@ -23,16 +23,7 @@ export default class Header extends Component {
                 </div>
                 <div className={styles.login} style={{ cursor: 'pointer' }}>
                     {name && (
-                        <Popover
-                            trigger="click"
-                            placement="bottomRight"
-                            content={
-                                <span className={styles.linkBtn} onClick={this.logout}>
-                                    退出登录
-                                </span>
-                            }
-                            title={account}
-                        >
+                        <a href="/portal/#/personal/profile" target="_blank">
                             {photo === null ? (
                                 <Avatar src={mtou} size="user" />
                             ) : (
@@ -40,7 +31,7 @@ export default class Header extends Component {
                             )}
 
                             <span className={styles.uname}>{name}</span>
-                        </Popover>
+                        </a>
                     )}
                 </div>
             </Layout.Header>

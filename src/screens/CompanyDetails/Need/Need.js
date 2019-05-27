@@ -2,10 +2,22 @@
  * 企服首页/企业详情==> Need 企业需求
  */
 import React, { PureComponent, Fragment } from 'react'
-import { Card, Table } from 'antd'
+import { Card, Table, Form } from 'antd'
 import styles from '../CompanyDetails.module.css'
 
-export default class Need extends PureComponent {
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from '../../../redux/agencyRequire'
+
+class Need extends PureComponent {
+    componentWillReceiveProps(nextProps) {
+        if (this.props.BasicInfoDetial !== nextProps.BasicInfoDetial) {
+            //console.log('dsf', nextProps.BasicInfoDetial)
+            if (nextProps.BasicInfoDetial.name) {
+                this.props.getDemandList({ enterpriseName: nextProps.BasicInfoDetial.name })
+            }
+        }
+    }
     render() {
         return (
             <Fragment>
@@ -18,6 +30,7 @@ export default class Need extends PureComponent {
                         <Table
                             bordered={true} //边框
                             pagination={false} //分页器
+                            rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
                                     title: '序号',
@@ -28,45 +41,41 @@ export default class Need extends PureComponent {
                                 },
                                 {
                                     title: '供应商类型',
-                                    dataIndex: 'name',
-                                    key: 'name',
+                                    dataIndex: 'category',
+                                    key: 'category',
                                     align: 'center',
                                 },
                                 {
                                     title: '发起人',
-                                    dataIndex: 'age',
-                                    key: 'age',
+                                    dataIndex: 'contract',
+                                    key: 'contract',
                                     align: 'center',
                                 },
                                 {
                                     title: '发起时间',
-                                    dataIndex: 'address',
-                                    key: 'address',
+                                    dataIndex: 'requestTime',
+                                    key: 'requestTime',
                                     align: 'center',
                                 },
                                 {
                                     title: '状态',
-                                    dataIndex: 'name2',
-                                    key: 'name2',
+                                    dataIndex: 'processStatus',
+                                    key: 'processStatus',
                                     align: 'center',
+                                    render: (text, record) => (
+                                        <div>
+                                            <span>
+                                                {text === '0'
+                                                    ? '已下单'
+                                                    : text === '1'
+                                                    ? '已办理'
+                                                    : '已完成'}
+                                            </span>
+                                        </div>
+                                    ),
                                 },
                             ]}
-                            dataSource={[
-                                {
-                                    key: '1',
-                                    name: '代理记账',
-                                    age: '张三',
-                                    address: '2018-10 12:00:00',
-                                    name2: '已下单',
-                                },
-                                {
-                                    key: '2',
-                                    name: '知识产权',
-                                    age: '张三',
-                                    address: '2018-10 12:00:00',
-                                    name2: '已办理',
-                                },
-                            ]}
+                            dataSource={this.props.demandList}
                         />
                     </Card>
                 </div>
@@ -74,3 +83,24 @@ export default class Need extends PureComponent {
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        demandList: state.agencyRequire.demandList,
+        BasicInfoDetial: state.companyDetails.BasicInfoDetial,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getDemandList: actions('getDemandList'),
+        },
+        dispatch,
+    )
+}
+export default Form.create()(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps,
+    )(Need),
+)

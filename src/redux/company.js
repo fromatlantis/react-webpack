@@ -3,6 +3,8 @@ import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message, notification } from 'antd'
 import qs from 'qs'
+import { actions as companyDetailsActions } from './companyDetails'
+import { actions as requireActions } from './agencyRequire'
 const model = {
     namespace: 'company',
     state: {
@@ -10,6 +12,8 @@ const model = {
         directorList: [], //获取服务人员列表
         companyList: [], //用户所在园区下公司列表
         importList: [], //导入
+        archivesDetail: {}, //档案详情
+        archives: {}, //档案列表
     },
     actions: [
         {
@@ -31,14 +35,18 @@ const model = {
         {
             name: 'getDirectorList',
             *effect(action) {
+                console.log(action.payload)
                 const res = yield call(request, {
-                    type: 'post',
-                    url: `/enterprise/getDirectorList`,
-                    contentType: 'multipart/form-data',
-                    data: action.payload,
+                    url: `/enterprise/getServantList?companyId=${action.payload}`,
                 })
                 if (res.code === 1000) {
                     yield put(actions('getDirectorListOk')(res.data))
+                }
+            },
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    directorList: [],
                 }
             },
         },
@@ -108,15 +116,136 @@ const model = {
                 })
                 if (res.code === 1000) {
                     notification.open({
-                        message: 'Notification Title',
-                        description:
-                            'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+                        message: '批量导入成功',
+                        description: '批量导入成功',
                         onClick: () => {
                             console.log('Notification Clicked!')
                         },
                     })
                 }
             },
+        },
+        // 获取档案详情
+        {
+            name: 'getArchivesDetail',
+            *effect(action) {
+                console.log(action.payload)
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/getArchivesDetail`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                // 复用企业详情
+                if (res.code === 1000) {
+                    const {
+                        basicInfo,
+                        baseInfo,
+                        firmGraph,
+                        financingHis,
+                        coreTeam,
+                        productInfo,
+                        companyNews,
+                        investmentEvent,
+                        investmentsAbroad,
+                        changeRecords,
+                        trademark,
+                        patent,
+                        softwareCopyright,
+                        productTrademark,
+                        websiteRecords,
+                        changesApprove,
+                        demand,
+                        suggestion,
+                        otherInfo,
+                    } = res.data.snapshot
+                    //console.log(investmentsAbroad)
+                    yield put(companyDetailsActions('queryBasicInfoDetialSuccess')(basicInfo))
+                    yield put(companyDetailsActions('queryBaseInfoDetialSuccess')(baseInfo))
+                    yield put(
+                        companyDetailsActions('getRecentNewsSuccess')({
+                            resultList: companyNews,
+                        }),
+                    )
+                    yield put(
+                        companyDetailsActions('getInvestmentEventListSuccess')(investmentEvent),
+                    )
+                    yield put(companyDetailsActions('getFinancingListSuccess')(financingHis))
+                    yield put(companyDetailsActions('getCoreTeamListSuccess')(coreTeam))
+                    yield put(companyDetailsActions('getProductInfoListSuccess')(productInfo))
+                    yield put(
+                        companyDetailsActions('getInvestmentAbroadListSuccess')({
+                            resultList: investmentsAbroad,
+                        }),
+                    )
+                    yield put(
+                        companyDetailsActions('companyChangeRecordsOk')({
+                            items: changeRecords,
+                        }),
+                    )
+                    yield put(companyDetailsActions('getTrademarkListSuccess')(trademark))
+                    yield put(companyDetailsActions('getPatentListSuccess')(patent))
+                    yield put(
+                        companyDetailsActions('getSoftwareCopyrightListSuccess')(softwareCopyright),
+                    )
+                    yield put(
+                        companyDetailsActions('getProductTrademarkListSuccess')(productTrademark),
+                    )
+                    yield put(companyDetailsActions('getWebsiteRecordsListSuccess')(websiteRecords))
+                    yield put(
+                        companyDetailsActions('getFirmGraphSuccess')(JSON.parse(firmGraph.graph)),
+                    )
+                    yield put(companyDetailsActions('getChangesListOk')(changesApprove))
+                    yield put(companyDetailsActions('getSuggestionListOk')(suggestion))
+                    yield put(companyDetailsActions('getOtherInfoListOk')(otherInfo))
+                    yield put(requireActions('getDemandListSuccess')(demand))
+                    //yield put(actions('getArchivesDetailOk')(res.data))
+                }
+            },
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    archivesDetail: {},
+                }
+            },
+        },
+        {
+            name: 'getArchivesDetailOk',
+            reducer: 'archivesDetail',
+        },
+        // 存档
+        {
+            name: 'saveArchives',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/saveArchives`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                }
+            },
+        },
+        // 获取档案列表
+        {
+            name: 'getArchivesList',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/getArchivesList`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('getArchivesListOk')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getArchivesListOk',
+            reducer: 'archives',
         },
     ],
 }

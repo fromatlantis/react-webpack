@@ -1,20 +1,21 @@
 import React, { PureComponent } from 'react'
-import { Button, Card, Table, Modal, Input, DatePicker, Divider, Tooltip } from 'antd'
+import { Button, Card, Table, Modal, Input, DatePicker, Divider, Tooltip, Select } from 'antd'
 import moment from 'moment'
 import { FormView, SearchView } from 'components'
 import styles from '../index.module.css'
-
+import Toolbar from '../../Toolbar/Toolbar'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/patent'
-
+import { actions as dictionaryActions } from 'reduxDir/dictionary'
 const dateStr = 'YYYY.MM.DD'
 const mapStateToProps = state => {
     return {
         patent: state.patent.patent,
         detail: state.patent.detail,
         searchParams: state.patent.searchParams,
+        PATENT_TYPE: state.dictionary.PATENT_TYPE,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -24,6 +25,7 @@ const mapDispatchToProps = dispatch => {
             queryPatentDetail: actions('queryPatentDetail'),
             increasePatentApprove: actions('increasePatentApprove'),
             changePatentApprove: actions('changePatentApprove'),
+            getDictionary: dictionaryActions('getDictionary'),
         },
         dispatch,
     )
@@ -41,6 +43,7 @@ class Patent extends PureComponent {
         const companyId = sessionStorage.getItem('companyId')
         if (companyId) {
             this.props.getPatentList()
+            this.props.getDictionary('PATENT_TYPE')
         }
     }
     newInfo = () => {
@@ -105,7 +108,15 @@ class Patent extends PureComponent {
             {
                 label: '专利类型',
                 field: 'patentType',
-                component: <Input />,
+                component: (
+                    <Select placeholder="请选择">
+                        {this.props.PATENT_TYPE.map((item, index) => (
+                            <Select.Option value={item.value} key={index}>
+                                {item.type}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                ),
             },
             {
                 label: '专利代理机构',
@@ -123,13 +134,14 @@ class Patent extends PureComponent {
             wrapperCol: { span: 12 },
         }
         return (
-            <SearchView
+            <FormView
                 ref={form => {
                     this.form = form
                 }}
                 formItemLayout={formItemLayout}
                 layout="inline"
                 items={items}
+                data={this.props.searchParams}
                 saveBtn={false}
             />
         )
@@ -170,7 +182,15 @@ class Patent extends PureComponent {
             {
                 label: '专利类型',
                 field: 'patentType',
-                component: <Input />,
+                component: (
+                    <Select placeholder="请选择">
+                        {this.props.PATENT_TYPE.map((item, index) => (
+                            <Select.Option value={item.value} key={index}>
+                                {item.type}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                ),
             },
             {
                 label: '专利代理机构',
@@ -225,12 +245,14 @@ class Patent extends PureComponent {
                 if (values.applicationTime) {
                     values.applicationTime = moment(values.applicationTime).format(dateStr)
                 }
+                values.pageNo = 1
                 this.props.getPatentList(values)
             }
         })
     }
     handleReset = () => {
         this.form.resetFields()
+        this.search()
     }
     // 分页
     onChange = pageNo => {
@@ -318,6 +340,7 @@ class Patent extends PureComponent {
                 dataIndex: 'action',
                 key: 'action',
                 fixed: 'right',
+                align: 'center',
                 width: 100,
                 render: (_, record) => (
                     <Button
@@ -333,7 +356,12 @@ class Patent extends PureComponent {
         ]
         const { patent, searchParams } = this.props
         return (
-            <Card title="专利信息" style={{ width: 'calc(100vw - 256px)' }} bordered={false}>
+            <Card
+                title="专利信息"
+                style={{ width: 'calc(100vw - 256px)' }}
+                bordered={false}
+                extra={<Toolbar />}
+            >
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>
@@ -341,7 +369,11 @@ class Patent extends PureComponent {
                             清除
                         </Button>
                         <Divider type="vertical" />
-                        <Button type="primary" onClick={this.search}>
+                        <Button
+                            type="primary"
+                            onClick={this.search}
+                            style={{ background: 'rgb(50,200,100)' }}
+                        >
                             查询
                         </Button>
                         <Divider type="vertical" />

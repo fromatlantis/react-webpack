@@ -1,19 +1,8 @@
 import React, { PureComponent } from 'react'
-import {
-    Button,
-    Card,
-    Table,
-    Modal,
-    Input,
-    DatePicker,
-    TimePicker,
-    Divider,
-    message,
-    Pagination,
-} from 'antd'
+import { Button, Card, Table, Modal, Input, DatePicker, message, Pagination, Divider } from 'antd'
 import moment from 'moment'
 import { FormView, SearchView } from 'components' //毫秒
-
+import Toolbar from '../../Toolbar/Toolbar'
 // import formView from '../FormView'
 import styles from '../index.module.css'
 import request from '../../../../utils/request'
@@ -408,7 +397,7 @@ class Copyright extends PureComponent {
     }
     render() {
         return (
-            <Card title="知识产权-软件著作权" bordered={false}>
+            <Card title="知识产权-软件著作权" bordered={false} extra={<Toolbar />}>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>

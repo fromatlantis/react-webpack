@@ -5,20 +5,48 @@ import React, { PureComponent, Fragment } from 'react'
 import { Card, Table, Button } from 'antd'
 import styles from '../CompanyDetails.module.css'
 
-export default class Advice extends PureComponent {
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { actions } from '../../../redux/companyDetails'
+
+@connect(
+    state => {
+        return {
+            suggestionList: state.companyDetails.suggestionList, //指定企业投资图谱
+        }
+    },
+    dispatch => {
+        return bindActionCreators(
+            {
+                getSuggestionList: actions('getSuggestionList'),
+            },
+            dispatch,
+        )
+    },
+)
+class Advice extends PureComponent {
+    componentDidMount() {
+        let company_id = this.props.match
+            ? this.props.match.params.company_id
+            : this.props.company_id
+        if (company_id) {
+            this.props.getSuggestionList(company_id)
+        }
+    }
     render() {
+        const { suggestionList } = this.props
         return (
             <Fragment>
                 <div className={styles.messageCard}>
                     <Card
                         id="advice"
                         title={<span style={{ color: '#1890ff' }}>改进建议</span>}
-                        extra={<Button type="link">展开更多>></Button>}
+                        // extra={<Button type="link">展开更多>></Button>}
                         className={styles.cardSty}
                     >
                         <Table
                             bordered={true} //边框
-                            pagination={false} //分页器
+                            // pagination={false} //分页器
                             columns={[
                                 {
                                     title: '序号',
@@ -29,39 +57,24 @@ export default class Advice extends PureComponent {
                                 },
                                 {
                                     title: '提出人',
-                                    dataIndex: 'name',
-                                    key: 'name',
+                                    dataIndex: 'submitterName',
+                                    key: 'submitterName',
                                     align: 'center',
                                 },
                                 {
                                     title: '提出时间',
-                                    dataIndex: 'age',
-                                    key: 'age',
+                                    dataIndex: 'createTime',
+                                    key: 'createTime',
                                     align: 'center',
                                 },
                                 {
                                     title: '建议内容',
-                                    dataIndex: 'address',
-                                    key: 'address',
+                                    dataIndex: 'content',
+                                    key: 'content',
                                     align: 'center',
                                 },
                             ]}
-                            dataSource={[
-                                {
-                                    key: '1',
-                                    name: '张三',
-                                    age: '2019-5-6 14:02:09    ',
-                                    address:
-                                        '建议内容建议内容建议内容建议内容建议内容建议内容建议内容建议内容',
-                                },
-                                {
-                                    key: '2',
-                                    name: '张三',
-                                    age: '2019-5-6 14:02:09    ',
-                                    address:
-                                        '建议内容建议内容建议内容建议内容建议内容建议内容建议内容建议内容',
-                                },
-                            ]}
+                            dataSource={suggestionList}
                         />
                     </Card>
                 </div>
@@ -69,3 +82,4 @@ export default class Advice extends PureComponent {
         )
     }
 }
+export default Advice

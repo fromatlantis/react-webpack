@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react'
 import { Button, Card, Divider, Modal, Input, Skeleton, Table } from 'antd'
-
+import Toolbar from '../../Toolbar/Toolbar'
 import { FormView, SearchView } from 'components'
 import { UploadImg } from 'components'
-
 import styles from './Members.module.css'
 
 // redux
@@ -125,12 +124,14 @@ class Members extends PureComponent {
     search = () => {
         this.form.validateFields((errors, values) => {
             if (!errors) {
+                values.pageNo = 1
                 this.props.getCoreTeamList(values)
             }
         })
     }
     handleReset = () => {
         this.form.resetFields()
+        this.search()
     }
     // 分页
     onChange = pageNo => {
@@ -190,6 +191,7 @@ class Members extends PureComponent {
                 dataIndex: 'actions',
                 key: 'actions',
                 width: 100,
+                align: 'center',
                 render: (_, record) => (
                     <Button
                         type="link"
@@ -204,14 +206,15 @@ class Members extends PureComponent {
         ]
         const { team, searchParams } = this.props
         return (
-            <Card title="核心人员" bordered={false}>
+            <Card title="核心人员" bordered={false} extra={<Toolbar />}>
                 <div className={styles.searchBox}>
-                    <SearchView
+                    <FormView
                         ref={form => {
                             this.form = form
                         }}
                         formItemLayout={{ labelCol: { span: 6 }, wrapperCol: { span: 18 } }}
                         items={searchItems}
+                        data={searchParams}
                         layout="inline"
                         saveBtn={false}
                     />
@@ -220,7 +223,11 @@ class Members extends PureComponent {
                             清除
                         </Button>
                         <Divider type="vertical" />
-                        <Button type="primary" onClick={this.search}>
+                        <Button
+                            type="primary"
+                            onClick={this.search}
+                            style={{ background: 'rgb(50,200,100)' }}
+                        >
                             查询
                         </Button>
                         <Divider type="vertical" />

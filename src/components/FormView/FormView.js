@@ -60,6 +60,11 @@ class FormView extends PureComponent {
 }
 export default Form.create({
     //name: 'register',
+    onFieldsChange(props, changedFields) {
+        if (props.onChange) {
+            props.onChange(changedFields)
+        }
+    },
     mapPropsToFields({ items = [], data = {} }) {
         const fields = {}
         items
@@ -67,16 +72,23 @@ export default Form.create({
             .forEach(item => {
                 let { field, formatter } = item
                 let getValue = data[item.field]
-                if (!getValue) {
-                    getValue = null
-                } else if (formatter) {
-                    getValue = formatter(getValue, { ...data })
+                if (getValue) {
+                    if (formatter) {
+                        getValue = formatter(getValue)
+                    }
+                    fields[field] = Form.createFormField({
+                        value: getValue,
+                    })
                 }
-                fields[field] = Form.createFormField({
-                    value: getValue,
-                })
+                // if (!getValue) {
+                //     getValue = null
+                // } else if (formatter) {
+                //     getValue = formatter(getValue, { ...data })
+                // }
+                // fields[field] = Form.createFormField({
+                //     value: getValue,
+                // })
             })
-        //onsole.log(fields)
         return fields
     },
 })(FormView)
