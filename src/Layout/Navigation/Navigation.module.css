@@ -1,0 +1,15 @@
+.title {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: rgba(0, 40, 77, 1);
+    & img {
+        width: 40px;
+        margin-right: 5px;
+    }
+}

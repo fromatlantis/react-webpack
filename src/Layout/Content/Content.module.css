@@ -1,0 +1,11 @@
+@import '~ThemeVariables';
+.content {
+    margin-top: calc(var(--headerHeight) + var(--contentGutter));
+    margin-right: var(--contentGutter);
+    margin-left: var(--contentGutter);
+    overflow: auto;
+    & .body {
+        background-color: var(--default-color);
+        min-height: calc(100vh - var(--headerHeight) - var(--footerHeight) - var(--contentGutter));
+    }
+}
