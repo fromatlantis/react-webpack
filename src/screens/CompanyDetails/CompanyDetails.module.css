@@ -1,3 +1,8 @@
+@import '~ThemeVariables';
+.routesDiv{
+    height: calc(100vh - var(--headerHeight) - var(--footerHeight) - 50px);
+    overflow-y: scroll;
+}
 /* 面包屑导航 */
 .BreadcrumbSty{
     padding: 20px 60px;
