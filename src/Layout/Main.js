@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styles from './Main.module.css'
 // 中文语言处理
-import { LocaleProvider } from 'antd'
+import { LocaleProvider, message } from 'antd'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
 import 'moment/locale/zh-cn'
 
@@ -24,6 +24,10 @@ class Main extends Component {
          * 所以每次刷新页面需要重新获取用户信息
          */
         this.props.userInfo()
+        // message全局配置
+        message.config({
+            // top: 200,
+        })
     }
     renderLayout = () => {
         let { user } = this.props

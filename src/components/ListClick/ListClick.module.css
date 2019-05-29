@@ -3,3 +3,12 @@
     background-color: #1E90FF;
     color: #fff;
 }
+.typeBut{
+    display: inline-block;
+    margin-right: 13px;
+    float: left;
+    padding: 1px 8px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

@@ -17,7 +17,7 @@ export default class Header extends Component {
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div>
                         <Avatar shape="square" size="large" src={hz} />
-                        <span className={styles.title}>资产管理</span>
+                        <span className={styles.title}>企业服务</span>
                     </div>
                     <Navigation auths={this.props.auths} />
                 </div>

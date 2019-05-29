@@ -77,7 +77,7 @@ export default ({ type = 'get', url, data = {}, contentType = 'application/json'
             headers: { 'Content-Type': contentType },
         }
     // 数据格式化，传过来的data均为json
-    if (type === 'post') {
+    if (type === 'get') {
         postData.params = data
     }
     if (contentType === 'multipart/form-data') {
