@@ -234,9 +234,11 @@ class Home extends PureComponent {
                                 <div className={styles.column}>
                                     <p className={styles.columnItem}>
                                         成立时间：
-                                        {moment(parseInt(list[i].estiblish_time)).format(
-                                            'YYYY-MM-DD',
-                                        )}
+                                        {list[i].estiblish_time.indexOf('-') === -1
+                                            ? moment(parseInt(list[i].estiblish_time)).format(
+                                                  'YYYY-MM-DD',
+                                              )
+                                            : moment(list[i].estiblish_time).format('YYYY-MM-DD')}
                                     </p>
                                     <p className={styles.columnItem}>
                                         官网：{list[i].website_list}
@@ -245,9 +247,11 @@ class Home extends PureComponent {
                                 </div>
                             </div>
                         </div>
-                        <Tag color="green" className={styles.companyType}>
-                            {list[i].reg_status}
-                        </Tag>
+                        {list[i].reg_status && (
+                            <Tag color="green" className={styles.companyType}>
+                                {list[i].reg_status}
+                            </Tag>
+                        )}
                     </div>,
                 )
             } else if (this.state.size === '查法人') {
