@@ -3,15 +3,41 @@ import Loading from '../components/Loading/FullScreen'
 
 const routes = [
     {
-        path: '/home',
-        name: '首页',
+        path: '/repair',
+        name: '物业报修',
         icon: 'appstore',
         navAttr: {
             index: 1,
-            role: 'home',
+            role: 'repair',
         },
         component: Loadable({
-            loader: () => import(/* webpackChunkName: "home" */ '../screens/Home'),
+            loader: () => import(/* webpackChunkName: "repair" */ '../screens/Repair/Repair'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/dispatch',
+        name: '物业派工',
+        icon: 'appstore',
+        navAttr: {
+            index: 1,
+            role: 'dispatch',
+        },
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "dispatch" */ '../screens/Dispatch/Dispatch'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/feedback',
+        name: '物业反馈',
+        icon: 'appstore',
+        navAttr: {
+            index: 1,
+            role: 'feedback',
+        },
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "feedback" */ '../screens/Feedback/Feedback'),
             loading: Loading,
         }),
     },

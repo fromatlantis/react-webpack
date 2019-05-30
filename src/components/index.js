@@ -7,7 +7,8 @@ import FullScreenLoading from './Loading/FullScreen'
 import IconFont from './IconFont/IconFont'
 import Crumbs from './Crumbs/Crumbs'
 import Graph from './Graph/Graph'
-
+import LeftMenu from './LeftMenu/LeftMenu'
+import MenuLayout from './MenuLayout/MenuLayout'
 export {
     FormView,
     SearchView,
@@ -19,4 +20,6 @@ export {
     Crumbs,
     IconFont,
     Graph,
+    LeftMenu,
+    MenuLayout,
 }
