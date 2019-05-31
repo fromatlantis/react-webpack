@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
-import { Alert, Button, Table, Input, DatePicker, Divider } from 'antd'
+import { Alert, Button, Card, Table, Input, DatePicker, Divider } from 'antd'
 import { FormView } from 'components'
-
+import { Link } from 'react-router-dom'
 import styles from '../Feedback.module.css'
 
 const dataSource = [
@@ -16,24 +16,6 @@ const dataSource = [
         name: '胡彦祖',
         age: 42,
         address: '西湖区湖底公园1号',
-    },
-]
-
-const columns = [
-    {
-        title: '姓名',
-        dataIndex: 'name',
-        key: 'name',
-    },
-    {
-        title: '年龄',
-        dataIndex: 'age',
-        key: 'age',
-    },
-    {
-        title: '住址',
-        dataIndex: 'address',
-        key: 'address',
     },
 ]
 
@@ -70,8 +52,32 @@ export default class Repair extends PureComponent {
         )
     }
     render() {
+        const columns = [
+            {
+                title: '姓名',
+                dataIndex: 'name',
+                key: 'name',
+            },
+            {
+                title: '年龄',
+                dataIndex: 'age',
+                key: 'age',
+            },
+            {
+                title: '住址',
+                dataIndex: 'address',
+                key: 'address',
+            },
+            {
+                title: '操作',
+                dataIndex: 'actions',
+                key: 'actions',
+                align: 'center',
+                render: () => <Link to="/repair/detail/123">反馈</Link>,
+            },
+        ]
         return (
-            <div>
+            <Card title="申请报修" bordered={false}>
                 <div className={styles.searchCard}>
                     {this.renderForm()}
                     <div className={styles.toolbar}>
@@ -86,7 +92,7 @@ export default class Repair extends PureComponent {
                     <Alert message="Informational Notes" type="info" showIcon />
                 </div>
                 <Table dataSource={dataSource} columns={columns} />
-            </div>
+            </Card>
         )
     }
 }

@@ -4,6 +4,7 @@ import { MenuLayout } from 'components'
 
 import Apply from './Apply/Apply'
 import Record from './Record/Record'
+import Detail from './Detail/Detail'
 
 const menu = [
     {
@@ -17,6 +18,13 @@ const menu = [
         icon: '',
         path: '/repair/record',
         component: Record,
+    },
+    {
+        title: '报修详情',
+        icon: '',
+        display: 'none',
+        path: '/repair/detail/:id',
+        component: Detail,
     },
 ]
 

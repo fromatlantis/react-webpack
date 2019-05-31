@@ -62,7 +62,7 @@ class LeftMenu extends PureComponent {
                 onOpenChange={this.onOpenChange}
                 mode="inline"
             >
-                {this.renderMenu(menuData)}
+                {this.renderMenu(menuData.filter(item => item.display !== 'none'))}
             </Menu>
         )
     }
