@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Alert, Button, Table, Input, DatePicker, Divider } from 'antd'
+import { Alert, Button, Card, Table, Input, DatePicker, Divider } from 'antd'
 import { FormView } from 'components'
 
 import styles from '../Dispatch.module.css'
@@ -71,7 +71,7 @@ export default class Work extends PureComponent {
     }
     render() {
         return (
-            <div>
+            <Card title="申请报修" bordered={false}>
                 <div className={styles.searchCard}>
                     {this.renderForm()}
                     <div className={styles.toolbar}>
@@ -86,7 +86,7 @@ export default class Work extends PureComponent {
                     <Alert message="Informational Notes" type="info" showIcon />
                 </div>
                 <Table dataSource={dataSource} columns={columns} />
-            </div>
+            </Card>
         )
     }
 }

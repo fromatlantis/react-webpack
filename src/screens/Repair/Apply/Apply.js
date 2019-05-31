@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Input, Cascader, Radio, message } from 'antd'
+import { Card, Input, Cascader, Radio, message } from 'antd'
 import { FormView, UploadImg } from 'components'
 
 const options = [
@@ -147,14 +147,16 @@ export default class Apply extends PureComponent {
             },
         ]
         return (
-            <FormView
-                ref={ref => {
-                    this.form = ref
-                }}
-                items={items}
-                data={values}
-                onChange={this.onChange}
-            />
+            <Card title="申请报修" bordered={false}>
+                <FormView
+                    ref={ref => {
+                        this.form = ref
+                    }}
+                    items={items}
+                    data={values}
+                    onChange={this.onChange}
+                />
+            </Card>
         )
     }
 }
