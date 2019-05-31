@@ -15,7 +15,7 @@ export default class Content extends Component {
                         {filterRoutes.map((item, index) => {
                             return (
                                 <Route
-                                    exact
+                                    //exact
                                     //strict
                                     path={item.path}
                                     component={item.component}

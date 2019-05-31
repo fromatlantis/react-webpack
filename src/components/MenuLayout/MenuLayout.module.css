@@ -1,5 +1,5 @@
 @import '~ThemeVariables';
-.footer {
-    text-align: center;
+.root {
     margin-left: var(--siderWidth);
+    /* padding: 30px; */
 }

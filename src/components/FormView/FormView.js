@@ -35,17 +35,21 @@ class FormView extends PureComponent {
         return (
             <Form {...formItemLayout} layout={layout} onSubmit={this.handleSubmit}>
                 {items.map((item, index) => {
-                    return (
-                        <Form.Item label={item.label} style={item.style} key={index}>
-                            {/* {item.component} */}
-                            {item.field
-                                ? getFieldDecorator(item.field, {
-                                      initialValue: item.initialValue,
-                                      rules: item.rules,
-                                  })(item.component)
-                                : item.component}
-                        </Form.Item>
-                    )
+                    if (item.hasOwnProperty('visible') && !item.visible) {
+                        return null
+                    } else {
+                        return (
+                            <Form.Item label={item.label} style={item.style} key={index}>
+                                {/* {item.component} */}
+                                {item.field
+                                    ? getFieldDecorator(item.field, {
+                                          initialValue: item.initialValue,
+                                          rules: item.rules,
+                                      })(item.component)
+                                    : item.component}
+                            </Form.Item>
+                        )
+                    }
                 })}
                 {saveBtn && (
                     <Form.Item wrapperCol={{ offset: formItemLayout.labelCol.span }}>
