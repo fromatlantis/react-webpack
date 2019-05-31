@@ -41,6 +41,19 @@ const routes = [
             loading: Loading,
         }),
     },
+    {
+        path: '/material',
+        name: '物料管理',
+        icon: 'appstore',
+        navAttr: {
+            index: 4,
+            role: 'material',
+        },
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "material" */ '../screens/Material/Material'),
+            loading: Loading,
+        }),
+    },
 ]
 const filterByAuths = (routes = [], auths = []) => {
     return routes.filter(route => {

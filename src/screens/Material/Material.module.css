@@ -1,0 +1,52 @@
+/* --物料管理-- */
+/* 搜索的样式 */
+.searchCard {
+    margin-bottom: 15px;
+}
+/* 搜索部分按钮的样式 */
+.toolbar2 {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+.dividerSty{
+    margin-top: 10px;
+}
+/* 出入库的的对话框的title */
+.marModalL{
+    font-weight: bold;
+}
+.marModalR{
+    font-size: 13px;
+    color: rgb(177, 175, 175);
+    padding-left: 10px;
+}
+/* 物料详情-样式 */
+.pmargin{
+    margin-bottom: 10px;
+}
+
+/* --申请审批-- */
+/* 搜索部分按钮的样式 */
+.toolbar {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    text-align: right;
+}
+/* --物料申请-- */
+/* 申请中循环的card */
+.cartitle{
+    font-size: 18px;
+    font-weight: bold;
+    text-align:center;
+}
+.cardStr{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: red;
+    padding-top: 10px;
+}
+/* --申请记录-- */

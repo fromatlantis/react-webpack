@@ -4,4 +4,5 @@ module.exports = function(app) {
     // 接口代理e.g.
     app.use(proxy('/authuser/', { target: 'http://*.*.*.*:8080/service' }))
     app.use(proxy('/user/', { target: 'http://*.*.*.*:8080//service' }))
+    app.use(proxy('/property/', { target: 'http://*.*.*.*:8080//service' }))
 }

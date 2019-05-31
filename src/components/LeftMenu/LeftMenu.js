@@ -21,7 +21,7 @@ class LeftMenu extends PureComponent {
                         key={index}
                         title={
                             <span>
-                                <Icon type="appstore" />
+                                <Icon type={item.icon ? item.icon : 'appstore'} />
                                 <span>{item.title}</span>
                             </span>
                         }
@@ -33,7 +33,7 @@ class LeftMenu extends PureComponent {
                 return (
                     <Menu.Item key={item.path}>
                         <NavLink to={item.path}>
-                            <Icon type="appstore" />
+                            <Icon type={item.icon ? item.icon : 'appstore'} />
                             <span>{item.title}</span>
                         </NavLink>
                     </Menu.Item>
