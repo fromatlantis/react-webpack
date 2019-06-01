@@ -86,7 +86,7 @@ export const getNav = auths => {
             }
         })
     //return navs
-    console.log(filterByAuths(navs, auths))
+    // console.log(filterByAuths(navs, auths))
     return filterByAuths(navs, auths)
 }
 // 首个路由

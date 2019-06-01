@@ -7,22 +7,22 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { actions } from '../../../redux/materialManager'
+import { FormView, UploadImg } from 'components'
 
 import styles from '../Material.module.css'
 
 const Option = Select.Option
+const { TextArea } = Input
 
 @connect(
     state => {
-        return {
-            MaterialList: state.materialManager.MaterialList, //企业详情信息
-        }
+        return {}
     },
     dispatch => {
         return bindActionCreators(
             {
                 push: push,
-                getMaterialList: actions('getMaterialList'),
+                addMaterial: actions('addMaterial'),
             },
             dispatch,
         )
@@ -39,26 +39,87 @@ class AddMaterial extends PureComponent {
     showModal = () => {
         this.setState({ visible: true })
     }
-    handleOk = e => {
-        console.log(e)
-        this.setState({ visible: false })
+    handleOk = () => {
+        this.form.validateFields((errors, values) => {
+            if (!errors) {
+                console.log('values', values)
+                this.props.addMaterial(values)
+                this.setState({ visible: false })
+            }
+        })
     }
     handleCancel = e => {
         this.setState({ visible: false })
     }
+    //'新增'表单
+    renderForm = type => {
+        const items = [
+            {
+                label: '物料类型：',
+                field: 'type',
+                component: (
+                    <Select style={{ width: '200px' }} placeholder="请选择类型">
+                        <Option value="工具类">工具类</Option>
+                        <Option value="一次性消耗品">一次性消耗品</Option>
+                    </Select>
+                ),
+                rules: [{ required: true, message: '请选择客户类型' }],
+            },
+            {
+                label: '物料名称：',
+                field: 'name',
+                component: <Input placeholder="请输入" />,
+                rules: [{ required: true, message: '请输入物料名称' }],
+            },
+            {
+                label: '物料型号：',
+                field: 'size',
+                component: <Input placeholder="请输入" />,
+                rules: [{ required: true, message: '请输入物料型号' }],
+            },
+            {
+                label: '物料价格：',
+                field: 'price',
+                component: <Input placeholder="请输入" />,
+                rules: [{ required: true, message: '请输入价格' }],
+            },
+            {
+                label: '物料图片',
+                field: 'image',
+                rules: [{ required: true, message: '请添加物料图片' }],
+                component: <UploadImg />,
+            },
+            {
+                label: '数量：',
+                field: 'count',
+                component: <InputNumber min={0} />,
+                initialValue: this.state.valueStr,
+            },
+            {
+                label: '用途说明：',
+                field: 'remark',
+                component: <TextArea autosize={{ minRows: 5 }} />,
+            },
+        ]
+        const formItemLayout = {
+            labelCol: { span: 6 },
+            wrapperCol: { span: 12 },
+        }
+        return (
+            <FormView
+                ref={form => {
+                    this.form = form
+                }}
+                formItemLayout={formItemLayout}
+                // layout="inline"
+                items={items}
+                data={this.props.searchParams}
+                saveBtn={false}
+            />
+        )
+    }
 
     render() {
-        const { getFieldDecorator } = this.props.form
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 4 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        }
         return (
             <div>
                 <Button type="primary" onClick={this.showModal}>
@@ -70,46 +131,7 @@ class AddMaterial extends PureComponent {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
-                    <Form onSubmit={this.handleSubmit}>
-                        <Form.Item {...formItemLayout} label="客户类型：">
-                            {getFieldDecorator(
-                                'customerType',
-                                { initialValue: this.state.valueStr },
-                                {
-                                    rules: [{ required: true, message: '请选择客户类型' }],
-                                },
-                            )(
-                                <Select
-                                    style={{ width: '300px' }}
-                                    placeholder="类型"
-                                    onChange={this.changeCustomerType}
-                                >
-                                    <Option value="1">工具类</Option>
-                                    <Option value="2">一次性消耗品</Option>
-                                </Select>,
-                            )}
-                        </Form.Item>
-                        <Form.Item {...formItemLayout} label="物料名称：">
-                            {getFieldDecorator('applyUserName', {
-                                rules: [{ required: true, message: '请输入物料名称' }],
-                            })(<Input style={{ width: '300px' }} placeholder="请输入" />)}
-                        </Form.Item>
-                        <Form.Item {...formItemLayout} label="物料型号：">
-                            {getFieldDecorator('applyUserName', {
-                                rules: [{ required: true, message: '请输入物料型号' }],
-                            })(<Input style={{ width: '300px' }} placeholder="请输入" />)}
-                        </Form.Item>
-                        <Form.Item {...formItemLayout} label="价格：">
-                            {getFieldDecorator('applyUserName', {
-                                rules: [{ required: true, message: '请输入价格' }],
-                            })(<Input style={{ width: '300px' }} placeholder="请输入" />)}
-                        </Form.Item>
-                        <Form.Item {...formItemLayout} label="数量：">
-                            {getFieldDecorator('houseName', { initialValue: 0 })(
-                                <InputNumber min={0} />,
-                            )}
-                        </Form.Item>
-                    </Form>
+                    {this.renderForm()}
                 </Modal>
             </div>
         )

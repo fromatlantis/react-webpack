@@ -12,12 +12,15 @@ import CompileMaterial from './Manager/CompileMaterial'
 
 // 申请审批
 import Approval from './Approval/Approval'
+import ApplyDetail from './Approval/ApplyDetail'
 
 // 物料申请
 import Apply from './Apply/Apply'
+import applySub from './Apply/ApplySub'
 
 // 申请记录
 import Record from './Record/Record'
+import RecordDetail from './Record/RecordDetail'
 
 const menu = [
     {
@@ -45,12 +48,34 @@ const menu = [
         component: Record,
     },
     {
-        path: '/material/materialDetails',
+        title: '物料详情',
+        display: 'none',
+        path: '/material/materialDetails/:id',
         component: MaterialDetails,
     },
     {
-        path: '/material/compileMaterial',
+        title: '物料编辑',
+        display: 'none',
+        path: '/material/compileMaterial/:id',
         component: CompileMaterial,
+    },
+    {
+        title: '物料申请',
+        display: 'none',
+        path: '/material/applyDetail/:id',
+        component: ApplyDetail,
+    },
+    {
+        title: '申请详情',
+        display: 'none',
+        path: '/material/recordDetail/:id',
+        component: RecordDetail,
+    },
+    {
+        title: '申请提交',
+        display: 'none',
+        path: '/material/applySub/:id',
+        component: applySub,
     },
 ]
 

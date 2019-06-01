@@ -2,39 +2,39 @@
  * 物料管理 ==> 物料管理
  */
 import React, { PureComponent } from 'react'
-import { Alert, Button, Table, Input, Modal, Divider, Select, Form, InputNumber, Radio } from 'antd'
+import {
+    Alert,
+    Button,
+    Table,
+    Input,
+    Modal,
+    Divider,
+    Select,
+    Form,
+    InputNumber,
+    Radio,
+    Card,
+} from 'antd'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { actions } from '../../../redux/materialManager'
 import { Link } from 'react-router-dom'
-import { FormView } from 'components'
+import { SearchView } from 'components'
 
 import styles from '../Material.module.css'
 
 import AddMaterial from './AddMaterial'
+import BatchImport from './BatchImport'
 
 const Option = Select.Option
-
-const dataSource = [
-    {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-]
 
 @connect(
     state => {
         return {
-            MaterialList: state.materialManager.MaterialList, //企业详情信息
+            MaterialList: state.materialManager.MaterialList, //物料列表
+            MaterialListTotalCount: state.materialManager.MaterialListTotalCount, //物料列表总条数
+            searchParamsMaterialList: state.materialManager.searchParamsMaterialList, //物料列表-分页
         }
     },
     dispatch => {
@@ -42,6 +42,7 @@ const dataSource = [
             {
                 push: push,
                 getMaterialList: actions('getMaterialList'),
+                materialStock: actions('materialStock'),
             },
             dispatch,
         )
@@ -53,19 +54,54 @@ class Manager extends PureComponent {
         visible: false,
         // 出入库的状态-单选radio的参数
         value: 1,
+        //最开始的库存数量（在表单计算中不变）
+        countNumNotD: 0,
+        //库存数量、物料id
+        countNum: 0,
+        materialId: '',
     }
     //生命周期
-    componentDidMount = () => {}
-    // 出入库的对话框-三个方法
-    showModal = () => {
-        this.setState({ visible: true })
+    componentDidMount = () => {
+        //物料管理==>获取物料列表
+        this.props.getMaterialList()
     }
-    handleOk = e => {
-        console.log(e)
-        this.setState({ visible: false })
+    handleSubmit = e => {
+        e.preventDefault()
+    }
+    // 出入库的对话框-三个方法
+    showModal = record => {
+        // console.log('record', record)
+        this.setState({
+            visible: true,
+            countNumNotD: parseInt(record.count),
+            countNum: parseInt(record.count),
+            materialId: record.id,
+        })
+    }
+    handleOk = () => {
+        this.props.form.validateFields((error, values) => {
+            if (!error) {
+                values.materialId = this.state.materialId
+                values.type = this.state.value
+                console.log('values', values)
+                this.props.materialStock(values)
+                this.setState({ visible: false })
+            }
+        })
     }
     handleCancel = e => {
         this.setState({ visible: false })
+    }
+    //"数量"改变时的回调
+    onChangeNumber = value => {
+        // console.log('value', value)
+        let aaa = 0
+        if (this.state.value === 0) {
+            aaa = this.state.countNumNotD + value
+        } else {
+            aaa = this.state.countNumNotD - value
+        }
+        this.setState({ countNum: aaa })
     }
     // 出入库-radio状态的改变回调
     radioOnChange = e => {
@@ -74,7 +110,15 @@ class Manager extends PureComponent {
             value: e.target.value,
         })
     }
+    //物料列表分页方法
+    onShowSizeChange(current, pageSize) {
+        this.props.getMaterialList({ pageNo: 1, pageSize: pageSize })
+    }
+    onChange(pageNo, pageSize) {
+        this.props.getMaterialList({ pageNo: pageNo, pageSize: pageSize })
+    }
 
+    //列表检索表单
     renderForm = type => {
         const items = [
             {
@@ -87,9 +131,9 @@ class Manager extends PureComponent {
                 field: 'type',
                 component: (
                     <Select style={{ width: '200px' }} placeholder="请选择类型">
-                        <Option value="0">全部</Option>
-                        <Option value="1">工具类</Option>
-                        <Option value="2">一次性消耗品</Option>
+                        <Option value="">全部</Option>
+                        <Option value="工具类">工具类</Option>
+                        <Option value="一次性消耗品">一次性消耗品</Option>
                     </Select>
                 ),
             },
@@ -100,7 +144,7 @@ class Manager extends PureComponent {
             },
         ]
         return (
-            <FormView
+            <SearchView
                 ref={form => {
                     this.form = form
                 }}
@@ -111,6 +155,20 @@ class Manager extends PureComponent {
                 saveBtn={false}
             />
         )
+    }
+    // 查询
+    search = () => {
+        this.form.validateFields((errors, values) => {
+            if (!errors) {
+                values.pageNo = 1
+                console.log('values', values)
+                this.props.getMaterialList(values)
+            }
+        })
+    }
+    handleReset = () => {
+        this.form.resetFields()
+        this.search()
     }
     render() {
         const { getFieldDecorator } = this.props.form
@@ -161,6 +219,7 @@ class Manager extends PureComponent {
                 dataIndex: 'remark',
                 key: 'remark',
                 align: 'center',
+                render: remark => (remark ? <span>{remark}</span> : <span>--</span>),
             },
             {
                 title: '库存',
@@ -175,11 +234,15 @@ class Manager extends PureComponent {
                 align: 'center',
                 render: (text, record) => (
                     <span>
-                        <Link to={{ pathname: `/material/materialDetails` }}>详情</Link>
+                        <Link to={{ pathname: `/material/materialDetails/${record.id}` }}>
+                            详情
+                        </Link>
                         <Divider type="vertical" />
-                        <Link to={{ pathname: `/material/compileMaterial` }}>编辑</Link>
+                        <Link to={{ pathname: `/material/compileMaterial/${record.id}` }}>
+                            编辑
+                        </Link>
                         <Divider type="vertical" />
-                        <Link to={{}} onClick={this.showModal}>
+                        <Link to={{}} onClick={() => this.showModal(record)}>
                             出入库
                         </Link>
                     </span>
@@ -188,7 +251,7 @@ class Manager extends PureComponent {
         ]
 
         return (
-            <div>
+            <Card title="物料管理" bordered={false}>
                 <div className={styles.searchCard}>
                     {this.renderForm()}
                     <div className={styles.toolbar2}>
@@ -196,17 +259,33 @@ class Manager extends PureComponent {
                             清空
                         </Button>
                         <Divider type="vertical" className={styles.dividerSty} />
-                        <Button type="primary" onClick={this.newInfo}>
+                        <Button type="primary" onClick={this.search}>
                             查询
                         </Button>
                         <Divider type="vertical" className={styles.dividerSty} />
                         <AddMaterial />
                         <Divider type="vertical" className={styles.dividerSty} />
-                        <Button type="primary">批量导入</Button>
+                        <BatchImport />
                     </div>
-                    <Alert message="共0项" type="info" showIcon />
+                    <Alert
+                        message={'共 ' + this.props.MaterialListTotalCount + ' 项'}
+                        type="info"
+                        showIcon
+                    />
                 </div>
-                <Table dataSource={dataSource} columns={columns} />
+                <Table
+                    dataSource={this.props.MaterialList}
+                    columns={columns}
+                    rowKey={(record, index) => `complete${record.id}${index}`}
+                    pagination={{
+                        current: this.props.searchParamsMaterialList.pageNo,
+                        showSizeChanger: true,
+                        pageSizeOptions: ['2', '5', '10'],
+                        total: this.props.MaterialListTotalCount,
+                        onShowSizeChange: this.onShowSizeChange.bind(this),
+                        onChange: this.onChange.bind(this),
+                    }}
+                />
                 <Modal
                     title={
                         <p>
@@ -221,29 +300,24 @@ class Manager extends PureComponent {
                     <Form onSubmit={this.handleSubmit}>
                         <Form.Item {...formItemLayout} label="状态：">
                             <Radio.Group onChange={this.radioOnChange} value={this.state.value}>
-                                <Radio value={1}>入库</Radio>
-                                <Radio value={2}>出库</Radio>
-                                <Radio value={3}>报废</Radio>
+                                <Radio value={0}>入库</Radio>
+                                <Radio value={1}>出库</Radio>
+                                <Radio value={2}>报废</Radio>
                             </Radio.Group>
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="数量：">
-                            {getFieldDecorator('numner')(
-                                <InputNumber min={1} defaultValue={1} onChange={this.onChange} />,
+                            {getFieldDecorator('number', { initialValue: 0 })(
+                                <InputNumber min={0} onChange={this.onChangeNumber} />,
                             )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="库存：">
-                            {getFieldDecorator('count')(
-                                <InputNumber
-                                    disabled
-                                    min={0}
-                                    defaultValue={233}
-                                    onChange={this.onChange}
-                                />,
+                            {getFieldDecorator('count', { initialValue: this.state.countNum })(
+                                <InputNumber disabled min={0} onChange={this.onChange} />,
                             )}
                         </Form.Item>
                     </Form>
                 </Modal>
-            </div>
+            </Card>
         )
     }
 }

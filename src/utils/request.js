@@ -80,6 +80,9 @@ export default ({ type = 'get', url, data = {}, contentType = 'application/json'
     if (type === 'get') {
         postData.params = data
     }
+    if (type === 'post') {
+        postData = data
+    }
     if (contentType === 'multipart/form-data') {
         let formData = new FormData()
         for (let k in data) {

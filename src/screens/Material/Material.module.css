@@ -25,7 +25,15 @@
 }
 /* 物料详情-样式 */
 .pmargin{
-    margin-bottom: 10px;
+    margin-bottom: 14px;
+    font-size: 16px;
+}
+/* 批量导入 */
+.stepCard {
+    margin-top: 16px;
+    border-radius: 6px;
+    background-color: #fafafa;
+    text-align: center;
 }
 
 /* --申请审批-- */
@@ -48,5 +56,19 @@
     justify-content: space-between;
     color: red;
     padding-top: 10px;
+}
+/* 申请单 */
+.pmarginTitle{
+    margin-bottom: 18px;
+    font-size: 28px;
+    font-weight:bold
+}
+.aplyDiv{
+    display: flex;
+    flex-direction: row;
+}
+.pmargint{
+    margin: 0 50px 14px 0;
+    font-size: 16px;
 }
 /* --申请记录-- */
