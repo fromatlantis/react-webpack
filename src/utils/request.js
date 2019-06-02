@@ -79,6 +79,8 @@ export default ({ type = 'get', url, data = {}, contentType = 'application/json'
     // 数据格式化，传过来的data均为json
     if (type === 'get') {
         postData.params = data
+    } else if (type === 'post') {
+        postData = data
     }
     if (contentType === 'multipart/form-data') {
         let formData = new FormData()

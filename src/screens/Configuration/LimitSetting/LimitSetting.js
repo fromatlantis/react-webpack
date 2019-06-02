@@ -4,13 +4,12 @@ import FormView from '../../../components/FormView/FormView'
 
 class LimitSetting extends PureComponent {
     componentDidMount = () => {
-        // this.props.getSetInfo()
+        this.props.getSetInfo()
     }
     submitForm = () => {
-        this.props.form.validateFields.validateFields((err, fieldsValue) => {
+        this.props.form.validateFields((err, fieldsValue) => {
             if (!err) {
-                // this.props.addServiceType(fieldsValue)
-                console.log('这是什么呀', fieldsValue)
+                this.props.setTimeLimit(fieldsValue)
             }
         })
     }
@@ -24,7 +23,7 @@ class LimitSetting extends PureComponent {
             <Card title="" bordered={false}>
                 <Form {...formItemLayout}>
                     <Form.Item label="派工时限:">
-                        {getFieldDecorator('limitTime', {
+                        {getFieldDecorator('dispatchingTimeLimit', {
                             rules: [
                                 {
                                     required: true,
@@ -35,7 +34,7 @@ class LimitSetting extends PureComponent {
                         <span> 分钟</span>
                     </Form.Item>
                     <Form.Item label="维修签到时限：">
-                        {getFieldDecorator('repairTime', {
+                        {getFieldDecorator('repairTimeLimit', {
                             rules: [
                                 {
                                     required: true,

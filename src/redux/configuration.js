@@ -87,6 +87,7 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('添加成功')
+                    yield put(actions('getRepairsType')())
                 }
             },
         },
@@ -101,6 +102,7 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getRepairsType')())
                     message.success('修改成功')
                 }
             },
@@ -114,6 +116,7 @@ const model = {
                     url: `/property/deleteRepairsTypeNode?id=${action.payload}`,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getRepairsType')())
                     message.success('删除成功')
                 }
             },
@@ -146,11 +149,12 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: '/property/seAddressTypeNode',
+                    url: '/property/setAddressTypeNode',
                     contentType: 'multipart/form-data',
                     data: action.payload,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getAddressType')())
                     message.success('添加成功')
                 }
             },
@@ -166,6 +170,7 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getAddressType')())
                     message.success('修改成功')
                 }
             },
@@ -179,6 +184,7 @@ const model = {
                     url: `/property/deleteAddressTypeNode?id=${action.payload}`,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getAddressType')())
                     message.success('删除成功')
                 }
             },
@@ -236,9 +242,10 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     type: 'get',
-                    url: `/property/deleteAddressRelate?id=${action.payload}`,
+                    url: `/property/deleteAddressRelate?id=${action.payload.id}`,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getAddressRelateList')(action.payload.userId))
                     message.success('删除成功')
                 }
             },
@@ -254,6 +261,7 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getAddressRelateList')(action.payload.userId))
                     message.success('关联成功')
                 }
             },
@@ -269,6 +277,7 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getRepairRelateList')(action.payload.userId))
                     message.success('关联成功')
                 }
             },
@@ -279,9 +288,10 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     type: 'get',
-                    url: `/property/deleteRepairRelate?id=${action.payload}`,
+                    url: `/property/deleteRepairRelate?id=${action.payload.id}`,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getRepairRelateList')(action.payload.userId))
                     message.success('删除成功')
                 }
             },

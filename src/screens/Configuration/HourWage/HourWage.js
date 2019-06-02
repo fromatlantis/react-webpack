@@ -3,13 +3,12 @@ import { Card, InputNumber, Button, Input, Form } from 'antd'
 
 class hourWage extends PureComponent {
     componentDidMount = () => {
-        // this.props.getSetInfo()
+        this.props.getSetInfo()
     }
     submitForm = () => {
         this.props.form.validateFields((err, fieldsValue) => {
             if (!err) {
-                // this.props.addServiceType(fieldsValue)
-                console.log('这是什么呀', fieldsValue)
+                this.props.setTimeLimit(fieldsValue)
             }
         })
     }
@@ -23,7 +22,7 @@ class hourWage extends PureComponent {
             <Card title="" bordered={false}>
                 <Form {...formItemLayout}>
                     <Form.Item label="标准工时费用(每小时/每人):">
-                        {getFieldDecorator('limitTime', {
+                        {getFieldDecorator('standardLaborCost', {
                             rules: [
                                 {
                                     required: true,
@@ -38,7 +37,7 @@ class hourWage extends PureComponent {
                         <span> 元</span>
                     </Form.Item>
                     <Form.Item label="收费时间阈值：">
-                        {getFieldDecorator('repairTime', {
+                        {getFieldDecorator('chargeableTimeLimit', {
                             rules: [
                                 {
                                     required: true,

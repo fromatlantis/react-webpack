@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { SearchView } from '../../../components/FormView/FormView'
-import { Button, Input, Card, Table, Alert, Modal, TreeSelect, Tabs } from 'antd'
+import { Button, Input, Card, Table, Alert, Modal, TreeSelect, Tabs, message } from 'antd'
 import styles from './UserSetting.module.css'
 import { Link } from 'react-router-dom'
 
@@ -10,15 +10,26 @@ import { actions } from '../../../redux/configuration'
 
 const TreeNode = TreeSelect.TreeNode
 const { TabPane } = Tabs
+// let page = { pageNo: 1, pageSize: 10, appIdentity: 'HZYYGLPTWYFW0034' }
+let page = { pageNo: 1, pageSize: 10, appIdentity: 'HZYYGLPTZXGL0024' }
 class UserSetting extends PureComponent {
+    componentDidMount = () => {
+        this.props.getUserList(page)
+        this.props.getAddressType()
+        this.props.getRepairsType(3)
+    }
     state = {
         visible: false,
+        userMess: {},
     }
     // 展示modal
-    showModal = () => {
+    showModal = record => {
         this.setState({
             visible: true,
+            userMess: record,
         })
+        this.props.getAddressRelateList(record.userId)
+        this.props.getRepairRelateList(record.userId)
     }
 
     handleOk = e => {
@@ -26,7 +37,38 @@ class UserSetting extends PureComponent {
             visible: false,
         })
     }
-
+    // 处理接口返回的数据
+    nodeText = list => {
+        // let list = this.props.repairsTypeList
+        let newList = []
+        let grandText = list.filter(item => {
+            return item.level === '1'
+        })
+        let parentText = list.filter(item => {
+            return item.level === '2'
+        })
+        let childText = list.filter(item => {
+            return item.level === '3'
+        })
+        grandText.forEach(parent => {
+            let child = []
+            parentText.forEach(item => {
+                let temp = []
+                if (parent.id == item.pid) {
+                    let finChild = []
+                    childText.forEach(self => {
+                        if (item.id == self.pid) {
+                            finChild.push(self)
+                        }
+                    })
+                    temp = item
+                    child.push({ temp, finChild })
+                }
+            })
+            newList.push({ parent, child })
+        })
+        return newList
+    }
     handleCancel = e => {
         this.setState({
             visible: false,
@@ -36,12 +78,12 @@ class UserSetting extends PureComponent {
         const items = [
             {
                 label: '角色：',
-                field: 'supplier',
+                field: 'role',
                 component: <Input />,
             },
             {
                 label: '姓名：',
-                field: 'contract',
+                field: 'userName',
                 component: <Input />,
             },
             {
@@ -74,20 +116,21 @@ class UserSetting extends PureComponent {
     }
     clearInput = () => {
         this.form.resetFields()
-        // this.props.getSupplierList({pageNo:1,pageSize:10})
+        this.props.getUserList(page)
     }
     handleSubmit = () => {
-        // let parm = this.formParms()
-        // parm.pageNo = 1
-        // parm.pageSize = 10
-        // this.props.getSupplierList(parm)
+        let parm = this.formParms()
+        parm.pageNo = 1
+        parm.pageSize = 10
+        parm.appIdentity = page.appIdentity
+        this.props.getUserList(parm)
     }
     // 设置-楼宇信息
     modalBuild = type => {
         const items = [
             {
                 label: '楼宇信息：',
-                field: 'supplier',
+                field: 'buildRle',
                 component: (
                     <TreeSelect
                         showSearch
@@ -98,25 +141,13 @@ class UserSetting extends PureComponent {
                         multiple
                         treeDefaultExpandAll
                     >
-                        <TreeNode value="parent 1" title="parent 1" key="0-1">
-                            <TreeNode value="parent 1-0" title="禁用" key="0-1-1" disabled>
-                                <TreeNode value="leaf1" title="my leaf" key="random" />
-                                <TreeNode value="leaf2" title="your leaf" key="random1" />
-                            </TreeNode>
-                            <TreeNode value="parent 1-1" title="parent 1-1" key="random2">
-                                <TreeNode
-                                    value="sss"
-                                    title={<b style={{ color: '#08c' }}>sss</b>}
-                                    key="random3"
-                                />
-                            </TreeNode>
-                        </TreeNode>
+                        {this.createTypeTree(this.props.repairsAddressList, 0)}
                     </TreeSelect>
                 ),
             },
             {
                 component: (
-                    <Button type="primary" onClick={this.addBuild}>
+                    <Button type="primary" onClick={this.addBuildRle}>
                         添加
                     </Button>
                 ),
@@ -140,10 +171,121 @@ class UserSetting extends PureComponent {
         )
     }
     // 点击添加楼宇按钮
-    addBuild = () => {
+    addBuildRle = () => {
         this.addBuild.validateFields((err, fieldsValue) => {
             if (!err) {
-                console.log('输入楼宇信息', fieldsValue)
+                if (!fieldsValue.buildRle) {
+                    message.warning('请选择楼宇信息')
+                    return
+                }
+                let parm = {}
+                parm.userId = this.state.userMess.userId
+                parm.userName = this.state.userMess.userName
+                parm.phone = this.state.userMess.phone
+                parm.id = fieldsValue.buildRle.join(',')
+                this.props.addAddressRelate(parm)
+                this.addBuild.resetFields()
+            }
+        })
+    }
+    // 报修类型树的创建
+    createTypeTree = (list, num) => {
+        let rapairList = this.props.repairTypeRelateList.map(item => {
+            return item.relate_id
+        })
+        let data = this.nodeText(list)
+        return data.map(item => {
+            if (item.child.length > 0) {
+                return (
+                    <TreeNode
+                        value={item.parent.id}
+                        title={item.parent.typeName}
+                        key={item.parent.id}
+                        disabled={
+                            !num
+                                ? item.parent.isRelate === 1
+                                    ? true
+                                    : false
+                                : rapairList.indexOf(item.parent.id) > -1
+                                ? true
+                                : false
+                        }
+                    >
+                        {item.child.map(child1 => {
+                            if (child1.finChild.length > 0) {
+                                return (
+                                    <TreeNode
+                                        value={child1.temp.id}
+                                        title={child1.temp.typeName}
+                                        key={child1.temp.id}
+                                        disabled={
+                                            !num
+                                                ? child1.temp.isRelate === 1
+                                                    ? true
+                                                    : false
+                                                : rapairList.indexOf(child1.temp.id) > -1
+                                                ? true
+                                                : false
+                                        }
+                                    >
+                                        {child1.finChild.map(self => {
+                                            return (
+                                                <TreeNode
+                                                    value={self.id}
+                                                    title={self.typeName}
+                                                    key={self.id}
+                                                    disabled={
+                                                        !num
+                                                            ? self.isRelate === 1
+                                                                ? true
+                                                                : false
+                                                            : rapairList.indexOf(self.id) > -1
+                                                            ? true
+                                                            : false
+                                                    }
+                                                />
+                                            )
+                                        })}
+                                    </TreeNode>
+                                )
+                            } else {
+                                return (
+                                    <TreeNode
+                                        value={child1.temp.id}
+                                        title={child1.temp.typeName}
+                                        key={child1.temp.id}
+                                        disabled={
+                                            !num
+                                                ? child1.temp.isRelate === 1
+                                                    ? true
+                                                    : false
+                                                : rapairList.indexOf(child1.temp.id) > -1
+                                                ? true
+                                                : false
+                                        }
+                                    />
+                                )
+                            }
+                        })}
+                    </TreeNode>
+                )
+            } else {
+                return (
+                    <TreeNode
+                        value={item.parent.id}
+                        title={item.parent.typeName}
+                        key={item.parent.id}
+                        disabled={
+                            !num
+                                ? item.parent.isRelate === 1
+                                    ? true
+                                    : false
+                                : rapairList.indexOf(item.parent.id) > -1
+                                ? true
+                                : false
+                        }
+                    />
+                )
             }
         })
     }
@@ -152,7 +294,7 @@ class UserSetting extends PureComponent {
         const items = [
             {
                 label: '报修类型：',
-                field: 'supplier',
+                field: 'repairTypeRel',
                 component: (
                     <TreeSelect
                         showSearch
@@ -163,19 +305,7 @@ class UserSetting extends PureComponent {
                         multiple
                         treeDefaultExpandAll
                     >
-                        <TreeNode value="parent 1" title="parent 1" key="0-1">
-                            <TreeNode value="parent 1-0" title="禁用" key="0-1-1" disabled>
-                                <TreeNode value="leaf1" title="my leaf" key="random" />
-                                <TreeNode value="leaf2" title="your leaf" key="random1" />
-                            </TreeNode>
-                            <TreeNode value="parent 1-1" title="parent 1-1" key="random2">
-                                <TreeNode
-                                    value="sss"
-                                    title={<b style={{ color: '#08c' }}>sss</b>}
-                                    key="random3"
-                                />
-                            </TreeNode>
-                        </TreeNode>
+                        {this.createTypeTree(this.props.repairsTypeList, 1)}
                     </TreeSelect>
                 ),
             },
@@ -208,7 +338,17 @@ class UserSetting extends PureComponent {
     addRepair = () => {
         this.addRepairType.validateFields((err, fieldsValue) => {
             if (!err) {
-                console.log('关联保修泪从信息', fieldsValue)
+                if (!fieldsValue.repairTypeRel) {
+                    message.warning('请选择报修类型')
+                    return
+                }
+                let parm = {}
+                parm.userId = this.state.userMess.userId
+                parm.userName = this.state.userMess.userName
+                parm.phone = this.state.userMess.phone
+                parm.id = fieldsValue.repairTypeRel.join(',')
+                this.props.addRepairRelate(parm)
+                this.addRepairType.resetFields()
             }
         })
     }
@@ -227,49 +367,46 @@ class UserSetting extends PureComponent {
         let parm = this.formParms()
         parm.pageNo = 1
         parm.pageSize = pageSize
-        // this.props.getSupplierList(parm)
+        parm.appIdentity = page.appIdentity
+        this.props.getUserList(parm)
     }
     // table的pageNo改变
     onChange = (pageNo, pageSize) => {
         let parm = this.formParms()
         parm.pageNo = pageNo
         parm.pageSize = pageSize
-        // this.props.getSupplierList(parm)
+        parm.appIdentity = page.appIdentity
+        this.props.getUserList(parm)
+    }
+    // 删除楼宇关联信息
+    deleteBuildRle = id => {
+        this.props.deleteAddressRelate({ id: id, userId: this.state.userMess.userId })
+    }
+    // 删除报修类型关联信息
+    deleteTypeRel = id => {
+        this.props.deleteRepairRelate({ id: id, userId: this.state.userMess.userId })
     }
     render() {
-        const buildData = [
-            {
-                key: '1',
-                name: '胡彦斌',
-                address: '西湖区湖底公园1号',
-                addressDetail: '详细住址受打击反恐',
-            },
-            {
-                key: '2',
-                name: '胡彦祖',
-                address: '西湖区湖底公园1号',
-                addressDetail: '详细住址受打击反恐',
-            },
-        ]
-
         const buildColumns = [
             {
                 title: '区域',
-                dataIndex: 'name',
-                key: 'name',
+                dataIndex: 'area',
+                key: 'area',
                 align: 'center',
             },
             {
-                title: '住址',
+                title: '地址',
                 dataIndex: 'address',
                 key: 'address',
                 align: 'center',
+                render: (text, record) => <span>{text ? text : '--'}</span>,
             },
             {
                 title: '详细地址',
-                dataIndex: 'addressDetail',
-                key: 'addressDetail',
+                dataIndex: 'detail',
+                key: 'detail',
                 align: 'center',
+                render: (text, record) => <span>{text ? text : '--'}</span>,
             },
             {
                 title: '操作',
@@ -280,7 +417,7 @@ class UserSetting extends PureComponent {
                     <span key={record}>
                         <span
                             style={{ color: '#0099CC', cursor: 'pointer' }}
-                            onClick={this.showModal}
+                            onClick={() => this.deleteBuildRle(record.id)}
                         >
                             删除
                         </span>
@@ -288,33 +425,11 @@ class UserSetting extends PureComponent {
                 ),
             },
         ]
-        const repairData = [
-            {
-                key: '1',
-                name: '电路/强电',
-            },
-            {
-                key: '2',
-                name: '电路/弱点',
-            },
-            {
-                key: '3',
-                name: '电路/弱点',
-            },
-            {
-                key: '4',
-                name: '电路/弱点',
-            },
-            {
-                key: '5',
-                name: '电路/弱点',
-            },
-        ]
         const repairColumns = [
             {
-                title: '保修类型',
-                dataIndex: 'name',
-                key: 'name',
+                title: '报修类型',
+                dataIndex: 'repairType',
+                key: 'repairType',
                 align: 'center',
             },
             {
@@ -326,7 +441,7 @@ class UserSetting extends PureComponent {
                     <span key={record}>
                         <span
                             style={{ color: '#0099CC', cursor: 'pointer' }}
-                            onClick={this.showModal}
+                            onClick={() => this.deleteTypeRel(record.id)}
                         >
                             删除
                         </span>
@@ -344,39 +459,39 @@ class UserSetting extends PureComponent {
             },
             {
                 title: '用户账号',
-                dataIndex: 'type_name',
-                key: 'type_name',
+                dataIndex: 'account',
+                key: 'account',
                 align: 'center',
             },
             {
                 title: '用户姓名',
-                dataIndex: 'supplier',
-                key: 'supplier',
+                dataIndex: 'userName',
+                key: 'userName',
                 align: 'center',
             },
             {
                 title: '联系电话',
-                dataIndex: 'serviceTimes',
-                key: 'serviceTimes',
+                dataIndex: 'phone',
+                key: 'phone',
                 align: 'center',
             },
             {
                 title: '角色',
-                dataIndex: 'score',
-                key: 'score',
+                dataIndex: 'role',
+                key: 'role',
                 align: 'center',
                 render: (text, record) => <span key={record}>{text ? text : '-'}</span>,
             },
             {
                 title: '部门',
-                dataIndex: 'category',
-                key: 'category',
+                dataIndex: 'deptName',
+                key: 'deptName',
                 align: 'center',
             },
             {
                 title: '职责',
-                dataIndex: 'contract',
-                key: 'contract',
+                dataIndex: 'duty',
+                key: 'duty',
                 align: 'center',
             },
             {
@@ -388,34 +503,12 @@ class UserSetting extends PureComponent {
                     <span key={record}>
                         <span
                             style={{ color: '#0099CC', cursor: 'pointer' }}
-                            onClick={this.showModal}
+                            onClick={() => this.showModal(record)}
                         >
                             设置
                         </span>
                     </span>
                 ),
-            },
-        ]
-        const dataSource = [
-            {
-                key: '1',
-                type_name: 'z4524545',
-                supplier: '胡彦斌',
-                address: '西湖区湖底公园1号',
-                serviceTimes: '11111111111',
-                score: '派工人员',
-                category: '部门1',
-                contract: '描述',
-            },
-            {
-                key: '2',
-                type_name: 'z4524545',
-                supplier: '胡彦斌',
-                address: '西湖区湖底公园1号',
-                serviceTimes: '11111111111',
-                score: '派工人员',
-                category: '部门1',
-                contract: '描述',
             },
         ]
         return (
@@ -426,17 +519,16 @@ class UserSetting extends PureComponent {
                     className={styles.commonLeft}
                     columns={columns}
                     // rowSelection={rowSelection}
-                    // rowKey={(record, index) => `${record.id}`}
-                    dataSource={dataSource}
-                    // pagination={{
-                    //     // current: 1,
-                    //     showSizeChanger: true,
-                    //     showQuickJumper: true,
-                    //     pageSizeOptions: ['10', '15', '20'],
-                    //     total: this.props.supperListTotal,
-                    //     onShowSizeChange: this.onShowSizeChange.bind(this),
-                    //     onChange: this.onChange.bind(this),
-                    // }}
+                    rowKey={(record, index) => `${record.userId}`}
+                    dataSource={this.props.userList}
+                    pagination={{
+                        showSizeChanger: true,
+                        showQuickJumper: true,
+                        pageSizeOptions: ['10', '15', '20'],
+                        total: this.props.userTotal,
+                        onShowSizeChange: this.onShowSizeChange.bind(this),
+                        onChange: this.onChange.bind(this),
+                    }}
                 />
                 <Modal
                     title="用户设置"
@@ -451,18 +543,20 @@ class UserSetting extends PureComponent {
                             {this.modalBuild('search')}
                             <div style={{ margin: '12px 0 5px' }}>已关联区域</div>
                             <Table
-                                dataSource={buildData}
+                                dataSource={this.props.addressRelateList}
                                 columns={buildColumns}
                                 pagination={false}
+                                rowKey={(record, index) => `${record.id}`}
                             />
                         </TabPane>
                         <TabPane tab="关联维修类型" key="2">
                             {this.modalRepair('search')}
                             <div style={{ margin: '12px 0 5px' }}>已关联维修类型</div>
                             <Table
-                                dataSource={repairData}
+                                dataSource={this.props.repairTypeRelateList}
                                 columns={repairColumns}
                                 pagination={false}
+                                rowKey={(record, index) => `${record.id}`}
                             />
                         </TabPane>
                     </Tabs>
@@ -478,6 +572,8 @@ const mapStateToProps = state => {
         userTotal: state.configuration.userTotal,
         addressRelateList: state.configuration.addressRelateList,
         repairTypeRelateList: state.configuration.repairTypeRelateList,
+        repairsTypeList: state.configuration.repairsTypeList,
+        repairsAddressList: state.configuration.repairsAddressList,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -485,6 +581,8 @@ const mapDispatchToProps = dispatch => {
         {
             getUserList: actions('getUserList'),
             getAddressRelateList: actions('getAddressRelateList'), //获取楼宇关联
+            getAddressType: actions('getAddressType'), //获取所有的报修地址
+            getRepairsType: actions('getRepairsType'), //获取所有的报修类型
             deleteAddressRelate: actions('deleteAddressRelate'), //删除楼宇关联
             addAddressRelate: actions('addAddressRelate'), //楼宇关联添加
             getRepairRelateList: actions('getRepairRelateList'), //获取保修类型关联
