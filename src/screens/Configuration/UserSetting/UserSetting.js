@@ -10,8 +10,8 @@ import { actions } from '../../../redux/configuration'
 
 const TreeNode = TreeSelect.TreeNode
 const { TabPane } = Tabs
-// let page = { pageNo: 1, pageSize: 10, appIdentity: 'HZYYGLPTWYFW0034' }
-let page = { pageNo: 1, pageSize: 10, appIdentity: 'HZYYGLPTZXGL0024' }
+let page = { pageNo: 1, pageSize: 10, appIdentity: 'HZYYGLPTWYFW0034' }
+// let page = { pageNo: 1, pageSize: 10, appIdentity: 'HZYYGLPTZXGL0024' }
 class UserSetting extends PureComponent {
     componentDidMount = () => {
         this.props.getUserList(page)
