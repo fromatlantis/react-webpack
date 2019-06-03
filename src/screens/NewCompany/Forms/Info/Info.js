@@ -24,6 +24,7 @@ const mapDispatchToProps = dispatch => {
             queryBasicInfoDetial: actions('queryBasicInfoDetial'),
             loadEnterpriseInfo: actions('loadEnterpriseInfo'),
             changeBasicInfoApprove: actions('changeBasicInfoApprove'),
+            storeLoadAll: actions('storeLoadAll'),
         },
         dispatch,
     )
@@ -203,8 +204,8 @@ class Info extends PureComponent {
                 onOk: () => {
                     this.props.loadEnterpriseInfo()
                 },
-                onCancel() {
-                    console.log('Cancel')
+                onCancel: () => {
+                    this.props.storeLoadAll('no')
                 },
             })
         return (

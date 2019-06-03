@@ -59,7 +59,7 @@ const model = {
                 if (res.code === 1000) {
                     //message.success('保存成功')
                     //yield put(actions('saveBasicInfoOk')({}))
-                    yield put(actions('loadAll')('yes'))
+                    yield put(actions('storeLoadAll')('yes'))
                 }
             },
         },
@@ -68,7 +68,7 @@ const model = {
             reducer: 'baseInfo',
         },
         {
-            name: 'loadAll',
+            name: 'storeLoadAll',
             reducer: 'loadAll',
         },
         {
@@ -83,7 +83,7 @@ const model = {
                         baseStr: JSON.stringify(baseInfo),
                     },
                 })
-                yield put(actions('loadAll')('no'))
+                yield put(actions('storeLoadAll')('no'))
                 if (res.code === 1000) {
                     message.success('保存成功')
                     sessionStorage.setItem('companyId', res.data.companyId)
