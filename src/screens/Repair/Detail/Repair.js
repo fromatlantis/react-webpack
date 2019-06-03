@@ -1,24 +1,34 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 
 import { Descriptions } from 'antd'
 export default class Repair extends PureComponent {
     render() {
         const { current } = this.props
         if (current) {
-            return <div>123</div>
+            return <div />
         } else {
+            const { detail } = this.props
             return (
-                <Descriptions title="" column={1} size="small">
-                    <Descriptions.Item label="报修地址">创新大厦A座1001室</Descriptions.Item>
-                    <Descriptions.Item label="详细地址">1810000000</Descriptions.Item>
-                    <Descriptions.Item label="报修人">Hangzhou, Zhejiang</Descriptions.Item>
-                    <Descriptions.Item label="联系方式">empty</Descriptions.Item>
-                    <Descriptions.Item label="报修类型">empty</Descriptions.Item>
-                    <Descriptions.Item label="故障描述">
-                        No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
-                    </Descriptions.Item>
-                    <Descriptions.Item label="故障图片">empty</Descriptions.Item>
-                </Descriptions>
+                <Fragment>
+                    <div style={{ margin: '15px 0' }}>{detail.reportTime}</div>
+                    <Descriptions title="" column={1} size="small">
+                        <Descriptions.Item label="报修地址">
+                            {detail.repairLocation}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="详细地址">
+                            {detail.repairAddress}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="报修人">{detail.reporterName}</Descriptions.Item>
+                        <Descriptions.Item label="联系方式">
+                            {detail.reporterContactWay}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="报修类型">{detail.category}</Descriptions.Item>
+                        <Descriptions.Item label="故障描述">
+                            <div style={{ width: '500px' }}>{detail.faultDesc}</div>
+                        </Descriptions.Item>
+                        <Descriptions.Item label="故障图片">{detail.faultImages}</Descriptions.Item>
+                    </Descriptions>
+                </Fragment>
             )
         }
     }

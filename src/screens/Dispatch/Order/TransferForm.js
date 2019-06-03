@@ -1,14 +1,23 @@
 import React, { PureComponent } from 'react'
 
-import { Input } from 'antd'
+import { Input, Select } from 'antd'
 import { FormView } from 'components'
+const { Option } = Select
+
 export default class TransferForm extends PureComponent {
     render() {
+        const { repairs } = this.props
         const items = [
             {
                 label: '接收人员',
                 field: 'patentName',
-                component: <Input />,
+                component: (
+                    <Select style={{ width: 200 }} placeholder="请选择接受人员">
+                        {repairs.map(item => (
+                            <Option value={item.userId}>{item.userName}</Option>
+                        ))}
+                    </Select>
+                ),
                 rules: [
                     {
                         required: true,

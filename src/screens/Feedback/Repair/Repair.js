@@ -1,25 +1,35 @@
 import React, { PureComponent } from 'react'
-import { Alert, Button, Card, Table, Input, DatePicker, Divider } from 'antd'
+import { Alert, Button, Card, Table, Input, DatePicker, Divider, Tooltip } from 'antd'
 import { FormView } from 'components'
 import { Link } from 'react-router-dom'
 import styles from '../Feedback.module.css'
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/dispatch'
 
-const dataSource = [
-    {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-]
+const mapStateToProps = state => {
+    return {
+        feedback: state.dispatch.feedback,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getFeedbackList: actions('getFeedbackList'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Repair extends PureComponent {
+    componentDidMount() {
+        this.props.getFeedbackList({})
+    }
 
-export default class Repair extends PureComponent {
     renderForm = type => {
         const items = [
             {
@@ -54,28 +64,47 @@ export default class Repair extends PureComponent {
     render() {
         const columns = [
             {
-                title: '姓名',
-                dataIndex: 'name',
-                key: 'name',
+                title: '故障描述',
+                dataIndex: 'faultDesc',
+                key: 'faultDesc',
+                render: faultDesc => (
+                    <Tooltip placement="right" title={faultDesc}>{`${faultDesc.substring(
+                        0,
+                        12,
+                    )}...`}</Tooltip>
+                ),
             },
             {
-                title: '年龄',
-                dataIndex: 'age',
-                key: 'age',
+                title: '派工时间',
+                dataIndex: 'dispatchTime',
+                key: 'dispatchTime',
             },
             {
-                title: '住址',
-                dataIndex: 'address',
-                key: 'address',
+                title: '报修类型',
+                dataIndex: 'categories',
+                key: 'categories',
+            },
+            {
+                title: '评价',
+                dataIndex: 'evaluateLevel',
+                key: 'evaluateLevel',
+            },
+            {
+                title: '工单状态',
+                dataIndex: 'repairStatus',
+                key: 'repairStatus',
             },
             {
                 title: '操作',
                 dataIndex: 'actions',
                 key: 'actions',
                 align: 'center',
-                render: () => <Link to="/repair/detail/123">反馈</Link>,
+                render: (_, record) => (
+                    <Link to={`/repair/detail/${record.repairId}/feedback`}>详情</Link>
+                ),
             },
         ]
+        const { feedback } = this.props
         return (
             <Card title="申请报修" bordered={false}>
                 <div className={styles.searchCard}>
@@ -89,10 +118,11 @@ export default class Repair extends PureComponent {
                             查询
                         </Button>
                     </div>
-                    <Alert message="Informational Notes" type="info" showIcon />
+                    <Alert message={`共${feedback.totalCount || 0}条数据`} type="info" showIcon />
                 </div>
-                <Table dataSource={dataSource} columns={columns} />
+                <Table dataSource={feedback.list} columns={columns} />
             </Card>
         )
     }
 }
+export default Repair

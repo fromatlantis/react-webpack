@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
+import { Link } from 'react-router-dom'
 
-import { Card, Steps } from 'antd'
+import { Card, Steps, Breadcrumb, Icon } from 'antd'
 
 import Repair from './Repair'
 import Dispatch from './Dispatch'
@@ -8,20 +9,105 @@ import Feedback from './Feedback'
 import Confirm from './Confirm'
 import Evaluate from './Evaluate'
 
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/repair'
+
 const { Step } = Steps
 
-export default class Detail extends PureComponent {
+const mapStateToProps = state => {
+    return {
+        repairDetail: state.repair.repairDetail,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getRepairDetail: actions('getRepairDetail'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Detail extends PureComponent {
+    componentDidMount() {
+        const { params } = this.props.match
+        this.props.getRepairDetail({
+            repairId: params.id,
+        })
+    }
+
     render() {
+        const { repairDetail } = this.props
+        const status = parseInt(repairDetail.repairStatus) + 1
+        const { params } = this.props.match
+        let crumb = {}
+        if (params.type === 'repair') {
+            crumb = {
+                title: '报修记录',
+                link: '/repair/record',
+            }
+        } else if (params.type === 'dispatch') {
+            crumb = {
+                title: '我的派工',
+                link: '/dispatch/work',
+            }
+        } else if (params.type === 'feedback') {
+            crumb = {
+                title: '报修反馈',
+                link: '/feedback/repair',
+            }
+        }
         return (
-            <Card title="详情" bordered={false}>
-                <Steps direction="vertical" size="small" current={4}>
-                    <Step title="物业报修" description={<Repair />} />
-                    <Step title="物业派工" description={<Dispatch />} />
-                    <Step title="物业反馈" description={<Feedback />} />
-                    <Step title="账单确认" description={<Confirm current={false} />} />
-                    <Step title="用户评价" description={<Evaluate current={true} />} />
+            <Card
+                title={
+                    <Breadcrumb>
+                        <Breadcrumb.Item>
+                            <Link to="/repair">
+                                <Icon type="home" />
+                            </Link>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item href="">
+                            <Link to={crumb.link}>{crumb.title}</Link>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>工单详情</Breadcrumb.Item>
+                    </Breadcrumb>
+                }
+                bordered={false}
+            >
+                <Steps direction="vertical" size="small" current={status}>
+                    <Step title="物业报修" description={<Repair detail={repairDetail} />} />
+                    <Step
+                        title="物业派工"
+                        description={
+                            <Dispatch detail={repairDetail} current={status === 1 ? true : false} />
+                        }
+                    />
+                    <Step
+                        title="物业反馈"
+                        description={
+                            <Feedback detail={repairDetail} current={status === 2 ? true : false} />
+                        }
+                    />
+                    <Step
+                        title="账单确认"
+                        description={
+                            <Confirm detail={repairDetail} current={status === 3 ? true : false} />
+                        }
+                    />
+                    <Step
+                        title="用户评价"
+                        description={
+                            <Evaluate detail={repairDetail} current={status === 4 ? true : false} />
+                        }
+                    />
                 </Steps>
             </Card>
         )
     }
 }
+export default Detail

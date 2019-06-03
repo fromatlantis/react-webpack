@@ -8,26 +8,45 @@ import TransferForm from './TransferForm'
 import RepairDetail from './RepairDetail'
 import styles from '../Dispatch.module.css'
 
-const dataSource = [
-    {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-]
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/dispatch'
+import { actions as repairActions } from 'reduxDir/repair'
 
-export default class Order extends PureComponent {
+const mapStateToProps = state => {
+    return {
+        repairDetail: state.repair.repairDetail,
+        workorder: state.dispatch.workorder,
+        repairs: state.dispatch.repairs,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getWorkorderList: actions('getWorkorderList'),
+            getRepairs: actions('getRepairs'),
+            getRepairDetail: repairActions('getRepairDetail'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Order extends PureComponent {
     state = {
         newInfo: false,
         dispatchForm: false,
         transferForm: false,
+    }
+    componentDidMount() {
+        this.props.getWorkorderList({
+            pageNo: 1,
+            pageSize: 10,
+        })
+        this.props.getRepairs()
     }
     renderForm = type => {
         const items = [
@@ -77,7 +96,8 @@ export default class Order extends PureComponent {
         })
     }
     // 派工
-    dispatchForm = () => {
+    dispatchForm = repairId => {
+        this.props.getRepairDetail({ repairId })
         this.setState({
             dispatchForm: true,
         })
@@ -93,7 +113,8 @@ export default class Order extends PureComponent {
         })
     }
     // 转办
-    transferForm = () => {
+    transferForm = repairId => {
+        this.props.getRepairDetail({ repairId })
         this.setState({
             transferForm: true,
         })
@@ -111,40 +132,63 @@ export default class Order extends PureComponent {
     render() {
         const columns = [
             {
-                title: '姓名',
-                dataIndex: 'name',
-                key: 'name',
+                title: '报修人',
+                dataIndex: 'reporterName',
+                key: 'reporterName',
             },
             {
-                title: '年龄',
-                dataIndex: 'age',
-                key: 'age',
+                title: '联系方式',
+                dataIndex: 'reporterContactWay',
+                key: 'reporterContactWay',
             },
             {
-                title: '住址',
-                dataIndex: 'address',
-                key: 'address',
+                title: '报修时间',
+                dataIndex: 'reportTime',
+                key: 'reportTime',
+            },
+            {
+                title: '报修地址',
+                dataIndex: 'repairLocation',
+                key: 'repairLocation',
+            },
+            {
+                title: '报修类型',
+                dataIndex: 'categories',
+                key: 'categories',
             },
             {
                 title: '操作',
                 dataIndex: 'actions',
                 key: 'actions',
                 align: 'center',
-                render: () => (
+                render: (_, record) => (
                     <div>
-                        <Button onClick={this.dispatchForm} type="link" size="small">
+                        <Button
+                            onClick={() => {
+                                this.dispatchForm(record.repairId)
+                            }}
+                            type="link"
+                            size="small"
+                        >
                             派工
                         </Button>
                         <Divider type="vertical" />
-                        <Button onClick={this.transferForm} type="link" size="small">
+                        <Button
+                            onClick={() => {
+                                this.transferForm(record.repairId)
+                            }}
+                            type="link"
+                            size="small"
+                        >
                             转办
                         </Button>
                     </div>
                 ),
             },
         ]
+        const { workorder } = this.props
         return (
-            <Card title="申请报修" bordered={false}>
+            <Card title="工单处理" bordered={false}>
                 <div className={styles.searchCard}>
                     {this.renderForm()}
                     <div className={styles.toolbar}>
@@ -160,9 +204,9 @@ export default class Order extends PureComponent {
                             新建派工
                         </Button>
                     </div>
-                    <Alert message="Informational Notes" type="info" showIcon />
+                    <Alert message={`共${workorder.totalCount || 0}条数据`} type="info" showIcon />
                 </div>
-                <Table dataSource={dataSource} columns={columns} />
+                <Table dataSource={workorder.list} columns={columns} />
                 <Modal
                     title="新建派工"
                     visible={this.state.newInfo}
@@ -178,7 +222,7 @@ export default class Order extends PureComponent {
                     onCancel={this.dispatchFormCancel}
                     width={800}
                 >
-                    <RepairDetail />
+                    <RepairDetail detail={this.props.repairDetail} />
                     <Divider />
                     <DispatchForm />
                 </Modal>
@@ -189,11 +233,12 @@ export default class Order extends PureComponent {
                     onCancel={this.transferFormCancel}
                     width={800}
                 >
-                    <RepairDetail />
+                    <RepairDetail detail={this.props.repairDetail} />
                     <Divider />
-                    <TransferForm />
+                    <TransferForm repairs={this.props.repairs} />
                 </Modal>
             </Card>
         )
     }
 }
+export default Order

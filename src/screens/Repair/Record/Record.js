@@ -5,22 +5,35 @@ import { FormView } from 'components'
 
 import styles from '../Repair.module.css'
 
-const dataSource = [
-    {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-]
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/repair'
 
-export default class Record extends PureComponent {
+const mapStateToProps = state => {
+    return {
+        repair: state.repair.repair,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getRepairList: actions('getRepairList'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Record extends PureComponent {
+    componentDidMount() {
+        this.props.getRepairList({
+            pageNo: 1,
+            pageSize: 10,
+        })
+    }
     renderForm = type => {
         const items = [
             {
@@ -55,28 +68,46 @@ export default class Record extends PureComponent {
     render() {
         const columns = [
             {
-                title: '姓名',
-                dataIndex: 'name',
-                key: 'name',
+                title: '报修类型',
+                dataIndex: 'categories',
+                key: 'categories',
             },
             {
-                title: '年龄',
-                dataIndex: 'age',
-                key: 'age',
+                title: '故障描述',
+                dataIndex: 'faultDesc',
+                key: 'faultDesc',
             },
             {
-                title: '住址',
-                dataIndex: 'address',
-                key: 'address',
+                title: '报修地址',
+                dataIndex: 'repairLocation',
+                key: 'repairLocation',
+            },
+            {
+                title: '报修时间',
+                dataIndex: 'reportTime',
+                key: 'reportTime',
+            },
+            {
+                title: '评价分值',
+                dataIndex: 'evaluateLevel',
+                key: 'evaluateLevel',
+            },
+            {
+                title: '工单状态',
+                dataIndex: 'statusName',
+                key: 'statusName',
             },
             {
                 title: '操作',
                 dataIndex: 'actions',
                 key: 'actions',
                 align: 'center',
-                render: () => <Link to="/repair/detail/123">详情</Link>,
+                render: (_, record) => (
+                    <Link to={`/repair/detail/${record.repairId}/repair`}>详情</Link>
+                ),
             },
         ]
+        const { repair } = this.props
         return (
             <Card title="申请报修" bordered={false}>
                 <div className={styles.searchCard}>
@@ -90,10 +121,11 @@ export default class Record extends PureComponent {
                             查询
                         </Button>
                     </div>
-                    <Alert message="共0条数据" type="info" showIcon />
+                    <Alert message={`共${repair.totalCount || 0}条数据`} type="info" showIcon />
                 </div>
-                <Table dataSource={dataSource} columns={columns} />
+                <Table dataSource={repair.list} columns={columns} />
             </Card>
         )
     }
 }
+export default Record

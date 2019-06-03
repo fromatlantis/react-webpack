@@ -1,6 +1,7 @@
 import FormView, { SearchView } from './FormView/FormView'
 import PhoneCard from './PhoneCard/PhoneCard'
 import UploadImg from './UploadImg/UploadImg'
+import PicturesWall from './UploadImg/PicturesWall'
 import DetailView from './DetailView/DetailView'
 import UploadFile from './UploadImg/UploadFile'
 import FullScreenLoading from './Loading/FullScreen'
@@ -14,6 +15,7 @@ export {
     SearchView,
     PhoneCard,
     UploadImg,
+    PicturesWall,
     DetailView,
     UploadFile,
     FullScreenLoading,

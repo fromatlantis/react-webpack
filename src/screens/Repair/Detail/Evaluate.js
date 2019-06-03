@@ -1,15 +1,15 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 
-import { Input, Rate, Typography } from 'antd'
+import { Input, Rate, Descriptions } from 'antd'
 
 import { FormView } from 'components'
 
-const { Text } = Typography
-
 export default class Evaluate extends PureComponent {
     render() {
-        const { current } = this.props
-        if (current) {
+        const { detail } = this.props
+        const status = parseInt(detail.repairStatus)
+        if (status === 3) {
+            //已完成，待评价
             const items = [
                 {
                     label: '评分',
@@ -27,8 +27,24 @@ export default class Evaluate extends PureComponent {
                 wrapperCol: { span: 14 },
             }
             return <FormView formItemLayout={formItemLayout} items={items} />
+        } else if (status > 3) {
+            // 已评价
+            const { detail } = this.props
+            return (
+                <Fragment>
+                    <div style={{ marginBottom: '10px' }}>
+                        <Rate disabled defaultValue={detail.evaluateLevel} />
+                        {detail.evaluateLevel}星
+                    </div>
+                    <Descriptions title="" column={1} size="small">
+                        <Descriptions.Item label="评价描述">
+                            <div style={{ width: '500px' }}>{detail.evaluateDesc}</div>
+                        </Descriptions.Item>
+                    </Descriptions>
+                </Fragment>
+            )
         } else {
-            return <Text>报修人已确认</Text>
+            return <div />
         }
     }
 }

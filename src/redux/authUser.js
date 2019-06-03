@@ -15,6 +15,7 @@ const model = {
         {
             name: 'login',
             *effect(action) {
+                console.log(action.payload)
                 const res = yield call(request, {
                     type: 'post',
                     url: '/authuser/login',

@@ -23,7 +23,7 @@ const menu = [
         title: '报修详情',
         icon: '',
         display: 'none',
-        path: '/repair/detail/:id',
+        path: '/repair/detail/:id/:type',
         component: Detail,
     },
 ]

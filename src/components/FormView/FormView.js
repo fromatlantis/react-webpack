@@ -76,22 +76,14 @@ export default Form.create({
             .forEach(item => {
                 let { field, formatter } = item
                 let getValue = data[item.field]
-                if (getValue) {
-                    if (formatter) {
-                        getValue = formatter(getValue)
-                    }
-                    fields[field] = Form.createFormField({
-                        value: getValue,
-                    })
+                //if (getValue) {
+                if (formatter) {
+                    getValue = formatter(getValue)
                 }
-                // if (!getValue) {
-                //     getValue = null
-                // } else if (formatter) {
-                //     getValue = formatter(getValue, { ...data })
-                // }
-                // fields[field] = Form.createFormField({
-                //     value: getValue,
-                // })
+                fields[field] = Form.createFormField({
+                    value: getValue,
+                })
+                //}
             })
         return fields
     },

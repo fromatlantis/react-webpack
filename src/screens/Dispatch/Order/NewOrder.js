@@ -1,47 +1,65 @@
 import React, { PureComponent } from 'react'
-import { Input, Cascader, Radio } from 'antd'
-import { FormView, UploadImg } from 'components'
+import { Input, Cascader, Radio, Select } from 'antd'
+import { FormView, PicturesWall } from 'components'
 
-const options = [
-    {
-        value: '电梯',
-        label: '电梯',
-        children: [
-            {
-                value: 'hangzhou',
-                label: 'Hanzhou',
-                children: [
-                    {
-                        value: 'xihu',
-                        label: 'West Lake',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        value: '电路',
-        label: '电路',
-        children: [
-            {
-                value: 'nanjing',
-                label: 'Nanjing',
-                children: [
-                    {
-                        value: 'zhonghuamen',
-                        label: 'Zhong Hua Men',
-                    },
-                ],
-            },
-        ],
-    },
-]
-
-export default class NewOrder extends PureComponent {
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/dispatch'
+import { actions as repairActions } from 'reduxDir/repair'
+const { Option } = Select
+const buildTree = data => {
+    let result = data
+        .map(item => ({
+            value: item.id,
+            label: item.typeName,
+            id: item.id,
+            pid: item.pid,
+        }))
+        .reduce((prev, item) => {
+            prev[item.pid] ? prev[item.pid].push(item) : (prev[item.pid] = [item])
+            return prev
+        }, {})
+    for (let prop in result) {
+        result[prop].forEach(function(item, i) {
+            //console.log(item)
+            if (result[item.id]) {
+                item.children = result[item.id]
+            }
+        })
+    }
+    return result[0]
+}
+const mapStateToProps = state => {
+    return {
+        addressType: buildTree(state.repair.addressType),
+        repairsType: buildTree(state.repair.repairsType),
+        repairs: state.dispatch.repairs,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getRepairs: actions('getRepairs'),
+            getAddressType: repairActions('getAddressType'),
+            getRepairsType: repairActions('getRepairsType'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class NewOrder extends PureComponent {
     state = {
         lift: false, //电梯
         trappedFlag: false,
         values: {},
+    }
+    componentDidMount() {
+        this.props.getAddressType()
+        this.props.getRepairsType()
     }
     onChange = changedFields => {
         // 报修类型联动
@@ -50,6 +68,10 @@ export default class NewOrder extends PureComponent {
             // 存放当前表单值
             this.setState({
                 values: this.form.getFieldsValue(),
+            })
+            // 管理维修人
+            this.props.getRepairs({
+                typeNodeId: applyType.value[applyType.value.length - 1],
             })
             // 报修类型包含电梯
             if (applyType.value.includes('电梯')) {
@@ -86,45 +108,62 @@ export default class NewOrder extends PureComponent {
     }
     render() {
         const { lift, trappedFlag, values } = this.state
-        console.log(lift && trappedFlag)
+        const { repairs } = this.props
         const items = [
             {
-                label: '报修地点',
-                field: 'patentName',
+                label: '报修位置',
+                field: 'repairLocation',
+                component: (
+                    <Cascader
+                        placeholder="请选择地址"
+                        options={this.props.addressType}
+                        changeOnSelect
+                    />
+                ),
+                rules: [
+                    {
+                        required: true,
+                        message: '请选择报修位置',
+                    },
+                ],
+            },
+            {
+                label: '详细地址',
+                field: 'repairAddress',
                 component: <Input />,
             },
             {
-                label: '派工说明',
-                field: 'appnumber',
+                label: '报修类型',
+                field: 'applyType',
+                rules: [
+                    {
+                        required: true,
+                        message: '请选择报修类型',
+                    },
+                ],
+                component: (
+                    <Cascader
+                        placeholder="请选择报修类型"
+                        options={this.props.repairsType}
+                        changeOnSelect
+                    />
+                ),
+            },
+            {
+                label: '故障描述',
+                field: 'faultDesc',
                 component: <Input.TextArea autosize={{ minRows: 4 }} />,
                 rules: [
                     {
-                        message: '不能多于500字',
+                        required: true,
+                        message: '请填写故障描述且不能多于500字',
                         max: 500,
                     },
                 ],
             },
             {
-                label: '图片',
-                field: 'logo',
-                component: <UploadImg />,
-            },
-            {
-                label: '派工类型',
-                field: 'applyType',
-                component: (
-                    <Cascader placeholder="请选择派工类型" options={options} changeOnSelect />
-                ),
-                rules: [
-                    {
-                        required: true,
-                        message: '请选择派工类型',
-                    },
-                ],
-            },
-            {
                 label: '是否困人',
-                field: 'trapped',
+                field: 'isStuck',
                 visible: lift,
                 //initialValue: 1,
                 component: (
@@ -136,9 +175,25 @@ export default class NewOrder extends PureComponent {
             },
             {
                 label: '被困人数',
-                field: 'trappedNum',
+                field: 'stuckNum',
                 visible: lift && trappedFlag,
                 component: <Input />,
+            },
+            {
+                label: '故障图片',
+                field: 'faultImages',
+                component: <PicturesWall />,
+            },
+            {
+                label: '派工描述',
+                field: 'dispatchDesc',
+                component: <Input.TextArea autosize={{ minRows: 4 }} />,
+                rules: [
+                    {
+                        message: '不能多于500字',
+                        max: 500,
+                    },
+                ],
             },
             {
                 label: '服务类型',
@@ -153,24 +208,20 @@ export default class NewOrder extends PureComponent {
             },
             {
                 label: '维修/跟踪人',
-                field: 'person',
-                component: <Input />,
+                field: 'maintainerId',
+                component: (
+                    <Select placeholder="请选择维修/跟踪人" mode="multiple">
+                        {repairs.map(item => (
+                            <Option value={item.userId}>{item.userName}</Option>
+                        ))}
+                    </Select>
+                ),
                 rules: [
                     {
                         required: true,
                         message: '请选择地址',
                     },
                 ],
-            },
-            {
-                label: '派工人',
-                field: 'orderPerson',
-                component: <Input />,
-            },
-            {
-                label: '联系方式',
-                field: 'contact',
-                component: <Input />,
             },
         ]
         const formItemLayout = {
@@ -191,3 +242,4 @@ export default class NewOrder extends PureComponent {
         )
     }
 }
+export default NewOrder
