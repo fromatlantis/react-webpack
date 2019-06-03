@@ -40,6 +40,7 @@ class Property extends PureComponent {
     state = {
         //企业id
         company_id: '',
+        paginationShu: [false, false, false, false, false],
     }
     //生命周期
     componentDidMount = () => {
@@ -60,8 +61,13 @@ class Property extends PureComponent {
             this.props.getWebsiteRecordsList({ companyId: company_id, limit: 5 })
         }
     }
+    paginationCon = num => {
+        let shu = this.state.paginationShu
+        shu[num] = true
+        this.setState({ paginationShu: shu })
+    }
     render() {
-        const { company_id } = this.state
+        const { company_id, paginationShu } = this.state
         return (
             <Fragment>
                 <div className={styles.messageCard}>
@@ -74,6 +80,7 @@ class Property extends PureComponent {
                                     type="link"
                                     onClick={() => {
                                         this.props.getTrademarkList({ companyId: company_id })
+                                        this.paginationCon(0)
                                     }}
                                 >
                                     展开更多>>
@@ -84,7 +91,7 @@ class Property extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            // pagination={false} //分页器
+                            pagination={paginationShu[0]} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -153,6 +160,7 @@ class Property extends PureComponent {
                                     type="link"
                                     onClick={() => {
                                         this.props.getPatentList({ companyId: company_id })
+                                        this.paginationCon(1)
                                     }}
                                 >
                                     展开更多>>
@@ -163,7 +171,7 @@ class Property extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            // pagination={false} //分页器
+                            pagination={paginationShu[1]} //分页器
                             scroll={{ x: 1800 }}
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
@@ -281,6 +289,7 @@ class Property extends PureComponent {
                                         this.props.getSoftwareCopyrightList({
                                             companyId: company_id,
                                         })
+                                        this.paginationCon(2)
                                     }}
                                 >
                                     展开更多>>
@@ -291,7 +300,7 @@ class Property extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            // pagination={false} //分页器
+                            pagination={paginationShu[2]} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -350,6 +359,7 @@ class Property extends PureComponent {
                                         this.props.getProductTrademarkList({
                                             companyId: company_id,
                                         })
+                                        this.paginationCon(3)
                                     }}
                                 >
                                     展开更多>>
@@ -360,7 +370,7 @@ class Property extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            // pagination={false} //分页器
+                            pagination={paginationShu[3]} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -412,6 +422,7 @@ class Property extends PureComponent {
                                     type="link"
                                     onClick={() => {
                                         this.props.getWebsiteRecordsList({ companyId: company_id })
+                                        this.paginationCon(4)
                                     }}
                                 >
                                     展开更多>>
@@ -422,7 +433,7 @@ class Property extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            // pagination={false} //分页器
+                            pagination={paginationShu[4]} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {

@@ -38,6 +38,7 @@ class Information extends PureComponent {
     state = {
         //企业id
         company_id: '',
+        paginationShu: [false, false, false, false],
     }
     //生命周期
     componentDidMount = () => {
@@ -59,8 +60,14 @@ class Information extends PureComponent {
             this.props.getProductInfoList({ companyId: company_id, limit: 5 })
         }
     }
+    paginationCon = num => {
+        // alert(num)
+        let shu = this.state.paginationShu
+        shu[num] = true
+        this.setState({ paginationShu: shu })
+    }
     render() {
-        const { company_id } = this.state
+        const { company_id, paginationShu } = this.state
         const baseInfoDetial = this.props.BaseInfoDetial
         return (
             <Fragment>
@@ -74,6 +81,7 @@ class Information extends PureComponent {
                                     type="link"
                                     onClick={() => {
                                         this.props.getRecentNews({ companyId: company_id })
+                                        this.paginationCon(0)
                                     }}
                                 >
                                     展开更多>>
@@ -85,7 +93,7 @@ class Information extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            // pagination={false} //分页器
+                            pagination={paginationShu[0]} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -235,6 +243,7 @@ class Information extends PureComponent {
                                     type="link"
                                     onClick={() => {
                                         this.props.getFinancingList({ companyId: company_id })
+                                        this.paginationCon(1)
                                     }}
                                 >
                                     展开更多>>
@@ -245,7 +254,7 @@ class Information extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            // pagination={false} //分页器
+                            pagination={paginationShu[1]} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -282,6 +291,7 @@ class Information extends PureComponent {
                                     type="link"
                                     onClick={() => {
                                         this.props.getCoreTeamList({ companyId: company_id })
+                                        this.paginationCon(2)
                                     }}
                                 >
                                     展开更多>>
@@ -292,7 +302,7 @@ class Information extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            // pagination={false} //分页器
+                            pagination={paginationShu[2]} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
@@ -328,6 +338,7 @@ class Information extends PureComponent {
                                     type="link"
                                     onClick={() => {
                                         this.props.getProductInfoList({ companyId: company_id })
+                                        this.paginationCon(3)
                                     }}
                                 >
                                     展开更多>>
@@ -338,7 +349,7 @@ class Information extends PureComponent {
                     >
                         <Table
                             bordered={true} //边框
-                            // pagination={false} //分页器
+                            pagination={paginationShu[3]} //分页器
                             rowKey={(record, index) => `complete${record.id}${index}`}
                             columns={[
                                 {
