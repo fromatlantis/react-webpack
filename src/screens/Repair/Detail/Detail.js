@@ -81,30 +81,10 @@ class Detail extends PureComponent {
             >
                 <Steps direction="vertical" size="small" current={status}>
                     <Step title="物业报修" description={<Repair detail={repairDetail} />} />
-                    <Step
-                        title="物业派工"
-                        description={
-                            <Dispatch detail={repairDetail} current={status === 1 ? true : false} />
-                        }
-                    />
-                    <Step
-                        title="物业反馈"
-                        description={
-                            <Feedback detail={repairDetail} current={status === 2 ? true : false} />
-                        }
-                    />
-                    <Step
-                        title="账单确认"
-                        description={
-                            <Confirm detail={repairDetail} current={status === 3 ? true : false} />
-                        }
-                    />
-                    <Step
-                        title="用户评价"
-                        description={
-                            <Evaluate detail={repairDetail} current={status === 4 ? true : false} />
-                        }
-                    />
+                    <Step title="物业派工" description={<Dispatch detail={repairDetail} />} />
+                    <Step title="物业反馈" description={<Feedback detail={repairDetail} />} />
+                    <Step title="账单确认" description={<Confirm detail={repairDetail} />} />
+                    <Step title="用户评价" description={<Evaluate detail={repairDetail} />} />
                 </Steps>
             </Card>
         )

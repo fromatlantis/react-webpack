@@ -10,6 +10,7 @@ import Crumbs from './Crumbs/Crumbs'
 import Graph from './Graph/Graph'
 import LeftMenu from './LeftMenu/LeftMenu'
 import MenuLayout from './MenuLayout/MenuLayout'
+import ImageView from './ImageView/ImageView'
 export {
     FormView,
     SearchView,
@@ -24,4 +25,5 @@ export {
     Graph,
     LeftMenu,
     MenuLayout,
+    ImageView,
 }

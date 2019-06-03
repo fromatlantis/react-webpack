@@ -5,6 +5,7 @@ import authUser from './authUser'
 import repair from './repair'
 import dispatch from './dispatch'
 import configuration from './configuration'
+import materialManager from './materialManager'
 
 export default history =>
     combineReducers({
@@ -13,4 +14,5 @@ export default history =>
         repair,
         dispatch,
         configuration,
+        materialManager,
     })

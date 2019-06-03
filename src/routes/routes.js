@@ -42,17 +42,20 @@ const routes = [
         }),
     },
     {
-        path: '/configuration/*',
-        name: '物业配置',
+        path: '/material',
+        name: '物料管理',
         icon: 'appstore',
+        navAttr: {
+            index: 4,
+            role: 'material',
+        },
         component: Loadable({
-            loader: () =>
-                import(/* webpackChunkName: "agency" */ '../screens/Configuration/Configuration'),
+            loader: () => import(/* webpackChunkName: "material" */ '../screens/Material/Material'),
             loading: Loading,
         }),
     },
     {
-        path: '/configuration/repairType',
+        path: '/configuration',
         name: '物业配置',
         icon: 'appstore',
         navAttr: {
@@ -61,7 +64,9 @@ const routes = [
         },
         component: Loadable({
             loader: () =>
-                import(/* webpackChunkName: "agency" */ '../screens/Configuration/Configuration'),
+                import(
+                    /* webpackChunkName: "configuration" */ '../screens/Configuration/Configuration'
+                ),
             loading: Loading,
         }),
     },
@@ -97,7 +102,7 @@ export const getNav = auths => {
             }
         })
     //return navs
-    console.log(filterByAuths(navs, auths))
+    // console.log(filterByAuths(navs, auths))
     return filterByAuths(navs, auths)
 }
 // 首个路由

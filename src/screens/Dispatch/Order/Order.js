@@ -45,6 +45,7 @@ class Order extends PureComponent {
         this.props.getWorkorderList({
             pageNo: 1,
             pageSize: 10,
+            isHasten: true,
         })
         this.props.getRepairs()
     }

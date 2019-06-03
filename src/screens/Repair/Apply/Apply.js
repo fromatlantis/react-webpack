@@ -6,7 +6,7 @@ import request from '../../../utils/request'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/repair'
-
+import { actions as dispatchActions } from 'reduxDir/dispatch'
 const options = [
     {
         value: '电梯',
@@ -46,7 +46,7 @@ const options = [
 const buildTree = data => {
     let result = data
         .map(item => ({
-            value: item.id,
+            value: item.typeName,
             label: item.typeName,
             id: item.id,
             pid: item.pid,
@@ -67,8 +67,10 @@ const buildTree = data => {
 }
 const mapStateToProps = state => {
     return {
+        user: state.authUser.user,
         addressType: buildTree(state.repair.addressType),
         repairsType: buildTree(state.repair.repairsType),
+        dispatchors: state.dispatch.dispatchors,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -77,6 +79,7 @@ const mapDispatchToProps = dispatch => {
             getAddressType: actions('getAddressType'),
             getRepairsType: actions('getRepairsType'),
             applyRepair: actions('applyRepair'),
+            getDispatchor: dispatchActions('getDispatchor'),
         },
         dispatch,
     )
@@ -89,11 +92,15 @@ class Apply extends PureComponent {
     state = {
         lift: false, //电梯
         trappedFlag: false,
-        values: {},
+        values: {
+            reporterContactWay: this.props.user.phone,
+        },
     }
     componentDidMount() {
         this.props.getAddressType()
-        this.props.getRepairsType()
+        this.props.getRepairsType({
+            level: '3',
+        })
     }
     async getDispatchor(addressId) {
         const res = await request({
@@ -106,16 +113,6 @@ class Apply extends PureComponent {
     }
     onChange = changedFields => {
         const { form } = this.wrappedForm.props
-        // 地址联动-后端处理
-        // if (changedFields.repairLocation) {
-        //     const res = this.getDispatchor('1')
-        //     this.setState({
-        //         values: {
-        //             ...this.state.values,
-        //             ...form.getFieldsValue(),
-        //         },
-        //     })
-        // }
         // 报修类型联动
         if (changedFields.applyType) {
             const { applyType } = changedFields
@@ -157,7 +154,6 @@ class Apply extends PureComponent {
     }
     onSubmit = values => {
         var formData = new FormData()
-        formData.append('name', 'laotie')
         formData.append('repairLocation', values.repairLocation.join(''))
         formData.append('repairAddress', values.repairAddress)
         if (values.applyType.length === 1) {
@@ -177,7 +173,27 @@ class Apply extends PureComponent {
                 formData.append('faultImages', item)
             })
         }
+        // 派工人员
+        const { dispatchors } = this.props
+        if (dispatchors.length > 0) {
+            formData.append('dispatcherId', dispatchors[0].userId)
+            formData.append('dispatcherName', dispatchors[0].userName)
+        }
         this.props.applyRepair(formData)
+    }
+    // 切换地址
+    changeAddress = (value, selectedOptions) => {
+        const leaf = selectedOptions[selectedOptions.length - 1]
+        const { form } = this.wrappedForm.props
+        this.setState({
+            values: {
+                ...form.getFieldsValue(),
+                repairLocation: value,
+            },
+        })
+        this.props.getDispatchor({
+            addressNodeId: leaf.id,
+        })
     }
     render() {
         const { lift, trappedFlag, values } = this.state
@@ -195,6 +211,7 @@ class Apply extends PureComponent {
                     <Cascader
                         placeholder="请选择地址"
                         options={this.props.addressType}
+                        onChange={this.changeAddress}
                         changeOnSelect
                     />
                 ),

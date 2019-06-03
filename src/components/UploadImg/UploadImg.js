@@ -29,7 +29,7 @@ class UploadImg extends Component {
         if ('value' in nextProps) {
             const value = nextProps.value
             // 如果传过来的是File对象，转换成base64
-            console.log(value)
+            // console.log(value)
             if (value && typeof value === 'object') {
                 getBase64(value, imageUrl => {
                     this.setState({
