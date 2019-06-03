@@ -41,6 +41,30 @@ const routes = [
             loading: Loading,
         }),
     },
+    {
+        path: '/configuration/*',
+        name: '物业配置',
+        icon: 'appstore',
+        component: Loadable({
+            loader: () =>
+                import(/* webpackChunkName: "agency" */ '../screens/Configuration/Configuration'),
+            loading: Loading,
+        }),
+    },
+    {
+        path: '/configuration/repairType',
+        name: '物业配置',
+        icon: 'appstore',
+        navAttr: {
+            index: 1,
+            role: 'home',
+        },
+        component: Loadable({
+            loader: () =>
+                import(/* webpackChunkName: "agency" */ '../screens/Configuration/Configuration'),
+            loading: Loading,
+        }),
+    },
 ]
 const filterByAuths = (routes = [], auths = []) => {
     return routes.filter(route => {
