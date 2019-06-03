@@ -2,7 +2,7 @@
  * 企服首页（企服管理）/企业详情
  */
 import React, { PureComponent, Fragment } from 'react'
-import { Tag, Breadcrumb, Card, Menu, Row, Col, Modal } from 'antd'
+import { Tag, Breadcrumb, Card, Menu, Row, Col, Modal, BackTop } from 'antd'
 import { Link, NavLink, Route } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -226,6 +226,7 @@ class CompanyDetails extends PureComponent {
                         </tbody>
                     </table>
                 </Modal>
+
                 <Menu
                     style={{ margin: '20px 50px 0 50px' }}
                     onClick={this.handleClick}
@@ -234,8 +235,7 @@ class CompanyDetails extends PureComponent {
                 >
                     {this.renderMenu(menuData)}
                 </Menu>
-
-                <div style={{ flex: 1 }}>
+                <div style={{ flex: 1 }} className={styles.routesDiv} id="markdownBody">
                     {routes().map((item, index) => {
                         return (
                             <Route
@@ -246,6 +246,7 @@ class CompanyDetails extends PureComponent {
                             />
                         )
                     })}
+                    <BackTop target={() => document.getElementById('markdownBody')} />
                 </div>
             </Fragment>
         )
