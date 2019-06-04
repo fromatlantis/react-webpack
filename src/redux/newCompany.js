@@ -96,7 +96,7 @@ const model = {
             name: 'queryBasicInfoDetial',
             *effect(action) {
                 const res = yield call(request, {
-                    url: `/enterprise/queryBasicInfoDetial?companyId=${action.payload}`,
+                    url: `/enterprise/getBasicInfoById?companyId=${action.payload}`,
                 })
                 if (res.code === 1000) {
                     yield put(actions('getBaseInfoOk')(res.data))
