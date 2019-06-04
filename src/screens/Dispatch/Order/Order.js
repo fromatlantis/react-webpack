@@ -45,9 +45,9 @@ class Order extends PureComponent {
         this.props.getWorkorderList({
             pageNo: 1,
             pageSize: 10,
-            isHasten: true,
+            isHasten: 'Y',
         })
-        this.props.getRepairs()
+        // this.props.getRepairs()
     }
     renderForm = type => {
         const items = [

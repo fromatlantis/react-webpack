@@ -11,7 +11,7 @@ const { Option } = Select
 const buildTree = data => {
     let result = data
         .map(item => ({
-            value: item.id,
+            value: item.typeName,
             label: item.typeName,
             id: item.id,
             pid: item.pid,
@@ -55,23 +55,24 @@ class NewOrder extends PureComponent {
     state = {
         lift: false, //电梯
         trappedFlag: false,
-        values: {},
+        values: {
+            isStuck: 2, //默认值
+        },
     }
     componentDidMount() {
         this.props.getAddressType()
-        this.props.getRepairsType()
+        this.props.getRepairsType({
+            level: '3',
+        })
     }
     onChange = changedFields => {
+        const { form } = this.wrappedForm.props
         // 报修类型联动
         if (changedFields.applyType) {
             const { applyType } = changedFields
             // 存放当前表单值
             this.setState({
-                values: this.form.getFieldsValue(),
-            })
-            // 管理维修人
-            this.props.getRepairs({
-                typeNodeId: applyType.value[applyType.value.length - 1],
+                values: { ...this.state.values, ...form.getFieldsValue() },
             })
             // 报修类型包含电梯
             if (applyType.value.includes('电梯')) {
@@ -87,15 +88,14 @@ class NewOrder extends PureComponent {
             }
         }
         // 是否困人
-        if (changedFields.trapped) {
-            const { trapped } = changedFields
-            console.log(this.form.getFieldsValue())
+        if (changedFields.isStuck) {
+            const { isStuck } = changedFields
             // 存放当前表单值
             this.setState({
-                values: this.form.getFieldsValue(),
+                values: { ...this.state.values, ...form.getFieldsValue() },
             })
             // 是否困人
-            if (trapped.value === 1) {
+            if (isStuck.value === 1) {
                 this.setState({
                     trappedFlag: true,
                 })
@@ -105,6 +105,20 @@ class NewOrder extends PureComponent {
                 })
             }
         }
+    }
+    typeChange = (value, selectedOptions) => {
+        const leaf = selectedOptions[selectedOptions.length - 1]
+        const { form } = this.wrappedForm.props
+        this.setState({
+            values: {
+                ...this.state.values,
+                ...form.getFieldsValue(),
+                applyType: value,
+            },
+        })
+        this.props.getRepairs({
+            typeNodeId: leaf.id,
+        })
     }
     render() {
         const { lift, trappedFlag, values } = this.state
@@ -146,6 +160,7 @@ class NewOrder extends PureComponent {
                         placeholder="请选择报修类型"
                         options={this.props.repairsType}
                         changeOnSelect
+                        onChange={this.typeChange}
                     />
                 ),
             },
@@ -198,7 +213,12 @@ class NewOrder extends PureComponent {
             {
                 label: '服务类型',
                 field: 'serviceType',
-                component: <Input />,
+                component: (
+                    <Select placeholder="请选择服务类型">
+                        <Option value="公区">公区</Option>
+                        <Option value="业户">业户</Option>
+                    </Select>
+                ),
                 rules: [
                     {
                         required: true,
@@ -230,8 +250,8 @@ class NewOrder extends PureComponent {
         }
         return (
             <FormView
-                ref={form => {
-                    this.form = form
+                wrappedComponentRef={ref => {
+                    this.wrappedForm = ref
                 }}
                 formItemLayout={formItemLayout}
                 items={items}

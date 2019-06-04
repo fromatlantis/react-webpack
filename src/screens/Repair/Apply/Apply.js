@@ -7,42 +7,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/repair'
 import { actions as dispatchActions } from 'reduxDir/dispatch'
-const options = [
-    {
-        value: '电梯',
-        label: '电梯',
-        isLeaf: false,
-        // children: [
-        //     {
-        //         value: 'hangzhou',
-        //         label: 'Hanzhou',
-        //         children: [
-        //             {
-        //                 value: 'xihu',
-        //                 label: 'West Lake',
-        //             },
-        //         ],
-        //     },
-        // ],
-    },
-    {
-        value: '电路',
-        label: '电路',
-        isLeaf: false,
-        // children: [
-        //     {
-        //         value: 'nanjing',
-        //         label: 'Nanjing',
-        //         children: [
-        //             {
-        //                 value: 'zhonghuamen',
-        //                 label: 'Zhong Hua Men',
-        //             },
-        //         ],
-        //     },
-        // ],
-    },
-]
+
 const buildTree = data => {
     let result = data
         .map(item => ({
@@ -94,6 +59,7 @@ class Apply extends PureComponent {
         trappedFlag: false,
         values: {
             reporterContactWay: this.props.user.phone,
+            isStuck: 2,
         },
     }
     componentDidMount() {
@@ -118,7 +84,7 @@ class Apply extends PureComponent {
             const { applyType } = changedFields
             // 存放当前表单值
             this.setState({
-                values: form.getFieldsValue(),
+                values: { ...this.state.values, ...form.getFieldsValue() },
             })
             // 报修类型包含电梯
             if (applyType.value.includes('电梯')) {
@@ -138,7 +104,7 @@ class Apply extends PureComponent {
             const { isStuck } = changedFields
             // 存放当前表单值
             this.setState({
-                values: form.getFieldsValue(),
+                values: { ...this.state.values, ...form.getFieldsValue() },
             })
             // 是否困人
             if (isStuck.value === 1) {
@@ -156,12 +122,17 @@ class Apply extends PureComponent {
         var formData = new FormData()
         formData.append('repairLocation', values.repairLocation.join(''))
         formData.append('repairAddress', values.repairAddress)
-        if (values.applyType.length === 1) {
-            formData.append('category', values.applyType[0])
-        } else if (values.applyType.length === 2) {
-            formData.append('classify', values.applyType[1])
-        } else if (values.applyType.length === 3) {
-            formData.append('fault', values.applyType[2])
+        if (values.applyType) {
+            if (values.applyType.length === 1) {
+                formData.append('category', values.applyType[0])
+            } else if (values.applyType.length === 2) {
+                formData.append('category', values.applyType[0])
+                formData.append('classify', values.applyType[1])
+            } else if (values.applyType.length === 3) {
+                formData.append('category', values.applyType[0])
+                formData.append('classify', values.applyType[1])
+                formData.append('fault', values.applyType[2])
+            }
         }
         formData.append('faultDesc', values.faultDesc)
         if (values.isStuck) {
@@ -187,6 +158,7 @@ class Apply extends PureComponent {
         const { form } = this.wrappedForm.props
         this.setState({
             values: {
+                ...this.state.values,
                 ...form.getFieldsValue(),
                 repairLocation: value,
             },
