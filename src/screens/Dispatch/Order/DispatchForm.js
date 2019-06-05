@@ -11,7 +11,7 @@ const { Option } = Select
 const buildTree = data => {
     let result = data
         .map(item => ({
-            value: item.id,
+            value: item.typeName,
             label: item.typeName,
             id: item.id,
             pid: item.pid,
@@ -32,6 +32,7 @@ const buildTree = data => {
 }
 const mapStateToProps = state => {
     return {
+        repairDetail: state.repair.repairDetail,
         repairsType: buildTree(state.repair.repairsType),
         repairs: state.dispatch.repairs,
     }
@@ -54,23 +55,25 @@ class DispatchForm extends PureComponent {
         values: {},
     }
     componentDidMount() {
-        this.props.getRepairsType()
+        this.props.getRepairsType({
+            level: '3',
+        })
     }
-    onChange = changedFields => {
+    changeApplyType = (value, selectedOptions) => {
         const { form } = this.wrappedForm.props
-        if (changedFields.applyType) {
-            const { applyType } = changedFields
-            // 存放当前表单值
-            this.setState({
-                values: form.getFieldsValue(),
-            })
-            this.props.getRepairs({
-                typeNodeId: applyType.value[applyType.value.length - 1],
-            })
-        }
+        const leaf = selectedOptions[selectedOptions.length - 1]
+        this.setState({
+            values: {
+                ...form.getFieldsValue(),
+                applyType: value,
+            },
+        })
+        this.props.getRepairs({
+            typeNodeId: leaf.id,
+        })
     }
     render() {
-        const { repairs } = this.props
+        const { repairs, repairDetail, forwardedRef } = this.props
         const items = [
             {
                 label: '派工类型',
@@ -80,11 +83,13 @@ class DispatchForm extends PureComponent {
                         placeholder="请选择报修类型"
                         options={this.props.repairsType}
                         changeOnSelect
+                        onChange={this.changeApplyType}
                     />
                 ),
                 rules: [
                     {
                         required: true,
+                        message: '请选择报修类型',
                     },
                 ],
             },
@@ -100,12 +105,13 @@ class DispatchForm extends PureComponent {
                 rules: [
                     {
                         required: true,
+                        message: '请选择服务类型',
                     },
                 ],
             },
             {
                 label: '维修/跟踪人',
-                field: 'maintainers',
+                field: 'maintainersId',
                 component: (
                     <Select placeholder="请选择维修/跟踪人" mode="multiple">
                         {repairs.map(item => (
@@ -116,6 +122,7 @@ class DispatchForm extends PureComponent {
                 rules: [
                     {
                         required: true,
+                        message: '请选择维修/跟踪人',
                     },
                 ],
             },
@@ -136,8 +143,21 @@ class DispatchForm extends PureComponent {
             wrapperCol: { span: 14 },
         }
         const { values } = this.state
+        // 派工类型默认展示报修类型
+        // let applyType = []
+        // if (repairDetail.category) {
+        //     applyType.push(repairDetail.category)
+        // }
+        // if (repairDetail.classify) {
+        //     applyType.push(repairDetail.classify)
+        // }
+        // if (repairDetail.fault) {
+        //     applyType.push(repairDetail.fault)
+        // }
+        // values.applyType = applyType
         return (
             <FormView
+                ref={forwardedRef}
                 wrappedComponentRef={ref => {
                     this.wrappedForm = ref
                 }}
@@ -145,7 +165,6 @@ class DispatchForm extends PureComponent {
                 items={items}
                 saveBtn={false}
                 data={values}
-                onChange={this.onChange}
             />
         )
     }

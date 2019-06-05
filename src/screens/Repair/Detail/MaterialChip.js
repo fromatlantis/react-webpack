@@ -1,30 +1,18 @@
 import React, { PureComponent, Fragment } from 'react'
 
-import { Button, Input, Icon, InputNumber, Table } from 'antd'
+import { Button, Select, InputNumber, Table } from 'antd'
 import { FormView } from 'components'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/repair'
-const dataSource = [
-    {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-]
+import { actions as materialManagerActions } from 'reduxDir/materialManager'
 
+const { Option } = Select
 const mapStateToProps = state => {
-    console.log(state.repair.materials)
     return {
         materials: state.repair.materials,
+        MaterialList: state.materialManager.MaterialList, //物料列表
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -32,6 +20,7 @@ const mapDispatchToProps = dispatch => {
         {
             addMaterial: actions('addMaterial'),
             removeMaterial: actions('removeMaterial'),
+            getMaterialList: materialManagerActions('getMaterialList'),
         },
         dispatch,
     )
@@ -41,6 +30,9 @@ const mapDispatchToProps = dispatch => {
     mapDispatchToProps,
 )
 class MaterialChip extends PureComponent {
+    componentDidMount() {
+        this.props.getMaterialList()
+    }
     addMaterial = () => {
         const { form } = this.wrappedForm.props
         //console.log(form.getFieldsValue())
@@ -62,11 +54,28 @@ class MaterialChip extends PureComponent {
         }
     }
     render() {
+        const { MaterialList } = this.props
         const items = [
             {
                 label: '',
                 field: 'name',
-                component: <Input />,
+                component: (
+                    <Select
+                        style={{ width: 190 }}
+                        showSearch
+                        placeholder="请选择物料"
+                        optionFilterProp="children"
+                        filterOption={(input, option) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                    >
+                        {(MaterialList || []).map((item, index) => (
+                            <Option value={`${item.name}-${item.size}`} key={index}>{`${
+                                item.name
+                            }-${item.size}`}</Option>
+                        ))}
+                    </Select>
+                ),
             },
             {
                 label: '数量',

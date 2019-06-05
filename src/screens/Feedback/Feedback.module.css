@@ -1,8 +1,10 @@
 .searchCard {
-    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .toolbar {
-    margin-top: 10px;
-    margin-bottom: 15px;
-    text-align: right;
+    /* margin-top: 10px; */
+    /* margin-bottom: 15px; */
+    /* text-align: right; */
 }

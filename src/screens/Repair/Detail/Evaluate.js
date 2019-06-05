@@ -3,8 +3,31 @@ import React, { PureComponent, Fragment } from 'react'
 import { Input, Rate, Descriptions } from 'antd'
 
 import { FormView } from 'components'
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/repair'
 
-export default class Evaluate extends PureComponent {
+const mapStateToProps = state => {
+    return {}
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            repairEvaluate: actions('repairEvaluate'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Evaluate extends PureComponent {
+    onSubmit = values => {
+        const { detail } = this.props
+        values.repairId = detail.id
+    }
     render() {
         const { detail } = this.props
         const status = parseInt(detail.repairStatus)
@@ -13,12 +36,12 @@ export default class Evaluate extends PureComponent {
             const items = [
                 {
                     label: '评分',
-                    field: 'rate',
+                    field: 'evaluateLevel',
                     component: <Rate allowHalf defaultValue={2.5} />,
                 },
                 {
                     label: '评价描述',
-                    field: 'ratedes',
+                    field: 'evaluateDesc',
                     component: <Input.TextArea autosize={{ minRows: 4 }} />,
                 },
             ]
@@ -26,7 +49,9 @@ export default class Evaluate extends PureComponent {
                 labelCol: { span: 3 },
                 wrapperCol: { span: 14 },
             }
-            return <FormView formItemLayout={formItemLayout} items={items} />
+            return (
+                <FormView onSubmit={this.onSubmit} formItemLayout={formItemLayout} items={items} />
+            )
         } else if (status > 3) {
             // 已评价
             const { detail } = this.props
@@ -48,3 +73,4 @@ export default class Evaluate extends PureComponent {
         }
     }
 }
+export default Evaluate

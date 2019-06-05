@@ -67,26 +67,7 @@ class NewOrder extends PureComponent {
     }
     onChange = changedFields => {
         const { form } = this.wrappedForm.props
-        // 报修类型联动
-        if (changedFields.applyType) {
-            const { applyType } = changedFields
-            // 存放当前表单值
-            this.setState({
-                values: { ...this.state.values, ...form.getFieldsValue() },
-            })
-            // 报修类型包含电梯
-            if (applyType.value.includes('电梯')) {
-                this.setState({
-                    lift: true,
-                    trappedFlag: false,
-                })
-            } else {
-                this.setState({
-                    lift: false,
-                    trappedFlag: false,
-                })
-            }
-        }
+        // console.log(changedFields.applyType)
         // 是否困人
         if (changedFields.isStuck) {
             const { isStuck } = changedFields
@@ -109,6 +90,18 @@ class NewOrder extends PureComponent {
     typeChange = (value, selectedOptions) => {
         const leaf = selectedOptions[selectedOptions.length - 1]
         const { form } = this.wrappedForm.props
+        // 报修类型包含电梯
+        if (value.includes('电梯')) {
+            this.setState({
+                lift: true,
+                trappedFlag: false,
+            })
+        } else {
+            this.setState({
+                lift: false,
+                trappedFlag: false,
+            })
+        }
         this.setState({
             values: {
                 ...this.state.values,
@@ -228,7 +221,7 @@ class NewOrder extends PureComponent {
             },
             {
                 label: '维修/跟踪人',
-                field: 'maintainerId',
+                field: 'maintainersId',
                 component: (
                     <Select placeholder="请选择维修/跟踪人" mode="multiple">
                         {repairs.map(item => (
@@ -248,8 +241,10 @@ class NewOrder extends PureComponent {
             labelCol: { span: 5 },
             wrapperCol: { span: 14 },
         }
+        const { forwardedRef } = this.props //传递ref
         return (
             <FormView
+                ref={forwardedRef}
                 wrappedComponentRef={ref => {
                     this.wrappedForm = ref
                 }}

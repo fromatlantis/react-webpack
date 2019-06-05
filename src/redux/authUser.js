@@ -22,14 +22,8 @@ const model = {
                     data: { params: action.payload },
                 })
                 if (res.data) {
-                    if (res.data.users) {
-                        let user = yield call(request, {
-                            url: `/authuser/confirm?token=${res.data.users[1].token}`,
-                        })
-                        yield put(actions('loginSuccess')(user.data))
-                    } else {
-                        yield put(actions('loginSuccess')(res.data))
-                    }
+                    yield put(actions('loginSuccess')(res.data))
+                    yield put(actions('getAuthoritiesByUser')(res.data.user.id))
                     yield put(replace('/repair'))
                 }
             },
@@ -85,7 +79,7 @@ const model = {
                     })
                     if (res.data) {
                         yield put(actions('loginSuccess')(res.data))
-                        // yield put(actions('getAuthoritiesByUser')(res.data.user.id))
+                        yield put(actions('getAuthoritiesByUser')(res.data.user.id))
                     } else {
                         //yield put(replace('/login'))
                         redirectLogin({
@@ -104,7 +98,7 @@ const model = {
                     type: 'get',
                     url: `/jurisdiction/getAuthoritiesByUser?userId=${
                         action.payload
-                    }&appIdendity=HZYYGLPTZCGL0028`,
+                    }&appIdendity=HZYYGLPTWYFW0034`,
                 })
                 if (res.code === 1000) {
                     yield put(

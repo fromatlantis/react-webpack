@@ -10,6 +10,7 @@ const SubMenu = Menu.SubMenu
 
 @connect(state => ({
     router: state.router,
+    auths: state.authUser.auths,
 }))
 class NewNavigation extends PureComponent {
     static propTypes = {
@@ -45,6 +46,7 @@ class NewNavigation extends PureComponent {
     render() {
         const { location } = this.props.router
         const openKeys = '/' + location.pathname.match(/[^/]+/)
+        console.log(this.props.auths)
         const menu = getNav(this.props.auths)
         return (
             <Menu

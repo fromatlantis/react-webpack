@@ -514,7 +514,12 @@ class UserSetting extends PureComponent {
         return (
             <Card title="" bordered={false}>
                 {this.renderForm('search')}
-                <Alert style={{ margin: '18px 0 8px' }} message="共2项" type="info" showIcon />
+                <Alert
+                    style={{ margin: '18px 0 8px' }}
+                    message={`共${this.props.userTotal || 0}项`}
+                    type="info"
+                    showIcon
+                />
                 <Table
                     className={styles.commonLeft}
                     columns={columns}

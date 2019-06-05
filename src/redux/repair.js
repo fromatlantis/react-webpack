@@ -151,6 +151,36 @@ const model = {
             name: 'getRepairDetailOk',
             reducer: 'repairDetail',
         },
+        // 对于“已反馈”的报修单，进行确认操作
+        {
+            name: 'repairOrderConfirm',
+            *effect(action) {
+                const res = yield call(request, {
+                    // type: 'post',
+                    url: '/property/repairOrderConfirm',
+                    // contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('确认成功')
+                }
+            },
+        },
+        // 评价
+        {
+            name: 'repairEvaluate',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: '/property/repairEvaluate',
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('评价成功')
+                }
+            },
+        },
     ],
 }
 const repair = blaze(model)

@@ -29,6 +29,10 @@ const menu = [
 ]
 
 export default class Repair extends PureComponent {
+    componentDidMount() {
+        // alert('1') //有时候路由刷新不出来
+    }
+
     render() {
         return <MenuLayout menu={menu} />
     }

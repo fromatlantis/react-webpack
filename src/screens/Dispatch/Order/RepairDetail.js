@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
-
+import { ImageView } from 'components'
 import { Descriptions } from 'antd'
 export default class RepairDetail extends PureComponent {
     render() {
@@ -17,7 +17,9 @@ export default class RepairDetail extends PureComponent {
                     <Descriptions.Item label="报修类型">{detail.category}</Descriptions.Item>
                 </Descriptions>
                 <Descriptions title="" column={1} size="small">
-                    <Descriptions.Item label="故障图片">{detail.faultImages}</Descriptions.Item>
+                    <Descriptions.Item label="故障图片">
+                        <ImageView fileList={detail.faultImages && detail.faultImages.split(',')} />
+                    </Descriptions.Item>
                 </Descriptions>
                 <Descriptions title="" column={1} size="small">
                     <Descriptions.Item label="故障描述">

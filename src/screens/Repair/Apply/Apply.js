@@ -137,7 +137,9 @@ class Apply extends PureComponent {
         formData.append('faultDesc', values.faultDesc)
         if (values.isStuck) {
             formData.append('isStuck', values.isStuck)
-            formData.append('stuckNum', values.stuckNum)
+            if (values.stuckNum) {
+                formData.append('stuckNum', values.stuckNum)
+            }
         }
         if (values.faultImages) {
             values.faultImages.forEach(item => {
