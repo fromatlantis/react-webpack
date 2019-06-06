@@ -165,7 +165,10 @@ class BatchImport extends PureComponent {
                                 <p className="ant-upload-hint">导入说明：文件必须为XLS或XLSX格式</p>
                             </Dragger>
                             <div style={{ padding: '20px', textAlign: 'right' }}>
-                                没有模版？<a href="">下载模版</a>
+                                没有模版？
+                                <a href="https://other-1257833666.cos.ap-beijing.myqcloud.com/model.zip">
+                                    下载模版
+                                </a>
                             </div>
                         </div>
                     )}

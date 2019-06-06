@@ -46,7 +46,7 @@ class NewNavigation extends PureComponent {
     render() {
         const { location } = this.props.router
         const openKeys = '/' + location.pathname.match(/[^/]+/)
-        console.log(this.props.auths)
+        // console.log(this.props.auths)
         const menu = getNav(this.props.auths)
         return (
             <Menu

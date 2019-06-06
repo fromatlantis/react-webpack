@@ -7,10 +7,11 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from '../../../redux/configuration'
+import { APPID } from '../../../config'
 
 const TreeNode = TreeSelect.TreeNode
 const { TabPane } = Tabs
-let page = { pageNo: 1, pageSize: 10, appIdentity: 'HZYYGLPTWYFW0034' }
+let page = { pageNo: 1, pageSize: 10, appIdentity: APPID }
 // let page = { pageNo: 1, pageSize: 10, appIdentity: 'HZYYGLPTZXGL0024' }
 class UserSetting extends PureComponent {
     componentDidMount = () => {

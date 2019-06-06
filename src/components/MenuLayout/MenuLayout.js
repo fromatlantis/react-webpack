@@ -16,7 +16,7 @@ class Repair extends PureComponent {
     render() {
         const { menu, auths } = this.props
         const authRoute = menu.filter(item => auths.includes(item.title) || item.display === 'none')
-        console.log(authRoute)
+        // console.log(authRoute)
         return (
             <div className={styles.root}>
                 <LeftMenu menuData={menu.filter(item => auths.includes(item.title))} />

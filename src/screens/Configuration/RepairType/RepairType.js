@@ -310,23 +310,19 @@ class RepairType extends PureComponent {
             <Card title="" bordered={false}>
                 <Search
                     style={{ marginBottom: 8, width: 350 }}
-                    placeholder="Search"
+                    placeholder="报修类型"
                     onChange={this.onChange}
                 />
-                {repairList.length ? (
-                    <Button
-                        type="primary"
-                        style={{
-                            display: repairList.length === 0 ? 'inline-block' : 'none',
-                            marginLeft: 20,
-                        }}
-                        onClick={this.addShowModal}
-                    >
-                        创建类型
-                    </Button>
-                ) : (
-                    ''
-                )}
+                <Button
+                    type="primary"
+                    style={{
+                        display: repairList.length === 0 ? 'inline-block' : 'none',
+                        marginLeft: 20,
+                    }}
+                    onClick={this.addShowModal}
+                >
+                    创建类型
+                </Button>
                 {repairList ? (
                     <Tree
                         onExpand={this.onExpand}
