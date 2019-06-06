@@ -13,6 +13,7 @@ if (process.env.NODE_ENV === 'development') {
         backHost = 'http://bg.hzpark.com/houzai'
     }
 }
+export const APPID = process.env.NODE_ENV === 'production' ? 'HZYYGLPTWYFW0065' : 'HZYYGLPTWYFW0034'
 export default {
     frontHost,
     backHost,
