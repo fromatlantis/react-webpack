@@ -189,7 +189,7 @@ class Order extends PureComponent {
         })
     }
     // 派工
-    dispatchForm = repairId => {
+    showDispatchForm = repairId => {
         this.props.getRepairDetail({ repairId })
         this.setState({
             dispatchForm: true,
@@ -232,7 +232,7 @@ class Order extends PureComponent {
         })
     }
     // 转办
-    transferForm = repairId => {
+    showTransferForm = repairId => {
         this.props.getRepairDetail({ repairId })
         this.setState({
             repairId,
@@ -351,7 +351,7 @@ class Order extends PureComponent {
                     <div>
                         <Button
                             onClick={() => {
-                                this.dispatchForm(record.repairId)
+                                this.showDispatchForm(record.repairId)
                             }}
                             type="link"
                             size="small"
@@ -360,7 +360,7 @@ class Order extends PureComponent {
                         </Button>
                         <Button
                             onClick={() => {
-                                this.transferForm(record.repairId)
+                                this.showTransferForm(record.repairId)
                             }}
                             type="link"
                             size="small"

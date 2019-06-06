@@ -122,6 +122,7 @@ class Apply extends PureComponent {
         var formData = new FormData()
         formData.append('repairLocation', values.repairLocation.join(''))
         formData.append('repairAddress', values.repairAddress)
+        formData.append('reporterContactWay', values.reporterContactWay)
         if (values.applyType) {
             if (values.applyType.length === 1) {
                 formData.append('category', values.applyType[0])

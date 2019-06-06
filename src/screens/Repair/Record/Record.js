@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Alert, Button, Card, Table, Select, DatePicker, Divider, Cascader } from 'antd'
+import { Alert, Button, Card, Table, Select, DatePicker, Divider, Cascader, Tooltip } from 'antd'
 import { Link } from 'react-router-dom'
 import { FormView } from 'components'
 
@@ -136,6 +136,12 @@ class Record extends PureComponent {
                 title: '故障描述',
                 dataIndex: 'faultDesc',
                 key: 'faultDesc',
+                render: faultDesc => (
+                    <Tooltip placement="right" title={faultDesc}>{`${faultDesc.substring(
+                        0,
+                        12,
+                    )}...`}</Tooltip>
+                ),
             },
             {
                 title: '报修地址',

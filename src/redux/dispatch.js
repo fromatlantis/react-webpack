@@ -190,6 +190,7 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getWorkorderList')())
                     message.success('派工成功')
                 }
             },
@@ -204,6 +205,7 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getWorkorderList')())
                     message.success('转办成功')
                 }
             },

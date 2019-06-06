@@ -100,24 +100,26 @@ class Apply extends PureComponent {
                         MaterialList.map((item, i) => {
                             return (
                                 <Col span={6}>
-                                    <Card
-                                        key={-i}
-                                        hoverable
-                                        style={{ width: 250, margin: '15px 0' }}
-                                        cover={
-                                            <img
-                                                style={{ width: 250, height: 150 }}
-                                                alt=""
-                                                src={item.image ? item.image : avatar}
-                                            />
-                                        }
-                                    >
-                                        <p className={styles.cartitle}>{item.name}</p>
-                                        <p className={styles.cardStr}>
-                                            <span>型号：{item.size}</span>
-                                            <span>库存：{item.count}</span>
-                                        </p>
-                                    </Card>
+                                    <Link to={`/material/applySub/${item.id}`}>
+                                        <Card
+                                            key={-i}
+                                            hoverable
+                                            style={{ width: 250, margin: '15px 0' }}
+                                            cover={
+                                                <img
+                                                    style={{ width: 250, height: 150 }}
+                                                    alt=""
+                                                    src={item.image ? item.image : avatar}
+                                                />
+                                            }
+                                        >
+                                            <p className={styles.cartitle}>{item.name}</p>
+                                            <p className={styles.cardStr}>
+                                                <span>型号：{item.size}</span>
+                                                <span>库存：{item.count}</span>
+                                            </p>
+                                        </Card>
+                                    </Link>
                                 </Col>
                             )
                         })}

@@ -223,12 +223,14 @@ class RepairAddressSet extends PureComponent {
                         visible: false,
                     })
                     let dataList = this.state.dataList
-                    if (!this.state.isParent) {
+                    // dataListalert(this.state.nodeNum)
+                    if (this.state.nodeNum === '1') {
                         fieldsValue.pid = '0'
                         fieldsValue.level = '1'
                     } else {
-                        fieldsValue.pid = dataList.pid
-                        fieldsValue.level = dataList.level
+                        // console.log(dataList)
+                        fieldsValue.pid = dataList.id
+                        fieldsValue.level = parseInt(dataList.level) + 1
                     }
                     this.props.seAddressTypeNode(fieldsValue)
                 }

@@ -51,7 +51,7 @@ const Dragger = Upload.Dragger
             {
                 push: push,
                 addMaterial: actions('addMaterial'),
-                readModelFile: actions('readModelFile'),
+                bulkImportMaterials: actions('bulkImportMaterials'),
             },
             dispatch,
         )
@@ -136,7 +136,7 @@ class BatchImport extends PureComponent {
                                         this.setState({
                                             importList: false,
                                         })
-                                        this.props.readModelFile(importResponse)
+                                        this.props.bulkImportMaterials(importResponse)
                                     }}
                                 >
                                     完成

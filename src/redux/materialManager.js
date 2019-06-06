@@ -101,8 +101,9 @@ const model = {
                     contentType: 'multipart/form-data',
                     data: action.payload,
                 })
-                if (res.data) {
-                    yield put(actions('addMaterialSuccess')(res.data))
+                if (res.code === 1000) {
+                    yield put(actions('getMaterialList')())
+                    message.success('新建物料成功')
                 }
             },
         },
@@ -261,11 +262,11 @@ const model = {
         },
         {
             //  post-上传
-            name: 'readModelFile',
+            name: 'bulkImportMaterials',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/property/readModelFile`,
+                    url: `/property/bulkImportMaterials`,
                     contentType: 'multipart/form-data',
                     data: {
                         enterprises: JSON.stringify(action.payload),
