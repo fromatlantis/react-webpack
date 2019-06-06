@@ -121,7 +121,9 @@ class Apply extends PureComponent {
     onSubmit = values => {
         var formData = new FormData()
         formData.append('repairLocation', values.repairLocation.join(''))
-        formData.append('repairAddress', values.repairAddress)
+        if (values.repairAddress) {
+            formData.append('repairAddress', values.repairAddress)
+        }
         formData.append('reporterContactWay', values.reporterContactWay)
         if (values.applyType) {
             if (values.applyType.length === 1) {
