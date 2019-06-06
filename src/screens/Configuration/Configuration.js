@@ -10,7 +10,7 @@ import UserSetting from './UserSetting/UserSetting'
 
 const menu = [
     {
-        title: '报修类型管理',
+        title: '报修类型设置',
         icon: '',
         path: '/configuration/repairType',
         component: RepairType,
