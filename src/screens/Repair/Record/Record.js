@@ -162,9 +162,15 @@ class Record extends PureComponent {
                 dataIndex: 'actions',
                 key: 'actions',
                 align: 'center',
-                render: (_, record) => (
-                    <Link to={`/repair/detail/${record.repairId}/repair`}>详情</Link>
-                ),
+                render: (_, record) => {
+                    if (record.statusName === '待确认') {
+                        return <Link to={`/repair/detail/${record.repairId}/repair`}>确认</Link>
+                    } else if (record.statusName === '已完成') {
+                        return <Link to={`/repair/detail/${record.repairId}/repair`}>评价</Link>
+                    } else {
+                        return <Link to={`/repair/detail/${record.repairId}/repair`}>详情</Link>
+                    }
+                },
             },
         ]
         const { repair, searchParams } = this.props

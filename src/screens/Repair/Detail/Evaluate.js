@@ -29,9 +29,9 @@ class Evaluate extends PureComponent {
         values.repairId = detail.id
     }
     render() {
-        const { detail } = this.props
+        const { detail, type } = this.props
         const status = parseInt(detail.repairStatus)
-        if (status === 3) {
+        if (status === 3 && type === 'repair') {
             //已完成，待评价
             const items = [
                 {

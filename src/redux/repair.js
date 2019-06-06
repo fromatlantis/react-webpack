@@ -1,5 +1,5 @@
 import { put, call, select } from 'redux-saga/effects'
-import { replace } from 'connected-react-router'
+import { push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
@@ -163,6 +163,7 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('确认成功')
+                    yield put(push('/repair/record'))
                 }
             },
         },
@@ -178,6 +179,7 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('评价成功')
+                    yield put(push('/repair/record'))
                 }
             },
         },

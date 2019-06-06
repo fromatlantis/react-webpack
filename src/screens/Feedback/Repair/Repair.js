@@ -7,6 +7,7 @@ import styles from '../Feedback.module.css'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/feedback'
+import { actions as dispatchActions } from 'reduxDir/dispatch'
 import { actions as repairActions } from 'reduxDir/repair'
 const { Option } = Select
 const buildTree = data => {
@@ -44,6 +45,7 @@ const mapDispatchToProps = dispatch => {
         {
             getFeedbackList: actions('getFeedbackList'),
             getRepairsType: repairActions('getRepairsType'),
+            hastening: dispatchActions('hastening'), //催办
         },
         dispatch,
     )
@@ -177,7 +179,10 @@ class Repair extends PureComponent {
                             this.state.isHasten === 'Y' && (
                                 <Button
                                     onClick={() => {
-                                        this.props.hastening(record.repairId)
+                                        this.props.hastening({
+                                            repairId: record.repairId,
+                                            hastenType: 'feedback',
+                                        })
                                     }}
                                     type="link"
                                     size="small"

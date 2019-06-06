@@ -30,9 +30,9 @@ class Confirm extends PureComponent {
         })
     }
     render() {
-        const { detail } = this.props
+        const { detail, type } = this.props
         const status = parseInt(detail.repairStatus)
-        if (status === 2) {
+        if (status === 2 && type === 'repair') {
             // 待确认
             return (
                 <div style={{ paddingTop: '10px' }}>

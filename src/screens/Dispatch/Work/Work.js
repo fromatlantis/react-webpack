@@ -46,6 +46,7 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             getMyDispatchList: actions('getMyDispatchList'),
+            dispatchRecall: actions('dispatchRecall'),
             getRepairsType: repairActions('getRepairsType'),
         },
         dispatch,
@@ -170,7 +171,16 @@ class Work extends PureComponent {
                     <Fragment>
                         <Link to={`/repair/detail/${record.repairId}/dispatch`}>详情</Link>
                         {moment().diff(moment(record.dispatchTime), 'minutes') <= 15 && (
-                            <Button type="link">撤回</Button>
+                            <Button
+                                type="link"
+                                onClick={() => {
+                                    this.props.dispatchRecall({
+                                        repairId: record.repairId,
+                                    })
+                                }}
+                            >
+                                撤回
+                            </Button>
                         )}
                     </Fragment>
                 ),

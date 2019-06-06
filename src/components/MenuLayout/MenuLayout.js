@@ -15,7 +15,7 @@ import styles from './MenuLayout.module.css'
 class Repair extends PureComponent {
     render() {
         const { menu, auths } = this.props
-        const authRoute = routes(menu).filter(item => auths.includes(item.title))
+        const authRoute = menu.filter(item => auths.includes(item.title) || item.display === 'none')
         console.log(authRoute)
         return (
             <div className={styles.root}>

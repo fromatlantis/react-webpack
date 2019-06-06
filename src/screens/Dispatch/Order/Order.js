@@ -59,6 +59,7 @@ const mapDispatchToProps = dispatch => {
             newDispatch: actions('newDispatch'),
             dispatching: actions('dispatching'),
             orderTransfer: actions('orderTransfer'),
+            hastening: actions('hastening'), //催办
             getRepairDetail: repairActions('getRepairDetail'),
             getRepairsType: repairActions('getRepairsType'),
             getSetInfo: configurationActions('getSetInfo'),
@@ -369,7 +370,10 @@ class Order extends PureComponent {
                         {record.status === '派工超时' && this.state.isHasten === 'Y' && (
                             <Button
                                 onClick={() => {
-                                    this.props.hastening(record.repairId)
+                                    this.props.hastening({
+                                        repairId: record.repairId,
+                                        hastenType: 'dispatch',
+                                    })
                                 }}
                                 type="link"
                                 size="small"

@@ -175,6 +175,7 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getWorkorderList')())
                     message.success('新建派工成功')
                 }
             },
@@ -214,10 +215,11 @@ const model = {
                 const res = yield call(request, {
                     type: 'post',
                     url: '/property/hastening',
+                    contentType: 'multipart/form-data',
                     data: action.payload,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getWorkorderList')())
+                    // yield put(actions('getWorkorderList')())
                     message.success('催办成功')
                 }
             },
@@ -229,6 +231,7 @@ const model = {
                 const res = yield call(request, {
                     type: 'post',
                     url: '/property/dispatchRecall',
+                    contentType: 'multipart/form-data',
                     data: action.payload,
                 })
                 if (res.code === 1000) {

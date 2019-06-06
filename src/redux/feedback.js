@@ -1,5 +1,5 @@
 import { put, call, select } from 'redux-saga/effects'
-import { replace } from 'connected-react-router'
+import { push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
@@ -67,6 +67,22 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('反馈成功')
+                    yield put(push('/feedback/repair'))
+                }
+            },
+        },
+        {
+            name: 'elevatorFeedback',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: '/property/elevatorFeedback',
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('反馈成功')
+                    yield put(push('/feedback/repair'))
                 }
             },
         },
