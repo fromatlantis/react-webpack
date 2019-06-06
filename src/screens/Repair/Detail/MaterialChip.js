@@ -61,7 +61,7 @@ class MaterialChip extends PureComponent {
                 field: 'name',
                 component: (
                     <Select
-                        style={{ width: 190 }}
+                        style={{ width: 160 }}
                         showSearch
                         placeholder="请选择物料"
                         optionFilterProp="children"
@@ -78,7 +78,7 @@ class MaterialChip extends PureComponent {
                 ),
             },
             {
-                label: '数量（个）',
+                label: '数量',
                 field: 'count',
                 component: <InputNumber min={1} />,
             },

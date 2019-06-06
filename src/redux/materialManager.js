@@ -256,7 +256,7 @@ const model = {
                     // contentType: 'multipart/form-data',
                     data: action.payload,
                 })
-                if (res.data) {
+                if (res.code === 1000) {
                     message.success('提交成功')
                     yield put(push('/material/apply'))
                 }

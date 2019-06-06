@@ -38,7 +38,8 @@ class Evaluate extends PureComponent {
                 {
                     label: '评分',
                     field: 'evaluateLevel',
-                    component: <Rate allowHalf defaultValue={2.5} />,
+                    initialValue: 2.5,
+                    component: <Rate allowHalf />,
                 },
                 {
                     label: '评价描述',

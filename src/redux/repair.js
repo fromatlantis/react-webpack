@@ -9,7 +9,6 @@ const model = {
         repair: {},
         addressType: [],
         repairsType: [],
-        materials: [],
         repairDetail: {},
         searchParams: {
             pageNo: 1,

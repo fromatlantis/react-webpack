@@ -381,7 +381,7 @@ class Feedback extends PureComponent {
                     },
                 ]
                 const formItemLayout = {
-                    labelCol: { span: 3 },
+                    labelCol: { span: 4 },
                     wrapperCol: { span: 14 },
                 }
                 return (

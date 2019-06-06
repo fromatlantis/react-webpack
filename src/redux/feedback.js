@@ -11,6 +11,7 @@ const model = {
             pageNo: 1,
             pageSize: 10,
         },
+        materials: [],
     },
     actions: [
         {
