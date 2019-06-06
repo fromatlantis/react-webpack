@@ -112,24 +112,6 @@ const model = {
             reducer: 'repairsType',
         },
         {
-            name: 'addMaterial',
-            reducer: (state, action) => {
-                return {
-                    ...state,
-                    materials: [...state.materials, ...[action.payload]],
-                }
-            },
-        },
-        {
-            name: 'removeMaterial',
-            reducer: (state, action) => {
-                return {
-                    ...state,
-                    materials: state.materials.filter((_, index) => index !== action.payload),
-                }
-            },
-        },
-        {
             name: 'getRepairDetail',
             *effect(action) {
                 const res = yield call(request, {

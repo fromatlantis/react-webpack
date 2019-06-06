@@ -5,13 +5,13 @@ import { FormView } from 'components'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { actions } from 'reduxDir/repair'
+import { actions } from 'reduxDir/feedback'
 import { actions as materialManagerActions } from 'reduxDir/materialManager'
 
 const { Option } = Select
 const mapStateToProps = state => {
     return {
-        materials: state.repair.materials,
+        materials: state.feedback.materials,
         MaterialList: state.materialManager.MaterialList, //物料列表
     }
 }
@@ -78,12 +78,12 @@ class MaterialChip extends PureComponent {
                 ),
             },
             {
-                label: '数量',
+                label: '数量（个）',
                 field: 'count',
                 component: <InputNumber min={1} />,
             },
             {
-                label: '单价',
+                label: '单价（元）',
                 field: 'price',
                 component: <InputNumber min={1} />,
             },
@@ -95,12 +95,12 @@ class MaterialChip extends PureComponent {
                 key: 'name',
             },
             {
-                title: '数量',
+                title: '数量（个）',
                 dataIndex: 'count',
                 key: 'count',
             },
             {
-                title: '单价',
+                title: '单价（元）',
                 dataIndex: 'price',
                 key: 'price',
             },

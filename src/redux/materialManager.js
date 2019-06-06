@@ -2,7 +2,7 @@
  * 物料管理 redux
  */
 import { put, call, select } from 'redux-saga/effects'
-import { replace, goBack } from 'connected-react-router'
+import { push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message, notification } from 'antd'
@@ -240,8 +240,9 @@ const model = {
                     // contentType: 'multipart/form-data',
                     data: action.payload,
                 })
-                if (res.data) {
-                    yield put(actions('addMaterialApplySuccess')(res.data))
+                if (res.code === 1000) {
+                    message.success('申请成功')
+                    yield put(push('/material/Approval'))
                 }
             },
         },
@@ -256,7 +257,8 @@ const model = {
                     data: action.payload,
                 })
                 if (res.data) {
-                    yield put(actions('approvalMaterialApplySuccess')(res.data))
+                    message.success('提交成功')
+                    yield put(push('/material/apply'))
                 }
             },
         },

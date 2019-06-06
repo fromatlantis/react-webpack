@@ -53,7 +53,9 @@ class Feedback extends PureComponent {
         formData.append('fixBeginDate', moment(values.fixBeginDate).format('YYYY-MM-DD HH:mm:ss'))
         formData.append('fixEndDate', moment(values.fixEndDate).format('YYYY-MM-DD HH:mm:ss'))
         formData.append('fixDuration', values.fixDuration)
-        formData.append('humans', values.humans)
+        if (values.humans) {
+            formData.append('humans', values.humans)
+        }
         if (values.fixDesc) {
             formData.append('fixDesc', values.fixDesc)
         }
@@ -322,7 +324,7 @@ class Feedback extends PureComponent {
                         ),
                     },
                     {
-                        label: '维修时长',
+                        label: '维修时长（分钟）',
                         field: 'fixDuration',
                         component: <InputNumber min={1} onChange={this.fixDurationChange} />,
                         rules: [
@@ -360,19 +362,19 @@ class Feedback extends PureComponent {
                         ],
                     },
                     {
-                        label: '物料费总计',
+                        label: '物料费总计（元）',
                         field: 'materialCosts',
                         visible: isPaid,
                         component: <InputNumber min={0} onChange={this.materialCostsChange} />,
                     },
                     {
-                        label: '人工费总计',
+                        label: '人工费总计（元）',
                         visible: isPaid,
                         field: 'staffCosts',
                         component: <InputNumber min={0} onChange={this.staffCostsChange} />,
                     },
                     {
-                        label: '维修费总计',
+                        label: '维修费总计（元）',
                         field: 'totalCosts',
                         visible: isPaid,
                         component: <InputNumber min={0} disabled />,

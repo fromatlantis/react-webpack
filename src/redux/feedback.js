@@ -82,7 +82,36 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('反馈成功')
+                    yield put(actions('clearMaterial')())
                     yield put(push('/feedback/repair'))
+                }
+            },
+        },
+        // 物料
+        {
+            name: 'addMaterial',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    materials: [...state.materials, ...[action.payload]],
+                }
+            },
+        },
+        {
+            name: 'removeMaterial',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    materials: state.materials.filter((_, index) => index !== action.payload),
+                }
+            },
+        },
+        {
+            name: 'clearMaterial',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    materials: [],
                 }
             },
         },

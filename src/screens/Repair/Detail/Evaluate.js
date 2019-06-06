@@ -27,6 +27,7 @@ class Evaluate extends PureComponent {
     onSubmit = values => {
         const { detail } = this.props
         values.repairId = detail.id
+        this.props.repairEvaluate(values)
     }
     render() {
         const { detail, type } = this.props
