@@ -346,7 +346,7 @@ class Home extends PureComponent {
                             <div className={styles.row}>
                                 <div className={styles.column}>
                                     <p className={styles.columnItem}>
-                                        法11111人：{list[i].legal_person_name}
+                                        法人：{list[i].legal_person_name}
                                     </p>
                                     <p className={styles.columnItem}>邮箱：{list[i].email}</p>
                                     <p className={styles.columnItem}>
