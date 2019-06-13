@@ -79,6 +79,7 @@ class UploadImg extends Component {
         //console.log(imageUrl)
         return (
             <Upload
+                accept="image/*"
                 name="avatar"
                 listType="picture-card"
                 className="avatar-uploader"

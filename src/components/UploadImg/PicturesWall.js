@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Upload, Icon, Modal } from 'antd'
+import { Upload, Icon, Modal, message } from 'antd'
 
 function getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -54,6 +54,7 @@ export default class PicturesWall extends PureComponent {
         return (
             <div>
                 <Upload
+                    accept="image/*"
                     listType="picture-card"
                     fileList={fileList}
                     onPreview={this.handlePreview}

@@ -1,5 +1,5 @@
 import { put, call, select } from 'redux-saga/effects'
-import { replace } from 'connected-react-router'
+import { push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
@@ -175,8 +175,7 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getWorkorderList')())
-                    message.success('新建派工成功')
+                    message.success('派工成功，请在「我的派工」查看详情')
                 }
             },
         },
@@ -190,8 +189,7 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getWorkorderList')())
-                    message.success('派工成功')
+                    message.success('派工成功，请在「我的派工」查看详情')
                 }
             },
         },

@@ -63,7 +63,7 @@ class AddMaterial extends PureComponent {
                         <Option value="一次性消耗品">一次性消耗品</Option>
                     </Select>
                 ),
-                rules: [{ required: true, message: '请选择客户类型' }],
+                rules: [{ required: true, message: '请选择物料类型' }],
             },
             {
                 label: '物料名称：',

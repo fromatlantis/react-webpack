@@ -39,6 +39,7 @@ const mapStateToProps = state => {
     return {
         myDispatch: state.dispatch.myDispatch,
         dispatchParams: state.dispatch.dispatchParams,
+        repairs: state.dispatch.repairs,
         repairsType: buildTree(state.repair.repairsType),
     }
 }
@@ -47,6 +48,7 @@ const mapDispatchToProps = dispatch => {
         {
             getMyDispatchList: actions('getMyDispatchList'),
             dispatchRecall: actions('dispatchRecall'),
+            getRepairs: actions('getRepairs'),
             getRepairsType: repairActions('getRepairsType'),
         },
         dispatch,
@@ -58,6 +60,7 @@ const mapDispatchToProps = dispatch => {
 )
 class Work extends PureComponent {
     componentDidMount() {
+        this.props.getRepairs() //获取公司维修人员列表
         this.props.getMyDispatchList()
         this.props.getRepairsType({
             level: '3',
@@ -91,7 +94,15 @@ class Work extends PureComponent {
             {
                 label: '维修人',
                 field: 'maintainerId',
-                component: <Input />,
+                component: (
+                    <Select placeholder="请选择" style={{ width: 120 }}>
+                        {this.props.repairs.map(item => (
+                            <Option value={item.userId} key={item.userId}>
+                                {item.userName}
+                            </Option>
+                        ))}
+                    </Select>
+                ),
             },
         ]
         return (

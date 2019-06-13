@@ -117,8 +117,9 @@ const model = {
                     contentType: 'multipart/form-data',
                     data: action.payload,
                 })
-                if (res.data) {
-                    yield put(actions('updateMaterialSuccess')(res.data))
+                if (res.code === 1000) {
+                    message.success('修改成功')
+                    yield put(push('/material/manager'))
                 }
             },
         },
@@ -133,8 +134,9 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('materialStockSuccess')(res.data))
-                    // yield put(actions('getMaterialList')())
+                    // yield put(actions('materialStockSuccess')(res.data))
+                    message.success('操作成功')
+                    yield put(actions('getMaterialList')())
                 }
             },
         },

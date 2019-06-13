@@ -53,9 +53,9 @@ class Approval extends PureComponent {
                 field: 'materialType',
                 component: (
                     <Select style={{ width: '200px' }} placeholder="请选择类型">
-                        <Option value="0">全部</Option>
-                        <Option value="1">工具类</Option>
-                        <Option value="2">一次性消耗品</Option>
+                        <Option value="">全部</Option>
+                        <Option value="工具类">工具类</Option>
+                        <Option value="一次性消耗品">一次性消耗品</Option>
                     </Select>
                 ),
             },
