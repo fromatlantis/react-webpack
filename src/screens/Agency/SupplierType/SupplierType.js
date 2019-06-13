@@ -58,6 +58,11 @@ class SearchTree extends React.Component {
                         value={this.state.nodeNum}
                         style={{ width: 120 }}
                         onChange={this.selectHandle}
+                        disabled={
+                            this.props.ServiceTypeList && this.props.ServiceTypeList.length === 0
+                                ? true
+                                : false
+                        }
                     >
                         <Option value="1">同级</Option>
                         <Option value="2">子级</Option>
@@ -674,9 +679,22 @@ class SearchTree extends React.Component {
                     <div style={{ paddingLeft: 10 }}>
                         <Search
                             style={{ marginBottom: 8, width: 350 }}
-                            placeholder="Search"
+                            placeholder="供应商类型"
                             onChange={this.onChange}
                         />
+                        {this.props.ServiceTypeList && this.props.ServiceTypeList.length === 0 && (
+                            <Button
+                                type="primary"
+                                style={{ marginLeft: '10px' }}
+                                onClick={() => {
+                                    this.setState({
+                                        visibleF: true,
+                                    })
+                                }}
+                            >
+                                创建供应商类型
+                            </Button>
+                        )}
                         {this.props.ServiceTypeList && (
                             <Tree
                                 onExpand={this.onExpand}

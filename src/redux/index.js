@@ -17,6 +17,7 @@ import outward from './outward'
 import trademark from './trademark'
 import patent from './patent'
 import dictionary from './dictionary'
+import loading from './loading'
 
 export default history =>
     combineReducers({
@@ -37,4 +38,5 @@ export default history =>
         patent,
         intermediary,
         dictionary,
+        loading,
     })

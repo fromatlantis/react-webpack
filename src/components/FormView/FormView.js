@@ -9,6 +9,7 @@ class FormView extends PureComponent {
         saveBtn: true,
         items: [],
         data: {},
+        loading: false,
     }
     static propTypes = {
         formItemLayout: PropTypes.object,
@@ -16,6 +17,7 @@ class FormView extends PureComponent {
         saveBtn: PropTypes.bool,
         items: PropTypes.array,
         data: PropTypes.object,
+        loading: PropTypes.bool,
     }
     handleSubmit = e => {
         e.preventDefault()
@@ -49,7 +51,7 @@ class FormView extends PureComponent {
                 })}
                 {saveBtn && (
                     <Form.Item wrapperCol={{ offset: formItemLayout.labelCol.span }}>
-                        <Button type="primary" htmlType="submit">
+                        <Button type="primary" htmlType="submit" loading={this.props.loading}>
                             保存
                         </Button>
                     </Form.Item>

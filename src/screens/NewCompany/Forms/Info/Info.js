@@ -15,6 +15,7 @@ const mapStateToProps = state => {
     return {
         baseInfo: state.newCompany.baseInfo,
         loadAll: state.newCompany.loadAll,
+        complate: state.loading.complate,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -65,7 +66,7 @@ class Info extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请输入信息',
+                        message: '未找到相关企业的工商信息',
                     },
                 ],
                 component: (
@@ -208,9 +209,15 @@ class Info extends PureComponent {
                     this.props.storeLoadAll('no')
                 },
             })
+        // alert(this.props.complate)
         return (
             <Card title="企业信息" bordered={false} extra={<Toolbar />}>
-                <FormView items={items} data={baseInfo} onSubmit={this.onSubmit} />
+                <FormView
+                    items={items}
+                    data={baseInfo}
+                    onSubmit={this.onSubmit}
+                    loading={!this.props.complate}
+                />
             </Card>
         )
     }
