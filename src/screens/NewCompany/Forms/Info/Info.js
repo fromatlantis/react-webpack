@@ -15,7 +15,7 @@ const mapStateToProps = state => {
     return {
         baseInfo: state.newCompany.baseInfo,
         loadAll: state.newCompany.loadAll,
-        complate: state.loading.complate,
+        // complate: state.loading.complate,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -216,7 +216,7 @@ class Info extends PureComponent {
                     items={items}
                     data={baseInfo}
                     onSubmit={this.onSubmit}
-                    loading={!this.props.complate}
+                    // loading={!this.props.complate}
                 />
             </Card>
         )
