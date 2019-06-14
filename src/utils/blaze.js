@@ -26,7 +26,7 @@ export const blaze = model => {
             // return getNewState(item,state,action)
             return item && item.reducer
                 ? typeof item.reducer === 'string'
-                    ? action.payload
+                    ? action.payload !== null
                         ? {
                               ...state,
                               [item.reducer]: action.payload,
