@@ -75,6 +75,19 @@ const routes = [
             loading: Loading,
         }),
     },
+    {
+        path: '/energy',
+        name: '能耗管理',
+        role: '能耗管理',
+        navAttr: {
+            index: 1,
+            role: 'home',
+        },
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "feedback" */ '../screens/Energy/Energy'),
+            loading: Loading,
+        }),
+    },
 ]
 const filterByAuths = (routes = [], auths = []) => {
     return routes.filter(route => {
