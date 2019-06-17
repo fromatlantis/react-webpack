@@ -6,7 +6,7 @@ import 'echarts/lib/chart/line'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legendScroll'
-import styles from './LineChart.css'
+import styles from './LineChart.module.css'
 
 export default class LineChart extends PureComponent {
     static defaultProps = {
@@ -41,7 +41,7 @@ export default class LineChart extends PureComponent {
         })
     }
     setOption = data => {
-        let { index, timeData, currentData, basisData } = data
+        let { names, values } = data
         let { title, styleFlge, unit } = this.props
 
         var option = {
@@ -57,37 +57,11 @@ export default class LineChart extends PureComponent {
             },
             tooltip: {
                 trigger: 'axis',
-                axisPointer: {
-                    lineStyle: {
-                        color: '#99617B',
-                    },
-                },
-            },
-            legend: {
-                icon: 'rect',
-                itemWidth: 18,
-                itemHeight: 2,
-                itemGap: 10,
-                data: [
-                    {
-                        name: '当前',
-                        textStyle: {
-                            color: '#00febc',
-                        },
-                    },
-                    {
-                        name: '比对',
-                        textStyle: {
-                            color: '#f9b43c',
-                        },
-                    },
-                ],
-                right: 45,
-                top: 5,
-                textStyle: {
-                    fontSize: 12,
-                    color: '#F1F1F3',
-                },
+                // axisPointer: {
+                //     lineStyle: {
+                //         color: '#99617B',
+                //     },
+                // },
             },
             grid: {
                 top: 45,
@@ -99,24 +73,13 @@ export default class LineChart extends PureComponent {
             xAxis: [
                 {
                     type: 'category',
-                    boundaryGap: false,
-                    axisTick: {
-                        show: false,
-                    },
-                    axisLabel: {
-                        margin: 10,
-                        textStyle: {
-                            fontSize: styleFlge ? 18 : 14,
-                            color: '#557492',
-                            fontWeight: 'normal',
-                        },
-                    },
                     axisLine: {
                         lineStyle: {
                             width: 1,
-                            color: '#477eab',
+                            color: '#666',
                         },
                     },
+                    axisLabel: {},
                     splitLine: {
                         show: true,
                         lineStyle: {
@@ -124,28 +87,17 @@ export default class LineChart extends PureComponent {
                             color: 'rgba(115, 156, 204,0.4)',
                         },
                     },
-                    data: timeData,
+                    data: names,
                 },
             ],
             yAxis: [
                 {
-                    name: styleFlge ? unit : '',
                     type: 'value',
-                    // name: '单位（%）',
-                    axisTick: {
-                        show: false,
-                    },
                     axisLine: {
+                        show: true,
                         lineStyle: {
                             width: 1,
-                            color: '#477eab',
-                        },
-                    },
-                    axisLabel: {
-                        //margin: 10,
-                        textStyle: {
-                            fontSize: styleFlge ? 16 : 12,
-                            color: '#557492',
+                            color: '#666',
                         },
                     },
                     splitLine: {
@@ -158,16 +110,29 @@ export default class LineChart extends PureComponent {
             ],
             series: [
                 {
-                    name: '当前',
                     type: 'line',
-                    smooth: false,
-                    symbol: 'circle',
-                    symbolSize: 5,
-                    showSymbol: false,
+                    smooth: true,
+                    // symbol: 'circle',
                     lineStyle: {
                         normal: {
-                            color: '#00febc',
-                            width: 4,
+                            color: new echarts.graphic.LinearGradient(
+                                0,
+                                0,
+                                0,
+                                1,
+                                [
+                                    {
+                                        offset: 0,
+                                        color: '#4ecac8', // 0% 处的颜色
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: '#4ba6f9', // 100% 处的颜色
+                                    },
+                                ],
+                                false,
+                            ),
+                            // width: 2,
                         },
                     },
                     // areaStyle: {
@@ -183,45 +148,28 @@ export default class LineChart extends PureComponent {
                     // },
                     itemStyle: {
                         normal: {
-                            color: '#00EBE7',
-                            borderColor: 'rgba(0,136,212,0.2)',
-                            borderWidth: 12,
+                            color: '#4ba6f9',
+                            borderColor: new echarts.graphic.LinearGradient(
+                                0,
+                                0,
+                                0,
+                                1,
+                                [
+                                    {
+                                        offset: 0,
+                                        color: '#4ecac8', // 0% 处的颜色
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: '#4ba6f9', // 100% 处的颜色
+                                    },
+                                ],
+                                false,
+                            ),
+                            borderWidth: 1,
                         },
                     },
-                    data: currentData,
-                },
-                {
-                    name: '比对',
-                    type: 'line',
-                    smooth: false,
-                    symbol: 'circle',
-                    symbolSize: 5,
-                    showSymbol: false,
-                    lineStyle: {
-                        normal: {
-                            color: '#f9b43c',
-                            width: 4,
-                        },
-                    },
-                    // areaStyle: {
-                    //     normal: {
-                    //         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                    //             offset: 0,
-                    //             color: 'rgba(137, 189, 27, 1)'
-                    //         }, {
-                    //             offset: 1,
-                    //             color: 'rgba(137, 189, 27, 0)'
-                    //         }], false),
-                    //     }
-                    // },
-                    itemStyle: {
-                        normal: {
-                            color: '#f9b43c',
-                            borderColor: 'rgba(137,189,2,0.27)',
-                            borderWidth: 12,
-                        },
-                    },
-                    data: basisData,
+                    data: values,
                 },
             ],
         }

@@ -57,6 +57,7 @@ class Apply extends PureComponent {
     state = {
         lift: false, //电梯
         trappedFlag: false,
+        addressNodeId: '',
         values: {
             reporterContactWay: this.props.user.phone,
             isStuck: 2,
@@ -149,9 +150,13 @@ class Apply extends PureComponent {
                 formData.append('faultImages', item)
             })
         }
+        const { addressNodeId } = this.state
+        if (addressNodeId) {
+            formData.append('addressNodeId', addressNodeId)
+        }
         // 派工人员
-        const { dispatchors } = this.props
-        formData.append('dispatchors', JSON.stringify({ dispatchors }))
+        // const { dispatchors } = this.props
+        // formData.append('dispatchors', JSON.stringify({ dispatchors }))
         // if (dispatchors.length > 0) {
         //     formData.append('dispatcherId', dispatchors[0].userId)
         //     formData.append('dispatcherName', dispatchors[0].userName)
@@ -160,20 +165,21 @@ class Apply extends PureComponent {
     }
     // 切换地址
     changeAddress = (value, selectedOptions) => {
-        const leaf = selectedOptions[selectedOptions.length - 1]
+        const leaf = selectedOptions[selectedOptions.length - 1] || {}
         const { form } = this.wrappedForm.props
         this.setState({
+            addressNodeId: leaf.id,
             values: {
                 ...this.state.values,
                 ...form.getFieldsValue(),
                 repairLocation: value,
             },
         })
-        if (leaf) {
-            this.props.getDispatchor({
-                addressNodeId: leaf.id,
-            })
-        }
+        // if (leaf) {
+        //     this.props.getDispatchor({
+        //         addressNodeId: leaf.id,
+        //     })
+        // }
     }
     render() {
         const { lift, trappedFlag, values } = this.state
