@@ -14,7 +14,8 @@ export default class RepairDetail extends PureComponent {
                     <Descriptions.Item label="联系方式">
                         {detail.reporterContactWay}
                     </Descriptions.Item>
-                    <Descriptions.Item label="报修类型">{detail.category}</Descriptions.Item>
+                    <Descriptions.Item label="报修类型">{`${detail.category ||
+                        ''}/${detail.classify || ''}/${detail.fault || ''}`}</Descriptions.Item>
                 </Descriptions>
                 <Descriptions title="" column={1} size="small">
                     <Descriptions.Item label="故障图片">
