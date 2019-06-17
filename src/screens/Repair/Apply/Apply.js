@@ -151,10 +151,11 @@ class Apply extends PureComponent {
         }
         // 派工人员
         const { dispatchors } = this.props
-        if (dispatchors.length > 0) {
-            formData.append('dispatcherId', dispatchors[0].userId)
-            formData.append('dispatcherName', dispatchors[0].userName)
-        }
+        formData.append('dispatchors', JSON.stringify({ dispatchors }))
+        // if (dispatchors.length > 0) {
+        //     formData.append('dispatcherId', dispatchors[0].userId)
+        //     formData.append('dispatcherName', dispatchors[0].userName)
+        // }
         this.props.applyRepair(formData)
     }
     // 切换地址
@@ -168,9 +169,11 @@ class Apply extends PureComponent {
                 repairLocation: value,
             },
         })
-        this.props.getDispatchor({
-            addressNodeId: leaf.id,
-        })
+        if (leaf) {
+            this.props.getDispatchor({
+                addressNodeId: leaf.id,
+            })
+        }
     }
     render() {
         const { lift, trappedFlag, values } = this.state

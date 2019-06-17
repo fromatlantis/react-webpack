@@ -45,6 +45,19 @@ const routes = [
         }),
     },
     {
+        path: '/energy',
+        name: '能耗管理',
+        role: '能耗管理',
+        navAttr: {
+            index: 1,
+            role: 'home',
+        },
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "feedback" */ '../screens/Energy/Energy'),
+            loading: Loading,
+        }),
+    },
+    {
         path: '/material',
         name: '物料管理',
         role: '物料管理',
@@ -72,19 +85,6 @@ const routes = [
                 import(
                     /* webpackChunkName: "configuration" */ '../screens/Configuration/Configuration'
                 ),
-            loading: Loading,
-        }),
-    },
-    {
-        path: '/energy',
-        name: '能耗管理',
-        role: '能耗管理',
-        navAttr: {
-            index: 1,
-            role: 'home',
-        },
-        component: Loadable({
-            loader: () => import(/* webpackChunkName: "feedback" */ '../screens/Energy/Energy'),
             loading: Loading,
         }),
     },
