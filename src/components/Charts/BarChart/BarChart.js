@@ -8,10 +8,11 @@ import 'echarts/lib/component/title'
 import styles from './BarChart.module.css'
 export default class BarChart extends PureComponent {
     static defaultProps = {
+        direction: 'column',
         data: {},
     }
     static propTypes = {
-        // data: PropTypes.object,
+        data: PropTypes.object,
     }
     componentDidMount = () => {
         this.initChart()
@@ -20,11 +21,52 @@ export default class BarChart extends PureComponent {
         this.initChart()
     }
     initChart = () => {
-        let { data, fullLabel, title } = this.props,
-            cValues,
-            bldata = []
+        let { data, fullLabel, title, direction } = this.props,
+            cValues
         let { names, values } = data
-
+        // 分类轴
+        let categoryOption = {
+            type: 'category',
+            axisLine: {
+                lineStyle: {
+                    width: 1,
+                    color: '#666',
+                },
+            },
+            axisLabel: {},
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    type: 'dashed',
+                    color: 'rgba(115, 156, 204,0.4)',
+                },
+            },
+            data: names,
+        }
+        // 数值轴
+        let valueOption = {
+            type: 'value',
+            axisLine: {
+                show: true,
+                lineStyle: {
+                    width: 1,
+                    color: '#666',
+                },
+            },
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed',
+                    color: 'rgba(115, 156, 204,0.4)',
+                },
+            },
+        }
+        if (fullLabel) {
+            let axisLabel = categoryOption.axisLabel
+            //let axisLabel1 = option.xAxis[1].axisLabel
+            //axisLabel1.interval = 0
+            axisLabel.interval = 0
+            axisLabel.rotate = 45
+        }
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(this.refs.barChart)
         var option = {
@@ -38,91 +80,24 @@ export default class BarChart extends PureComponent {
             legend: {
                 data: [
                     {
-                        name: '当前',
-                        textStyle: {
-                            color: '#00ffef',
-                        },
+                        name: '',
                     },
                 ],
                 right: 5,
                 top: 5,
             },
             grid: {
-                top: 45,
-                right: 0,
+                top: 35,
+                right: 10,
                 left: 10,
-                bottom: 0,
+                bottom: 10,
                 containLabel: true,
             },
             tooltip: {},
-            xAxis: [
-                {
-                    type: 'category',
-                    axisLabel: {
-                        formatter: function(label) {
-                            return label
-                        },
-                        margin: 18,
-                        textStyle: {
-                            color: 'rgb(91, 139, 176)',
-                        },
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            width: 1,
-                            color: '#477eab',
-                        },
-                    },
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            type: 'dashed',
-                            color: 'rgba(115, 156, 204,0.4)',
-                        },
-                    },
-                    data: names,
-                },
-                {
-                    // 比例x轴
-                    type: 'category',
-                    axisLabel: {
-                        formatter: function(label) {
-                            return label
-                        },
-                        margin: 2,
-                        textStyle: {
-                            color: 'rgb(91, 139, 176)',
-                            fontSize: 10,
-                        },
-                    },
-                    position: 'bottom',
-                    data: bldata,
-                },
-            ],
-            yAxis: {
-                type: 'value',
-                axisLine: {
-                    show: true,
-                    lineStyle: {
-                        width: 1,
-                        color: '#477eab',
-                    },
-                },
-                axisLabel: {
-                    textStyle: {
-                        color: 'rgb(91, 139, 176)',
-                    },
-                },
-                splitLine: {
-                    lineStyle: {
-                        type: 'dashed',
-                        color: 'rgba(115, 156, 204,0.4)',
-                    },
-                },
-            },
+            xAxis: direction === 'row' ? valueOption : categoryOption,
+            yAxis: direction === 'row' ? categoryOption : valueOption,
             series: [
                 {
-                    name: '当前',
                     type: 'bar',
                     itemStyle: {
                         normal: {
@@ -134,11 +109,11 @@ export default class BarChart extends PureComponent {
                                 [
                                     {
                                         offset: 0,
-                                        color: '#ffe049', // 0% 处的颜色
+                                        color: '#4ecac8', // 0% 处的颜色
                                     },
                                     {
                                         offset: 1,
-                                        color: '#f9b43c', // 100% 处的颜色
+                                        color: '#4ba6f9', // 100% 处的颜色
                                     },
                                 ],
                                 false,
@@ -185,13 +160,7 @@ export default class BarChart extends PureComponent {
             }
             option.legend.data.push(lg)
         }
-        if (fullLabel) {
-            let axisLabel = option.xAxis[0].axisLabel
-            let axisLabel1 = option.xAxis[1].axisLabel
-            axisLabel1.interval = 0
-            axisLabel.interval = 0
-            axisLabel.rotate = 45
-        }
+
         // 绘制图表
         myChart.setOption(option)
         window.addEventListener('resize', function() {

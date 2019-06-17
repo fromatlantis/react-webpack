@@ -29,9 +29,9 @@ const getPinyin = str => {
 const redirectLogin = ({ type = 0, storeurl = false }) => {
     let fromUrl = window.location.href
     if (storeurl) {
-        window.location.href = `${config.frontHost}/#/login?fromurl=${fromUrl}&type=${type}`
+        window.location.href = `${config.sso}?fromurl=${fromUrl}&type=${type}`
     } else {
-        window.location.href = `${config.frontHost}/#/login`
+        window.location.href = `${config.sso}`
     }
 }
 // 获取地址栏参数

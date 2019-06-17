@@ -36,7 +36,11 @@ export default class PieChart extends PureComponent {
         let { title, data, hollow } = props,
             names = []
         data.map(x => {
-            names.push(x.name)
+            let item = {
+                name: x.name,
+                icon: 'circle',
+            }
+            names.push(item)
             return true
         })
         var option = {
@@ -63,13 +67,14 @@ export default class PieChart extends PureComponent {
             legend: {
                 bottom: 0,
                 left: 'center',
+                itemWidth: 10,
                 data: names,
             },
             grid: {
-                top: 45,
-                right: 0,
+                top: 35,
+                right: 10,
                 left: 10,
-                bottom: 0,
+                bottom: 10,
                 containLabel: true,
             },
             series: [
@@ -89,6 +94,8 @@ export default class PieChart extends PureComponent {
                         '#69f7f6',
                         '#4cc3fd',
                         '#3d84f9',
+                        '#4ba6f9',
+                        '#4ecac8',
                     ].reverse(),
                     data: data,
                     itemStyle: {
