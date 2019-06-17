@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react'
 import { Card, Row, Col } from 'antd'
 
 import { BarChart, PieChart, LineChart } from 'components/Charts'
+import styles from './Analysis.module.css'
 export default class Analysis extends PureComponent {
     render() {
         return (
@@ -14,7 +15,7 @@ export default class Analysis extends PureComponent {
                                 data={{ names: ['1', '2', 3], values: ['11', '22', '33'] }}
                             />
                         </div>
-                        <div className="gutter-box">
+                        <div className={styles.chartBox}>
                             <PieChart />
                         </div>
                         <div style={{ height: '260px', display: 'flex' }}>
