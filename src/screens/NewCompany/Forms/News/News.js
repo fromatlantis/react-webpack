@@ -9,6 +9,7 @@ import { actions } from 'reduxDir/news'
 const mapStateToProps = state => {
     return {
         news: state.news.news,
+        searchParams: state.news.searchParams,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -56,18 +57,34 @@ class News extends PureComponent {
     componentDidMount = () => {
         const companyId = sessionStorage.getItem('companyId')
         if (companyId) {
-            this.props.getRecentNews({
-                companyId: sessionStorage.getItem('companyId'),
-                pageNo: 1,
-                pageSize: 10,
-            })
+            this.props.getRecentNews()
         }
     }
+    // 分页
+    onChange = pageNo => {
+        this.props.getRecentNews({ pageNo })
+    }
+    onShowSizeChange = (_, pageSize) => {
+        this.props.getRecentNews({ pageNo: 1, pageSize })
+    }
     render() {
-        const { news } = this.props
+        const { news, searchParams } = this.props
         return (
             <Card title="企业动态" bordered={false} extra={<Toolbar />}>
-                <Table bordered pagination={false} dataSource={news.list} columns={columns} />
+                <Table
+                    bordered
+                    pagination={{
+                        current: searchParams.pageNo,
+                        showSizeChanger: true,
+                        showQuickJumper: true,
+                        pageSizeOptions: ['10', '15', '20'],
+                        total: news.totalCount,
+                        onShowSizeChange: this.onShowSizeChange,
+                        onChange: this.onChange,
+                    }}
+                    dataSource={news.resultList}
+                    columns={columns}
+                />
             </Card>
         )
     }
