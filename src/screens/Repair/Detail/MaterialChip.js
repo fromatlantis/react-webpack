@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react'
 
-import { Button, Select, InputNumber, Table } from 'antd'
+import { Button, Select, InputNumber, Table, message } from 'antd'
 import { FormView } from 'components'
 // redux
 import { connect } from 'react-redux'
@@ -35,8 +35,16 @@ class MaterialChip extends PureComponent {
     }
     addMaterial = () => {
         const { form } = this.wrappedForm.props
-        //console.log(form.getFieldsValue())
-        this.props.addMaterial(form.getFieldsValue())
+        const { name, count, price } = form.getFieldsValue()
+        if (!name) {
+            message.error('请选择物料')
+        } else if (!count) {
+            message.error('请填写数量')
+        } else if (!price) {
+            message.error('请填写价格')
+        } else {
+            this.props.addMaterial(form.getFieldsValue())
+        }
     }
     remove = index => {
         this.props.removeMaterial(index)
@@ -46,7 +54,23 @@ class MaterialChip extends PureComponent {
             this.tiggerChange(nextProps.materials)
         }
     }
-
+    changeMaterial = value => {
+        if (value) {
+            const arr = value.split('-')
+            if (arr.length === 2) {
+                const name = arr[0]
+                const size = arr[1]
+                const material = this.props.MaterialList.filter(
+                    item => item.name === name && item.size === size,
+                )
+                const { form } = this.wrappedForm.props
+                form.setFieldsValue({
+                    count: 1,
+                    price: material[0].price,
+                })
+            }
+        }
+    }
     tiggerChange = materials => {
         const { onChange } = this.props
         if (onChange) {
@@ -64,6 +88,7 @@ class MaterialChip extends PureComponent {
                         style={{ width: 160 }}
                         showSearch
                         placeholder="请选择物料"
+                        onChange={this.changeMaterial}
                         optionFilterProp="children"
                         filterOption={(input, option) =>
                             option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -76,6 +101,11 @@ class MaterialChip extends PureComponent {
                         ))}
                     </Select>
                 ),
+                rules: [
+                    {
+                        required: true,
+                    },
+                ],
             },
             {
                 label: '数量',
@@ -85,7 +115,7 @@ class MaterialChip extends PureComponent {
             {
                 label: '单价（元）',
                 field: 'price',
-                component: <InputNumber min={1} />,
+                component: <InputNumber min={0} />,
             },
         ]
         const columns = [

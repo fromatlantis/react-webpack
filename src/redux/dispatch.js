@@ -235,8 +235,8 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
+                    message.success('撤回成功') //放在put后面会不提示信息
                     yield put(actions('myDispatchList')())
-                    message.success('撤回成功')
                 }
             },
         },

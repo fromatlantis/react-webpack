@@ -2,4 +2,5 @@
     height: 260px; 
     display: flex; 
     margin-bottom: 15px;
+    /* flex-direction: column; */
 }

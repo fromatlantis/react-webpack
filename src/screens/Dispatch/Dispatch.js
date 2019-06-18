@@ -4,6 +4,7 @@ import { MenuLayout } from 'components'
 
 import Order from './Order/Order'
 import Work from './Work/Work'
+import Detail from '../Repair/Detail/Detail'
 
 const menu = [
     {
@@ -17,6 +18,13 @@ const menu = [
         icon: '',
         path: '/dispatch/work',
         component: Work,
+    },
+    {
+        title: '派工详情',
+        icon: '',
+        display: 'none',
+        path: '/dispatch/detail/:id/:type',
+        component: Detail,
     },
 ]
 export default class Dispatch extends PureComponent {

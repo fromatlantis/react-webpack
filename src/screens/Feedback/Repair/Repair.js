@@ -171,7 +171,7 @@ class Repair extends PureComponent {
                 align: 'center',
                 render: (_, record) => (
                     <div>
-                        <Link to={`/repair/detail/${record.repairId}/feedback`}>
+                        <Link to={`/feedback/detail/${record.repairId}/feedback`}>
                             {record.repairStatus === '1' ? '反馈' : '查看'}
                         </Link>
                         {record.repairStatus === '1' &&

@@ -180,7 +180,7 @@ class Work extends PureComponent {
                 align: 'center',
                 render: (_, record) => (
                     <Fragment>
-                        <Link to={`/repair/detail/${record.repairId}/dispatch`}>详情</Link>
+                        <Link to={`/dispatch/detail/${record.repairId}/dispatch`}>详情</Link>
                         {moment().diff(moment(record.dispatchTime), 'minutes') <= 15 && (
                             <Button
                                 type="link"
