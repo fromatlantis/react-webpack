@@ -6,6 +6,7 @@ import { effects as dispatchEffects } from './dispatch'
 import { effects as feedbackEffects } from './feedback'
 import { effects as configuration } from './configuration'
 import { effects as materialManagerEffects } from './materialManager'
+import { effects as meterEffects } from './meter'
 // 监听action的调用，然后调用异步generate函数
 export function* watchFetchData() {
     yield all([
@@ -15,5 +16,6 @@ export function* watchFetchData() {
         ...feedbackEffects,
         ...configuration,
         ...materialManagerEffects,
+        ...meterEffects,
     ])
 }

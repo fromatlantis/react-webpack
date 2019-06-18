@@ -1,29 +1,27 @@
 import React, { PureComponent } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Alert, Button, Card, DatePicker, Divider, Input, Select, Table } from 'antd'
+import { Alert, Button, Card, DatePicker, Divider, Input, Select, Table, Modal } from 'antd'
 import { FormView } from 'components'
-
+import MeterForm from './MeterForm'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { actions } from 'reduxDir/feedback'
-import { actions as dispatchActions } from 'reduxDir/dispatch'
-import { actions as repairActions } from 'reduxDir/repair'
+import { actions } from 'reduxDir/meter'
 
 const { Option } = Select
 const { MonthPicker } = DatePicker
 
 const mapStateToProps = state => {
     return {
-        feedback: state.feedback.feedback,
-        searchParams: state.feedback.searchParams,
+        meter: state.meter.meter,
+        searchParams: state.meter.searchParams,
     }
 }
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
-            getFeedbackList: actions('getFeedbackList'),
+            getMeterList: actions('getMeterList'),
         },
         dispatch,
     )
@@ -33,10 +31,12 @@ const mapDispatchToProps = dispatch => {
     mapDispatchToProps,
 )
 class Manage extends PureComponent {
-    componentDidMount() {
-        this.props.getFeedbackList()
+    state = {
+        newModal: false,
     }
-
+    componentDidMount() {
+        this.props.getMeterList()
+    }
     renderForm = () => {
         const items = [
             {
@@ -82,37 +82,48 @@ class Manage extends PureComponent {
             />
         )
     }
+    // 新增
+    newModal = () => {
+        this.setState({
+            newModal: true,
+        })
+    }
+    newModalOk = () => {
+        this.setState({
+            newModal: false,
+        })
+    }
+    newModalCancel = () => {
+        this.setState({
+            newModal: false,
+        })
+    }
     render() {
         const columns = [
             {
-                title: '故障描述',
-                dataIndex: 'faultDesc',
-                key: 'faultDesc',
+                title: '表编号',
+                dataIndex: 'meterNo',
+                key: 'meterNo',
             },
             {
-                title: '派工时间',
-                dataIndex: 'dispatchTime',
-                key: 'dispatchTime',
+                title: '表类型',
+                dataIndex: 'category',
+                key: 'category',
             },
             {
-                title: '报修类型',
-                dataIndex: 'categories',
-                key: 'categories',
+                title: '抄表周期',
+                dataIndex: 'cycle',
+                key: 'cycle',
             },
             {
-                title: '工单状态',
-                dataIndex: 'statusName',
-                key: 'statusName',
+                title: '截止时间',
+                dataIndex: 'deadlineDay',
+                key: 'deadlineDay',
             },
             {
-                title: '评价',
-                dataIndex: 'evaluateLevel',
-                key: 'evaluateLevel',
-            },
-            {
-                title: '状态',
-                dataIndex: 'status',
-                key: 'status',
+                title: '安装位置',
+                dataIndex: 'location',
+                key: 'location',
             },
             {
                 title: '操作',
@@ -121,14 +132,24 @@ class Manage extends PureComponent {
                 align: 'center',
                 render: (_, record) => (
                     <div>
-                        <Link to={`/repair/detail/${record.repairId}/feedback`}>
-                            {record.repairStatus === '1' ? '反馈' : '查看'}
+                        <Link to={`/energy/manage/${record.id}`}>
+                            <Button type="link" size="small">
+                                详情
+                            </Button>
                         </Link>
+                        <Link to={`/repair/detail/${record.id}`}>
+                            <Button type="link" size="small">
+                                修改
+                            </Button>
+                        </Link>
+                        <Button type="link" size="small">
+                            删除
+                        </Button>
                     </div>
                 ),
             },
         ]
-        const { feedback, searchParams } = this.props
+        const { meter, searchParams } = this.props
         return (
             <Card bordered={false}>
                 <div>
@@ -138,7 +159,7 @@ class Manage extends PureComponent {
                             查询
                         </Button>
                         <Divider type="vertical" />
-                        <Button type="primary" onClick={this.search}>
+                        <Button type="primary" onClick={this.newModal}>
                             新增
                         </Button>
                         <Divider type="vertical" />
@@ -157,23 +178,31 @@ class Manage extends PureComponent {
                 </div>
                 <Alert
                     style={{ margin: '10px 0' }}
-                    message={`共${feedback.totalCount || 0}条数据`}
+                    message={`共${meter.totalCount || 0}条数据`}
                     type="info"
                     showIcon
                 />
                 <Table
-                    dataSource={feedback.list}
+                    dataSource={meter.list}
                     columns={columns}
                     pagination={{
                         current: searchParams.pageNo,
                         showSizeChanger: true,
                         showQuickJumper: true,
                         pageSizeOptions: ['10', '20', '30'],
-                        total: feedback.totalCount,
+                        total: meter.totalCount,
                         onShowSizeChange: this.onShowSizeChange,
                         onChange: this.onPageChange,
                     }}
                 />
+                <Modal
+                    title="新增设备"
+                    visible={this.state.newModal}
+                    onOk={this.newModalOk}
+                    onCancel={this.newModalCancel}
+                >
+                    <MeterForm />
+                </Modal>
             </Card>
         )
     }

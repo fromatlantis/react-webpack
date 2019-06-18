@@ -7,6 +7,7 @@ import dispatch from './dispatch'
 import feedback from './feedback'
 import configuration from './configuration'
 import materialManager from './materialManager'
+import meter from './meter'
 
 export default history =>
     combineReducers({
@@ -17,4 +18,5 @@ export default history =>
         feedback,
         configuration,
         materialManager,
+        meter,
     })

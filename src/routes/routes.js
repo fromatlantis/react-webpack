@@ -44,20 +44,20 @@ const routes = [
             loading: Loading,
         }),
     },
-    // {
-    //     path: '/energy',
-    //     name: '能耗管理',
-    //     role: '能耗管理',
-    //     icon: 'appstore',
-    //     navAttr: {
-    //         index: 1,
-    //         role: 'energy',
-    //     },
-    //     component: Loadable({
-    //         loader: () => import(/* webpackChunkName: "energy" */ '../screens/Energy/Energy'),
-    //         loading: Loading,
-    //     }),
-    // },
+    {
+        path: '/energy',
+        name: '能耗管理',
+        role: '能耗管理',
+        icon: 'appstore',
+        navAttr: {
+            index: 1,
+            role: 'energy',
+        },
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "energy" */ '../screens/Energy/Energy'),
+            loading: Loading,
+        }),
+    },
     {
         path: '/material',
         name: '物料管理',
