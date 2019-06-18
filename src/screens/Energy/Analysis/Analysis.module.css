@@ -1,6 +1,11 @@
 .chartBox {
-    height: 260px; 
+    height: 290px; 
     display: flex; 
     margin-bottom: 15px;
-    /* flex-direction: column; */
+    background-color: #fff;
+    flex-direction: column;
+}
+.chartTitle {
+    padding: 10px 10px 0 10px;
+    font-size: 16px;
 }

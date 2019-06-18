@@ -64,10 +64,10 @@ export default class LineChart extends PureComponent {
                 // },
             },
             grid: {
-                top: 45,
+                top: 10,
+                right: 10,
                 left: 10,
-                right: 30,
-                bottom: 0,
+                bottom: 10,
                 containLabel: true,
             },
             xAxis: [

@@ -87,7 +87,7 @@ export default class BarChart extends PureComponent {
                 top: 5,
             },
             grid: {
-                top: 35,
+                top: 10,
                 right: 10,
                 left: 10,
                 bottom: 10,

@@ -66,12 +66,13 @@ export default class PieChart extends PureComponent {
             // },
             legend: {
                 bottom: 0,
-                left: 'center',
+                orient: 'vertical',
+                left: 'left',
                 itemWidth: 10,
                 data: names,
             },
             grid: {
-                top: 35,
+                top: 10,
                 right: 10,
                 left: 10,
                 bottom: 10,
