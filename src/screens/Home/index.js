@@ -225,7 +225,7 @@ class Home extends PureComponent {
                                         注册资本：{list[i].reg_capital}
                                     </p>
                                     <p className={styles.columnItem}>
-                                        电弧：{list[i].phone_number}
+                                        电话：{list[i].phone_number}
                                     </p>
                                     <p className={styles.columnItem}>
                                         所属行业：{list[i].industry}
