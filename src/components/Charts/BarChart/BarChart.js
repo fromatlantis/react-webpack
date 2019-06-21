@@ -23,7 +23,13 @@ export default class BarChart extends PureComponent {
     initChart = () => {
         let { data, fullLabel, title, direction } = this.props,
             cValues
-        let { names, values } = data
+        let names = [],
+            values = []
+        data.map(x => {
+            names.push(x.name)
+            values.push(x.value)
+            return true
+        })
         // 分类轴
         let categoryOption = {
             type: 'category',

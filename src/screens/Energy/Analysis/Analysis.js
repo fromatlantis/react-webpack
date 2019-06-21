@@ -1,22 +1,91 @@
 import React, { PureComponent } from 'react'
 
 import { Card, Divider, Row, Col, Statistic, Icon, List, Select, Form } from 'antd'
-
+import { IconFont } from 'components'
 import { BarChart, PieChart, LineChart } from 'components/Charts'
 import styles from './Analysis.module.css'
 
-const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-    'Los Angeles battles huge wildfires.',
-]
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/meterAnalysis'
+
 const { Option } = Select
 
-export default class Analysis extends PureComponent {
+const mapStateToProps = state => {
+    return {
+        latestConsumption: state.meterAnalysis.latestConsumption.map(item => ({
+            name: item.month,
+            value: item.value,
+        })),
+        consumption: state.meterAnalysis.consumption,
+        topList: state.meterAnalysis.topList,
+        taskStatus: state.meterAnalysis.taskStatus,
+        latestTask: state.meterAnalysis.latestTask,
+        warnings: state.meterAnalysis.warnings,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getLatestConsumption: actions('getLatestConsumption'),
+            getConsumptionDistribution: actions('getConsumptionDistribution'),
+            getConsumptionTopList: actions('getConsumptionTopList'),
+            getTaskStatus: actions('getTaskStatus'),
+            getLatestTask: actions('getLatestTask'),
+            consumptionWarning: actions('consumptionWarning'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Analysis extends PureComponent {
+    state = {
+        category: 'water',
+        range: '1',
+    }
+    componentDidMount() {
+        const { category, range } = this.state
+        this.getChartData({ category, range })
+        this.props.getTaskStatus()
+        this.props.getLatestTask()
+        this.props.consumptionWarning()
+    }
+    getChartData = params => {
+        const { category, range } = params
+        this.props.getLatestConsumption({
+            category,
+            range,
+        })
+        this.props.getConsumptionDistribution({
+            category,
+            range,
+        })
+        this.props.getConsumptionTopList({
+            category,
+            range,
+            limit: 10,
+        })
+    }
+    categoryChange = category => {
+        const { range } = this.state
+        this.getChartData({ category, range })
+        this.setState({
+            category,
+        })
+    }
+    rangeChange = range => {
+        const { category } = this.state
+        this.getChartData({ category, range })
+        this.setState({
+            range,
+        })
+    }
     render() {
+        const { taskStatus } = this.props
         return (
             <Card bordered={false} style={{ background: '#f0f2f5' }}>
                 <Row gutter={16}>
@@ -26,18 +95,24 @@ export default class Analysis extends PureComponent {
                                 <Select
                                     placeholder="表类型"
                                     style={{ width: 160 }}
-                                    defaultValue="2"
+                                    defaultValue={this.state.category}
+                                    onChange={this.categoryChange}
                                 >
-                                    <Option value="2">水表</Option>
-                                    <Option value="3">电表</Option>
-                                    <Option value="4">燃气表</Option>
+                                    <Option value="water">水表</Option>
+                                    <Option value="ammeter">电表</Option>
+                                    <Option value="fuelgas">燃气表</Option>
                                 </Select>
                             </Form.Item>
                             <Form.Item label="时间">
-                                <Select placeholder="时间" style={{ width: 160 }} defaultValue="2">
-                                    <Option value="2">近一季度</Option>
-                                    <Option value="3">近半年</Option>
-                                    <Option value="4">近一年</Option>
+                                <Select
+                                    placeholder="时间"
+                                    style={{ width: 160 }}
+                                    defaultValue={this.state.range}
+                                    onChange={this.rangeChange}
+                                >
+                                    <Option value="1">近一季度</Option>
+                                    <Option value="2">近半年</Option>
+                                    <Option value="3">近一年</Option>
                                 </Select>
                             </Form.Item>
                         </Form>
@@ -49,9 +124,7 @@ export default class Analysis extends PureComponent {
                                 />
                                 园区能耗趋势
                             </div>
-                            <LineChart
-                                data={{ names: ['1', '2', 3], values: ['11', '22', '33'] }}
-                            />
+                            <LineChart data={this.props.latestConsumption} />
                         </div>
                         <div className={styles.chartBox}>
                             <div className={styles.chartTitle}>
@@ -61,13 +134,7 @@ export default class Analysis extends PureComponent {
                                 />
                                 用量分布
                             </div>
-                            <PieChart
-                                data={[
-                                    { name: '1', value: '11' },
-                                    { name: '2', value: '22' },
-                                    { name: '3', value: '33' },
-                                ]}
-                            />
+                            <PieChart data={this.props.consumption} />
                         </div>
                         <div className={styles.chartBox}>
                             <div className={styles.chartTitle}>
@@ -77,7 +144,7 @@ export default class Analysis extends PureComponent {
                                 />
                                 用量排名
                             </div>
-                            <BarChart data={{ names: ['1', '2', 3], values: ['11', '22', '33'] }} />
+                            <BarChart data={this.props.topList} />
                         </div>
                     </Col>
                     <Col span={12}>
@@ -85,23 +152,25 @@ export default class Analysis extends PureComponent {
                             <Col span={8} style={{ textAlign: 'center' }}>
                                 <Statistic
                                     title="抄表任务/项"
-                                    value={1128}
+                                    value={taskStatus.task}
                                     valueStyle={{ color: '#4098FF' }}
-                                    prefix={<Icon type="like" />}
+                                    prefix={<IconFont type="iconriji" />}
                                 />
                             </Col>
                             <Col span={8} style={{ textAlign: 'center' }}>
                                 <Statistic
                                     title="已抄表数/项"
-                                    value={93}
+                                    value={taskStatus.taskDone}
                                     valueStyle={{ color: '#FF7792' }}
+                                    prefix={<Icon type="like" />}
                                 />
                             </Col>
                             <Col span={8} style={{ textAlign: 'center' }}>
                                 <Statistic
                                     title="未抄表数/项"
-                                    value={93}
+                                    value={taskStatus.taskToDo}
                                     valueStyle={{ color: '#BC79F9' }}
+                                    prefix={<IconFont type="iconweiwancheng" />}
                                 />
                             </Col>
                         </Row>
@@ -115,8 +184,23 @@ export default class Analysis extends PureComponent {
                             </div>
                             <List
                                 style={{ padding: '10px' }}
-                                dataSource={data}
-                                renderItem={item => <List.Item>{item}</List.Item>}
+                                dataSource={this.props.latestTask}
+                                renderItem={item => (
+                                    <List.Item>
+                                        <div style={{ display: 'flex', width: '100%' }}>
+                                            <div
+                                                style={{
+                                                    flex: 1,
+                                                    textAlign: 'right',
+                                                    padding: '0 20px',
+                                                }}
+                                            >
+                                                {item.description}
+                                            </div>
+                                            <div>{item.time}</div>
+                                        </div>
+                                    </List.Item>
+                                )}
                             />
                         </div>
                         <div style={{ backgroundColor: '#fff', marginTop: '15px' }}>
@@ -129,8 +213,26 @@ export default class Analysis extends PureComponent {
                             </div>
                             <List
                                 style={{ padding: '10px' }}
-                                dataSource={data}
-                                renderItem={item => <List.Item>{item}</List.Item>}
+                                dataSource={this.props.warnings}
+                                renderItem={item => (
+                                    <List.Item>
+                                        <div style={{ display: 'flex', width: '100%' }}>
+                                            <div>
+                                                <b>{item.meter}</b>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    flex: 1,
+                                                    textAlign: 'right',
+                                                    padding: '0 20px',
+                                                }}
+                                            >
+                                                {item.description}
+                                            </div>
+                                            <div>{item.time}</div>
+                                        </div>
+                                    </List.Item>
+                                )}
                             />
                         </div>
                     </Col>
@@ -139,3 +241,4 @@ export default class Analysis extends PureComponent {
         )
     }
 }
+export default Analysis

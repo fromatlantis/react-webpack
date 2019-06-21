@@ -34,13 +34,28 @@ class ManageDetail extends PureComponent {
 
     render() {
         const { meterDetail } = this.props
+        const categoryStr = {
+            water: '水表',
+            ammeter: '电表',
+            fuelgas: '燃气表',
+        }
+        const areaType = {
+            '1': '公区',
+            '2': '企业',
+            '3': '个人',
+            '4': '其他',
+        }
         return (
             <Card bordered={false}>
                 <Descriptions column={2}>
-                    <Descriptions.Item label="表类型">{meterDetail.category}</Descriptions.Item>
+                    <Descriptions.Item label="表类型">
+                        {categoryStr[meterDetail.category]}
+                    </Descriptions.Item>
                     <Descriptions.Item label="表编号">{meterDetail.meterNo}</Descriptions.Item>
                     <Descriptions.Item label="安装地址">{meterDetail.location}</Descriptions.Item>
-                    <Descriptions.Item label="类型">{meterDetail.areaType}</Descriptions.Item>
+                    <Descriptions.Item label="类型">
+                        {areaType[meterDetail.areaType]}
+                    </Descriptions.Item>
                     <Descriptions.Item label="企业名称">
                         {meterDetail.customerName}
                     </Descriptions.Item>

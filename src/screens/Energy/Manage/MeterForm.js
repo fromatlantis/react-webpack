@@ -10,6 +10,13 @@ export default class MeterForm extends PureComponent {
             areaType: 1,
         },
     }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.meterDetail !== nextProps.meterDetail) {
+            this.setState({
+                values: nextProps.meterDetail,
+            })
+        }
+    }
     areaTypeChange = e => {
         const { form } = this.wrappedForm.props
         this.setState({
@@ -28,9 +35,9 @@ export default class MeterForm extends PureComponent {
                 field: 'category',
                 component: (
                     <Select placeholder="表类型" style={{ width: 160 }}>
-                        <Option value="2">水表</Option>
-                        <Option value="3">电表</Option>
-                        <Option value="4">燃气表</Option>
+                        <Option value="water">水表</Option>
+                        <Option value="ammeter">电表</Option>
+                        <Option value="fuelgas">燃气表</Option>
                     </Select>
                 ),
                 rules: [
@@ -122,7 +129,8 @@ export default class MeterForm extends PureComponent {
                 rules: [
                     {
                         required: true,
-                        message: '请填写联系电话',
+                        pattern: /^1\d{10}$/,
+                        message: '请填写正确的联系电话',
                     },
                 ],
             },
@@ -142,8 +150,10 @@ export default class MeterForm extends PureComponent {
             labelCol: { span: 5 },
             wrapperCol: { span: 14 },
         }
+        const { forwardedRef } = this.props //传递ref
         return (
             <FormView
+                ref={forwardedRef}
                 wrappedComponentRef={ref => {
                     this.wrappedForm = ref
                 }}

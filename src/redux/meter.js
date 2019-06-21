@@ -44,7 +44,6 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     url: '/property/getMeterDetail',
-                    contentType: 'multipart/form-data',
                     data: action.payload,
                 })
                 if (res.code === 1000) {
@@ -61,6 +60,77 @@ const model = {
         {
             name: 'getMeterDetailOK',
             reducer: 'meterDetail',
+        },
+        {
+            name: 'addMeter',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: '/property/addMeter',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('添加成功')
+                    yield put(actions('getMeterList')())
+                }
+            },
+        },
+        {
+            name: 'updateMeter',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: '/property/updateMeter',
+                    type: 'post',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('修改成功')
+                    yield put(actions('getMeterList')())
+                }
+            },
+        },
+        {
+            name: 'deleteMeter',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: '/property/deleteMeter',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('删除成功')
+                    yield put(actions('getMeterList')())
+                }
+            },
+        },
+        {
+            name: 'leadInMeters',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    contentType: 'multipart/form-data',
+                    url: '/property/leadInMeters',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('导入成功')
+                    yield put(actions('getMeterList')())
+                }
+            },
+        },
+        {
+            name: 'meterSet',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    contentType: 'multipart/form-data',
+                    url: '/property/meterSet',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('设置成功')
+                    yield put(actions('getMeterList')())
+                }
+            },
         },
     ],
 }

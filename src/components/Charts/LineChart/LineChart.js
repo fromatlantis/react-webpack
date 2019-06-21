@@ -41,9 +41,14 @@ export default class LineChart extends PureComponent {
         })
     }
     setOption = data => {
-        let { names, values } = data
         let { title, styleFlge, unit } = this.props
-
+        let names = [],
+            values = []
+        data.map(x => {
+            names.push(x.name)
+            values.push(x.value)
+            return true
+        })
         var option = {
             title: {
                 text: title,
