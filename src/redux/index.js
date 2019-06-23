@@ -9,6 +9,7 @@ import configuration from './configuration'
 import materialManager from './materialManager'
 import meter from './meter'
 import meterAnalysis from './meterAnalysis'
+import meterRecord from './meterRecord'
 
 export default history =>
     combineReducers({
@@ -21,4 +22,5 @@ export default history =>
         materialManager,
         meter,
         meterAnalysis,
+        meterRecord,
     })

@@ -92,6 +92,7 @@ class Manage extends PureComponent {
     search = () => {
         const { form } = this.wrappedForm.props
         const values = form.getFieldsValue()
+        values.pageNo = 1
         this.props.getMeterList(values)
     }
     reset = () => {

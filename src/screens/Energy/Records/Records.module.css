@@ -1,0 +1,11 @@
+.areaType {
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+.stepCard {
+    margin-top: 16px;
+    padding: 0 15px;
+    border-radius: 6px;
+    background-color: #fafafa;
+}

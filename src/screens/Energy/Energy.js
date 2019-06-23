@@ -4,6 +4,7 @@ import { MenuLayout } from 'components'
 
 import Analysis from './Analysis/Analysis'
 import Records from './Records/Records'
+import RecordCreate from './RecordCreate/RecordCreate'
 import RecordDetail from './RecordDetail/RecordDetail'
 import Manage from './Manage/Manage'
 import ManageDetail from './ManageDetail/ManageDetail'
@@ -20,6 +21,13 @@ const menu = [
         icon: '',
         path: '/energy/record',
         component: Records,
+    },
+    {
+        title: '新增记录',
+        icon: '',
+        display: 'none',
+        path: '/energy/newRecord',
+        component: RecordCreate,
     },
     {
         title: '抄表详情',

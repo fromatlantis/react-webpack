@@ -4,11 +4,11 @@ import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
 const model = {
-    namespace: 'meter',
+    namespace: 'meterRecord',
     state: {
-        meter: {},
-        meterDetail: {},
-        meterNos: [], //根据类型获取表编号
+        records: {},
+        recordDetail: {},
+        taskDetail: {}, //获取上期读数
         searchParams: {
             pageNo: 1,
             pageSize: 10,
@@ -16,7 +16,7 @@ const model = {
     },
     actions: [
         {
-            name: 'getMeterList',
+            name: 'getMeterRecordList',
             reducer: (state, action) => {
                 return {
                     ...state,
@@ -24,144 +24,117 @@ const model = {
                 }
             },
             *effect(action) {
-                const params = yield select(rootState => rootState.meter.searchParams)
+                const params = yield select(rootState => rootState.meterRecord.searchParams)
                 const res = yield call(request, {
                     type: 'post',
-                    url: '/property/getMeterList',
+                    url: '/property/getMeterRecordList',
                     contentType: 'multipart/form-data',
                     data: params,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getMeterListOK')(res.data))
+                    yield put(actions('getMeterRecordListOK')(res.data))
                 }
             },
         },
         {
-            name: 'getMeterListOK',
-            reducer: 'meter',
+            name: 'getMeterRecordListOK',
+            reducer: 'records',
         },
         {
-            name: 'getMeterDetail',
+            name: 'getRecordDetail',
             *effect(action) {
-                console.log(action.payload)
                 const res = yield call(request, {
-                    url: '/property/getMeterDetail',
+                    url: '/property/getRecordDetail',
                     data: action.payload,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getMeterDetailOK')(res.data))
+                    yield put(actions('getRecordDetailOK')(res.data))
                 }
             },
             reducer: (state, action) => {
                 return {
                     ...state,
-                    meterDetail: {},
+                    recordDetail: {},
                 }
             },
         },
         {
-            name: 'getMeterDetailOK',
-            reducer: 'meterDetail',
+            name: 'getRecordDetailOK',
+            reducer: 'recordDetail',
         },
         {
-            name: 'addMeter',
+            name: 'saveRecord',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: '/property/addMeter',
+                    contentType: 'multipart/form-data',
+                    url: '/property/saveRecord',
                     data: action.payload,
                 })
                 if (res.code === 1000) {
-                    message.success('添加成功')
-                    yield put(actions('getMeterList')())
+                    message.success('保存成功')
+                    yield put(push('/energy/record'))
                 }
             },
         },
         {
-            name: 'updateMeter',
+            name: 'delRecord',
             *effect(action) {
                 const res = yield call(request, {
-                    url: '/property/updateMeter',
-                    type: 'post',
-                    data: action.payload,
-                })
-                if (res.code === 1000) {
-                    message.success('修改成功')
-                    yield put(actions('getMeterList')())
-                }
-            },
-        },
-        {
-            name: 'deleteMeter',
-            *effect(action) {
-                const res = yield call(request, {
-                    url: '/property/deleteMeter',
+                    url: '/property/delRecord',
                     data: action.payload,
                 })
                 if (res.code === 1000) {
                     message.success('删除成功')
-                    yield put(actions('getMeterList')())
+                    yield put(actions('getMeterRecordList')())
                 }
             },
         },
         {
-            name: 'leadInMeters',
+            name: 'loadRecords',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
                     contentType: 'multipart/form-data',
-                    url: '/property/leadInMeters',
+                    url: '/property/loadRecords',
                     data: action.payload,
                 })
                 if (res.code === 1000) {
                     message.success('导入成功')
-                    yield put(actions('getMeterList')())
+                    yield put(actions('getMeterRecordList')())
                 }
             },
         },
         {
-            name: 'meterSet',
+            name: 'getReadingTaskDetail',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
+                    url: '/property/getReadingTaskDetail',
                     contentType: 'multipart/form-data',
-                    url: '/property/meterSet',
                     data: action.payload,
                 })
                 if (res.code === 1000) {
-                    message.success('设置成功')
-                    yield put(actions('getMeterList')())
+                    yield put(actions('getReadingTaskDetailOK')(res.data))
                 }
             },
-        },
-        {
-            name: 'getMeterNoByCategory',
             reducer: (state, action) => {
                 return {
                     ...state,
-                    meterDetail: {},
-                }
-            },
-            *effect(action) {
-                const res = yield call(request, {
-                    url: '/property/getMeterNoByCategory',
-                    data: action.payload,
-                })
-                if (res.code === 1000) {
-                    yield put(actions('getMeterNoByCategoryOK')(res.data))
+                    taskDetail: {},
                 }
             },
         },
         {
-            name: 'getMeterNoByCategoryOK',
-            reducer: 'meterNos',
+            name: 'getReadingTaskDetailOK',
+            reducer: 'taskDetail',
         },
     ],
 }
-const meter = blaze(model)
+const meterRecord = blaze(model)
 // reducer combineReducers使用
-export default meter.reducers
+export default meterRecord.reducers
 // action connect组件使用
-export const actions = meter.actions
+export const actions = meterRecord.actions
 // effects saga监听副作用函数使用
-export const effects = meter.effects
+export const effects = meterRecord.effects

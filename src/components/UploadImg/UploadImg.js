@@ -78,22 +78,24 @@ class UploadImg extends Component {
         const { imageUrl } = this.state
         //console.log(imageUrl)
         return (
-            <Upload
-                accept="image/*"
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                //action="//jsonplaceholder.typicode.com/posts/"
-                beforeUpload={this.beforeUpload}
-                onChange={this.handleChange}
-            >
-                {imageUrl ? (
-                    <img src={imageUrl} style={{ width: 120 }} alt="avatar" />
-                ) : (
-                    uploadButton
-                )}
-            </Upload>
+            <div style={this.props.style}>
+                <Upload
+                    accept="image/*"
+                    name="avatar"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    showUploadList={false}
+                    //action="//jsonplaceholder.typicode.com/posts/"
+                    beforeUpload={this.beforeUpload}
+                    onChange={this.handleChange}
+                >
+                    {imageUrl ? (
+                        <img src={imageUrl} style={{ width: 120 }} alt="avatar" />
+                    ) : (
+                        uploadButton
+                    )}
+                </Upload>
+            </div>
         )
     }
 }

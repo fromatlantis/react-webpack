@@ -191,8 +191,6 @@ class Analysis extends PureComponent {
                                             <div
                                                 style={{
                                                     flex: 1,
-                                                    textAlign: 'right',
-                                                    padding: '0 20px',
                                                 }}
                                             >
                                                 {item.description}
