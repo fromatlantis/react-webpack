@@ -213,11 +213,6 @@ class Records extends PureComponent {
                 key: 'category',
             },
             {
-                title: '报修类型',
-                dataIndex: 'categories',
-                key: 'categories',
-            },
-            {
                 title: '月份',
                 dataIndex: 'deadline',
                 key: 'deadline',
