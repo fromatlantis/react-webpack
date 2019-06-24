@@ -74,7 +74,7 @@ class RecordCreate extends PureComponent {
             values.transcriberId = values.transcriber.split('-')[1]
             values.transcriberName = values.transcriber.split('-')[0]
             // 时间
-            values.readingTime = values.readingTime.format('YYYY-MM-DD HH:mm:ss')
+            values.readingTime = values.readingTime.format('YYYY-MM-DD HH:mm')
             this.props.saveRecord(values)
         } else {
             message.error('请选择表编号')
@@ -220,7 +220,7 @@ class RecordCreate extends PureComponent {
                 label: '抄表时间',
                 field: 'readingTime',
                 initialValue: moment(),
-                component: <DatePicker showTime />,
+                component: <DatePicker showTime format="YYYY-MM-DD HH:mm" />,
             },
             {
                 label: '抄表说明',
