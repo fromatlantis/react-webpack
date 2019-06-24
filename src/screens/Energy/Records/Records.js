@@ -305,10 +305,10 @@ class Records extends PureComponent {
                         <Link to="/energy/newRecord">
                             <Button type="primary">新增</Button>
                         </Link>
-                        <Divider type="vertical" />
+                        {/* <Divider type="vertical" />
                         <Button type="primary" onClick={this.importModal}>
                             导入
-                        </Button>
+                        </Button> */}
                     </div>
                 </div>
                 <Alert
