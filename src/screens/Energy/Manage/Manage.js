@@ -178,7 +178,7 @@ class Manage extends PureComponent {
     setModal = () => {
         const { selectedRowKeys } = this.state
         if (selectedRowKeys.length === 0) {
-            message.error('请选择需要设置的内容')
+            message.error('至少选择一条数据')
         } else {
             this.setState({
                 setModal: true,
@@ -365,15 +365,19 @@ class Manage extends PureComponent {
                         >
                             修改
                         </Button>
-                        <Button
-                            type="link"
-                            size="small"
-                            onClick={() => {
+                        <Popconfirm
+                            placement="topRight"
+                            title="此设备信息会被删除，但不会删除抄表记录。确定要删除吗？"
+                            onConfirm={() => {
                                 this.props.deleteMeter({ id: record.id })
                             }}
+                            okText="确定"
+                            cancelText="取消"
                         >
-                            删除
-                        </Button>
+                            <Button type="link" size="small">
+                                删除
+                            </Button>
+                        </Popconfirm>
                     </div>
                 ),
             },

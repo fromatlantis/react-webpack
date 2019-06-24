@@ -1,3 +1,8 @@
+.searchCard {
+    & :global .ant-form-inline .ant-form-item{
+        width: 260px
+    }
+}
 .areaType {
     text-align: center;
     padding-top: 15px;

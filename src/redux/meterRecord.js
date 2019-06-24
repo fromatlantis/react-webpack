@@ -3,6 +3,8 @@ import { push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
+import { APPID } from '../config'
+import moment from 'moment'
 const model = {
     namespace: 'meterRecord',
     state: {
@@ -13,6 +15,7 @@ const model = {
             pageNo: 1,
             pageSize: 10,
         },
+        meterUsers: [],
     },
     actions: [
         {
@@ -24,7 +27,13 @@ const model = {
                 }
             },
             *effect(action) {
-                const params = yield select(rootState => rootState.meterRecord.searchParams)
+                const params = {
+                    ...(yield select(rootState => rootState.meterRecord.searchParams)),
+                }
+                if (params.beginMonth && params.endMonth) {
+                    params.beginMonth = moment(params.beginMonth).format('YYYY-MM')
+                    params.endMonth = moment(params.endMonth).format('YYYY-MM')
+                }
                 const res = yield call(request, {
                     type: 'post',
                     url: '/property/getMeterRecordList',
@@ -81,6 +90,8 @@ const model = {
             name: 'delRecord',
             *effect(action) {
                 const res = yield call(request, {
+                    type: 'post',
+                    contentType: 'multipart/form-data',
                     url: '/property/delRecord',
                     data: action.payload,
                 })
@@ -128,6 +139,29 @@ const model = {
         {
             name: 'getReadingTaskDetailOK',
             reducer: 'taskDetail',
+        },
+        // 获取抄表人员
+        {
+            name: 'getUsersByAuth',
+            *effect(action) {
+                const user = yield select(rootState => rootState.authUser.user)
+                const data = {
+                    companyId: user.company_id,
+                    authStr: action.payload,
+                    appIdendity: APPID,
+                }
+                const res = yield call(request, {
+                    url: `/jurisdiction/getUsersByAuth`,
+                    data: data,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('getUsersByAuthOK')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getUsersByAuthOK',
+            reducer: 'meterUsers',
         },
     ],
 }

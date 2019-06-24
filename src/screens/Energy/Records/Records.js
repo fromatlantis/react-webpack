@@ -13,6 +13,7 @@ import {
     Table,
     Input,
     Upload,
+    Popconfirm,
     message,
 } from 'antd'
 import { FormView, IconFont } from 'components'
@@ -52,6 +53,7 @@ const mapDispatchToProps = dispatch => {
         {
             getMeterRecordList: actions('getMeterRecordList'),
             getRecordDetail: actions('getRecordDetail'),
+            delRecord: actions('delRecord'),
         },
         dispatch,
     )
@@ -71,12 +73,20 @@ class Records extends PureComponent {
         },
     }
     componentDidMount() {
-        this.props.getMeterRecordList()
+        this.props.getMeterRecordList({ column: 'readingTime', sort: 'desc' })
     }
     // 查询
     search = () => {
         const { form } = this.wrappedForm.props
         const values = form.getFieldsValue()
+        if (values.beginMonth && values.endMonth) {
+            if (values.beginMonth.isBefore(values.endMonth)) {
+                // values.beginMonth = values.beginMonth.format('YYYY-MM')
+                // values.endMonth = values.endMonth.format('YYYY-MM')
+            } else {
+                message.error('开始月份不能晚于结束月份')
+            }
+        }
         values.pageNo = 1
         this.props.getMeterRecordList(values)
     }
@@ -85,7 +95,18 @@ class Records extends PureComponent {
         form.resetFields()
         this.search()
     }
-    // 分页
+    // 分页 && 排序
+    onTableChange = (pagination, __, sorter) => {
+        const { current } = pagination
+        let data = {
+            pageNo: current,
+        }
+        if (sorter.field) {
+            data.column = sorter.field
+            data.sort = sorter.order === 'ascend' ? 'asc' : 'desc'
+        }
+        this.props.getMeterRecordList(data)
+    }
     onPageChange = pageNo => {
         this.props.getMeterRecordList({ pageNo })
     }
@@ -95,8 +116,13 @@ class Records extends PureComponent {
     renderForm = () => {
         const items = [
             {
-                label: '月份',
-                field: 'timeInterval',
+                label: '开始月份',
+                field: 'beginMonth',
+                component: <MonthPicker />,
+            },
+            {
+                label: '结束月份',
+                field: 'endMonth',
                 component: <MonthPicker />,
             },
             {
@@ -108,7 +134,7 @@ class Records extends PureComponent {
                 label: '表类型',
                 field: 'category',
                 component: (
-                    <Select placeholder="表类型" style={{ width: 160 }}>
+                    <Select placeholder="表类型" style={{ width: 170 }}>
                         <Option value="">全部</Option>
                         <Option value="water">水表</Option>
                         <Option value="ammeter">电表</Option>
@@ -117,12 +143,16 @@ class Records extends PureComponent {
                 ),
             },
         ]
+        const formItemLayout = {
+            labelCol: { span: 8 },
+            wrapperCol: { span: 16 },
+        }
         return (
             <FormView
                 wrappedComponentRef={ref => {
                     this.wrappedForm = ref
                 }}
-                formItemLayout={{}}
+                formItemLayout={formItemLayout}
                 layout="inline"
                 items={items}
                 data={this.props.searchParams}
@@ -191,6 +221,7 @@ class Records extends PureComponent {
                 title: '月份',
                 dataIndex: 'deadline',
                 key: 'deadline',
+                sorter: true,
             },
             {
                 title: '抄表周期',
@@ -212,6 +243,8 @@ class Records extends PureComponent {
                 title: '抄表时间',
                 dataIndex: 'readingTime',
                 key: 'readingTime',
+                sorter: true,
+                defaultSortOrder: 'descend',
             },
             {
                 title: '操作',
@@ -221,7 +254,19 @@ class Records extends PureComponent {
                 render: (_, record) => (
                     <div>
                         <Link to={`/energy/record/${record.recordId}`}>详情</Link>
-                        <Button type="link">删除</Button>
+                        <Popconfirm
+                            placement="topRight"
+                            title="确定要删除吗？"
+                            onConfirm={() => {
+                                this.props.delRecord({ recordId: record.recordId })
+                            }}
+                            okText="确定"
+                            cancelText="取消"
+                        >
+                            <Button type="link" size="small">
+                                删除
+                            </Button>
+                        </Popconfirm>
                     </div>
                 ),
             },
@@ -250,15 +295,9 @@ class Records extends PureComponent {
         }
         return (
             <Card bordered={false}>
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                    }}
-                >
+                <div className={styles.searchCard}>
                     {this.renderForm()}
-                    <div>
+                    <div style={{ textAlign: 'right' }}>
                         <Button type="primary" onClick={this.search}>
                             查询
                         </Button>
@@ -281,6 +320,7 @@ class Records extends PureComponent {
                 <Table
                     dataSource={records.list}
                     columns={columns}
+                    onChange={this.onTableChange}
                     pagination={{
                         current: searchParams.pageNo,
                         showSizeChanger: true,
@@ -288,7 +328,7 @@ class Records extends PureComponent {
                         pageSizeOptions: ['10', '20', '30'],
                         total: records.totalCount,
                         onShowSizeChange: this.onShowSizeChange,
-                        onChange: this.onPageChange,
+                        // onChange: this.onPageChange,
                     }}
                 />
                 <Modal

@@ -17,6 +17,7 @@ const mapStateToProps = state => {
         meterNos: state.meter.meterNos,
         meterDetail: state.meter.meterDetail,
         taskDetail: state.meterRecord.taskDetail,
+        meterUsers: state.meterRecord.meterUsers,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -26,6 +27,7 @@ const mapDispatchToProps = dispatch => {
             getMeterDetail: meterActions('getMeterDetail'),
             getReadingTaskDetail: actions('getReadingTaskDetail'),
             saveRecord: actions('saveRecord'),
+            getUsersByAuth: actions('getUsersByAuth'),
         },
         dispatch,
     )
@@ -44,6 +46,7 @@ class RecordCreate extends PureComponent {
         this.props.getMeterNoByCategory({
             category: 'water',
         })
+        this.props.getUsersByAuth('抄表记录')
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.meterDetail !== nextProps.meterDetail) {
@@ -64,12 +67,12 @@ class RecordCreate extends PureComponent {
         this.props.getMeterDetail({ id })
     }
     onSubmit = values => {
-        const { taskDetail, user } = this.props
+        const { taskDetail } = this.props
         if (taskDetail.id) {
             values.recordId = taskDetail.id
             // 抄表人
-            values.transcriberId = user.id
-            values.transcriberName = user.name
+            values.transcriberId = values.transcriber.split('-')[1]
+            values.transcriberName = values.transcriber.split('-')[0]
             // 时间
             values.readingTime = values.readingTime.format('YYYY-MM-DD HH:mm:ss')
             this.props.saveRecord(values)
@@ -78,7 +81,7 @@ class RecordCreate extends PureComponent {
         }
     }
     render() {
-        const { meterNos, meterDetail } = this.props
+        const { meterNos, meterDetail, meterUsers, user } = this.props
         const { values } = this.state
         const data = { ...values, ...meterDetail }
         const detailItems = [
@@ -190,12 +193,15 @@ class RecordCreate extends PureComponent {
             },
             {
                 label: '抄表人',
-                field: 'transcriberId',
+                field: 'transcriber',
+                initialValue: `${user.name}-${user.id}`,
                 component: (
                     <Select placeholder="抄表人" style={{ width: 175 }}>
-                        <Option value="water">水表</Option>
-                        <Option value="ammeter">电表</Option>
-                        <Option value="fuelgas">燃气表</Option>
+                        {meterUsers.map(item => (
+                            <Option value={`${item.userName}-${item.userId}`}>
+                                {item.userName}
+                            </Option>
+                        ))}
                     </Select>
                 ),
             },
@@ -227,6 +233,12 @@ class RecordCreate extends PureComponent {
                 label: '抄表图片',
                 field: 'images',
                 component: <UploadImg style={{ marginTop: '6px' }} />,
+                rules: [
+                    {
+                        required: true,
+                        message: '请上传抄表图片',
+                    },
+                ],
             },
         ]
         const formItemLayout = {

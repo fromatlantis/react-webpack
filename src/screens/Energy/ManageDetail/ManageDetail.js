@@ -1,10 +1,12 @@
-import React, { PureComponent, Fragment } from 'react'
+import React, { PureComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { Card, Descriptions, Breadcrumb } from 'antd'
+import { Card, Descriptions, Breadcrumb, Tabs, Table, Tooltip } from 'antd'
+import { ImageView } from 'components'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/meter'
+const { TabPane } = Tabs
 const categoryStr = {
     water: '水表',
     ammeter: '电表',
@@ -70,12 +72,14 @@ const mapStateToProps = state => {
     return {
         meterDetail: state.meter.meterDetail,
         searchParams: state.meter.searchParams,
+        recordList: state.meter.recordList,
     }
 }
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             getMeterDetail: actions('getMeterDetail'),
+            getRecordListByMeterId: actions('getRecordListByMeterId'),
         },
         dispatch,
     )
@@ -90,11 +94,71 @@ class ManageDetail extends PureComponent {
         this.props.getMeterDetail({
             id: params.id,
         })
+        this.props.getRecordListByMeterId({
+            meterId: params.id,
+        })
     }
 
     render() {
         const { meterDetail } = this.props
         const items = allFields.filter(item => item.type.includes(meterDetail.areaType))
+        const dataSource = [
+            {
+                key: '1',
+                name: '胡彦斌',
+                age: 32,
+                address: '西湖区湖底公园1号',
+            },
+            {
+                key: '2',
+                name: '胡彦祖',
+                age: 42,
+                address: '西湖区湖底公园1号',
+            },
+        ]
+
+        const columns = [
+            {
+                title: '月份',
+                dataIndex: 'deadline',
+                key: 'deadline',
+            },
+            {
+                title: '抄表人',
+                dataIndex: 'transcriberName',
+                key: 'transcriberName',
+            },
+            {
+                title: '本期读数',
+                dataIndex: 'numericValue',
+                key: 'numericValue',
+            },
+            {
+                title: '抄表时间',
+                dataIndex: 'readingTime',
+                key: 'readingTime',
+            },
+            {
+                title: '备注',
+                dataIndex: 'description',
+                key: 'description',
+                render: description => (
+                    <Tooltip title={description}>
+                        <span>
+                            {description.length > 20
+                                ? `${description.substring(0, 20)}...`
+                                : description}
+                        </span>
+                    </Tooltip>
+                ),
+            },
+            {
+                title: '图片',
+                dataIndex: 'images',
+                key: 'images',
+                render: images => <ImageView fileList={images.split(',')} />,
+            },
+        ]
         return (
             <Card
                 bordered={false}
@@ -123,6 +187,11 @@ class ManageDetail extends PureComponent {
                         <div style={{ width: '500px' }}>{meterDetail.remarks}</div>
                     </Descriptions.Item>
                 </Descriptions>
+                <Tabs defaultActiveKey="1">
+                    <TabPane tab="历史抄表记录" key="1">
+                        <Table dataSource={this.props.recordList} columns={columns} />
+                    </TabPane>
+                </Tabs>
             </Card>
         )
     }

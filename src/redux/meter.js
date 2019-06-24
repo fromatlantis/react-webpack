@@ -13,6 +13,7 @@ const model = {
             pageNo: 1,
             pageSize: 10,
         },
+        recordList: [], //抄表记录
     },
     actions: [
         {
@@ -155,6 +156,23 @@ const model = {
         {
             name: 'getMeterNoByCategoryOK',
             reducer: 'meterNos',
+        },
+        // 根据表ID获取抄表记录列表
+        {
+            name: 'getRecordListByMeterId',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: '/property/getRecordListByMeterId',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('getRecordListByMeterIdOK')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getRecordListByMeterIdOK',
+            reducer: 'recordList',
         },
     ],
 }
