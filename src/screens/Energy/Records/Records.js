@@ -161,6 +161,14 @@ class Records extends PureComponent {
         )
     }
     // 导入
+    next() {
+        const current = this.state.current + 1
+        this.setState({ current })
+    }
+    prev() {
+        const current = this.state.current - 1
+        this.setState({ current })
+    }
     importModal = () => {
         this.setState({
             importModal: true,
@@ -199,6 +207,29 @@ class Records extends PureComponent {
         this.setState({
             importModal: false,
         })
+    }
+    //  导入完成
+    renderImportOk = () => {
+        const { importResponse } = this.state
+        if (importResponse.readMeters.length > 0) {
+            return (
+                <Popconfirm
+                    title="有重复数据，是否覆盖掉重复数据？"
+                    onConfirm={this.repeaConfirmOk}
+                    onCancel={this.importModalOk}
+                    okText="覆盖"
+                    cancelText="不覆盖"
+                >
+                    <Button type="primary">完成</Button>
+                </Popconfirm>
+            )
+        } else {
+            return (
+                <Button type="primary" onClick={this.importModalOk}>
+                    完成
+                </Button>
+            )
+        }
     }
     render() {
         const columns = [
@@ -300,8 +331,8 @@ class Records extends PureComponent {
                         <Link to="/energy/newRecord">
                             <Button type="primary">新增</Button>
                         </Link>
-                        {/* <Divider type="vertical" />
-                        <Button type="primary" onClick={this.importModal}>
+                        <Divider type="vertical" />
+                        {/* <Button type="primary" onClick={this.importModal}>
                             导入
                         </Button> */}
                     </div>

@@ -163,6 +163,15 @@ const model = {
             name: 'getUsersByAuthOK',
             reducer: 'meterUsers',
         },
+        {
+            name: 'clearTaskDetail',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    taskDetail: {},
+                }
+            },
+        },
     ],
 }
 const meterRecord = blaze(model)

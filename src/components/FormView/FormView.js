@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Form } from 'antd'
-
+import { Link } from 'react-router-dom'
 class FormView extends PureComponent {
     static defaultProps = {
         formItemLayout: { labelCol: { span: 3 }, wrapperCol: { span: 13 } },
@@ -56,6 +56,11 @@ class FormView extends PureComponent {
                         <Button type="primary" htmlType="submit">
                             保存
                         </Button>
+                        {this.props.goBack && (
+                            <Link to={this.props.goBack}>
+                                <Button style={{ marginLeft: '20px' }}>取消</Button>
+                            </Link>
+                        )}
                     </Form.Item>
                 )}
             </Form>

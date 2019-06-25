@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Card, DatePicker, Divider, Input, InputNumber, Select, message } from 'antd'
+import { Card, DatePicker, Divider, Input, InputNumber, Select, Modal, message } from 'antd'
 import { FormView, UploadImg } from 'components'
 import moment from 'moment'
 import styles from './RecordCreate.module.css'
@@ -26,6 +26,7 @@ const mapDispatchToProps = dispatch => {
             getMeterNoByCategory: meterActions('getMeterNoByCategory'),
             getMeterDetail: meterActions('getMeterDetail'),
             getReadingTaskDetail: actions('getReadingTaskDetail'),
+            clearTaskDetail: actions('clearTaskDetail'),
             saveRecord: actions('saveRecord'),
             getUsersByAuth: actions('getUsersByAuth'),
         },
@@ -38,15 +39,18 @@ const mapDispatchToProps = dispatch => {
 )
 class RecordCreate extends PureComponent {
     state = {
+        visible: false,
         values: {
             category: 'water',
         },
+        values2: {}, //第二个表单
     }
     componentDidMount() {
         this.props.getMeterNoByCategory({
             category: 'water',
         })
         this.props.getUsersByAuth('抄表记录')
+        this.props.clearTaskDetail() //清除上期读数
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.meterDetail !== nextProps.meterDetail) {
@@ -68,21 +72,47 @@ class RecordCreate extends PureComponent {
     }
     onSubmit = values => {
         const { taskDetail } = this.props
+        console.log(taskDetail)
         if (taskDetail.id) {
-            values.recordId = taskDetail.id
-            // 抄表人
-            values.transcriberId = values.transcriber.split('-')[1]
-            values.transcriberName = values.transcriber.split('-')[0]
-            // 时间
-            values.readingTime = values.readingTime.format('YYYY-MM-DD HH:mm')
-            this.props.saveRecord(values)
+            if (taskDetail.numericValue) {
+                this.setState({
+                    visible: true,
+                    values2: { ...values },
+                })
+            } else {
+                values.recordId = taskDetail.id
+                // 抄表人
+                values.transcriberId = values.transcriber.split('-')[1]
+                values.transcriberName = values.transcriber.split('-')[0]
+                // 时间
+                values.readingTime = values.readingTime.format('YYYY-MM-DD HH:mm')
+                this.props.saveRecord(values)
+            }
         } else {
             message.error('请选择表编号')
         }
     }
+    // 覆盖保存
+    handleOk = () => {
+        const { form } = this.wrappedForm.props
+        const { taskDetail } = this.props
+        const values = form.getFieldsValue()
+        values.recordId = taskDetail.id
+        // 抄表人
+        values.transcriberId = values.transcriber.split('-')[1]
+        values.transcriberName = values.transcriber.split('-')[0]
+        // 时间
+        values.readingTime = values.readingTime.format('YYYY-MM-DD HH:mm')
+        this.props.saveRecord(values)
+    }
+    handleCancel = () => {
+        this.setState({
+            visible: false,
+        })
+    }
     render() {
         const { meterNos, meterDetail, meterUsers, user } = this.props
-        const { values } = this.state
+        const { values, values2 } = this.state
         const data = { ...values, ...meterDetail }
         const detailItems = [
             {
@@ -184,6 +214,7 @@ class RecordCreate extends PureComponent {
                 component: <Input readOnly />,
             },
         ]
+        console.log(this.props.taskDetail)
         const items = [
             {
                 label: '上期读数',
@@ -257,10 +288,23 @@ class RecordCreate extends PureComponent {
                 <Divider />
                 <FormView
                     layout="inline"
+                    wrappedComponentRef={ref => {
+                        this.wrappedForm = ref
+                    }}
                     formItemLayout={formItemLayout}
                     items={items}
+                    data={values2}
+                    goBack="/energy/record"
                     onSubmit={this.onSubmit}
                 />
+                <Modal
+                    title="提示信息"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                >
+                    <p>已有抄表记录，确定覆盖吗？</p>
+                </Modal>
             </Card>
         )
     }

@@ -3,24 +3,6 @@ import { Alert, Table, Tabs, Tooltip } from 'antd'
 import { IconFont } from 'components'
 const { TabPane } = Tabs
 
-const dataSource = [
-    {
-        key: '1',
-        category: '胡彦斌',
-        meterNo: 32,
-        location: '西湖区湖底公园1号',
-        contacts: '胡彦斌',
-        contactsWay: '1234',
-    },
-    {
-        key: '2',
-        category: '胡彦斌',
-        meterNo: 32,
-        location: '西湖区湖底公园1号',
-        contacts: '胡彦斌',
-        contactsWay: '1234',
-    },
-]
 const categoryStr = {
     water: '水表',
     ammeter: '电表',
@@ -105,18 +87,22 @@ export default class Preview extends PureComponent {
         return (
             <div style={{ paddingTop: '15px' }}>
                 <Alert
-                    message={`正常数据${data.normalList.length}项，异常数据${
-                        [...data.repeatList, ...data.abnormalList].length
+                    message={`正常数据${data.unreadMeters.length}项，异常数据${
+                        [...data.readMeters, ...data.exceptRecords].length
                     }项`}
                     type="info"
                 />
                 <Tabs activeKey={this.state.activeKey} onChange={this.changeTab}>
                     <TabPane tab="正常数据" key="1">
-                        <Table dataSource={data.normalList} columns={columns} pagination={false} />
+                        <Table
+                            dataSource={data.unreadMeters}
+                            columns={columns}
+                            pagination={false}
+                        />
                     </TabPane>
                     <TabPane tab="异常数据" key="2">
                         <Table
-                            dataSource={[...data.repeatList, ...data.abnormalList]}
+                            dataSource={[...data.readMeters, ...data.exceptRecords]}
                             columns={columns}
                             pagination={false}
                         />
