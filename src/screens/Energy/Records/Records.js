@@ -54,7 +54,7 @@ const mapDispatchToProps = dispatch => {
             getMeterRecordList: actions('getMeterRecordList'),
             getRecordDetail: actions('getRecordDetail'),
             delRecord: actions('delRecord'),
-            loadRecords: actions('loadRecords'),
+            loadMeterRecords: actions('loadMeterRecords'),
         },
         dispatch,
     )
@@ -186,7 +186,10 @@ class Records extends PureComponent {
         if (unreadMeters.length === 0 && readMeters.length === 0) {
             message.error('未检测到需要导入的数据')
         } else {
-            this.props.loadRecords({ unreadMeters: JSON.stringify(unreadMeters), isCover: 'N' })
+            this.props.loadMeterRecords({
+                recordJson: JSON.stringify(this.state.importResponse),
+                isCover: 'N',
+            })
             this.setState({
                 importModal: false,
             })
@@ -195,9 +198,8 @@ class Records extends PureComponent {
     repeaConfirmOk = () => {
         const { unreadMeters, readMeters } = this.state.importResponse
         if (readMeters.length > 0) {
-            this.props.loadRecords({
-                unreadMeters: JSON.stringify(unreadMeters),
-                readMeters: JSON.stringify(readMeters),
+            this.props.loadMeterRecords({
+                recordJson: JSON.stringify(this.state.importResponse),
                 isCover: 'Y',
             })
             this.setState({

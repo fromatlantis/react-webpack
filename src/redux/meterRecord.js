@@ -102,12 +102,12 @@ const model = {
             },
         },
         {
-            name: 'loadRecords',
+            name: 'loadMeterRecords',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
                     contentType: 'multipart/form-data',
-                    url: '/property/loadRecords',
+                    url: '/property/loadMeterRecords',
                     data: action.payload,
                 })
                 if (res.code === 1000) {

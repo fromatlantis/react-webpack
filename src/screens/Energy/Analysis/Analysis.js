@@ -51,8 +51,14 @@ class Analysis extends PureComponent {
         const { category, range } = this.state
         this.getChartData({ category, range })
         this.props.getTaskStatus()
-        this.props.getLatestTask()
-        this.props.consumptionWarning()
+        this.props.getLatestTask({
+            pageNo: 1,
+            pageSize: 10,
+        })
+        this.props.consumptionWarning({
+            pageNo: 1,
+            pageSize: 10,
+        })
     }
     getChartData = params => {
         const { category, range } = params
@@ -191,6 +197,7 @@ class Analysis extends PureComponent {
                                             <div
                                                 style={{
                                                     flex: 1,
+                                                    color: '#4F89F5',
                                                 }}
                                             >
                                                 {item.description}
@@ -216,7 +223,7 @@ class Analysis extends PureComponent {
                                     <List.Item>
                                         <div style={{ display: 'flex', width: '100%' }}>
                                             <div>
-                                                <b>{item.meter}</b>
+                                                <b style={{ color: '#4F89F5' }}>{item.meter}</b>
                                             </div>
                                             <div
                                                 style={{
