@@ -305,7 +305,10 @@ class Records extends PureComponent {
             name: 'recordFile',
             multiple: false,
             accept: '.xls,.xlsx',
-            action: '/property/importRecords',
+            action:
+                process.env.NODE_ENV === 'production'
+                    ? '/houzai/property/importRecords'
+                    : '/property/importRecords',
             onChange: info => {
                 const status = info.file.status
                 if (status !== 'uploading') {

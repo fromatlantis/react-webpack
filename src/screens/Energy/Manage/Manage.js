@@ -388,7 +388,10 @@ class Manage extends PureComponent {
             name: 'excelFile',
             multiple: false,
             accept: '.xls,.xlsx',
-            action: '/property/leadInMetersFileRead',
+            action:
+                process.env.NODE_ENV === 'production'
+                    ? '/houzai/property/leadInMetersFileRead'
+                    : '/property/leadInMetersFileRead',
             data: {
                 areaType: this.state.type,
             },
