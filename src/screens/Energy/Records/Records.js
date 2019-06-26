@@ -68,9 +68,9 @@ class Records extends PureComponent {
         current: 0, //导入：当前页
         importModal: false,
         importResponse: {
-            normalList: [], //正常数据
-            repeatList: [], //重复数据
-            abnormalList: [], //异常数据
+            unreadMeters: [], //正常数据
+            readMeters: [], //重复数据
+            exceptRecords: [], //异常数据
         },
     }
     componentDidMount() {
@@ -175,9 +175,9 @@ class Records extends PureComponent {
             importModal: true,
             current: 0, //重置
             importResponse: {
-                normalList: [], //正常数据
-                repeatList: [], //重复数据
-                abnormalList: [], //异常数据
+                unreadMeters: [], //正常数据
+                readMeters: [], //重复数据
+                exceptRecords: [], //异常数据
             },
         })
     }
