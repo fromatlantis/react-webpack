@@ -397,7 +397,10 @@ class Records extends PureComponent {
                             </Dragger>
                             <div style={{ padding: '20px 0', textAlign: 'right' }}>
                                 没有模版？
-                                <a href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190614/72fee9a0-c97d-4082-a889-0b575ebe376b-批量导入企业XLSX模板.xlsx">
+                                <a
+                                    href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190626/5bbe1fd7-7519-4f76-8636-eb6b59b16469-抄表记录.xlsx
+"
+                                >
                                     模版下载
                                 </a>
                             </div>

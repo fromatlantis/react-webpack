@@ -545,19 +545,28 @@ class Manage extends PureComponent {
                             </Dragger>
                             <div style={{ padding: '20px 0', textAlign: 'right' }}>
                                 没有模版？
-                                <a href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190614/72fee9a0-c97d-4082-a889-0b575ebe376b-批量导入企业XLSX模板.xlsx">
+                                <a
+                                    href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190626/38005326-39c2-43f4-9cdd-b05a7d7e79a1-公区表模板.xlsx
+"
+                                >
                                     公区表模版下载
                                 </a>
                                 <Divider type="vertical" />
-                                <a href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190614/72fee9a0-c97d-4082-a889-0b575ebe376b-批量导入企业XLSX模板.xlsx">
+                                <a href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190626/c93e0948-4e88-4b7d-ba75-3a1a564150ae-企业表模板 .xlsx">
                                     企业表模版下载
                                 </a>
                                 <Divider type="vertical" />
-                                <a href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190614/72fee9a0-c97d-4082-a889-0b575ebe376b-批量导入企业XLSX模板.xlsx">
-                                    公区表模版下载
+                                <a
+                                    href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190626/00b0af9c-b600-4d01-9a44-bc4264848885-个人表模板.xlsx
+"
+                                >
+                                    个人表模版下载
                                 </a>
                                 <Divider type="vertical" />
-                                <a href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190614/72fee9a0-c97d-4082-a889-0b575ebe376b-批量导入企业XLSX模板.xlsx">
+                                <a
+                                    href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190626/f6733771-f80b-4926-b494-09b59a9978b8-其他表模板 .xlsx
+"
+                                >
                                     其他表模版下载
                                 </a>
                             </div>
