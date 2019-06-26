@@ -54,6 +54,7 @@ const mapDispatchToProps = dispatch => {
             getMeterRecordList: actions('getMeterRecordList'),
             getRecordDetail: actions('getRecordDetail'),
             delRecord: actions('delRecord'),
+            loadRecords: actions('loadRecords'),
         },
         dispatch,
     )
@@ -181,22 +182,23 @@ class Records extends PureComponent {
         })
     }
     importModalOk = () => {
-        const { normalList, repeatList } = this.state.importResponse
-        if (normalList.length === 0 && repeatList.length === 0) {
+        const { unreadMeters, readMeters } = this.state.importResponse
+        if (unreadMeters.length === 0 && readMeters.length === 0) {
             message.error('未检测到需要导入的数据')
         } else {
-            this.props.leadInMeters({ normalList: JSON.stringify(normalList) })
+            this.props.loadRecords({ unreadMeters: JSON.stringify(unreadMeters), isCover: 'N' })
             this.setState({
                 importModal: false,
             })
         }
     }
     repeaConfirmOk = () => {
-        const { normalList, repeatList } = this.state.importResponse
-        if (repeatList.length > 0) {
-            this.props.leadInMeters({
-                normalList: JSON.stringify(normalList),
-                repeatList: JSON.stringify(repeatList),
+        const { unreadMeters, readMeters } = this.state.importResponse
+        if (readMeters.length > 0) {
+            this.props.loadRecords({
+                unreadMeters: JSON.stringify(unreadMeters),
+                readMeters: JSON.stringify(readMeters),
+                isCover: 'Y',
             })
             this.setState({
                 importModal: false,
@@ -332,9 +334,9 @@ class Records extends PureComponent {
                             <Button type="primary">新增</Button>
                         </Link>
                         <Divider type="vertical" />
-                        {/* <Button type="primary" onClick={this.importModal}>
+                        <Button type="primary" onClick={this.importModal}>
                             导入
-                        </Button> */}
+                        </Button>
                     </div>
                 </div>
                 <Alert
