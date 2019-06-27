@@ -100,7 +100,8 @@
             "prettier"
         ],
         "rules": {
-            "prettier/prettier": "error"
+            "prettier/prettier": "error",
+            "react/self-closing-comp": 1
         }
     },
     "browserslist": [
