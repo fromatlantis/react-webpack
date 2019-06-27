@@ -33,7 +33,7 @@ const filterByAuths = (routes = [], auths = []) => {
     })
 }
 export const getNav = auths => {
-    // auths = ['房源管理', '租赁审批']
+    // auths = []
     const navs = routes
         .filter(item => item.navAttr)
         .map(item => {
@@ -42,21 +42,30 @@ export const getNav = auths => {
                 path: item.path,
                 icon: item.icon,
                 role: item.role,
-                //children: item.children,
                 children: filterByAuths(item.children, auths),
             }
         })
-    //return navs
-    console.log(filterByAuths(navs, auths))
+    // console.log(filterByAuths(navs, auths))
     return filterByAuths(navs, auths)
 }
+
 // 首个路由
 export const getFirst = auths => {
     const firstNav = getNav(auths)[0]
-    return firstNav && firstNav.children.length > 0 ? firstNav.children[0].path : firstNav.path
+    if (firstNav) {
+        if (firstNav.children.length > 0) {
+            return firstNav.children[0].path
+        } else {
+            return firstNav.path
+        }
+    } else {
+        //如果没有任何菜单项
+        return '/'
+    }
 }
+
 export default auths => {
-    // auths = ['房源管理', '租赁审批']
+    // auths = []
     let allRoutes = []
     routes.map(item => {
         if (item.children) {

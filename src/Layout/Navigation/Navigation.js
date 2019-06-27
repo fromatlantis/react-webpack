@@ -1,20 +1,22 @@
-import React from 'react'
-import { NavLink, withRouter } from 'react-router-dom'
-import { Menu, message } from 'antd'
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { NavLink } from 'react-router-dom'
 
+import { Menu } from 'antd'
 import { getNav } from '../../routes/routes'
 
 const SubMenu = Menu.SubMenu
 
-let Navigation = withRouter(({ history, location, match, items, style, auths }) => {
-    const menu = getNav(auths)
-    let link = (e, item) => {
-        // if(!auths.includes(item.name)) {
-        //     e.preventDefault()
-        //     message.warning('您没有对应的权限')
-        // }
+@connect(state => ({
+    router: state.router,
+    auths: state.authUser.auths,
+}))
+class NewNavigation extends PureComponent {
+    static propTypes = {
+        //prop: PropTypes
     }
-    let generateMenu = menuData => {
+    generateMenu = menuData => {
         return menuData.map((item, index) => {
             if (item.children && item.children.length > 0) {
                 return (
@@ -27,7 +29,7 @@ let Navigation = withRouter(({ history, location, match, items, style, auths }) 
                             </span>
                         }
                     >
-                        {generateMenu(item.children)}
+                        {this.generateMenu(item.children)}
                     </SubMenu>
                 )
             } else {
@@ -41,18 +43,24 @@ let Navigation = withRouter(({ history, location, match, items, style, auths }) 
             }
         })
     }
-    const openKeys = '/' + location.pathname.match(/[^/]+/)
-    return (
-        <Menu
-            defaultSelectedKeys={[location.pathname]}
-            //selectedKeys={[location.pathname]}
-            defaultOpenKeys={[openKeys]}
-            mode="horizontal"
-            style={{ lineHeight: '64px' }}
-            theme="dark"
-        >
-            {generateMenu(menu)}
-        </Menu>
-    )
-})
-export default Navigation
+    render() {
+        const { location } = this.props.router
+        const openKeys = '/' + location.pathname.match(/[^/]+/)
+        // console.log(this.props.auths)
+        const menu = getNav(this.props.auths)
+        return (
+            <Menu
+                //defaultSelectedKeys={[location.pathname]}
+                selectedKeys={[openKeys]}
+                defaultOpenKeys={[openKeys]}
+                mode="horizontal"
+                style={{ lineHeight: '64px' }}
+                theme="dark"
+            >
+                {this.generateMenu(menu)}
+            </Menu>
+        )
+    }
+}
+
+export default NewNavigation

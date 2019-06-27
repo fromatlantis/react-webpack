@@ -29,7 +29,7 @@ class UploadImg extends Component {
         if ('value' in nextProps) {
             const value = nextProps.value
             // 如果传过来的是File对象，转换成base64
-            console.log(value)
+            // console.log(value)
             if (value && typeof value === 'object') {
                 getBase64(value, imageUrl => {
                     this.setState({
@@ -78,21 +78,24 @@ class UploadImg extends Component {
         const { imageUrl } = this.state
         //console.log(imageUrl)
         return (
-            <Upload
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                //action="//jsonplaceholder.typicode.com/posts/"
-                beforeUpload={this.beforeUpload}
-                onChange={this.handleChange}
-            >
-                {imageUrl ? (
-                    <img src={imageUrl} style={{ width: 120 }} alt="avatar" />
-                ) : (
-                    uploadButton
-                )}
-            </Upload>
+            <div style={this.props.style}>
+                <Upload
+                    accept="image/*"
+                    name="avatar"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    showUploadList={false}
+                    //action="//jsonplaceholder.typicode.com/posts/"
+                    beforeUpload={this.beforeUpload}
+                    onChange={this.handleChange}
+                >
+                    {imageUrl ? (
+                        <img src={imageUrl} style={{ width: 120 }} alt="avatar" />
+                    ) : (
+                        uploadButton
+                    )}
+                </Upload>
+            </div>
         )
     }
 }

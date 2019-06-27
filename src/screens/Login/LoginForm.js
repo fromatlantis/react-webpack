@@ -14,7 +14,7 @@ class LoginForm extends PureComponent {
                 values.type = '0'
                 values.password = DESEncrypt(values.password)
                 this.props.login(values)
-                //console.log('Received values of form: ', values);
+                // console.log('Received values of form: ', values)
             }
         })
     }

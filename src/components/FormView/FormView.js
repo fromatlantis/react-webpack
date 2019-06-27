@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Form } from 'antd'
-
+import { Link } from 'react-router-dom'
 class FormView extends PureComponent {
     static defaultProps = {
         formItemLayout: { labelCol: { span: 3 }, wrapperCol: { span: 13 } },
@@ -35,23 +35,32 @@ class FormView extends PureComponent {
         return (
             <Form {...formItemLayout} layout={layout} onSubmit={this.handleSubmit}>
                 {items.map((item, index) => {
-                    return (
-                        <Form.Item label={item.label} style={item.style} key={index}>
-                            {/* {item.component} */}
-                            {item.field
-                                ? getFieldDecorator(item.field, {
-                                      initialValue: item.initialValue,
-                                      rules: item.rules,
-                                  })(item.component)
-                                : item.component}
-                        </Form.Item>
-                    )
+                    if (item.hasOwnProperty('visible') && !item.visible) {
+                        return null
+                    } else {
+                        return (
+                            <Form.Item label={item.label} style={item.style} key={index}>
+                                {/* {item.component} */}
+                                {item.field
+                                    ? getFieldDecorator(item.field, {
+                                          initialValue: item.initialValue,
+                                          rules: item.rules,
+                                      })(item.component)
+                                    : item.component}
+                            </Form.Item>
+                        )
+                    }
                 })}
                 {saveBtn && (
                     <Form.Item wrapperCol={{ offset: formItemLayout.labelCol.span }}>
                         <Button type="primary" htmlType="submit">
                             保存
                         </Button>
+                        {this.props.goBack && (
+                            <Link to={this.props.goBack}>
+                                <Button style={{ marginLeft: '20px' }}>取消</Button>
+                            </Link>
+                        )}
                     </Form.Item>
                 )}
             </Form>
@@ -72,22 +81,14 @@ export default Form.create({
             .forEach(item => {
                 let { field, formatter } = item
                 let getValue = data[item.field]
-                if (getValue) {
-                    if (formatter) {
-                        getValue = formatter(getValue)
-                    }
-                    fields[field] = Form.createFormField({
-                        value: getValue,
-                    })
+                //if (getValue) {
+                if (formatter) {
+                    getValue = formatter(getValue)
                 }
-                // if (!getValue) {
-                //     getValue = null
-                // } else if (formatter) {
-                //     getValue = formatter(getValue, { ...data })
-                // }
-                // fields[field] = Form.createFormField({
-                //     value: getValue,
-                // })
+                fields[field] = Form.createFormField({
+                    value: getValue,
+                })
+                //}
             })
         return fields
     },
