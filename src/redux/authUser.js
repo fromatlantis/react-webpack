@@ -97,9 +97,7 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     type: 'get',
-                    url: `/jurisdiction/getAuthoritiesByUser?userId=${
-                        action.payload
-                    }&appIdendity=${APPID}`,
+                    url: `/jurisdiction/getAuthoritiesByUser?userId=${action.payload}&appIdendity=${APPID}`,
                 })
                 if (res.code === 1000) {
                     yield put(
