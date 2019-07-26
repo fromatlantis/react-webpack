@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import { Layout, Avatar, Popover } from 'antd'
 import Navigation from '../Navigation/Navigation'
+import config from '../../config'
 import styles from './Header.module.css'
 import hz from 'assets/hz.png'
 import mtou from 'assets/mtou.png'
@@ -16,7 +17,9 @@ export default class Header extends Component {
             <Layout.Header className={styles.header}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div>
-                        <Avatar shape="square" size="large" src={hz} />
+                        <a href={`${config.origin}/portal`}>
+                            <Avatar shape="square" size="large" src={hz} />
+                        </a>
                         <span className={styles.title}>物业服务</span>
                     </div>
                     <Navigation auths={this.props.auths} />
