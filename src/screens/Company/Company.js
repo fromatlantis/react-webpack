@@ -478,7 +478,10 @@ class Home extends PureComponent {
                                 <p className="ant-upload-hint">导入说明：文件必须为XLS或XLSX格式</p>
                             </Dragger>
                             <div style={{ padding: '20px', textAlign: 'right' }}>
-                                没有模版？<a href="">下载模版</a>
+                                没有模版？
+                                <a href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190614/72fee9a0-c97d-4082-a889-0b575ebe376b-批量导入企业XLSX模板.xlsx">
+                                    下载模版
+                                </a>
                             </div>
                         </div>
                     )}

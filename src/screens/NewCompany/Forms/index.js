@@ -13,7 +13,8 @@ import Patent from './Patent/Patent'
 import Suggest from './Suggest/Suggest'
 import Other from './Other/Other'
 import Website from './Website/Website'
-
+import Staff from './Staff/Staff' //人员情况
+import Revenue from './Revenue/Revenue' //财务信息
 export {
     Website,
     Info,
@@ -30,4 +31,6 @@ export {
     Other,
     Copyright,
     Works,
+    Staff,
+    Revenue,
 }

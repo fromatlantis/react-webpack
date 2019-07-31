@@ -108,6 +108,19 @@ const routes = [
             loading: Loading,
         }),
     },
+    {
+        path: '/stats',
+        name: '企业统计',
+        icon: 'appstore',
+        navAttr: {
+            index: 1,
+            role: 'home',
+        },
+        component: Loadable({
+            loader: () => import(/* webpackChunkName: "stats" */ '../screens/Stats/Stats'),
+            loading: Loading,
+        }),
+    },
 ]
 const filterByAuths = (routes = [], auths = []) => {
     return routes.filter(route => {

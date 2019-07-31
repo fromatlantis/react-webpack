@@ -39,7 +39,6 @@ class Main extends Component {
                 </Layout>
             )
         } else {
-            alert('1')
             // 获取用户信息前添加loading效果
             return <FullScreenLoading />
         }

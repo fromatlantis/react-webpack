@@ -14,8 +14,6 @@ import {
     Copyright,
     Works,
     Website,
-    Staff,
-    Revenue,
 } from '../Forms'
 export const menuData = [
     {
@@ -53,11 +51,6 @@ export const menuData = [
                 title: '核心人员',
                 path: 'members',
                 component: Members,
-            },
-            {
-                title: '人员情况',
-                path: 'staff',
-                component: Staff,
             },
             {
                 title: '企业动态',
@@ -143,23 +136,17 @@ export const menuData = [
     //     path: 'requirement',
     // },
     {
-        title: '财务信息',
-        icon: '',
-        path: 'revenue',
-        component: Revenue,
-    },
-    {
-        title: '需求和建议',
+        title: '改进建议',
         icon: '',
         path: 'suggest',
         component: Suggest,
     },
-    // {
-    //     title: '其他信息',
-    //     icon: '',
-    //     path: 'other',
-    //     component: Other,
-    // },
+    {
+        title: '其他信息',
+        icon: '',
+        path: 'other',
+        component: Other,
+    },
     // {
     //     title: '企业档案',
     //     icon: '',
