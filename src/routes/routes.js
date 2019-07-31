@@ -121,6 +121,20 @@ const routes = [
             loading: Loading,
         }),
     },
+    {
+        path: '/configure',
+        name: '企服配置',
+        icon: 'appstore',
+        navAttr: {
+            index: 1,
+            role: 'home',
+        },
+        component: Loadable({
+            loader: () =>
+                import(/* webpackChunkName: "Company" */ '../screens/Configure/Configure'),
+            loading: Loading,
+        }),
+    },
 ]
 const filterByAuths = (routes = [], auths = []) => {
     return routes.filter(route => {
