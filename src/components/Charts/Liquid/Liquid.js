@@ -34,7 +34,7 @@ export default class Liquid extends PureComponent {
     }
     getOption = () => {
         let { title } = this.props
-        let liquidColor = ['rgba(75,165,250,.5)', 'rgba(75,165,250,1)']
+        let liquidColor = ['#4ecac8', '#4ba6f9']
         let option = {
             title: {
                 text: title,
@@ -91,6 +91,7 @@ export default class Liquid extends PureComponent {
                             formatter: '{b}:\n{c}',
                             textStyle: {
                                 fontSize: 14,
+                                color: '#666',
                             },
                         },
                     },
@@ -98,7 +99,7 @@ export default class Liquid extends PureComponent {
                         borderDistance: 3,
                         itemStyle: {
                             borderWidth: 2,
-                            borderColor: 'rgb(75,165,250)',
+                            borderColor: '#4ba6f9',
                         },
                     },
                 },

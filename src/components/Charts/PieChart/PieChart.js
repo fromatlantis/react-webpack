@@ -7,6 +7,7 @@ import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legendScroll'
 import 'echarts/lib/component/toolbox'
+import { Empty } from 'antd'
 import styles from './PieChart.module.css'
 
 export default class PieChart extends PureComponent {
@@ -17,10 +18,14 @@ export default class PieChart extends PureComponent {
         data: PropTypes.array,
     }
     componentDidMount = () => {
-        this.initChart()
+        if (this.refs.pieChart) {
+            this.initChart()
+        }
     }
     componentWillReceiveProps = nextProps => {
-        this.initChart(nextProps)
+        if (this.refs.pieChart) {
+            this.initChart()
+        }
     }
     initChart = props => {
         // 基于准备好的dom，初始化echarts实例
@@ -36,7 +41,11 @@ export default class PieChart extends PureComponent {
         let { title, data, hollow } = props,
             names = []
         data.map(x => {
-            names.push(x.name)
+            let item = {
+                name: x.name,
+                icon: 'circle',
+            }
+            names.push(item)
             return true
         })
         var option = {
@@ -50,8 +59,7 @@ export default class PieChart extends PureComponent {
             },
             tooltip: {
                 trigger: 'item',
-
-                // "{a} <br/>{b} : {c} ({d}%)"
+                formatter: '{b}: {c} ({d}%)',
             },
             // toolbox: {
             //     show: true,
@@ -62,21 +70,23 @@ export default class PieChart extends PureComponent {
             // },
             legend: {
                 bottom: 0,
-                left: 'center',
+                // orient: 'vertical',
+                left: 'left',
+                itemWidth: 10,
                 data: names,
             },
             grid: {
-                top: 45,
-                right: 0,
+                top: 10,
+                right: 10,
                 left: 10,
-                bottom: 0,
+                bottom: 10,
                 containLabel: true,
             },
             series: [
                 {
                     name: '比例',
                     type: 'pie',
-                    radius: [hollow ? '40%' : '0%', '60%'],
+                    radius: [hollow ? '40%' : '0%', '40%'],
                     color: [
                         '#ec5b48',
                         '#f48138',
@@ -89,6 +99,8 @@ export default class PieChart extends PureComponent {
                         '#69f7f6',
                         '#4cc3fd',
                         '#3d84f9',
+                        '#4ba6f9',
+                        '#4ecac8',
                     ].reverse(),
                     data: data,
                     itemStyle: {
@@ -108,6 +120,15 @@ export default class PieChart extends PureComponent {
         return option
     }
     render() {
-        return <div ref="pieChart" className={styles.root} />
+        const { data } = this.props
+        if (data && data.length > 0) {
+            return <div ref="pieChart" className={styles.root} />
+        } else {
+            return (
+                <div className={styles.root}>
+                    <Empty />
+                </div>
+            )
+        }
     }
 }

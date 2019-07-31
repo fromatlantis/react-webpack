@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
-import { Card, Col, Row, Statistic } from 'antd'
+import { Card, Col, Divider, Row, Statistic } from 'antd'
 import { YearPicker } from 'components'
+import { BarChart, LineChart, PieChart } from 'components/Charts'
+import RevenueChart from './RevenueChart'
 import styles from '../Stats.module.css'
 export default class Overview extends PureComponent {
     render() {
@@ -29,40 +31,69 @@ export default class Overview extends PureComponent {
                                 <Statistic title="Feedback" value={1128} />
                             </div>
                             <Row>
-                                <Col span={12}>123</Col>
-                                <Col span={12}>456</Col>
+                                <Col span={12} className={styles.card}>
+                                    <div className={styles.title}>
+                                        <Divider
+                                            style={{ background: '#1890ff', width: '2px' }}
+                                            type="vertical"
+                                        />
+                                        引进企业数量统计
+                                    </div>
+                                    <BarChart data={[{ name: '123', value: '123' }]} />
+                                </Col>
+                                <Col span={12} className={styles.card}>
+                                    <div className={styles.title}>
+                                        <Divider
+                                            style={{ background: '#1890ff', width: '2px' }}
+                                            type="vertical"
+                                        />
+                                        知识产权分布
+                                    </div>
+                                    <PieChart data={[]} />
+                                </Col>
                             </Row>
                         </Card>
                     </Col>
                     <Col span={8}>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <Card bordered={false} title="融资趋势" style={{ flex: 1 }}>
-                                123
-                            </Card>
-                            <Card
-                                bordered={false}
-                                title="企业资质"
-                                style={{ marginTop: '12px', flex: 1 }}
-                            >
-                                123
-                            </Card>
-                        </div>
+                        <Card bordered={false} title="融资趋势">
+                            <div style={{ height: '230px', display: 'flex' }}>
+                                <LineChart data={[{ name: '123', value: '123' }]} />
+                            </div>
+                        </Card>
+                        <Card
+                            bordered={false}
+                            title="企业资质"
+                            style={{ marginTop: '12px', height: '280px' }}
+                        >
+                            123
+                        </Card>
                     </Col>
                 </Row>
                 <Row style={{ marginTop: '12px' }} gutter={12}>
                     <Col span={8}>
                         <Card bordered={false} title="人才建设">
-                            123
+                            <div className={styles.card}>
+                                <PieChart data={[]} />
+                            </div>
                         </Card>
                     </Col>
                     <Col span={8}>
                         <Card bordered={false} title="行业分布">
-                            456
+                            <div className={styles.card}>
+                                <PieChart data={[]} />
+                            </div>
                         </Card>
                     </Col>
                     <Col span={8}>
                         <Card bordered={false} title="营收和纳税情况">
-                            789
+                            <div className={styles.card}>
+                                <RevenueChart
+                                    data={[
+                                        { name: '123', value: '123' },
+                                        { name: '456', value: '456' },
+                                    ]}
+                                />
+                            </div>
                         </Card>
                     </Col>
                 </Row>

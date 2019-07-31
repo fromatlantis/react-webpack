@@ -29,7 +29,7 @@ const model = {
                     } else {
                         yield put(actions('loginSuccess')(res.data))
                     }
-                    yield put(replace('/home'))
+                    yield put(replace('/company'))
                 }
             },
         },

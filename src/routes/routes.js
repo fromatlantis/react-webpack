@@ -3,30 +3,6 @@ import Loading from '../components/Loading/FullScreen'
 
 const routes = [
     {
-        path: '/home',
-        name: '企服首页',
-        icon: 'appstore',
-        navAttr: {
-            index: 1,
-            role: 'home',
-        },
-        component: Loadable({
-            loader: () => import(/* webpackChunkName: "Home" */ '../screens/Home'),
-            loading: Loading,
-        }),
-    },
-    {
-        //企服首页/企业详情
-        path: '/companyDetails/*/:company_id/:type',
-        component: Loadable({
-            loader: () =>
-                import(
-                    /* webpackChunkName: "companyDetails" */ '../screens/CompanyDetails/CompanyDetails'
-                ),
-            loading: Loading,
-        }),
-    },
-    {
         path: '/company',
         name: '企服管理',
         icon: 'appstore',
@@ -87,16 +63,7 @@ const routes = [
         }),
     },
     {
-        path: '/agency/*',
-        name: '中介服务',
-        icon: 'appstore',
-        component: Loadable({
-            loader: () => import(/* webpackChunkName: "agency" */ '../screens/Agency/Agency'),
-            loading: Loading,
-        }),
-    },
-    {
-        path: '/agency/companyRequire',
+        path: '/agency',
         name: '中介服务',
         icon: 'appstore',
         navAttr: {
