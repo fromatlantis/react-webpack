@@ -108,13 +108,13 @@ class SupplierList extends PureComponent {
         const { addTypes, allActive } = this.state
         const { getFieldDecorator } = this.props.form
         const columns = [
-            {
-                title: '序号',
-                key: 'num',
-                dataIndex: 'num',
-                align: 'center',
-                render: (text, record, index) => <span key={text}>{index + 1}</span>,
-            },
+            // {
+            //     title: '序号',
+            //     key: 'num',
+            //     dataIndex: 'num',
+            //     align: 'center',
+            //     render: (text, record, index) => <span key={text}>{index + 1}</span>,
+            // },
             {
                 title: '供应商类型',
                 dataIndex: 'type_name',
@@ -128,7 +128,7 @@ class SupplierList extends PureComponent {
                 align: 'center',
             },
             {
-                title: '服务的次数',
+                title: '服务次数',
                 dataIndex: 'serviceTimes',
                 key: 'serviceTimes',
                 align: 'center',
