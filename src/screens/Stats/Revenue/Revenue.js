@@ -105,16 +105,6 @@ export default class Revenue extends PureComponent {
     initChart = () => {
         var myChart = echarts.init(this.refs.barChart)
         var option = {
-            title: {
-                text: '园区营收统计',
-                textStyle: {
-                    fontWeight: 'normal',
-                    fontSize: 18,
-                    color: '#000',
-                },
-                left: 6,
-                top: 0,
-            },
             tooltip: {
                 trigger: 'axis',
             },
@@ -221,14 +211,12 @@ export default class Revenue extends PureComponent {
     }
     render() {
         return (
-            <Card title="" bodyStyle={{ padding: '30px' }} style={{ position: 'relative' }}>
-                <div style={{ position: 'absolute', right: '30px', top: '20px' }}>
+            <Card title="园区营收统计" bordered={false} style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', right: '30px', top: '15px' }}>
                     <b>选择年份：</b>
                     <YearPicker />
                 </div>
-                <div ref="barChart" style={{ height: '400px', marginTop: '50px' }}>
-                    {/* <BarChart title="园区营收统计" data={dataSource} /> */}
-                </div>
+                <div ref="barChart" style={{ height: '400px' }} />
                 <div style={{ position: 'absolute', right: '10px', margin: '20px' }}>
                     <Button
                         type="primary"

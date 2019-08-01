@@ -83,20 +83,38 @@ const data2 = [
         address: '石家庄科技中心润江大厦B座1302',
     },
 ]
-const dataSource = {
-    names: ['2015', '2016', '2017', '2018', '2019'],
-    values: [100, 182, 201, 367, 412],
-}
+const dataSource = [
+    {
+        name: '2015',
+        value: 100,
+    },
+    {
+        name: '2016',
+        value: 182,
+    },
+    {
+        name: '2017',
+        value: 210,
+    },
+    {
+        name: '2018',
+        value: 367,
+    },
+    {
+        name: '2019',
+        value: 412,
+    },
+]
 export default class Quantity extends PureComponent {
     render() {
         return (
-            <Card title="" bodyStyle={{ padding: '30px' }} style={{ position: 'relative' }}>
-                <div style={{ position: 'absolute', right: '30px', top: '20px' }}>
+            <Card title="企业数量统计" style={{ position: 'relative' }} bordered={false}>
+                <div style={{ position: 'absolute', right: '30px', top: '15px' }}>
                     <b>选择年份：</b>
                     <YearPicker />
                 </div>
-                <div style={{ height: '400px', marginTop: '50px' }}>
-                    <BarChart title="企业数量统计" data={dataSource} />
+                <div style={{ height: '400px', marginTop: '30px' }}>
+                    <BarChart data={dataSource} />
                 </div>
                 <div style={{ position: 'absolute', right: '10px', margin: '20px' }}>
                     <Button

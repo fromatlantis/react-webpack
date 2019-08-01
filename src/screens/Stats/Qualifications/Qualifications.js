@@ -3,10 +3,28 @@ import { YearPicker } from 'components'
 import { Card, Button, Alert, Table } from 'antd'
 import { BarChart } from 'components/Charts'
 
-const dataSource = {
-    names: ['高新技术企业', '专利试点示范企业', '企业技术中心', '专精特新企业', '上海市科技小巨人'],
-    values: [8.3, 10.7, 11.2, 16.8, 15.9],
-}
+const dataSource = [
+    {
+        name: '高新技术企业',
+        value: 10.7,
+    },
+    {
+        name: '专利试点示范企业',
+        value: 8.3,
+    },
+    {
+        name: '企业技术中心',
+        value: 11.2,
+    },
+    {
+        name: '专精特新企业',
+        value: 16.8,
+    },
+    {
+        name: '上海市科技小巨人',
+        value: 15.9,
+    },
+]
 const columnsCount = [
     {
         title: '资质名称',
@@ -90,13 +108,13 @@ const data2 = [
 export default class Qualifications extends PureComponent {
     render() {
         return (
-            <Card title="" bodyStyle={{ padding: '30px' }} style={{ position: 'relative' }}>
-                <div style={{ position: 'absolute', right: '30px', top: '20px' }}>
+            <Card title="企业资质统计" style={{ position: 'relative' }} bordered={false}>
+                <div style={{ position: 'absolute', right: '30px', top: '15px' }}>
                     <b>选择年份：</b>
                     <YearPicker />
                 </div>
-                <div style={{ height: '400px', marginTop: '50px' }}>
-                    <BarChart title="企业资质统计" data={dataSource} />
+                <div style={{ height: '400px', marginTop: '30px' }}>
+                    <BarChart data={dataSource} />
                 </div>
                 <div style={{ position: 'absolute', right: '10px', margin: '20px' }}>
                     <Button

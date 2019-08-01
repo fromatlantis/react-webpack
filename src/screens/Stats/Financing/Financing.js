@@ -125,13 +125,13 @@ const dataSource = [
 export default class Financing extends PureComponent {
     render() {
         return (
-            <Card title="" bodyStyle={{ padding: '30px' }} style={{ position: 'relative' }}>
-                <div style={{ position: 'absolute', right: '30px', top: '20px' }}>
+            <Card title="融资情况统计" bordered={false} style={{ position: 'relative' }}>
+                <div style={{ position: 'absolute', right: '30px', top: '15px' }}>
                     <b>选择年份：</b>
                     <YearPicker />
                 </div>
-                <div style={{ height: '400px', marginTop: '50px' }}>
-                    <LineChart titleTop styleFlge title="融资情况统计" data={dataSource} />
+                <div style={{ height: '400px' }}>
+                    <LineChart titleTop styleFlge data={dataSource} />
                 </div>
                 <div style={{ position: 'absolute', right: '10px', margin: '20px' }}>
                     <Button
