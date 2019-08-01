@@ -46,7 +46,7 @@ export default class LineChart extends PureComponent {
         })
     }
     setOption = data => {
-        let { title, styleFlge, unit } = this.props
+        let { title, styleFlge, unit, titleTop } = this.props
         let names = [],
             values = []
         data.map(x => {
@@ -74,7 +74,7 @@ export default class LineChart extends PureComponent {
                 // },
             },
             grid: {
-                top: 10,
+                top: titleTop ? 50 : 0,
                 right: 10,
                 left: 10,
                 bottom: 10,

@@ -4,6 +4,11 @@ import Overview from './Overview/Overview'
 import Industry from './Industry/Industry'
 import Staff from './Staff/Staff'
 import Rights from './Rights/Rights'
+import Qualifications from './Qualifications/Qualifications'
+import Quantity from './Quantity/Quantity'
+import Revenue from './Revenue/Revenue'
+import Financing from './Financing/Financing'
+
 const menu = [
     {
         title: '物业统计总览',
@@ -28,6 +33,30 @@ const menu = [
         icon: '',
         path: '/stats/rights',
         component: Rights,
+    },
+    {
+        title: '企业资质统计',
+        icon: '',
+        path: '/stats/qualifications',
+        component: Qualifications,
+    },
+    {
+        title: '企业数量统计',
+        icon: '',
+        path: '/stats/quantity',
+        component: Quantity,
+    },
+    {
+        title: '园区营收统计',
+        icon: '',
+        path: '/stats/revenue',
+        component: Revenue,
+    },
+    {
+        title: '融资情况统计',
+        icon: '',
+        path: '/stats/financing',
+        component: Financing,
     },
 ]
 export default class Stats extends PureComponent {
