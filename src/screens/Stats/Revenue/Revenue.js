@@ -145,7 +145,7 @@ export default class Revenue extends PureComponent {
                         color: '#666',
                     },
                 },
-                data: ['2014', '2015', '2016', '2017', '2018', '2019'],
+                data: ['2014', '2015', '2016', '2017', '2018', '2019', '2020'],
             },
             yAxis: {
                 type: 'value',
@@ -184,7 +184,7 @@ export default class Revenue extends PureComponent {
                             },
                         },
                     },
-                    data: [31, 22, 41, 54, 26, 43],
+                    data: [31, 22, 41, 54, 26, 43, 39],
                 },
                 {
                     name: '营收',
@@ -202,7 +202,7 @@ export default class Revenue extends PureComponent {
                             },
                         },
                     },
-                    data: [15, 28, 51, 20, 70, 80],
+                    data: [15, 28, 51, 20, 70, 80, 66],
                 },
             ],
         }

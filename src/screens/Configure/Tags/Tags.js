@@ -2,28 +2,99 @@ import React, { PureComponent } from 'react'
 import { NavLink } from 'react-router-dom'
 import styles from '../Configure.module.css'
 import { Card, Tabs, Input, Tag, Tooltip, Icon, Modal } from 'antd'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from '../../../redux/configure'
 
 const { TabPane } = Tabs
 const { confirm } = Modal
-function callback(key) {
-    console.log(key)
+
+const mapStateToProps = state => {
+    return {
+        industryList: state.configure.industryList,
+        qualityList: state.configure.qualityList,
+        addLabelList: state.configure.addLabelList,
+    }
 }
-export default class Tags extends PureComponent {
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getLabelList: actions('getLabelList'),
+            addLabel: actions('addLabel'),
+            updateLabel: actions('updateLabel'),
+            deleteLabel: actions('deleteLabel'),
+            closeLabelList: actions('closeLabelList'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Tags extends PureComponent {
     state = {
-        tags: ['清华控股企业', '标签一', '标签二', '标签三', '标签四', '标签五'],
         inputVisible: false,
         inputValue: '',
+        type: 'industry',
+        industryTags: [],
+        qualityTags: [],
     }
+    componentDidMount = () => {
+        const type = this.state.type
+        this.renderData({ type })
+    }
+    componentWillReceiveProps = nextProps => {
+        if (
+            (nextProps.industryList !== this.props.industryList ||
+                nextProps.addLabelList !== this.props.addLabelList) &&
+            this.state.type === 'industry'
+        ) {
+            this.setState({ industryTags: nextProps.industryList })
+        }
+        if (
+            (nextProps.qualityList !== this.props.qualityList ||
+                nextProps.addLabelList !== this.props.addLabelList) &&
+            this.state.type === 'qualification'
+        ) {
+            this.setState({ qualityTags: nextProps.qualityList })
+        }
+    }
+    renderData = (type, label) => {
+        this.props.getLabelList(type, label)
+    }
+
+    callback = key => {
+        if (key == 1) {
+            this.setState({ type: 'industry' })
+            this.props.closeLabelList()
+            this.props.getLabelList({ type: 'industry' })
+        } else if (key == 2) {
+            this.setState({ type: 'qualification' })
+            this.props.closeLabelList()
+            this.props.getLabelList({ type: 'qualification' })
+        }
+    }
+
     handleClose = (removedTag, that) => {
         confirm({
             title: '确定删除？',
             content: '标签已关联企业，删除后企业将不具有此标签',
             onOk() {
-                const tags = that.state.tags.filter(tag => tag !== removedTag)
-                console.log(tags)
-                that.setState({ tags })
+                that.props.deleteLabel({ id: removedTag.id })
             },
-            onCancel() {},
+            onCancel() {
+                let { industryTags, qualityTags } = that.state
+                if (that.state.type === 'industry') {
+                    setTimeout(() => {
+                        that.setState({ industryTags: [...industryTags, removedTag] })
+                    }, 0)
+                } else if (that.state.type === 'qualification') {
+                    setTimeout(() => {
+                        that.setState({ qualityTags: [...qualityTags, removedTag] })
+                    }, 0)
+                }
+            },
         })
     }
     showInput = () => {
@@ -35,33 +106,43 @@ export default class Tags extends PureComponent {
     }
 
     handleInputConfirm = () => {
-        const { inputValue } = this.state
-        let { tags } = this.state
-        if (inputValue && tags.indexOf(inputValue) === -1) {
-            tags = [...tags, inputValue]
+        const { inputValue, type } = this.state
+        let { industryTags, qualityTags } = this.state
+        if (type === 'industry') {
+            if (inputValue && industryTags.indexOf(inputValue) === -1) {
+                this.props.addLabel({ type: type, label: inputValue })
+            }
+            this.setState({
+                inputVisible: false,
+                inputValue: '',
+            })
+        } else if (type === 'qualification') {
+            if (inputValue && qualityTags.indexOf(inputValue) === -1) {
+                this.props.addLabel({ type: type, label: inputValue })
+                qualityTags = [...qualityTags, inputValue]
+            }
+            this.setState({
+                inputVisible: false,
+                inputValue: '',
+            })
         }
-        console.log(tags)
-        this.setState({
-            tags,
-            inputVisible: false,
-            inputValue: '',
-        })
     }
 
     saveInputRef = input => (this.input = input)
 
     render() {
-        const { tags, inputVisible, inputValue } = this.state
+        const { inputVisible, inputValue, industryTags, qualityTags } = this.state
         return (
             <Card title="企业标签" bordered={false}>
-                <Tabs onChange={callback} type="card">
+                <Tabs onChange={this.callback} type="card">
                     <TabPane tab="行业标签" key="1">
                         <div style={{ display: 'inline-block' }}>
                             <span>标签：</span>
                             <Input.Search
                                 placeholder="请输入标签关键词"
-                                // onSearch={this.searchName}
-                                // onChange={data => this.changeData(data)}
+                                onSearch={value =>
+                                    this.renderData({ type: this.state.type, label: value })
+                                }
                                 className={styles.search}
                             />
                         </div>
@@ -88,19 +169,19 @@ export default class Tags extends PureComponent {
                             )}
                         </div>
                         <div style={{ marginTop: '20px' }}>
-                            {tags.map((tag, index) => {
+                            {industryTags.map((tag, index) => {
                                 const isLongTag = tag.length > 20
                                 const tagElem = (
                                     <Tag
-                                        key={tag}
+                                        key={tag.id}
                                         closable="true"
-                                        onClick={() => this.handleClose(tag, this)}
+                                        onClose={() => this.handleClose(tag, this)}
                                     >
-                                        {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                                        {isLongTag ? `${tag.label.slice(0, 20)}...` : tag.label}
                                     </Tag>
                                 )
                                 return isLongTag ? (
-                                    <Tooltip title={tag} key={tag}>
+                                    <Tooltip title={tag.label} key={tag.id}>
                                         {tagElem}
                                     </Tooltip>
                                 ) : (
@@ -114,8 +195,9 @@ export default class Tags extends PureComponent {
                             <span>标签：</span>
                             <Input.Search
                                 placeholder="请输入标签关键词"
-                                // onSearch={this.searchName}
-                                // onChange={data => this.changeData(data)}
+                                onSearch={value =>
+                                    this.renderData({ type: this.state.type, label: value })
+                                }
                                 className={styles.search}
                             />
                         </div>
@@ -142,25 +224,29 @@ export default class Tags extends PureComponent {
                             )}
                         </div>
                         <div style={{ marginTop: '20px' }}>
-                            {tags.map((tag, index) => {
-                                const isLongTag = tag.length > 20
-                                const tagElem = (
-                                    <Tag
-                                        key={tag}
-                                        closable="true"
-                                        // onClose={() => this.handleClose(tag, this)}
-                                    >
-                                        {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                                    </Tag>
-                                )
-                                return isLongTag ? (
-                                    <Tooltip title={tag} key={tag}>
-                                        {tagElem}
-                                    </Tooltip>
-                                ) : (
-                                    tagElem
-                                )
-                            })}
+                            {qualityTags.length
+                                ? qualityTags.map((tag, index) => {
+                                      const isLongTag = tag.length > 20
+                                      const tagElem = (
+                                          <Tag
+                                              key={tag.id}
+                                              closable="true"
+                                              onClose={() => this.handleClose(tag, this)}
+                                          >
+                                              {isLongTag
+                                                  ? `${tag.label.slice(0, 20)}...`
+                                                  : tag.label}
+                                          </Tag>
+                                      )
+                                      return isLongTag ? (
+                                          <Tooltip title={tag.label} key={tag.id}>
+                                              {tagElem}
+                                          </Tooltip>
+                                      ) : (
+                                          tagElem
+                                      )
+                                  })
+                                : null}
                         </div>
                     </TabPane>
                 </Tabs>
@@ -168,3 +254,4 @@ export default class Tags extends PureComponent {
         )
     }
 }
+export default Tags

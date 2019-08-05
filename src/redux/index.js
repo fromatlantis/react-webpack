@@ -18,6 +18,7 @@ import trademark from './trademark'
 import patent from './patent'
 import dictionary from './dictionary'
 import loading from './loading'
+import configure from './configure'
 
 export default history =>
     combineReducers({
@@ -39,4 +40,5 @@ export default history =>
         intermediary,
         dictionary,
         loading,
+        configure,
     })
