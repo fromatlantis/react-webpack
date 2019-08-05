@@ -9,6 +9,7 @@ import {
     Avatar,
     Alert,
     Button,
+    Checkbox,
     Input,
     Select,
     Tag,
@@ -21,6 +22,7 @@ import {
     Pagination,
 } from 'antd'
 import { IconFont } from 'components'
+import SearchChip from './SearchChip'
 import TransferView from './TransferView'
 import ImportTable from './ImportTable'
 import styles from './Company.module.css'
@@ -30,6 +32,7 @@ import avatar from 'assets/hz.png'
 const Search = Input.Search
 const Step = Steps.Step
 const Option = Select.Option
+const CheckboxGroup = Checkbox.Group
 
 const steps = [
     {
@@ -84,17 +87,20 @@ class Home extends PureComponent {
         keyWord: '',
         pageSize: 10,
         pageNo: 1,
+        allChecked: false,
+        checkedList: [],
+        indeterminate: true,
     }
     componentDidMount() {
         this.props.searchCompany({ pageNo: 1, pageSize: 10 })
     }
-    search = keyWord => {
+    search = params => {
         let { column, pageSize, pageNo } = this.state
-        this.setState({
-            keyWord,
-        })
-        if (keyWord) {
-            this.props.searchCompany({ column, keyWord, pageNo: 1, pageSize })
+        // this.setState({
+        //     keyWord,
+        // })
+        if (params.keyWord) {
+            this.props.searchCompany({ pageNo: 1, pageSize, ...params })
         } else {
             this.props.searchCompany({ pageNo: 1, pageSize })
         }
@@ -196,11 +202,21 @@ class Home extends PureComponent {
         //sessionStorage.setItem('companyName', item.name)
         this.props.push('/newCompany/info')
     }
+    // 选择
+    onCheck = checkedList => {
+        const { company } = this.props
+        this.setState({
+            checkedList,
+            indeterminate: !!checkedList.length && checkedList.length < company.list.length,
+            allChecked: checkedList.length === company.list.length,
+        })
+    }
     renderItem = () => {
         const { company } = this.props
         return (company.list || []).map(item => {
             return (
                 <div className={styles.itemCard} key={item.company_id}>
+                    <Checkbox value={item.company_id} style={{ position: 'absolute' }} />
                     <Avatar className={styles.avatar} src={item.logo} shape="square" size={100} />
                     <div className={styles.intro}>
                         <div className={styles.title}>
@@ -330,42 +346,20 @@ class Home extends PureComponent {
                 }
             },
         }
-        let { current, importResponse } = this.state
-        const selectBefore = (
-            <Select
-                defaultValue="name"
-                style={{ width: 110 }}
-                onChange={column => {
-                    this.setState({ column })
-                }}
-            >
-                <Option value="name">查公司</Option>
-                <Option value="legal_person_name">查法人</Option>
-                <Option value="industry">查行业</Option>
-            </Select>
-        )
+        let { current, importResponse, allChecked } = this.state
         const { company, directorList, companyList } = this.props
+        const chks = (company.list || []).map(item => item.company_id)
         return (
             <div className={styles.root}>
                 <div className={styles.searchBox}>
-                    {/* <Radio.Group buttonStyle="solid" style={{ marginBottom: '10px' }}>
-                        <Radio.Button value="a">查公司</Radio.Button>
-                        <Radio.Button value="b">查法人</Radio.Button>
-                        <Radio.Button value="c">查行业</Radio.Button>
-                    </Radio.Group>
-                    <Search
-                        placeholder="请输入企业名称"
-                        onSearch={value => console.log(value)}
-                        enterButton
-                        size="large"
-                    /> */}
-                    <Search
+                    <SearchChip onSearch={this.search} />
+                    {/* <Search
                         addonBefore={selectBefore}
                         placeholder="请输入企业名称"
                         onSearch={this.search}
                         enterButton
                         size="large"
-                    />
+                    /> */}
                 </div>
                 <div className={styles.titleChip}>
                     <Alert message={`总计${company.totalCount || 0}个企业`} type="info" showIcon />
@@ -384,7 +378,22 @@ class Home extends PureComponent {
                         <Button onClick={this.importList}>导入</Button>
                     </div>
                 </div>
-                {this.renderItem()}
+                <Checkbox
+                    style={{ marginTop: '10px' }}
+                    checked={allChecked}
+                    onChange={e => {
+                        this.setState({
+                            checkedList: e.target.checked ? chks : [],
+                            allChecked: !this.state.allChecked,
+                            indeterminate: false,
+                        })
+                    }}
+                >
+                    选择全部
+                </Checkbox>
+                <CheckboxGroup value={this.state.checkedList} onChange={this.onCheck}>
+                    {this.renderItem()}
+                </CheckboxGroup>
                 <div style={{ padding: '15px', display: 'flex', justifyContent: 'flex-end' }}>
                     <Pagination
                         showQuickJumper

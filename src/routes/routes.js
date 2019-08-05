@@ -16,6 +16,17 @@ const routes = [
         }),
     },
     {
+        //企业详情
+        path: '/companyDetails/*/:company_id/:type',
+        component: Loadable({
+            loader: () =>
+                import(
+                    /* webpackChunkName: "companyDetails" */ '../screens/CompanyDetails/CompanyDetails'
+                ),
+            loading: Loading,
+        }),
+    },
+    {
         path: '/newCompany/*',
         name: '新增',
         component: Loadable({

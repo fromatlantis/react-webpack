@@ -67,3 +67,29 @@
     background-color: #fafafa;
     text-align: center;
 }
+/* 搜索 */
+.searchChip {
+    display: flex;
+    & :global .ant-select-selection {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    & :global .ant-input {
+        border-radius: 0;
+        border-left-width: 0;
+        border-right-width: 0;
+        width: 500px;
+    }
+    & :global .ant-btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    & .input {
+        & :global .ant-select-selection {
+            border-radius: 0;
+            border-left-width: 0;
+            border-right-width: 0;
+            width: 500px;
+        }
+    }
+}
