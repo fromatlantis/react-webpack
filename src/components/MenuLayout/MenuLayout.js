@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { LeftMenu } from 'components'
-import routes from './authMenu'
+import { LeftMenu, AuthWrapper } from 'components'
+import getRoutes, { filterMenu } from './authMenu'
 import styles from './MenuLayout.module.css'
 
 @connect(state => {
@@ -15,25 +15,27 @@ import styles from './MenuLayout.module.css'
 class Repair extends PureComponent {
     render() {
         const { menu, auths } = this.props
-        const authRoute = menu /*.filter(item => auths.includes(item.title) || item.display === 'none')*/
-        // console.log(authRoute)
+        const authRoute = getRoutes(
+            menu,
+        ) /*.filter(item => auths.includes(item.title) || item.display === 'none')*/
         return (
             <div className={styles.root}>
-                <LeftMenu menuData={menu /*.filter(item => auths.includes(item.title))*/} />
-                <Switch>
-                    {authRoute.map((item, index) => {
-                        return (
+                <LeftMenu
+                    menuData={filterMenu(menu) /*.filter(item => auths.includes(item.title))*/}
+                />
+                {authRoute.map((item, index) => {
+                    return (
+                        <AuthWrapper role={item.role} key={index}>
                             <Route
                                 exact
                                 //strict
                                 path={item.path}
                                 component={item.component}
-                                key={index}
                             />
-                        )
-                    })}
-                    <Redirect to={authRoute[0].path} />
-                </Switch>
+                        </AuthWrapper>
+                    )
+                })}
+                <Redirect to={authRoute[0].path} />
             </div>
         )
     }
