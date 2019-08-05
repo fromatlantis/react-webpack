@@ -3,46 +3,26 @@ import React, { PureComponent } from 'react'
 import { Button, Form, Input, Divider, Select, TreeSelect, Breadcrumb, Card } from 'antd'
 import styles from './SupplierAdd.module.css'
 import { Link } from 'react-router-dom'
-
+import { UploadImg } from 'components'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from '../../../../redux/agencyRequire'
 
 const { TextArea } = Input
-const TreeNode = TreeSelect.TreeNode
 class supplierEdit extends PureComponent {
     state = {
         value: undefined,
+        classifyMap: [],
     }
     componentDidMount = () => {
         this.props.getServiceTypeList()
     }
     // 处理接口返回的数据
     nodeText = () => {
-        let ServiceTypeList = this.props.ServiceTypeList
-        let keys = [],
-            newList = []
-        ServiceTypeList.filter(item => {
+        let data = this.props.ServiceTypeList.filter(item => {
             return item.level === '1'
-        }).map(child => {
-            if (keys.indexOf(child.id) < 0) {
-                keys.push({ key: child.id, typeName: child.typeName })
-            }
-            return true
         })
-        let temp = ServiceTypeList.filter(item => {
-            return item.level === '2'
-        })
-        keys.forEach(parent => {
-            let items = []
-            temp.forEach(child => {
-                if (parent.key === child.pid) {
-                    items.push(child)
-                }
-            })
-            newList.push({ parent, items })
-        })
-        return newList
+        return data
     }
     handleSubmit = e => {
         e.preventDefault()
@@ -53,8 +33,22 @@ class supplierEdit extends PureComponent {
             }
         })
     }
+    selectClassify = value => {
+        let data = []
+        value.map(id => {
+            let temp = this.props.ServiceTypeList.filter(item => {
+                return item.pid == id
+            })
+            temp.map(child => {
+                data.push(child)
+            })
+        })
+        this.setState({ classifyMap: data })
+    }
     render() {
         const { getFieldDecorator } = this.props.form
+        const { classifyMap } = this.state
+        let list = this.props.ServiceTypeList
         const Option = Select.Option
         const formItemLayout = {
             labelCol: {
@@ -82,50 +76,31 @@ class supplierEdit extends PureComponent {
                     bordered={false}
                 >
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+                        <Form.Item {...formItemLayout} label="LOGO:">
+                            {getFieldDecorator('logo', {})(<UploadImg />)}
+                        </Form.Item>
                         <Form.Item {...formItemLayout} label="供应商分类:">
-                            {getFieldDecorator('category', {
-                                rules: [{ required: true, message: '请输入正确的供应商分类' }],
-                            })(
-                                <TreeSelect
-                                    showSearch
-                                    allowClear
-                                    multiple
-                                    treeDefaultExpandAll
-                                    style={{ width: 375 }}
-                                    dropdownStyle={{ maxHeight: 200, overflow: 'auto' }}
-                                >
-                                    {this.nodeText().map(item => {
-                                        if (item.items.length > 0) {
-                                            return (
-                                                <TreeNode
-                                                    value={item.parent.key}
-                                                    title={item.parent.typeName}
-                                                    key={item.parent.key}
-                                                    disabled
-                                                >
-                                                    {item.items.map(type => {
-                                                        return (
-                                                            <TreeNode
-                                                                key={type.id}
-                                                                title={type.typeName}
-                                                                value={type.id}
-                                                            />
-                                                        )
-                                                    })}
-                                                </TreeNode>
-                                            )
-                                        } else {
-                                            return (
-                                                <TreeNode
-                                                    value={item.parent.key}
-                                                    key={item.parent.key}
-                                                    title={item.parent.typeName}
-                                                    disabled
-                                                />
-                                            )
-                                        }
+                            <Select
+                                mode="multiple"
+                                style={{ width: 375 }}
+                                onChange={this.selectClassify}
+                            >
+                                {list &&
+                                    this.nodeText().map(item => {
+                                        return <Option key={item.id}>{item.typeName} </Option>
                                     })}
-                                </TreeSelect>,
+                            </Select>
+                        </Form.Item>
+                        <Form.Item {...formItemLayout} label="供应商细类:">
+                            {getFieldDecorator('classify', {
+                                rules: [{ required: true, message: '请输入正确的供应商细类' }],
+                            })(
+                                <Select mode="multiple" style={{ width: 375 }}>
+                                    {classifyMap.length &&
+                                        classifyMap.map(item => {
+                                            return <Option key={item.id}>{item.typeName}</Option>
+                                        })}
+                                </Select>,
                             )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="供应商名称:">

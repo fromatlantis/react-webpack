@@ -16,6 +16,7 @@ import { effects as outwardEffects } from './outward'
 import { effects as effectsTrademark } from './trademark'
 import { effects as patentEffects } from './patent'
 import { effects as dictionaryEffects } from './dictionary'
+import { effects as configureEffects } from './configure'
 
 // 监听action的调用，然后调用异步generate函数
 
@@ -38,5 +39,6 @@ export function* watchFetchData() {
         ...intermediary,
         ...agencyRequire,
         ...dictionaryEffects,
+        ...configureEffects,
     ])
 }

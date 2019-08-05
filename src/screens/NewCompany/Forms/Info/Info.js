@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Card, Input, Select, DatePicker, Modal } from 'antd'
+import { Card, Input, Select, DatePicker, Modal, Divider } from 'antd'
 import moment from 'moment'
 import { UploadImg, FormView } from 'components'
 // redux
@@ -190,6 +190,71 @@ class Info extends PureComponent {
                         <Option value="2">虚拟企业</Option>
                     </Select>
                 ),
+            },
+            {
+                label: '企业分级',
+                field: 'level',
+                initialValue: '1',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入信息',
+                    },
+                ],
+                component: (
+                    <Select>
+                        <Option value="1">A类企业</Option>
+                        <Option value="2">B类企业</Option>
+                    </Select>
+                ),
+            },
+            {
+                label: '引入时间',
+                field: 'time',
+                formatter: estiblishTime => {
+                    return moment(parseInt(estiblishTime))
+                },
+                component: <DatePicker />,
+            },
+            {
+                label: '行业标签',
+                field: 'industry',
+                component: (
+                    <Select mode="multiple">
+                        <Option value="one">选项一</Option>
+                        <Option value="two">选项二</Option>
+                        <Option value="three">选项三</Option>
+                    </Select>
+                ),
+            },
+            {
+                label: '资质标签',
+                field: 'quality',
+                component: (
+                    <Select mode="multiple">
+                        <Option value="one">选项一</Option>
+                        <Option value="two">选项二</Option>
+                        <Option value="three">选项三</Option>
+                    </Select>
+                ),
+            },
+            {
+                component: <Divider style={{ marginLeft: '15%' }}>企业联系人</Divider>,
+            },
+            {
+                label: '联系人',
+                field: 'person',
+                component: <Input />,
+            },
+            {
+                label: '联系人手机号',
+                field: 'telephone',
+                component: <Input />,
+            },
+            {
+                label: '联系人邮箱',
+                field: 'email',
+                component: <Input />,
             },
         ]
         let { loadAll, baseInfo } = this.props
