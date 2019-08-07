@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { Card, Button, Alert, Table, DatePicker, message } from 'antd'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { actions } from 'reduxDir/revenue'
+import { actions } from 'reduxDir/revenueAndFinancing'
 import moment from 'moment'
 import LineChart from './RevenueCharts'
 
@@ -82,9 +82,9 @@ const columnsDetail = [
 ]
 const mapStateToProps = state => {
     return {
-        financialStatus: state.revenue.financialStatus,
-        financeCountList: state.revenue.financeCountList,
-        financeDetailList: state.revenue.financeDetailList,
+        financialStatus: state.revenueAndFinancing.financialStatus,
+        financeCountList: state.revenueAndFinancing.financeCountList,
+        financeDetailList: state.revenueAndFinancing.financeDetailList,
     }
 }
 const mapDispatchToProps = dispatch => {

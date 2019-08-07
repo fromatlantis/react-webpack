@@ -427,7 +427,7 @@ class Website extends PureComponent {
             type: 'post',
             url: '/enterprise/getWebsiteRecordsList',
             data: {
-                companyId: 484167,
+                companyId: sessionStorage.companyId,
                 pageNo: req.pageNo,
                 pageSize: 10,
                 ym: this.state.form.ym,

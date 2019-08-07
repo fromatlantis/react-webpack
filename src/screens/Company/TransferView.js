@@ -53,13 +53,16 @@ export default class TransferView extends React.PureComponent {
     handleDisable = disabled => {
         this.setState({ disabled })
     }
-
+    filterOption = (inputValue, option) => option.name.indexOf(inputValue) > -1
     render() {
         const { targetKeys, selectedKeys, disabled } = this.state
         return (
             <div>
                 <Transfer
+                    listStyle={{ height: 360, width: 200 }}
                     rowKey={record => record.id}
+                    showSearch
+                    filterOption={this.filterOption}
                     dataSource={this.props.data}
                     titles={this.props.titles}
                     operations={['添加', '移除']}

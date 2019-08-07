@@ -20,8 +20,9 @@ import dictionary from './dictionary'
 import loading from './loading'
 import configure from './configure'
 import qualification from './qualification'
+import revenueAndFinancing from './revenueAndFinancing'
+import staff from './staff'
 import revenue from './revenue'
-
 export default history =>
     combineReducers({
         router: connectRouter(history),
@@ -44,5 +45,7 @@ export default history =>
         loading,
         configure,
         qualification,
+        revenueAndFinancing,
+        staff,
         revenue,
     })

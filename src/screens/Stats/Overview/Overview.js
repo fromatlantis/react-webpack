@@ -4,7 +4,43 @@ import { YearPicker } from 'components'
 import { BarChart, LineChart, PieChart } from 'components/Charts'
 import RevenueChart from './RevenueChart'
 import styles from '../Stats.module.css'
+const data = [
+    {
+        name: '网站域名',
+        value: 100,
+    },
+    {
+        name: '软件著作权',
+        value: 100,
+    },
+    {
+        name: '作品著作权',
+        value: 100,
+    },
+    {
+        name: '专利',
+        value: 100,
+    },
+    {
+        name: '商标',
+        value: 100,
+    },
+]
 export default class Overview extends PureComponent {
+    state = {
+        data: [
+            {
+                name: '123',
+                value: '123',
+            },
+        ],
+    }
+    componentDidMount() {
+        this.setState({
+            data: [],
+        })
+    }
+
     render() {
         return (
             <Card
@@ -39,7 +75,7 @@ export default class Overview extends PureComponent {
                                         />
                                         引进企业数量统计
                                     </div>
-                                    <BarChart data={[{ name: '123', value: '123' }]} />
+                                    <BarChart data={this.state.data} />
                                 </Col>
                                 <Col span={12} className={styles.card}>
                                     <div className={styles.title}>
@@ -49,7 +85,7 @@ export default class Overview extends PureComponent {
                                         />
                                         知识产权分布
                                     </div>
-                                    <PieChart data={[]} />
+                                    <PieChart data={data} />
                                 </Col>
                             </Row>
                         </Card>
@@ -57,7 +93,7 @@ export default class Overview extends PureComponent {
                     <Col span={8}>
                         <Card bordered={false} title="融资趋势">
                             <div style={{ height: '230px', display: 'flex' }}>
-                                <LineChart data={[{ name: '123', value: '123' }]} />
+                                <LineChart data={data} />
                             </div>
                         </Card>
                         <Card
@@ -73,26 +109,21 @@ export default class Overview extends PureComponent {
                     <Col span={8}>
                         <Card bordered={false} title="人才建设">
                             <div className={styles.card}>
-                                <PieChart data={[]} />
+                                <PieChart data={data} />
                             </div>
                         </Card>
                     </Col>
                     <Col span={8}>
                         <Card bordered={false} title="行业分布">
                             <div className={styles.card}>
-                                <PieChart data={[]} />
+                                <PieChart data={data} />
                             </div>
                         </Card>
                     </Col>
                     <Col span={8}>
                         <Card bordered={false} title="营收和纳税情况">
                             <div className={styles.card}>
-                                <RevenueChart
-                                    data={[
-                                        { name: '123', value: '123' },
-                                        { name: '456', value: '456' },
-                                    ]}
-                                />
+                                <RevenueChart data={data} />
                             </div>
                         </Card>
                     </Col>

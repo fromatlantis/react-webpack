@@ -9,7 +9,8 @@ import Crumbs from './Crumbs/Crumbs'
 import Graph from './Graph/Graph'
 import LeftMenu from './LeftMenu/LeftMenu'
 import MenuLayout from './MenuLayout/MenuLayout'
-import YearPicker from './ YearPicker/ YearPicker'
+import YearPicker from './YearPicker/YearPicker'
+import AuthWrapper from './AuthWrapper/AuthWrapper'
 export {
     FormView,
     SearchView,
@@ -24,4 +25,5 @@ export {
     LeftMenu,
     MenuLayout,
     YearPicker,
+    AuthWrapper,
 }

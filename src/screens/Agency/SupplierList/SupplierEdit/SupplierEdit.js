@@ -1,46 +1,38 @@
 // 企业需求/办理
 import React, { PureComponent } from 'react'
-import { Button, Form, Input, Divider, Select, TreeSelect, Breadcrumb, Card } from 'antd'
+import { Button, Form, Input, Select, Breadcrumb, Card } from 'antd'
 import styles from './SupplierEdit.module.css'
 import { Link } from 'react-router-dom'
 
 const { TextArea } = Input
-const TreeNode = TreeSelect.TreeNode
+
 class supplierEdit extends PureComponent {
     state = {
         value: undefined,
+        classifyMap: [],
     }
     componentDidMount = () => {
         let id = this.props.match.params.id
-        this.props.getSupplierList({ id: id })
+        this.props.getSupplierDetail({ supplierId: id })
         this.props.getServiceTypeList()
+    }
+    // 初始化细类
+    componentWillReceiveProps(nextProps) {
+        if (this.props.detail !== nextProps.detail) {
+            const category = this.props.ServiceTypeList.filter(item => item.level === '2').filter(
+                item => nextProps.detail.classifyId.split(',').includes(item.id),
+            )
+            this.setState({
+                classifyMap: category,
+            })
+        }
     }
     // 处理接口返回的数据
     nodeText = () => {
-        let ServiceTypeList = this.props.ServiceTypeList
-        let keys = [],
-            newList = []
-        ServiceTypeList.filter(item => {
+        let data = this.props.ServiceTypeList.filter(item => {
             return item.level === '1'
-        }).map(child => {
-            if (keys.indexOf(child.id) < 0) {
-                keys.push({ key: child.id, typeName: child.typeName })
-            }
-            return true
         })
-        let temp = ServiceTypeList.filter(item => {
-            return item.level === '2'
-        })
-        keys.forEach(parent => {
-            let items = []
-            temp.forEach(child => {
-                if (parent.key === child.pid) {
-                    items.push(child)
-                }
-            })
-            newList.push({ parent, items })
-        })
-        return newList
+        return data
     }
     handleSubmit = e => {
         e.preventDefault()
@@ -53,8 +45,26 @@ class supplierEdit extends PureComponent {
             }
         })
     }
+    selectClassify = value => {
+        let data = []
+        value.map(id => {
+            let temp = this.props.ServiceTypeList.filter(item => {
+                return item.pid == id
+            })
+            temp.map(child => {
+                data.push(child)
+            })
+        })
+        // 重置细类
+        this.props.form.setFieldsValue({
+            classifies: [],
+        })
+        this.setState({ classifyMap: data })
+    }
     render() {
         const { getFieldDecorator } = this.props.form
+        const { classifyMap } = this.state
+        let list = this.props.ServiceTypeList
         const Option = Select.Option
         const formItemLayout = {
             labelCol: {
@@ -84,49 +94,31 @@ class supplierEdit extends PureComponent {
                 >
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                         <Form.Item {...formItemLayout} label="供应商分类:">
-                            {getFieldDecorator('category', {
-                                rules: [{ required: true, message: '请输入供应商分类' }],
+                            {getFieldDecorator('categories', {
+                                rules: [{ required: true, message: '请选择供应商类型' }],
                             })(
-                                <TreeSelect
-                                    showSearch
+                                <Select
+                                    mode="multiple"
                                     style={{ width: 375 }}
-                                    dropdownStyle={{ maxHeight: 200, overflow: 'auto' }}
-                                    placeholder="Please select"
-                                    allowClear
-                                    treeDefaultExpandAll
+                                    onChange={this.selectClassify}
                                 >
-                                    {this.nodeText().map(item => {
-                                        if (item.items.length > 0) {
-                                            return (
-                                                <TreeNode
-                                                    value={item.parent.key}
-                                                    title={item.parent.typeName}
-                                                    key={item.parent.key}
-                                                    disabled
-                                                >
-                                                    {item.items.map(type => {
-                                                        return (
-                                                            <TreeNode
-                                                                key={type.id}
-                                                                title={type.typeName}
-                                                                value={type.id}
-                                                            />
-                                                        )
-                                                    })}
-                                                </TreeNode>
-                                            )
-                                        } else {
-                                            return (
-                                                <TreeNode
-                                                    value={item.parent.key}
-                                                    key={item.parent.key}
-                                                    title={item.parent.typeName}
-                                                    disabled
-                                                />
-                                            )
-                                        }
-                                    })}
-                                </TreeSelect>,
+                                    {list &&
+                                        this.nodeText().map(item => {
+                                            return <Option key={item.id}>{item.typeName} </Option>
+                                        })}
+                                </Select>,
+                            )}
+                        </Form.Item>
+                        <Form.Item {...formItemLayout} label="供应商细类:">
+                            {getFieldDecorator('classifies', {
+                                rules: [{ required: true, message: '请选择供应商细类' }],
+                            })(
+                                <Select mode="multiple" style={{ width: 375 }}>
+                                    {classifyMap.length &&
+                                        classifyMap.map(item => {
+                                            return <Option key={item.id}>{item.typeName}</Option>
+                                        })}
+                                </Select>,
                             )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="供应商名称:">
@@ -186,14 +178,20 @@ class supplierEdit extends PureComponent {
 }
 export default Form.create({
     mapPropsToFields(props) {
+        console.log(props.detail.categoryId)
         return {
-            supplier: Form.createFormField({ value: props.supperList.supplier }),
-            contract: Form.createFormField({ value: props.supperList.contract }),
-            telephone: Form.createFormField({ value: props.supperList.telephone }),
-            email: Form.createFormField({ value: props.supperList.email }),
-            website: Form.createFormField({ value: props.supperList.website }),
-            introduce: Form.createFormField({ value: props.supperList.introduce }),
-            category: Form.createFormField({ value: props.supperList.category_id }),
+            supplier: Form.createFormField({ value: props.detail.supplier }),
+            contract: Form.createFormField({ value: props.detail.contract }),
+            telephone: Form.createFormField({ value: props.detail.telephone }),
+            email: Form.createFormField({ value: props.detail.email }),
+            website: Form.createFormField({ value: props.detail.website }),
+            introduce: Form.createFormField({ value: props.detail.introduce }),
+            categories: Form.createFormField({
+                value: props.detail.categoryId ? props.detail.categoryId.split(',') : [],
+            }),
+            classifies: Form.createFormField({
+                value: props.detail.classifyId ? props.detail.classifyId.split(',') : [],
+            }),
         }
     },
 })(supplierEdit)

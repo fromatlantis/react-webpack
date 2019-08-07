@@ -1,5 +1,17 @@
 import React, { PureComponent } from 'react'
-import { Card, Form, Input, Button, Table, Select, Divider, Breadcrumb, Modal } from 'antd'
+import {
+    Avatar,
+    Card,
+    Form,
+    Input,
+    Button,
+    Table,
+    Select,
+    Divider,
+    Breadcrumb,
+    Modal,
+    Tag,
+} from 'antd'
 import { Link } from 'react-router-dom'
 import styles from './SupplierList.module.css'
 
@@ -11,7 +23,7 @@ let page = { pageNo: 1, pageSize: 10 }
 const confirm = Modal.confirm
 class SupplierList extends PureComponent {
     state = {
-        typeId: '',
+        categoryId: '',
         addTypes: [],
         allActive: true,
     }
@@ -27,7 +39,7 @@ class SupplierList extends PureComponent {
             }
             params = fieldsValue
             if (this.state.addTypes.length > 0) {
-                params.typeId = this.state.addTypes.join(',')
+                params.categoryId = this.state.addTypes.join(',')
             }
         })
         return params
@@ -87,7 +99,7 @@ class SupplierList extends PureComponent {
         let parm = this.formParms()
         parm.pageNo = 1
         parm.pageSize = 10
-        parm.typeId = undefined
+        parm.categoryId = undefined
         this.props.getSupplierList(parm)
     }
     underSupp = id => {
@@ -116,10 +128,11 @@ class SupplierList extends PureComponent {
             //     render: (text, record, index) => <span key={text}>{index + 1}</span>,
             // },
             {
-                title: '供应商类型',
-                dataIndex: 'type_name',
-                key: 'type_name',
+                title: 'LOGO',
+                dataIndex: 'logo',
+                key: 'logo',
                 align: 'center',
+                render: logo => <Avatar src={logo} size={60} shape="square" />,
             },
             {
                 title: '供应商名称',
@@ -128,34 +141,32 @@ class SupplierList extends PureComponent {
                 align: 'center',
             },
             {
-                title: '服务次数',
-                dataIndex: 'serviceTimes',
-                key: 'serviceTimes',
-                align: 'center',
-            },
-            {
-                title: '总评分(满分5分)',
-                dataIndex: 'score',
-                key: 'score',
-                align: 'center',
-                render: (text, record) => <span key={record}>{text ? text : '-'}</span>,
-            },
-            {
-                title: '提供的服务',
-                dataIndex: 'category',
-                key: 'category',
-                align: 'center',
-            },
-            {
-                title: '供应商联系人',
+                title: '联系人',
                 dataIndex: 'contract',
                 key: 'contract',
                 align: 'center',
             },
             {
-                title: '联系电话',
+                title: '联系方式',
                 dataIndex: 'telephone',
                 key: 'telephone',
+                align: 'center',
+            },
+            {
+                title: '供应商类型',
+                dataIndex: 'categories',
+                key: 'categories',
+                width: 230,
+                render: categories => {
+                    return categories
+                        .split(',')
+                        .map((item, index) => index < 3 && <Tag color="blue">{item}</Tag>)
+                },
+            },
+            {
+                title: '状态',
+                dataIndex: 'flagName',
+                key: 'flagName',
                 align: 'center',
             },
             {
@@ -165,12 +176,12 @@ class SupplierList extends PureComponent {
                 align: 'center',
                 render: (text, record) => (
                     <span key={record}>
-                        <Link to={`/agency/supplierEdit/${record.id}`}>编辑</Link>
+                        <Link to={`/agency/supplierEdit/${record.supplierId}`}>编辑</Link>
                         <Divider type="vertical" />
-                        <Link to={`/agency/supplierDetail/${record.id}`}>详情</Link>
+                        <Link to={`/agency/supplierDetail/${record.supplierId}`}>详情</Link>
                         <Divider type="vertical" />
                         <span
-                            onClick={() => this.underSupp(record.id)}
+                            onClick={() => this.underSupp(record.supplierId)}
                             style={{
                                 color: record.flag === '1' ? '#0099CC' : 'red',
                                 cursor: 'pointer',

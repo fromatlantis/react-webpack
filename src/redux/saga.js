@@ -18,8 +18,9 @@ import { effects as patentEffects } from './patent'
 import { effects as dictionaryEffects } from './dictionary'
 import { effects as configureEffects } from './configure'
 import { effects as qualificationEffects } from './qualification'
+import { effects as revenueAndFinancingEffects } from './revenueAndFinancing'
+import { effects as staffEffects } from './staff'
 import { effects as revenueEffects } from './revenue'
-
 // 监听action的调用，然后调用异步generate函数
 
 export function* watchFetchData() {
@@ -43,6 +44,8 @@ export function* watchFetchData() {
         ...dictionaryEffects,
         ...configureEffects,
         ...qualificationEffects,
+        ...revenueAndFinancingEffects,
+        ...staffEffects,
         ...revenueEffects,
     ])
 }

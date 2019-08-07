@@ -28,7 +28,8 @@ class supplierEdit extends PureComponent {
         e.preventDefault()
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                values.category = values.category.join(',')
+                values.categories = values.categories.join(',')
+                values.classifies = values.classifies.join(',')
                 this.props.addSupplier(values)
             }
         })
@@ -42,6 +43,10 @@ class supplierEdit extends PureComponent {
             temp.map(child => {
                 data.push(child)
             })
+        })
+        // 重置细类
+        this.props.form.setFieldsValue({
+            classifies: [],
         })
         this.setState({ classifyMap: data })
     }
@@ -80,20 +85,24 @@ class supplierEdit extends PureComponent {
                             {getFieldDecorator('logo', {})(<UploadImg />)}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="供应商分类:">
-                            <Select
-                                mode="multiple"
-                                style={{ width: 375 }}
-                                onChange={this.selectClassify}
-                            >
-                                {list &&
-                                    this.nodeText().map(item => {
-                                        return <Option key={item.id}>{item.typeName} </Option>
-                                    })}
-                            </Select>
+                            {getFieldDecorator('categories', {
+                                rules: [{ required: true, message: '请选择供应商类型' }],
+                            })(
+                                <Select
+                                    mode="multiple"
+                                    style={{ width: 375 }}
+                                    onChange={this.selectClassify}
+                                >
+                                    {list &&
+                                        this.nodeText().map(item => {
+                                            return <Option key={item.id}>{item.typeName} </Option>
+                                        })}
+                                </Select>,
+                            )}
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="供应商细类:">
-                            {getFieldDecorator('classify', {
-                                rules: [{ required: true, message: '请输入正确的供应商细类' }],
+                            {getFieldDecorator('classifies', {
+                                rules: [{ required: true, message: '请选择供应商细类' }],
                             })(
                                 <Select mode="multiple" style={{ width: 375 }}>
                                     {classifyMap.length &&

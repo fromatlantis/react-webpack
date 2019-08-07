@@ -3,7 +3,7 @@ import { Card, Button, Alert, Table, DatePicker, message } from 'antd'
 import { LineChart } from 'components/Charts'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { actions } from 'reduxDir/revenue'
+import { actions } from 'reduxDir/revenueAndFinancing'
 import moment from 'moment'
 
 const columnsCount = [
@@ -81,14 +81,14 @@ const columnsDetail = [
 ]
 const mapStateToProps = state => {
     return {
-        financingTrend: state.revenue.financingTrend
+        financingTrend: state.revenueAndFinancing.financingTrend
             .map(item => ({
                 name: item.year,
                 value: item.totalAmount,
             }))
             .reverse(),
-        financingHisCountList: state.revenue.financingHisCountList,
-        financingHisDetailList: state.revenue.financingHisDetailList,
+        financingHisCountList: state.revenueAndFinancing.financingHisCountList,
+        financingHisDetailList: state.revenueAndFinancing.financingHisDetailList,
     }
 }
 const mapDispatchToProps = dispatch => {

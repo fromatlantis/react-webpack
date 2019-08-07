@@ -1,29 +1,31 @@
-import React, { PureComponent } from 'react'
-import { Button, Card, Divider, Modal, Input, Skeleton, Table } from 'antd'
+import React, { PureComponent, Fragment } from 'react'
+import { Button, Card, Divider, Modal, Input, InputNumber, Skeleton, Table, DatePicker } from 'antd'
 import Toolbar from '../../Toolbar/Toolbar'
-import { FormView, SearchView } from 'components'
+import { FormView, SearchView, YearPicker } from 'components'
 import { UploadImg } from 'components'
+import moment from 'moment'
 import styles from './Staff.module.css'
 
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { actions } from 'reduxDir/members'
+import { actions } from 'reduxDir/staff'
 
 const mapStateToProps = state => {
     return {
-        team: state.members.team,
-        detail: state.members.detail,
-        searchParams: state.members.searchParams,
+        staff: state.staff.staff,
+        detail: state.staff.detail,
+        searchParams: state.staff.searchParams,
     }
 }
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
-            getCoreTeamList: actions('getCoreTeamList'),
-            queryCoreTeamDetail: actions('queryCoreTeamDetail'),
-            increaseCoreTeamApprove: actions('increaseCoreTeamApprove'),
-            changeCoreTeamApprove: actions('changeCoreTeamApprove'),
+            getStaffEdusList: actions('getStaffEdusList'),
+            getStaffsDetail: actions('getStaffsDetail'),
+            addStaffEdu: actions('addStaffEdu'),
+            updateStaffEdu: actions('updateStaffEdu'),
+            delStaffEdu: actions('delStaffEdu'),
         },
         dispatch,
     )
@@ -41,9 +43,29 @@ class Staff extends PureComponent {
         isEdit: false,
     }
     componentDidMount() {
-        this.props.getCoreTeamList()
+        this.props.getStaffEdusList()
     }
-
+    // 查询
+    search = () => {
+        this.form.validateFields((errors, values) => {
+            if (!errors) {
+                values.pageNo = 1
+                this.props.getStaffEdusList(values)
+            }
+        })
+    }
+    handleReset = () => {
+        this.form.resetFields()
+        this.search()
+    }
+    // 分页
+    onChange = pageNo => {
+        this.props.getStaffEdusList({ pageNo })
+    }
+    onShowSizeChange = (_, pageSize) => {
+        this.props.getStaffEdusList({ pageNo: 1, pageSize })
+    }
+    // 新增
     newInfo = () => {
         this.setState({
             visible: true,
@@ -54,13 +76,13 @@ class Staff extends PureComponent {
         this.newForm.validateFields((errors, values) => {
             if (!errors) {
                 const { isEdit } = this.state
-                const { changeCoreTeamApprove, increaseCoreTeamApprove, detail } = this.props
+                const { updateStaffEdu, addStaffEdu, detail } = this.props
                 if (isEdit) {
                     // 编辑
-                    changeCoreTeamApprove({ ...detail, ...values })
+                    updateStaffEdu({ ...detail, ...values })
                 } else {
                     // 新增
-                    increaseCoreTeamApprove(values)
+                    addStaffEdu(values)
                 }
                 this.setState({
                     visible: false,
@@ -74,75 +96,83 @@ class Staff extends PureComponent {
         })
     }
     renderNewForm = () => {
+        const suffix = <span style={{ marginLeft: '5px' }}>人</span>
         const items = [
             {
-                label: '形象照片',
-                field: 'icon',
+                label: '年份',
+                field: 'years',
+                formatter: years => moment(years),
+                component: <YearPicker />,
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请选择年份',
                     },
                 ],
-                component: <UploadImg />,
             },
             {
-                label: '姓名',
-                field: 'name',
-                component: <Input />,
+                label: '就业人数',
+                field: 'employment',
+                component: <InputNumber min={0} precision={0} />,
+                suffix: () => suffix,
             },
             {
-                label: '职务',
-                field: 'title',
-                component: <Input />,
+                label: '入选区、本市和国家相关人才计划的人员',
+                field: 'talents',
+                component: <InputNumber />,
+                suffix: () => suffix,
             },
             {
-                label: '介绍',
-                field: 'description',
-                component: <TextArea autosize={{ minRows: 5 }} />,
+                label: '留学生人员',
+                field: 'overseasStudent',
+                component: <InputNumber />,
+                suffix: () => suffix,
+            },
+            {
+                label: '博士人员',
+                field: 'doctoral',
+                component: <InputNumber />,
+                suffix: () => suffix,
+            },
+            {
+                label: '本科及以上学历人员',
+                field: 'undergraduate',
+                component: <InputNumber />,
+                suffix: () => suffix,
+            },
+            {
+                label: '大专及以上学历人员',
+                field: 'juniorCollege',
+                component: <InputNumber />,
+                suffix: () => suffix,
+            },
+            {
+                label: '本公司社保缴纳人员',
+                field: 'socialPay',
+                component: <InputNumber />,
+                suffix: () => suffix,
             },
         ]
-        const formItemLayout = {
-            labelCol: { span: 5 },
-            wrapperCol: { span: 14 },
-        }
         const { isEdit } = this.state
         const { detail } = this.props
         return (
-            <FormView
-                ref={form => {
-                    this.newForm = form
-                }}
-                items={items}
-                formItemLayout={formItemLayout}
-                data={isEdit ? detail : {}}
-                saveBtn={false}
-            />
+            <div style={{ width: '400px', margin: '0 auto' }}>
+                <FormView
+                    ref={form => {
+                        this.newForm = form
+                    }}
+                    items={items}
+                    layout="inline"
+                    formItemLayout={{}}
+                    data={isEdit ? detail : {}}
+                    saveBtn={false}
+                />
+            </div>
         )
     }
-    // 查询
-    search = () => {
-        this.form.validateFields((errors, values) => {
-            if (!errors) {
-                values.pageNo = 1
-                this.props.getCoreTeamList(values)
-            }
-        })
-    }
-    handleReset = () => {
-        this.form.resetFields()
-        this.search()
-    }
-    // 分页
-    onChange = pageNo => {
-        this.props.getCoreTeamList({ pageNo })
-    }
-    onShowSizeChange = (_, pageSize) => {
-        this.props.getCoreTeamList({ pageNo: 1, pageSize })
-    }
     // 编辑
-    edit = keyId => {
-        this.props.queryCoreTeamDetail(keyId)
+    edit = staffId => {
+        this.props.getStaffsDetail(staffId)
         this.setState({
             visible: true,
             isEdit: true,
@@ -152,39 +182,66 @@ class Staff extends PureComponent {
         const searchItems = [
             {
                 label: '年份',
-                field: 'name',
-                component: <Input />,
+                field: 'years',
+                component: <YearPicker />,
             },
             {
                 label: '更新日期',
-                field: 'title',
-                component: <Input />,
+                field: 'updateTime',
+                component: <DatePicker />,
             },
         ]
         const columns = [
             {
-                title: '形象照片',
-                dataIndex: 'icon',
-                key: 'icon',
-                width: 150,
-                render: icon => <img src={icon} alt="" style={{ width: '120px' }} />,
+                title: '年份',
+                dataIndex: 'years',
+                key: 'years',
+                width: 80,
             },
             {
-                title: '姓名',
-                dataIndex: 'name',
-                key: 'name',
-                width: 100,
+                title: '就业人员',
+                dataIndex: 'employment',
+                key: 'employment',
             },
             {
-                title: '职务',
-                dataIndex: 'title',
-                key: 'title',
-                width: 100,
+                title: '博士',
+                dataIndex: 'doctoral',
+                key: 'doctoral',
             },
             {
-                title: '介绍',
-                dataIndex: 'description',
-                key: 'description',
+                title: '入选区、本市和国家相关人才计划的人员',
+                dataIndex: 'talents',
+                key: 'talents',
+                width: 120,
+            },
+            {
+                title: '留学生人员',
+                dataIndex: 'overseasStudent',
+                key: 'overseasStudent',
+            },
+            {
+                title: '本科及以上学历人员',
+                dataIndex: 'undergraduate',
+                key: 'undergraduate',
+                width: 110,
+            },
+            {
+                title: '大专及以上学历人员',
+                dataIndex: 'juniorCollege',
+                key: 'juniorCollege',
+                width: 110,
+            },
+            {
+                title: '本公司社保缴纳人员',
+                dataIndex: 'socialPay',
+                key: 'socialPay',
+                width: 110,
+            },
+            {
+                title: '更新日期',
+                dataIndex: 'updateTime',
+                key: 'updateTime',
+                width: 130,
             },
             {
                 title: '操作',
@@ -193,18 +250,28 @@ class Staff extends PureComponent {
                 width: 100,
                 align: 'center',
                 render: (_, record) => (
-                    <Button
-                        type="link"
-                        onClick={() => {
-                            this.edit(record.keyId)
-                        }}
-                    >
-                        编辑
-                    </Button>
+                    <Fragment>
+                        <Button
+                            type="link"
+                            onClick={() => {
+                                this.edit(record.staffId)
+                            }}
+                        >
+                            编辑
+                        </Button>
+                        <Button
+                            type="link"
+                            onClick={() => {
+                                this.props.delStaffEdu({ staffId: record.staffId })
+                            }}
+                        >
+                            删除
+                        </Button>
+                    </Fragment>
                 ),
             },
         ]
-        const { team, searchParams } = this.props
+        const { staff, searchParams } = this.props
         return (
             <Card title="人员情况" bordered={false} extra={<Toolbar />}>
                 <div className={styles.searchBox}>
@@ -237,24 +304,24 @@ class Staff extends PureComponent {
                     </div>
                 </div>
 
-                <Skeleton loading={team.list ? false : true} active avatar>
+                <Skeleton loading={staff.list ? false : true} active avatar>
                     <Table
                         bordered
-                        dataSource={team.list}
+                        dataSource={staff.list}
                         columns={columns}
                         pagination={{
                             current: searchParams.pageNo,
                             showSizeChanger: true,
                             showQuickJumper: true,
                             pageSizeOptions: ['10', '15', '20'],
-                            total: team.totalCount,
+                            total: staff.totalCount,
                             onShowSizeChange: this.onShowSizeChange,
                             onChange: this.onChange,
                         }}
                     />
                 </Skeleton>
                 <Modal
-                    title="核心人员"
+                    title="人员情况"
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}

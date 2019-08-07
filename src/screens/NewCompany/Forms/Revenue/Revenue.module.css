@@ -4,3 +4,9 @@
     align-items: center;
     justify-content: space-between;
 }
+.modal {
+     & :global .ant-form-inline .ant-form-item > .ant-form-item-label {
+        width: 120px;
+        text-align: right;
+    }
+}

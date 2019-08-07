@@ -4,9 +4,9 @@ import { blaze } from '../utils/blaze'
 import { message } from 'antd'
 
 const model = {
-    namespace: 'revenue',
+    namespace: 'staff',
     state: {
-        revenue: {},
+        staff: {},
         detail: {},
         searchParams: {
             pageNo: 1,
@@ -15,7 +15,7 @@ const model = {
     },
     actions: [
         {
-            name: 'getFinanceInfosList',
+            name: 'getStaffEdusList',
             reducer: (state, action) => {
                 return {
                     ...state,
@@ -23,7 +23,7 @@ const model = {
                 }
             },
             *effect(action) {
-                const searchParams = yield select(rootState => rootState.revenue.searchParams)
+                const searchParams = yield select(rootState => rootState.staff.searchParams)
                 // 时间处理
                 const { years, updateTime, ...params } = searchParams
                 params.companyId = sessionStorage.getItem('companyId')
@@ -35,27 +35,27 @@ const model = {
                 }
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/getFinanceInfosList`,
+                    url: `/enterprise/getStaffEduList`,
                     contentType: 'multipart/form-data',
                     data: params,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getFinanceInfosListOK')(res.data))
+                    yield put(actions('getStaffEdusListOK')(res.data))
                 }
             },
         },
         {
-            name: 'getFinanceInfosListOK',
-            reducer: 'revenue',
+            name: 'getStaffEdusListOK',
+            reducer: 'staff',
         },
         {
-            name: 'getFinanceDetail',
+            name: 'getStaffsDetail',
             *effect(action) {
                 const res = yield call(request, {
-                    url: `/enterprise/getFinanceDetail?financeId=${action.payload}`,
+                    url: `/enterprise/getStaffsDetail?staffId=${action.payload}`,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getFinanceDetailOK')(res.data))
+                    yield put(actions('getStaffsDetailOK')(res.data))
                 }
             },
             reducer: (state, action) => {
@@ -66,12 +66,12 @@ const model = {
             },
         },
         {
-            name: 'getFinanceDetailOK',
+            name: 'getStaffsDetailOK',
             reducer: 'detail',
         },
         // 新增
         {
-            name: 'addFinanceInfo',
+            name: 'addStaffEdu',
             *effect(action) {
                 let params = action.payload
                 params.companyId = sessionStorage.getItem('companyId')
@@ -80,13 +80,13 @@ const model = {
                 }
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/addFinanceInfo`,
+                    url: `/enterprise/addStaffEdu`,
                     contentType: 'multipart/form-data',
                     data: params,
                 })
                 if (res.code === 1000) {
                     message.success('保存成功')
-                    yield put(actions('getFinanceInfosList')())
+                    yield put(actions('getStaffEdusList')())
                 }
             },
         },
@@ -109,7 +109,7 @@ const model = {
             },
         },
         {
-            name: 'updateFinanceInfo',
+            name: 'updateStaffEdu',
             *effect(action) {
                 let params = action.payload
                 params.companyId = sessionStorage.getItem('companyId')
@@ -118,39 +118,39 @@ const model = {
                 }
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/updateFinanceInfo`,
+                    url: `/enterprise/updateStaffEdu`,
                     contentType: 'multipart/form-data',
                     data: params,
                 })
                 if (res.code === 1000) {
                     message.success('修改成功')
-                    yield put(actions('getFinanceInfosList')())
+                    yield put(actions('getStaffEdusList')())
                 }
             },
         },
         {
-            name: 'delFinanceInfo',
+            name: 'delStaffEdu',
             *effect(action) {
                 let params = action.payload
                 params.companyId = sessionStorage.getItem('companyId')
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/delFinanceInfo`,
+                    url: `/enterprise/delStaffEdu`,
                     contentType: 'multipart/form-data',
                     data: params,
                 })
                 if (res.code === 1000) {
                     message.success('删除成功')
-                    yield put(actions('getFinanceInfosList')())
+                    yield put(actions('getStaffEdusList')())
                 }
             },
         },
     ],
 }
-const revenue = blaze(model)
+const staff = blaze(model)
 // reducer combineReducers使用
-export default revenue.reducers
+export default staff.reducers
 // action connect组件使用
-export const actions = revenue.actions
+export const actions = staff.actions
 // effects saga监听副作用函数使用
-export const effects = revenue.effects
+export const effects = staff.effects

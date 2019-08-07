@@ -27,7 +27,7 @@ const routes = [
         }),
     },
     {
-        path: '/newCompany/*',
+        path: '/newCompany',
         name: '新增',
         component: Loadable({
             loader: () =>

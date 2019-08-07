@@ -486,7 +486,7 @@ class Works extends PureComponent {
             type: 'post',
             url: '/enterprise/getProductTrademarkList',
             data: {
-                companyId: 484167,
+                companyId: sessionStorage.companyId,
                 pageNo: req.pageNo,
                 pageSize: 10,
                 fullname: this.state.form.fullname,
