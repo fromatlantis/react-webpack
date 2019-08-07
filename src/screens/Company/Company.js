@@ -378,9 +378,7 @@ class Home extends PureComponent {
                             批量指派
                         </Button>
                         <Export title="批量导出" />
-                        <Button type="primary" onClick={this.batchAssign}>
-                            全部导出
-                        </Button>
+                        <Export title="全部导出" />
                     </div>
                 </div>
                 <Checkbox
