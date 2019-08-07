@@ -5,16 +5,15 @@ import { actions } from '../../../../redux/agencyRequire'
 
 const mapStateToProps = state => {
     return {
-        supperList: state.agencyRequire.supperList[0] || state.agencyRequire.supperList,
-        demandList: state.agencyRequire.demandList,
-        demandTotal: state.agencyRequire.demandTotal,
+        ServiceTypeList: state.agencyRequire.ServiceTypeList,
+        detail: state.agencyRequire.detail,
     }
 }
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
-            getSupplierList: actions('getSupplierList'),
-            getDemandList: actions('getDemandList'),
+            getSupplierDetail: actions('getSupplierDetail'),
+            getServiceTypeList: actions('getServiceTypeList'),
         },
         dispatch,
     )

@@ -21,7 +21,7 @@ import {
     Upload,
     Pagination,
 } from 'antd'
-import { IconFont } from 'components'
+import { IconFont, FormView } from 'components'
 import SearchChip from './SearchChip'
 import TransferView from './TransferView'
 import ImportTable from './ImportTable'
@@ -364,7 +364,6 @@ class Home extends PureComponent {
                 <div className={styles.titleChip}>
                     <Alert message={`总计${company.totalCount || 0}个企业`} type="info" showIcon />
                     <div className={styles.toolbar}>
-                        <Button onClick={this.batchAssign}>批量指派</Button>
                         <Button
                             type="primary"
                             onClick={() => {
@@ -375,7 +374,18 @@ class Home extends PureComponent {
                         >
                             新增
                         </Button>
-                        <Button onClick={this.importList}>导入</Button>
+                        <Button type="primary" onClick={this.importList}>
+                            导入
+                        </Button>
+                        <Button type="primary" onClick={this.batchAssign}>
+                            批量指派
+                        </Button>
+                        <Button type="primary" onClick={this.batchAssign}>
+                            批量导出
+                        </Button>
+                        <Button type="primary" onClick={this.batchAssign}>
+                            全部导出
+                        </Button>
                     </div>
                 </div>
                 <Checkbox
@@ -391,7 +401,11 @@ class Home extends PureComponent {
                 >
                     选择全部
                 </Checkbox>
-                <CheckboxGroup value={this.state.checkedList} onChange={this.onCheck}>
+                <CheckboxGroup
+                    style={{ width: '100%' }}
+                    value={this.state.checkedList}
+                    onChange={this.onCheck}
+                >
                     {this.renderItem()}
                 </CheckboxGroup>
                 <div style={{ padding: '15px', display: 'flex', justifyContent: 'flex-end' }}>
@@ -407,23 +421,41 @@ class Home extends PureComponent {
 
                 {/* <List dataSource={data} renderItem={this.renderItem} /> */}
                 <Modal
+                    width={1000}
                     title="批量指派企服人员"
                     visible={this.state.batchAssign}
                     onOk={this.batchAssignOk}
                     onCancel={this.batchAssignCancel}
                     //footer={null}
                 >
-                    <TransferView
-                        titles={['选择企业', '已选企业']}
-                        data={companyList}
-                        ref="batchAssignCompany"
-                    />
-                    <Divider dashed />
-                    <TransferView
-                        titles={['选择人员', '已选人员']}
-                        data={directorList}
-                        ref="batchAssignPerson"
-                    />
+                    <div style={{ display: 'flex' }}>
+                        <TransferView
+                            titles={['源列表', '目标列表']}
+                            data={companyList}
+                            ref="batchAssignCompany"
+                        />
+                        <div style={{ marginLeft: '20px', flex: 1 }}>
+                            <FormView
+                                ref={form => {
+                                    this.form = form
+                                }}
+                                formItemLayout={{ labelCol: { span: 8 }, wrapperCol: { span: 13 } }}
+                                items={[
+                                    {
+                                        label: '招商负责人',
+                                        field: 'years',
+                                        component: <Select />,
+                                    },
+                                    {
+                                        label: '招商服务模块',
+                                        field: 'updateTime',
+                                        component: <Select />,
+                                    },
+                                ]}
+                                saveBtn={false}
+                            />
+                        </div>
+                    </div>
                 </Modal>
                 <Modal
                     title="指派企服人员"

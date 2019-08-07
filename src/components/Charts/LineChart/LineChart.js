@@ -201,9 +201,9 @@ export default class LineChart extends PureComponent {
             return <div ref="lineChart" className={styles.root} style={style} />
         } else {
             return (
-                <div className={styles.root}>
+                <ul className={styles.root}>
                     <Empty />
-                </div>
+                </ul>
             )
         }
     }

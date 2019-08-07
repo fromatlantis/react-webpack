@@ -27,6 +27,20 @@ const data = [
     },
 ]
 export default class Overview extends PureComponent {
+    state = {
+        data: [
+            {
+                name: '123',
+                value: '123',
+            },
+        ],
+    }
+    componentDidMount() {
+        this.setState({
+            data: [],
+        })
+    }
+
     render() {
         return (
             <Card
@@ -61,7 +75,7 @@ export default class Overview extends PureComponent {
                                         />
                                         引进企业数量统计
                                     </div>
-                                    <BarChart data={[{ name: '123', value: '123' }]} />
+                                    <BarChart data={this.state.data} />
                                 </Col>
                                 <Col span={12} className={styles.card}>
                                     <div className={styles.title}>

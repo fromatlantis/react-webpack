@@ -40,7 +40,7 @@ const menu = [
     {
         title: '基本信息',
         icon: '',
-        path: '/newCompany',
+        path: 'base',
         children: [
             {
                 title: '工商信息',
@@ -77,6 +77,7 @@ const menu = [
     {
         title: '投资关系',
         icon: '',
+        path: 'investment',
         children: [
             {
                 title: '投资事件',
@@ -93,6 +94,7 @@ const menu = [
     {
         title: '知识产权',
         icon: '',
+        path: 'copyright',
         children: [
             {
                 title: '商标信息',

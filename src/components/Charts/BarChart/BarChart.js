@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/bar'
@@ -200,9 +200,9 @@ export default class BarChart extends PureComponent {
             return <div ref="barChart" className={styles.root} />
         } else {
             return (
-                <div className={styles.root}>
+                <ul className={styles.root}>
                     <Empty />
-                </div>
+                </ul>
             )
         }
     }

@@ -19,7 +19,8 @@ import patent from './patent'
 import dictionary from './dictionary'
 import loading from './loading'
 import configure from './configure'
-
+import staff from './staff'
+import revenue from './revenue'
 export default history =>
     combineReducers({
         router: connectRouter(history),
@@ -41,4 +42,6 @@ export default history =>
         dictionary,
         loading,
         configure,
+        staff,
+        revenue,
     })

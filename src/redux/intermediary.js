@@ -17,7 +17,7 @@ const model = {
             name: 'getServiceTypeList',
             *effect(action) {
                 const res = yield call(request, {
-                    type: 'post',
+                    // type: 'post',
                     url: '/enterprise/getServiceTypeList',
                     // data: action.payload,
                 })

@@ -46,6 +46,7 @@ class FormView extends PureComponent {
                                       rules: item.rules,
                                   })(item.component)
                                 : item.component}
+                            {item.suffix && item.suffix()}
                         </Form.Item>
                     )
                 })}

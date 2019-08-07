@@ -17,6 +17,7 @@ const model = {
         editTypeList: [],
         demandTotal: null,
         recommendList: [],
+        detail: {},
     },
     actions: [
         //获取需求列表
@@ -87,7 +88,7 @@ const model = {
             name: 'getServiceTypeList',
             *effect(action) {
                 const res = yield call(request, {
-                    type: 'post',
+                    // type: 'post',
                     url: '/enterprise/getServiceTypeList',
                 })
                 if (res.data) {
@@ -177,6 +178,23 @@ const model = {
                     supperListTotal: action.payload.totalCount,
                 }
             },
+        },
+        // 供应商详情
+        {
+            name: 'getSupplierDetail',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: '/enterprise/getSupplierDetail',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('getSupplierDetailOK')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getSupplierDetailOK',
+            reducer: 'detail',
         },
         // 新增供应商
         {

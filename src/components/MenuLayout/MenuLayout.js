@@ -23,19 +23,19 @@ class Repair extends PureComponent {
                 <LeftMenu
                     menuData={filterMenu(menu) /*.filter(item => auths.includes(item.title))*/}
                 />
-                {authRoute.map((item, index) => {
-                    return (
-                        <AuthWrapper role={item.role} key={index}>
+                <Switch>
+                    {authRoute.map((item, index) => {
+                        return (
                             <Route
                                 exact
                                 //strict
                                 path={item.path}
                                 component={item.component}
                             />
-                        </AuthWrapper>
-                    )
-                })}
-                <Redirect to={authRoute[0].path} />
+                        )
+                    })}
+                    <Redirect to={authRoute[0].path} />
+                </Switch>
             </div>
         )
     }

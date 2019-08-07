@@ -6,7 +6,7 @@ import { actions } from '../../../../redux/agencyRequire'
 const mapStateToProps = state => {
     return {
         ServiceTypeList: state.agencyRequire.ServiceTypeList,
-        supperList: state.agencyRequire.supperList[0] || state.agencyRequire.supperList,
+        detail: state.agencyRequire.detail,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -14,7 +14,7 @@ const mapDispatchToProps = dispatch => {
         {
             updateSupplier: actions('updateSupplier'),
             getServiceTypeList: actions('getServiceTypeList'),
-            getSupplierList: actions('getSupplierList'),
+            getSupplierDetail: actions('getSupplierDetail'),
         },
         dispatch,
     )
