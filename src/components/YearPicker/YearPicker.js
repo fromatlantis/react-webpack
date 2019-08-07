@@ -8,7 +8,7 @@ export default class YearPicker extends PureComponent {
     }
     static getDerivedStateFromProps(nextProps, prevState) {
         // Should be a controlled component.
-        if (nextProps.value !== prevState.time) {
+        if (nextProps.value && nextProps.value !== prevState.time) {
             return {
                 time: nextProps.value,
             }
@@ -39,6 +39,7 @@ export default class YearPicker extends PureComponent {
         })
     }
     render() {
+        console.log(this.state.time)
         return (
             <DatePicker
                 value={this.state.time}

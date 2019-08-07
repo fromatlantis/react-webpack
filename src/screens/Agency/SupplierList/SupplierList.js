@@ -132,7 +132,7 @@ class SupplierList extends PureComponent {
                 dataIndex: 'logo',
                 key: 'logo',
                 align: 'center',
-                render: logo => <Avatar src={logo} />,
+                render: logo => <Avatar src={logo} size={60} shape="square" />,
             },
             {
                 title: '供应商名称',

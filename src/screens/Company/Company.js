@@ -25,13 +25,10 @@ import { IconFont, FormView } from 'components'
 import SearchChip from './SearchChip'
 import TransferView from './TransferView'
 import ImportTable from './ImportTable'
+import Export from './Export'
 import styles from './Company.module.css'
 
-import avatar from 'assets/hz.png'
-
-const Search = Input.Search
 const Step = Steps.Step
-const Option = Select.Option
 const CheckboxGroup = Checkbox.Group
 
 const steps = [
@@ -380,9 +377,7 @@ class Home extends PureComponent {
                         <Button type="primary" onClick={this.batchAssign}>
                             批量指派
                         </Button>
-                        <Button type="primary" onClick={this.batchAssign}>
-                            批量导出
-                        </Button>
+                        <Export title="批量导出" />
                         <Button type="primary" onClick={this.batchAssign}>
                             全部导出
                         </Button>
@@ -439,7 +434,7 @@ class Home extends PureComponent {
                                 ref={form => {
                                     this.form = form
                                 }}
-                                formItemLayout={{ labelCol: { span: 8 }, wrapperCol: { span: 13 } }}
+                                formItemLayout={{ labelCol: { span: 7 }, wrapperCol: { span: 13 } }}
                                 items={[
                                     {
                                         label: '招商负责人',
@@ -459,15 +454,30 @@ class Home extends PureComponent {
                 </Modal>
                 <Modal
                     title="指派企服人员"
+                    width={560}
                     visible={this.state.assign}
                     onOk={this.assignOk}
                     onCancel={this.assignCancel}
                     //footer={null}
                 >
-                    <TransferView
-                        titles={['选择人员', '已选人员']}
-                        data={directorList}
-                        ref="assign"
+                    <FormView
+                        ref={form => {
+                            this.form = form
+                        }}
+                        formItemLayout={{ labelCol: { span: 7 }, wrapperCol: { span: 13 } }}
+                        items={[
+                            {
+                                label: '招商负责人',
+                                field: 'years',
+                                component: <Select />,
+                            },
+                            {
+                                label: '招商服务模块',
+                                field: 'updateTime',
+                                component: <Select />,
+                            },
+                        ]}
+                        saveBtn={false}
                     />
                 </Modal>
                 <Modal
