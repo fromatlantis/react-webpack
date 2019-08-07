@@ -197,12 +197,13 @@ export default class BarChart extends PureComponent {
     render() {
         const { data } = this.props
         if (data && data.length > 0) {
+            console.log(data)
             return <div ref="barChart" className={styles.root} />
         } else {
             return (
-                <div className={styles.root}>
+                <ul className={styles.root}>
                     <Empty />
-                </div>
+                </ul>
             )
         }
     }

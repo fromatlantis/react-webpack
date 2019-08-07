@@ -19,6 +19,8 @@ import patent from './patent'
 import dictionary from './dictionary'
 import loading from './loading'
 import configure from './configure'
+import qualification from './qualification'
+import revenue from './revenue'
 
 export default history =>
     combineReducers({
@@ -41,4 +43,6 @@ export default history =>
         dictionary,
         loading,
         configure,
+        qualification,
+        revenue,
     })

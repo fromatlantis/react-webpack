@@ -1,7 +1,10 @@
 import React, { PureComponent } from 'react'
-import { YearPicker } from 'components'
-import { Card, Button, Alert, Table } from 'antd'
+import { Card, Button, Alert, Table, Tooltip, DatePicker, message } from 'antd'
 import { BarChart } from 'components/Charts'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { actions } from 'reduxDir/qualification'
+import moment from 'moment'
 
 const columnsCount = [
     {
@@ -11,170 +14,348 @@ const columnsCount = [
     },
     {
         title: '企业数量',
-        dataIndex: 'count',
-        key: 'count',
+        dataIndex: 'totalCount',
+        key: 'totalCount',
         align: 'center',
     },
     {
         title: '新增企业数量',
-        dataIndex: 'increase',
-        key: 'increase',
+        dataIndex: 'currentCount',
+        key: 'currentCount',
         align: 'center',
     },
     {
         title: '企业数量环比',
-        dataIndex: 'hb',
-        key: 'hb',
+        dataIndex: 'chainRatio',
+        key: 'chainRatio',
         align: 'center',
-    },
-]
-const data1 = [
-    {
-        year: '2019',
-        count: 123,
-        increase: 123,
-        hb: '12.12%',
     },
 ]
 const columnsDetail = [
     {
         title: '企业名称',
-        dataIndex: 'comname',
-        key: 'comname',
+        dataIndex: 'name',
+        key: 'name',
     },
     {
         title: '企业类型',
-        dataIndex: 'type',
-        key: 'type',
+        dataIndex: 'category',
+        key: 'category',
         align: 'center',
     },
     {
         title: '法人',
-        dataIndex: 'person',
-        key: 'person',
+        dataIndex: 'legalPersonName',
+        key: 'legalPersonName',
         align: 'center',
+        render: legalPersonName => (
+            <Tooltip placement="right" title={legalPersonName}>
+                {legalPersonName.length > 4
+                    ? legalPersonName.substring(0, 4) + '...'
+                    : legalPersonName}
+            </Tooltip>
+        ),
     },
     {
         title: '成立时间',
-        dataIndex: 'time',
-        key: 'time',
+        dataIndex: 'estiblishTime',
+        key: 'estiblishTime',
         align: 'center',
     },
     {
         title: '引入时间',
-        dataIndex: 'into',
-        key: 'into',
+        dataIndex: 'introduceTime',
+        key: 'introduceTime',
         align: 'center',
     },
     {
         title: '企业地址',
-        dataIndex: 'address',
-        key: 'address',
+        dataIndex: 'regLocation',
+        key: 'regLocation',
         align: 'center',
+        render: regLocation => (
+            <Tooltip placement="right" title={regLocation}>
+                {regLocation.length > 20 ? regLocation.substring(0, 20) + '...' : regLocation}
+            </Tooltip>
+        ),
     },
 ]
-const data2 = [
-    {
-        comname: '启迪智慧创新（北京）科技有限公司',
-        type: '实驻企业',
-        person: '张三',
-        time: '2019-04-05',
-        into: '2019-04-05',
-        address: '石家庄科技中心润江大厦B座1302',
-    },
-]
-const dataSource = [
-    {
-        name: '2015',
-        value: 100,
-    },
-    {
-        name: '2016',
-        value: 182,
-    },
-    {
-        name: '2017',
-        value: 210,
-    },
-    {
-        name: '2018',
-        value: 367,
-    },
-    {
-        name: '2019',
-        value: 412,
-    },
-]
-export default class Quantity extends PureComponent {
+const mapStateToProps = state => {
+    return {
+        introducedCompanyCount: state.qualification.introducedCompanyCount.map(item => ({
+            name: item.year,
+            value: item.count,
+        })),
+        companyCountList: state.qualification.companyCountList,
+        companyDetailList: state.qualification.companyDetailList,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getIntroducedCompanyCount: actions('getIntroducedCompanyCount'),
+            getCompanyCountCountList: actions('getCompanyCountCountList'),
+            getCompanyCountDetailList: actions('getCompanyCountDetailList'),
+            exportCompanyCountCountList: actions('exportCompanyCountCountList'),
+            exportCompanyCountDetailList: actions('exportCompanyCountDetailList'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Quantity extends PureComponent {
+    state = {
+        isopen: false,
+        time: null,
+        rowIndex: 0,
+        year: moment().year(),
+        countPager: {
+            pageNo: 1,
+            pageSize: 10,
+        },
+        detailPager: {
+            pageNo: 1,
+            pageSize: 10,
+        },
+        yearDetail: '',
+    }
+    componentDidMount = () => {
+        const year = this.state.year
+        this.renderData({ year })
+    }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.companyCountList !== nextProps.companyCountList) {
+            const [first] = nextProps.companyCountList.list
+            if (first) {
+                this.renderDetailData(first.year) //默认获取选中第一条数据的详情
+            }
+        }
+    }
+    renderData = params => {
+        const { countPager } = this.state
+        const { getIntroducedCompanyCount, getCompanyCountCountList } = this.props
+        getIntroducedCompanyCount(params)
+        getCompanyCountCountList({
+            ...params,
+            ...countPager,
+        })
+    }
+    renderDetailData = year => {
+        this.setState({ yearDetail: year })
+        this.props.getCompanyCountDetailList({
+            year,
+            ...this.state.detailPager,
+            pageNo: 1,
+        })
+    }
+    setRowClassName = (_, index) => {
+        return index === this.state.rowIndex ? 'row-active' : ''
+    }
+    handlePanelChange = value => {
+        if (value.year() > moment().year()) {
+            message.info('选择的年份不能大于当前年份')
+        } else {
+            this.setState({
+                time: value,
+                isopen: false,
+                year: value.year(),
+            })
+            this.renderData({ year: value.year() })
+        }
+    }
+    handleOpenChange = status => {
+        if (status) {
+            this.setState({ isopen: true })
+        } else {
+            this.setState({ isopen: false })
+        }
+    }
+
+    // 企业数量数量列表的pageNo改变
+    onChange = (pageNo, pageSize) => {
+        this.setState({
+            countPager: {
+                pageSize,
+                pageNo,
+            },
+        })
+        const year = this.state.year
+        let parm = { pageNo: pageNo, pageSize: pageSize, year }
+        this.props.getCompanyCountCountList(parm)
+    }
+    // 企业数量数量列表的pageSize改变
+    onShowSizeChange = (pageNo, pageSize) => {
+        this.setState({
+            countPager: {
+                pageSize: pageSize,
+                pageNo: 1,
+            },
+        })
+        const year = this.state.year
+        let parm = { pageNo: 1, pageSize: pageSize, year }
+        this.props.getCompanyCountCountList(parm)
+    }
+    // 企业数量详情列表的pageNo改变
+    onDetailPageNoChange = (pageNo, pageSize) => {
+        this.setState({
+            detailPager: {
+                pageSize: pageSize,
+                pageNo: pageNo,
+            },
+        })
+        const year = this.state.yearDetail
+        let parm = { pageNo: pageNo, pageSize: pageSize, year }
+        this.props.getCompanyCountDetailList(parm)
+    }
+    // 企业数量详情列表的pageSize改变
+    onDetailPageSizeChange = (pageNo, pageSize) => {
+        this.setState({
+            detailPager: {
+                pageSize: pageSize,
+                pageNo: 1,
+            },
+        })
+        const year = this.state.yearDetail
+        let parm = { pageNo: 1, pageSize: pageSize, year }
+        this.props.getCompanyCountDetailList(parm)
+    }
+    //导出基本列表
+    exportTable = flag => {
+        const year = this.state.year
+        if (flag === 0) {
+            const { pageNo, pageSize } = this.state.countPager
+            this.props.exportCompanyCountCountList({
+                year: year,
+                pageNo: pageNo,
+                pageSize: pageSize,
+            })
+        } else if (flag === 1) {
+            this.props.exportCompanyCountCountList({
+                year: year,
+            })
+        }
+    }
+    //导出详情列表
+    exportTableDetail = flag => {
+        const year = this.state.yearDetail
+        if (flag === 0) {
+            const { pageNo, pageSize } = this.state.detailPager
+            this.props.exportCompanyCountDetailList({
+                year: year,
+                pageNo: pageNo,
+                pageSize: pageSize,
+            })
+        } else if (flag === 1) {
+            this.props.exportCompanyCountDetailList({
+                year: year,
+            })
+        }
+    }
     render() {
+        const { countPager, detailPager } = this.state
+        const { introducedCompanyCount, companyCountList, companyDetailList } = this.props
         return (
             <Card title="企业数量统计" style={{ position: 'relative' }} bordered={false}>
                 <div style={{ position: 'absolute', right: '30px', top: '15px' }}>
                     <b>选择年份：</b>
-                    <YearPicker />
+                    <DatePicker
+                        value={this.state.time}
+                        open={this.state.isopen}
+                        mode="year"
+                        placeholder="请选择年份"
+                        format="YYYY"
+                        onOpenChange={this.handleOpenChange}
+                        onPanelChange={this.handlePanelChange}
+                    />
                 </div>
                 <div style={{ height: '400px', marginTop: '30px' }}>
-                    <BarChart data={dataSource} />
+                    <BarChart data={introducedCompanyCount} />
                 </div>
                 <div style={{ position: 'absolute', right: '10px', margin: '20px' }}>
                     <Button
                         type="primary"
-                        // onClick={() => this.exportDispCount(0)}
+                        onClick={() => this.exportTable(0)}
                         style={{ marginRight: '20px' }}
                     >
                         导出当前页
                     </Button>
                     <Button
                         type="primary"
-                        // onClick={() => this.exportDispCount(1)}
+                        onClick={() => this.exportTable(1)}
                         style={{ marginRight: '10px' }}
                     >
                         导出全部
                     </Button>
                 </div>
-                <Alert message={'共20项'} type="info" showIcon style={{ marginTop: '70px' }} />
+                <Alert
+                    message={`共${companyCountList.totalCount}项`}
+                    type="info"
+                    showIcon
+                    style={{ marginTop: '70px' }}
+                />
                 <div style={{ marginTop: '10px' }}>
                     <Table
-                        dataSource={data1}
+                        dataSource={companyCountList.list}
                         columns={columnsCount}
+                        rowClassName={this.setRowClassName}
                         pagination={{
-                            // current: dispCountPager.pageNo,
+                            current: countPager.pageNo,
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            // pageSizeOptions: ['10', '15', '20'],
-                            // total: dispatchList.totalCount,
-                            // onChange: this.onChangeDispatcherCountPage,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: companyCountList.totalCount,
+                            onShowSizeChange: this.onShowSizeChange,
+                            onChange: this.onChange,
+                        }}
+                        onRow={(record, index) => {
+                            return {
+                                onClick: event => {
+                                    this.setState({
+                                        rowIndex: index,
+                                    })
+                                    this.renderDetailData(record.year)
+                                }, // 点击行
+                            }
                         }}
                     />
                 </div>
                 <div style={{ position: 'absolute', right: '30px' }}>
                     <Button
                         type="primary"
-                        // onClick={() => this.exportDispDetail(0)}
+                        onClick={() => this.exportTableDetail(0)}
                         style={{ marginRight: '20px' }}
                     >
                         导出当前页
                     </Button>
                     <Button
                         type="primary"
-                        // onClick={() => this.exportDispDetail(1)}
+                        onClick={() => this.exportTableDetail(1)}
                         style={{ marginRight: '10px' }}
                     >
                         导出全部
                     </Button>
                 </div>
-                <Alert message={'共20项'} type="info" showIcon style={{ marginTop: '50px' }} />
+                <Alert
+                    message={`共${companyDetailList.totalCount}项`}
+                    type="info"
+                    showIcon
+                    style={{ marginTop: '50px' }}
+                />
                 <div style={{ marginTop: '10px' }}>
                     <Table
                         columns={columnsDetail}
-                        dataSource={data2}
+                        dataSource={companyDetailList.list}
                         pagination={{
+                            current: detailPager.pageNo,
                             showSizeChanger: true,
-                            // current: dispDetailPager.pageNo,
                             showQuickJumper: true,
-                            // pageSizeOptions: ['10', '15', '20'],
-                            // total: dispatcherDetailList.totalCount,
-                            // onChange: this.onChangeDispatcherDetailPage,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: companyDetailList.totalCount,
+                            onShowSizeChange: this.onDetailPageSizeChange,
+                            onChange: this.onDetailPageNoChange,
                         }}
                     />
                 </div>
@@ -182,3 +363,4 @@ export default class Quantity extends PureComponent {
         )
     }
 }
+export default Quantity

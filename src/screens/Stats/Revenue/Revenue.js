@@ -1,7 +1,10 @@
 import React, { PureComponent } from 'react'
-import { YearPicker } from 'components'
-import { Card, Button, Alert, Table } from 'antd'
-import echarts from 'echarts/lib/echarts'
+import { Card, Button, Alert, Table, DatePicker, message } from 'antd'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { actions } from 'reduxDir/revenue'
+import moment from 'moment'
+import LineChart from './RevenueCharts'
 
 const columnsCount = [
     {
@@ -11,20 +14,20 @@ const columnsCount = [
     },
     {
         title: '企业数量',
-        dataIndex: 'count',
-        key: 'count',
+        dataIndex: 'companyCount',
+        key: 'companyCount',
         align: 'center',
     },
     {
         title: '营业收入（元）',
-        dataIndex: 'income',
-        key: 'income',
+        dataIndex: 'revenue',
+        key: 'revenue',
         align: 'center',
     },
     {
         title: '营收环比',
-        dataIndex: 'chain',
-        key: 'chain',
+        dataIndex: 'chainRatio',
+        key: 'chainRatio',
         align: 'center',
     },
     {
@@ -35,31 +38,21 @@ const columnsCount = [
     },
     {
         title: '税金环比',
-        dataIndex: 'ratio',
-        key: 'ratio',
+        dataIndex: 'taxesChainRatio',
+        key: 'taxesChainRatio',
         align: 'center',
-    },
-]
-const data1 = [
-    {
-        year: '2019',
-        count: 123,
-        income: 123456789.89,
-        chain: '12.12%',
-        taxes: 123456789.89,
-        ratio: '12.12%',
     },
 ]
 const columnsDetail = [
     {
         title: '企业名称',
-        dataIndex: 'comname',
-        key: 'comname',
+        dataIndex: 'name',
+        key: 'name',
     },
     {
         title: '企业类型',
-        dataIndex: 'type',
-        key: 'type',
+        dataIndex: 'category',
+        key: 'category',
         align: 'center',
     },
     {
@@ -70,14 +63,14 @@ const columnsDetail = [
     },
     {
         title: '成立时间',
-        dataIndex: 'time',
-        key: 'time',
+        dataIndex: 'estiblishTime',
+        key: 'estiblishTime',
         align: 'center',
     },
     {
         title: '营业收入（元）',
-        dataIndex: 'income',
-        key: 'income',
+        dataIndex: 'operatingRevenue',
+        key: 'operatingRevenue',
         align: 'center',
     },
     {
@@ -87,195 +80,279 @@ const columnsDetail = [
         align: 'center',
     },
 ]
-const data2 = [
-    {
-        comname: '启迪智慧创新（北京）科技有限公司',
-        type: '实驻企业',
-        industry: '科学研究和技术服务业',
-        time: '2019-04-05',
-        income: 123456789.89,
-        taxes: 123456789.89,
-    },
-]
-
-export default class Revenue extends PureComponent {
-    componentDidMount = () => {
-        this.initChart()
+const mapStateToProps = state => {
+    return {
+        financialStatus: state.revenue.financialStatus,
+        financeCountList: state.revenue.financeCountList,
+        financeDetailList: state.revenue.financeDetailList,
     }
-    initChart = () => {
-        var myChart = echarts.init(this.refs.barChart)
-        var option = {
-            tooltip: {
-                trigger: 'axis',
-            },
-            legend: {
-                data: ['纳税', '营收'],
-                icon: 'rect',
-                top: 22,
-                right: 24,
-                itemGap: 15,
-                itemWidth: 10,
-                itemHeight: 10,
-                textStyle: {
-                    // padding: [0, 0, 0, 5],
-                    color: 'rgba(0,0,0,0.87)',
-                },
-            },
-            color: ['#289df5', '#fbc01b'],
-            grid: {
-                left: 24,
-                right: 0,
-                bottom: '30',
-                containLabel: true,
-            },
-            xAxis: {
-                type: 'category',
-                axisLine: {
-                    lineStyle: {
-                        width: 1,
-                        color: '#aaa',
-                    },
-                },
-                axisTick: {
-                    length: 0,
-                },
-                axisLabel: {
-                    interval: 0,
-                    textStyle: {
-                        color: '#666',
-                    },
-                },
-                data: ['2014', '2015', '2016', '2017', '2018', '2019', '2020'],
-            },
-            yAxis: {
-                type: 'value',
-                axisLine: {
-                    show: false,
-                },
-                axisTick: {
-                    length: 0, // 刻度线的长度
-                },
-                splitLine: {
-                    lineStyle: {
-                        type: 'dashed',
-                        color: 'rgba(115, 156, 204,0.4)',
-                    },
-                },
-                axisLabel: {
-                    textStyle: {
-                        color: '#666',
-                    },
-                },
-            },
-            series: [
-                {
-                    name: '纳税',
-                    type: 'line',
-                    smooth: true,
-                    // symbol: 'circle', // 拐点类型
-                    // symbolSize: 0, // 拐点圆的大小
-                    itemStyle: {
-                        normal: {
-                            color: '#289df5', // 折线条的颜色
-                            borderColor: '#289df5', // 拐点边框颜色
-                            areaStyle: {
-                                type: 'default',
-                                opacity: 0.1,
-                            },
-                        },
-                    },
-                    data: [31, 22, 41, 54, 26, 43, 39],
-                },
-                {
-                    name: '营收',
-                    type: 'line',
-                    smooth: true,
-                    // symbol: 'circle',
-                    // symbolSize: 0,
-                    itemStyle: {
-                        normal: {
-                            color: '#fbc01b',
-                            borderColor: '#fbc01b',
-                            areaStyle: {
-                                type: 'default',
-                                opacity: 0.1,
-                            },
-                        },
-                    },
-                    data: [15, 28, 51, 20, 70, 80, 66],
-                },
-            ],
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getFinancialStatus: actions('getFinancialStatus'),
+            getFinanceCountList: actions('getFinanceCountList'),
+            getFinanceDetailList: actions('getFinanceDetailList'),
+            exportFinanceCountList: actions('exportFinanceCountList'),
+            exportFinanceDetailList: actions('exportFinanceDetailList'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Revenue extends PureComponent {
+    state = {
+        isopen: false,
+        time: null,
+        rowIndex: 0,
+        year: moment().year(),
+        countPager: {
+            pageNo: 1,
+            pageSize: 10,
+        },
+        detailPager: {
+            pageNo: 1,
+            pageSize: 10,
+        },
+        yearDetail: '',
+    }
+    componentDidMount = () => {
+        const year = this.state.year
+        this.renderData({ year })
+    }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.financeCountList !== nextProps.financeCountList) {
+            const [first] = nextProps.financeCountList.list
+            if (first) {
+                this.renderDetailData(first.year) //默认获取选中第一条数据的详情
+            }
         }
-        // 使用制定的配置项和数据显示图表
-        myChart.setOption(option)
+    }
+    renderData = params => {
+        console.log('sdfds')
+        const { countPager } = this.state
+        const { getFinancialStatus, getFinanceCountList } = this.props
+        getFinancialStatus(params)
+        getFinanceCountList({
+            ...params,
+            ...countPager,
+        })
+    }
+    renderDetailData = year => {
+        this.setState({ yearDetail: year })
+        this.props.getFinanceDetailList({
+            year,
+            ...this.state.detailPager,
+            pageNo: 1,
+        })
+    }
+    setRowClassName = (_, index) => {
+        return index === this.state.rowIndex ? 'row-active' : ''
+    }
+    handlePanelChange = value => {
+        if (value.year() > moment().year()) {
+            message.info('选择的年份不能大于当前年份')
+        } else {
+            this.setState({
+                time: value,
+                isopen: false,
+                year: value.year(),
+            })
+            this.renderData({ year: value.year() })
+        }
+    }
+    handleOpenChange = status => {
+        if (status) {
+            this.setState({ isopen: true })
+        } else {
+            this.setState({ isopen: false })
+        }
+    }
+    // 园区营收统计-数量列表的pageNo改变
+    onChange = (pageNo, pageSize) => {
+        this.setState({
+            countPager: {
+                pageSize,
+                pageNo,
+            },
+        })
+        const year = this.state.year
+        let parm = { pageNo: pageNo, pageSize: pageSize, year }
+        this.props.getFinanceCountList(parm)
+    }
+    // 园区营收统计-数量列表的pageSize改变
+    onShowSizeChange = (pageNo, pageSize) => {
+        this.setState({
+            countPager: {
+                pageSize: pageSize,
+                pageNo: 1,
+            },
+        })
+        const year = this.state.year
+        let parm = { pageNo: 1, pageSize: pageSize, year }
+        this.props.getFinanceCountList(parm)
+    }
+    // 园区营收统计-详情列表的pageNo改变
+    onDetailPageChange = (pageNo, pageSize) => {
+        this.setState({
+            detailPager: {
+                pageSize: pageSize,
+                pageNo: pageNo,
+            },
+        })
+        const year = this.state.yearDetail
+        let parm = { pageNo: pageNo, pageSize: pageSize, year }
+        this.props.getFinanceDetailList(parm)
+    }
+    // 园区营收统计-详情列表的pageSize改变
+    onDetailChange = (pageNo, pageSize) => {
+        this.setState({
+            detailPager: {
+                pageSize: pageSize,
+                pageNo: 1,
+            },
+        })
+        const year = this.state.yearDetail
+        let parm = { pageNo: 1, pageSize: pageSize, year }
+        this.props.getFinanceDetailList(parm)
+    }
+    //导出数量列表
+    exportTable = flag => {
+        const year = this.state.year
+        if (flag === 0) {
+            const { pageNo, pageSize } = this.state.countPager
+            this.props.exportFinanceCountList({
+                year: year,
+                pageNo: pageNo,
+                pageSize: pageSize,
+            })
+        } else if (flag === 1) {
+            this.props.exportFinanceCountList({
+                year: year,
+            })
+        }
+    }
+    //导出详情列表
+    exportTableDetail = flag => {
+        const year = this.state.yearDetail
+        if (flag === 0) {
+            const { pageNo, pageSize } = this.state.detailPager
+            this.props.exportFinanceDetailList({
+                year: year,
+                pageNo: pageNo,
+                pageSize: pageSize,
+            })
+        } else if (flag === 1) {
+            this.props.exportFinanceDetailList({
+                year: year,
+            })
+        }
     }
     render() {
+        const { countPager, detailPager } = this.state
+        const { financialStatus, financeCountList, financeDetailList } = this.props
         return (
             <Card title="园区营收统计" bordered={false} style={{ position: 'relative' }}>
                 <div style={{ position: 'absolute', right: '30px', top: '15px' }}>
                     <b>选择年份：</b>
-                    <YearPicker />
+                    <DatePicker
+                        value={this.state.time}
+                        open={this.state.isopen}
+                        mode="year"
+                        placeholder="请选择年份"
+                        format="YYYY"
+                        onOpenChange={this.handleOpenChange}
+                        onPanelChange={this.handlePanelChange}
+                    />
                 </div>
-                <div ref="barChart" style={{ height: '400px' }} />
+                <div style={{ height: '400px', marginTop: '30px' }}>
+                    <LineChart data={financialStatus} />
+                </div>
                 <div style={{ position: 'absolute', right: '10px', margin: '20px' }}>
                     <Button
                         type="primary"
-                        // onClick={() => this.exportDispCount(0)}
+                        onClick={() => this.exportTable(0)}
                         style={{ marginRight: '20px' }}
                     >
                         导出当前页
                     </Button>
                     <Button
                         type="primary"
-                        // onClick={() => this.exportDispCount(1)}
+                        onClick={() => this.exportTable(1)}
                         style={{ marginRight: '10px' }}
                     >
                         导出全部
                     </Button>
                 </div>
-                <Alert message={'共20项'} type="info" showIcon style={{ marginTop: '70px' }} />
+                <Alert
+                    message={`共${financeCountList.totalCount}项`}
+                    type="info"
+                    showIcon
+                    style={{ marginTop: '70px' }}
+                />
                 <div style={{ marginTop: '10px' }}>
                     <Table
-                        dataSource={data1}
+                        dataSource={financeCountList.list}
                         columns={columnsCount}
+                        rowClassName={this.setRowClassName}
                         pagination={{
-                            // current: dispCountPager.pageNo,
+                            current: countPager.pageNo,
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            // pageSizeOptions: ['10', '15', '20'],
-                            // total: dispatchList.totalCount,
-                            // onChange: this.onChangeDispatcherCountPage,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: financeCountList.totalCount,
+                            onShowSizeChange: this.onDetailChange,
+                            onChange: this.onDetailPageChange,
+                        }}
+                        onRow={(record, index) => {
+                            return {
+                                onClick: event => {
+                                    this.setState({
+                                        rowIndex: index,
+                                    })
+                                    this.renderDetailData(record.year)
+                                }, // 点击行
+                            }
                         }}
                     />
                 </div>
                 <div style={{ position: 'absolute', right: '30px' }}>
                     <Button
                         type="primary"
-                        // onClick={() => this.exportDispDetail(0)}
+                        onClick={() => this.exportTableDetail(0)}
                         style={{ marginRight: '20px' }}
                     >
                         导出当前页
                     </Button>
                     <Button
                         type="primary"
-                        // onClick={() => this.exportDispDetail(1)}
+                        onClick={() => this.exportTableDetail(1)}
                         style={{ marginRight: '10px' }}
                     >
                         导出全部
                     </Button>
                 </div>
-                <Alert message={'共20项'} type="info" showIcon style={{ marginTop: '50px' }} />
+                <Alert
+                    message={`共${financeDetailList.totalCount}项`}
+                    type="info"
+                    showIcon
+                    style={{ marginTop: '50px' }}
+                />
                 <div style={{ marginTop: '10px' }}>
                     <Table
                         columns={columnsDetail}
-                        dataSource={data2}
+                        dataSource={financeDetailList.list}
                         pagination={{
+                            current: detailPager.pageNo,
                             showSizeChanger: true,
-                            // current: dispDetailPager.pageNo,
                             showQuickJumper: true,
-                            // pageSizeOptions: ['10', '15', '20'],
-                            // total: dispatcherDetailList.totalCount,
-                            // onChange: this.onChangeDispatcherDetailPage,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: financeDetailList.totalCount,
+                            onShowSizeChange: this.onDetailChange,
+                            onChange: this.onDetailPageChange,
                         }}
                     />
                 </div>
@@ -283,3 +360,4 @@ export default class Revenue extends PureComponent {
         )
     }
 }
+export default Revenue
