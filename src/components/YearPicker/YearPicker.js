@@ -8,7 +8,7 @@ export default class YearPicker extends PureComponent {
     }
     static getDerivedStateFromProps(nextProps, prevState) {
         // Should be a controlled component.
-        if (nextProps.value && nextProps.value !== prevState.time) {
+        if (nextProps.onChange && nextProps.value !== prevState.time) {
             return {
                 time: nextProps.value,
             }

@@ -17,6 +17,7 @@ const model = {
         {
             name: 'getFinanceInfosList',
             reducer: (state, action) => {
+                console.log(action.payload)
                 return {
                     ...state,
                     searchParams: { ...state.searchParams, ...action.payload },
@@ -24,6 +25,7 @@ const model = {
             },
             *effect(action) {
                 const searchParams = yield select(rootState => rootState.revenue.searchParams)
+                console.log(searchParams)
                 // 时间处理
                 const { years, updateTime, ...params } = searchParams
                 params.companyId = sessionStorage.getItem('companyId')
