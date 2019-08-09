@@ -45,3 +45,19 @@ em {
 .ant-timeline-item-last > .ant-timeline-item-content {
     min-height: 0px;
 }
+/* 左侧菜单 */
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: #1156A2;
+}
+/* rem适配 */
+@media screen and (min-width: 1200px) {
+    html {
+        font-size: 625%;
+        /* font-size: 395%; */
+    }
+}
+@media screen and (min-width: 1900px) {
+    html {
+        font-size: 625%;
+    }
+}

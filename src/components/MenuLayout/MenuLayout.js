@@ -17,11 +17,15 @@ class Repair extends PureComponent {
         const { menu, auths } = this.props
         const authRoute = getRoutes(
             menu,
+            auths,
         ) /*.filter(item => auths.includes(item.title) || item.display === 'none')*/
+        const [first] = authRoute
         return (
             <div className={styles.root}>
                 <LeftMenu
-                    menuData={filterMenu(menu) /*.filter(item => auths.includes(item.title))*/}
+                    menuData={
+                        filterMenu(menu, auths) /*.filter(item => auths.includes(item.title))*/
+                    }
                 />
                 <Switch>
                     {authRoute.map((item, index) => {
@@ -34,7 +38,8 @@ class Repair extends PureComponent {
                             />
                         )
                     })}
-                    <Redirect to={authRoute[0].path} />
+                    {first && <Redirect to={first.path} />}
+                    <div>「没有相关权限」</div>
                 </Switch>
             </div>
         )

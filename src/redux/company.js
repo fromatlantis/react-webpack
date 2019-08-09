@@ -21,6 +21,7 @@ const model = {
             *effect(action) {
                 console.log(qs.stringify(action.payload))
                 const res = yield call(request, {
+                    type: 'post',
                     url: `/enterprise/searchCompany?${qs.stringify(action.payload)}`,
                 })
                 if (res.code === 1000) {

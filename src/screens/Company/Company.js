@@ -24,6 +24,7 @@ import {
 import { IconFont, FormView } from 'components'
 import SearchChip from './SearchChip'
 import TransferView from './TransferView'
+import TransferModules from './TransferModules'
 import ImportTable from './ImportTable'
 import Export from './Export'
 import styles from './Company.module.css'
@@ -212,39 +213,44 @@ class Home extends PureComponent {
         const { company } = this.props
         return (company.list || []).map(item => {
             return (
-                <div className={styles.itemCard} key={item.company_id}>
-                    <Checkbox value={item.company_id} style={{ position: 'absolute' }} />
-                    <Avatar className={styles.avatar} src={item.logo} shape="square" size={100} />
+                <div className={styles.itemCard} key={item.companyId}>
+                    <Checkbox
+                        value={item.companyId}
+                        style={{ marginRight: '10px', alignSelf: 'center' }}
+                    />
+                    <Avatar className={styles.avatar} src={item.logo} shape="square" />
                     <div className={styles.intro}>
                         <div className={styles.title}>
-                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <div
+                                style={{ display: 'flex', alignItems: 'center', fontSize: '22px' }}
+                            >
                                 <span>{item.name}</span>
                                 <Tag color="orange">实驻企业</Tag>
                             </div>
                             <div className={styles.toobar}>
-                                <Button
+                                <span
                                     type="link"
                                     size="small"
                                     onClick={() => {
-                                        this.assign(item.company_id)
+                                        this.assign(item.companyId)
                                     }}
                                 >
-                                    <IconFont type="iconicon_zhipai" />
-                                </Button>
-                                <Button
+                                    <IconFont type="icondetails" />
+                                    <span>指派</span>
+                                </span>
+                                <span
                                     type="link"
                                     size="small"
                                     onClick={() => {
                                         this.props.push(
-                                            `/companyDetails/information/${
-                                                item.company_id
-                                            }/company`,
+                                            `/companyDetails/information/${item.companyId}/company`,
                                         )
                                     }}
                                 >
                                     <IconFont type="icondetails" />
-                                </Button>
-                                <Button
+                                    <span>详情</span>
+                                </span>
+                                <span
                                     type="link"
                                     size="small"
                                     onClick={() => {
@@ -252,14 +258,15 @@ class Home extends PureComponent {
                                     }}
                                 >
                                     <IconFont type="iconbianji" />
-                                </Button>
+                                    <span>编辑</span>
+                                </span>
                             </div>
                         </div>
                         <div className={styles.info}>
                             <div>
                                 <p>
                                     <b>法人：</b>
-                                    <span>{item.legal_person_name}</span>
+                                    <span>{item.legalPersonName}</span>
                                 </p>
                                 <p>
                                     <b>邮箱：</b>
@@ -267,55 +274,59 @@ class Home extends PureComponent {
                                 </p>
                                 <p>
                                     <b>公司类型：</b>
-                                    <span>{item.company_org_type}</span>
+                                    <span>{item.companyOrgType}</span>
                                 </p>
                                 <p>
-                                    <b>企服负责人：</b>
-                                    <span>{item.director_name}</span>
+                                    <b>招商负责人：</b>
+                                    <span>{item.commerceName}</span>
                                 </p>
                             </div>
                             <div>
                                 <p>
                                     <b>注册资本：</b>
-                                    <span>{item.reg_capital}</span>
+                                    <span>{item.regCapital}</span>
                                 </p>
                                 <p>
                                     <b>电话：</b>
-                                    <span>{item.phone_number}</span>
+                                    <span>{item.phoneNumber}</span>
                                 </p>
                                 <p>
                                     <b>所属行业：</b>
                                     <span>{item.industry}</span>
                                 </p>
+                                <p>
+                                    <b>企服负责人：</b>
+                                    <span>{item.enterpriseName}</span>
+                                </p>
                             </div>
                             <div>
                                 <p>
                                     <b>成立时间：</b>
-                                    <span>
-                                        {moment(parseInt(item.estiblish_time)).format('YYYY-MM-DD')}
-                                    </span>
+                                    <span>{item.establishTime}</span>
                                 </p>
                                 <p>
                                     <b>官网：</b>
-                                    {item.website_list && (
+                                    {item.websiteList && (
                                         <a
-                                            href={`http://${item.website_list}`}
+                                            href={`http://${item.websiteList}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
-                                            {`http://${item.website_list}`}
+                                            {`http://${item.websiteList}`}
                                         </a>
                                     )}
                                 </p>
                                 <p>
                                     <b>企业地址：</b>
-                                    <span>{item.reg_location}</span>
+                                    <span>{item.regLocation}</span>
                                 </p>
                             </div>
                             <ul className={styles.status}>
-                                <Tag color="green">{item.reg_status}</Tag>
-                                {item.director_name && <Tag color="volcano">已指派</Tag>}
-                                {!item.director_name && <Tag color="blue">未指派</Tag>}
+                                <Tag color="green">{item.regStatus}</Tag>
+                                <p>
+                                    {item.director_name && <Tag color="volcano">已指派</Tag>}
+                                    {!item.director_name && <Tag color="blue">未指派</Tag>}
+                                </p>
                             </ul>
                         </div>
                     </div>
@@ -359,7 +370,12 @@ class Home extends PureComponent {
                     /> */}
                 </div>
                 <div className={styles.titleChip}>
-                    <Alert message={`总计${company.totalCount || 0}个企业`} type="info" showIcon />
+                    <Alert
+                        style={{ flex: 1 }}
+                        message={`总计${company.totalCount || 0}个企业`}
+                        type="info"
+                        showIcon
+                    />
                     <div className={styles.toolbar}>
                         <Button
                             type="primary"
@@ -382,7 +398,7 @@ class Home extends PureComponent {
                     </div>
                 </div>
                 <Checkbox
-                    style={{ marginTop: '10px' }}
+                    style={{ marginTop: '0.2rem' }}
                     checked={allChecked}
                     onChange={e => {
                         this.setState({
@@ -415,7 +431,7 @@ class Home extends PureComponent {
                 {/* <List dataSource={data} renderItem={this.renderItem} /> */}
                 <Modal
                     width={1000}
-                    title="批量指派企服人员"
+                    title="批量指派"
                     visible={this.state.batchAssign}
                     onOk={this.batchAssignOk}
                     onCancel={this.batchAssignCancel}
@@ -428,55 +444,19 @@ class Home extends PureComponent {
                             ref="batchAssignCompany"
                         />
                         <div style={{ marginLeft: '20px', flex: 1 }}>
-                            <FormView
-                                ref={form => {
-                                    this.form = form
-                                }}
-                                formItemLayout={{ labelCol: { span: 7 }, wrapperCol: { span: 13 } }}
-                                items={[
-                                    {
-                                        label: '招商负责人',
-                                        field: 'years',
-                                        component: <Select />,
-                                    },
-                                    {
-                                        label: '招商服务模块',
-                                        field: 'updateTime',
-                                        component: <Select />,
-                                    },
-                                ]}
-                                saveBtn={false}
-                            />
+                            <TransferModules />
                         </div>
                     </div>
                 </Modal>
                 <Modal
-                    title="指派企服人员"
+                    title="指派"
                     width={560}
                     visible={this.state.assign}
                     onOk={this.assignOk}
                     onCancel={this.assignCancel}
                     //footer={null}
                 >
-                    <FormView
-                        ref={form => {
-                            this.form = form
-                        }}
-                        formItemLayout={{ labelCol: { span: 7 }, wrapperCol: { span: 13 } }}
-                        items={[
-                            {
-                                label: '招商负责人',
-                                field: 'years',
-                                component: <Select />,
-                            },
-                            {
-                                label: '招商服务模块',
-                                field: 'updateTime',
-                                component: <Select />,
-                            },
-                        ]}
-                        saveBtn={false}
-                    />
+                    <TransferModules />
                 </Modal>
                 <Modal
                     title="导入"

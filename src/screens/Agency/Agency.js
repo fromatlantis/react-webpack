@@ -14,18 +14,21 @@ import GoView from './CompanyRequire/GoView/Connect'
 const menu = [
     {
         title: '供应商列表',
+        role: '供应商列表',
         icon: '',
         path: '/agency/supplierList',
         component: SupplierList,
     },
     {
         title: '供应商类型',
+        role: '供应商类型',
         icon: '',
         path: '/agency/supplierType',
         component: SupplierType,
     },
     {
         title: '供应商详情',
+        role: '供应商列表',
         icon: '',
         display: 'none',
         path: '/agency/supplierDetail/:id',
@@ -33,6 +36,7 @@ const menu = [
     },
     {
         title: '供应商编辑',
+        role: '供应商列表',
         icon: '',
         display: 'none',
         path: '/agency/supplierEdit/:id',
@@ -40,6 +44,7 @@ const menu = [
     },
     {
         title: '供应商添加',
+        role: '供应商列表',
         icon: '',
         display: 'none',
         path: '/agency/supplierAdd',

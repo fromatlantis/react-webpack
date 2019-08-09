@@ -113,7 +113,7 @@ export default class SearchChip extends PureComponent {
                     type="primary"
                     icon="search"
                     size="large"
-                    style={{ width: 60 }}
+                    style={{ width: '0.8rem' }}
                     onClick={this.handleSearch}
                 />
             </div>
