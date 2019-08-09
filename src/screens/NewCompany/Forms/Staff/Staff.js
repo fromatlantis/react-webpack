@@ -273,7 +273,11 @@ class Staff extends PureComponent {
         ]
         const { staff, searchParams } = this.props
         return (
-            <Card title="人员情况" bordered={false} extra={<Toolbar />}>
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>财务信息</div>
+                    <Toolbar />
+                </div>
                 <div className={styles.searchBox}>
                     <FormView
                         ref={form => {
@@ -304,32 +308,34 @@ class Staff extends PureComponent {
                     </div>
                 </div>
 
-                <Skeleton loading={staff.list ? false : true} active avatar>
-                    <Table
-                        bordered
-                        dataSource={staff.list}
-                        columns={columns}
-                        pagination={{
-                            current: searchParams.pageNo,
-                            showSizeChanger: true,
-                            showQuickJumper: true,
-                            pageSizeOptions: ['10', '15', '20'],
-                            total: staff.totalCount,
-                            onShowSizeChange: this.onShowSizeChange,
-                            onChange: this.onChange,
-                        }}
-                    />
-                </Skeleton>
-                <Modal
-                    title="人员情况"
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    //footer={null}
-                >
-                    {this.renderNewForm()}
-                </Modal>
-            </Card>
+                <div className={styles.tableSty}>
+                    <Skeleton loading={staff.list ? false : true} active avatar>
+                        <Table
+                            bordered
+                            dataSource={staff.list}
+                            columns={columns}
+                            pagination={{
+                                current: searchParams.pageNo,
+                                showSizeChanger: true,
+                                showQuickJumper: true,
+                                pageSizeOptions: ['10', '15', '20'],
+                                total: staff.totalCount,
+                                onShowSizeChange: this.onShowSizeChange,
+                                onChange: this.onChange,
+                            }}
+                        />
+                    </Skeleton>
+                    <Modal
+                        title="人员情况"
+                        visible={this.state.visible}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                        //footer={null}
+                    >
+                        {this.renderNewForm()}
+                    </Modal>
+                </div>
+            </div>
         )
     }
 }
