@@ -133,11 +133,12 @@ class Tags extends PureComponent {
     render() {
         const { inputVisible, inputValue, industryTags, qualityTags } = this.state
         return (
-            <Card title="企业标签" bordered={false}>
-                <Tabs onChange={this.callback} type="card">
-                    <TabPane tab="行业标签" key="1">
+            <div className={styles.outerLayer}>
+                <div className={styles.labelNav}>企业标签</div>
+                <Tabs onChange={this.callback} type="card" className={styles.tabsStyle}>
+                    <TabPane tab="行业标签" key="1" className={styles.rectangle}>
                         <div style={{ display: 'inline-block' }}>
-                            <span>标签：</span>
+                            <span className={styles.spanStyle}>标签：</span>
                             <Input.Search
                                 placeholder="请输入标签关键词"
                                 onSearch={value =>
@@ -146,12 +147,9 @@ class Tags extends PureComponent {
                                 className={styles.search}
                             />
                         </div>
-                        <div style={{ marginTop: '10px' }}>
+                        <div className={styles.labelCont}>
                             {!inputVisible && (
-                                <Tag
-                                    onClick={this.showInput}
-                                    style={{ background: '#fff', borderStyle: 'dashed' }}
-                                >
+                                <Tag onClick={this.showInput} className={styles.tagLabel}>
                                     <Icon type="plus" /> 标签
                                 </Tag>
                             )}
@@ -167,12 +165,11 @@ class Tags extends PureComponent {
                                     onPressEnter={this.handleInputConfirm}
                                 />
                             )}
-                        </div>
-                        <div style={{ marginTop: '20px' }}>
                             {industryTags.map((tag, index) => {
                                 const isLongTag = tag.length > 20
                                 const tagElem = (
                                     <Tag
+                                        className={styles.tagCont}
                                         key={tag.id}
                                         closable="true"
                                         onClose={() => this.handleClose(tag, this)}
@@ -190,9 +187,9 @@ class Tags extends PureComponent {
                             })}
                         </div>
                     </TabPane>
-                    <TabPane tab="资质标签" key="2">
+                    <TabPane tab="资质标签" key="2" className={styles.rectangle}>
                         <div style={{ display: 'inline-block' }}>
-                            <span>标签：</span>
+                            <span className={styles.spanStyle}>标签：</span>
                             <Input.Search
                                 placeholder="请输入标签关键词"
                                 onSearch={value =>
@@ -201,12 +198,9 @@ class Tags extends PureComponent {
                                 className={styles.search}
                             />
                         </div>
-                        <div style={{ marginTop: '10px' }}>
+                        <div className={styles.labelCont}>
                             {!inputVisible && (
-                                <Tag
-                                    onClick={this.showInput}
-                                    style={{ background: '#fff', borderStyle: 'dashed' }}
-                                >
+                                <Tag onClick={this.showInput} className={styles.tagLabel}>
                                     <Icon type="plus" /> 标签
                                 </Tag>
                             )}
@@ -222,13 +216,12 @@ class Tags extends PureComponent {
                                     onPressEnter={this.handleInputConfirm}
                                 />
                             )}
-                        </div>
-                        <div style={{ marginTop: '20px' }}>
                             {qualityTags.length
                                 ? qualityTags.map((tag, index) => {
                                       const isLongTag = tag.length > 20
                                       const tagElem = (
                                           <Tag
+                                              className={styles.tagCont}
                                               key={tag.id}
                                               closable="true"
                                               onClose={() => this.handleClose(tag, this)}
@@ -250,7 +243,7 @@ class Tags extends PureComponent {
                         </div>
                     </TabPane>
                 </Tabs>
-            </Card>
+            </div>
         )
     }
 }
