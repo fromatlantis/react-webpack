@@ -3,6 +3,7 @@ import { replace } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { redirectLogin } from '../utils'
+import { APPID } from '../config'
 const model = {
     namespace: 'authUser',
     state: {
@@ -84,7 +85,7 @@ const model = {
                     })
                     if (res.data) {
                         yield put(actions('loginSuccess')(res.data))
-                        // yield put(actions('getAuthoritiesByUser')(res.data.user.id))
+                        yield put(actions('getAuthoritiesByUser')(res.data.user.id))
                     } else {
                         //yield put(replace('/login'))
                         redirectLogin({
@@ -103,7 +104,7 @@ const model = {
                     type: 'get',
                     url: `/jurisdiction/getAuthoritiesByUser?userId=${
                         action.payload
-                    }&appIdendity=HZYYGLPTZCGL0028`,
+                    }&appIdendity=${APPID}`,
                 })
                 if (res.code === 1000) {
                     yield put(

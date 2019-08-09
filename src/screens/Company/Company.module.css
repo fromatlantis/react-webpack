@@ -1,32 +1,32 @@
 .root {
-    padding: 0 50px;
+    padding: 0 0.4rem;
     overflow: hidden;
 }
 .searchBox {
-    padding: 15px 250px;
+    padding: 0.4rem 0;
+    display: flex;
+    justify-content: center;
 }
 .titleChip {
-    position: relative;
-    & .toolbar {
-        position: absolute;
-        right: 0;
-        top: 4px;
-    }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     & button {
-        margin-right: 10px;
+        margin-left: 0.1rem;
     }
 }
 .itemCard {
     display: flex;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 1px 1px 6px rgba(0,0,0,.1);
-    margin: 10px 0;
+    padding: 0.3rem;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 4px 10px 0px rgba(167,191,227,0.37);
+    border-radius:10px;
+    margin: 0.2rem 0;
     & .avatar {
-        width: 110px;
-        height: 100%;
-        border-radius: 3px;
-        margin-right: 15px;
+        width: 1.8rem;
+        height: 1.8rem;
+        border-radius:0;
+        margin-right: 0.3rem;
         align-self: center;
     }
     & .intro {
@@ -34,8 +34,7 @@
         line-height: 29px;
     }
     & .title {
-        font-weight: bold;
-        font-size: 16px;
+        color: #333333;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -44,20 +43,17 @@
         }
     }
     & .toobar {
-        & i {
-            margin-right: 10px;
-            font-size: 23px;
-        }
+       
     }
     & .info {
         display: flex;
         & > div {
-            flex: 1
+            flex: 1;
+            margin-right:10px;
         }
     }
     & .status {
         align-self: center;
-        width: 160px;
         text-align: center;
     }
 }
@@ -70,6 +66,7 @@
 /* 搜索 */
 .searchChip {
     display: flex;
+    width: 10rem;
     & :global .ant-select-selection {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
@@ -77,19 +74,22 @@
     & :global .ant-input {
         border-radius: 0;
         border-left-width: 0;
-        border-right-width: 0;
-        width: 500px;
+        border-right-width: 0; 
     }
     & :global .ant-btn {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
     }
     & .input {
+        flex: 1;
+        & :global .ant-select {
+            width: 100%;
+        }
         & :global .ant-select-selection {
             border-radius: 0;
             border-left-width: 0;
             border-right-width: 0;
-            width: 500px;
+           
         }
     }
 }

@@ -75,8 +75,8 @@
     },
     "scripts": {
         "start": "node scripts/start.js",
-        "production": "node scripts/build.js",
-        "build": "cross-env CONFIG_ENV=test node scripts/build.js",
+        "production": "cross-env CONFIG_ENV=prod node scripts/build.js",
+        "build": "node scripts/build.js",
         "test": "node scripts/test.js",
         "lint": "eslint --debug src/",
         "lint:write": "eslint --debug src/ --fix",
