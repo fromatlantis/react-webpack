@@ -8,110 +8,251 @@ import styles from '../Stats.module.css'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 // import { actions } from 'reduxDir/statOrder'
+
+// 知识产权统计-数量列表
 const columns = [
     {
-        title: '时间',
-        dataIndex: 'date',
-        key: 'date',
+        title: '类型',
+        dataIndex: 'type',
+        key: 'type',
     },
     {
-        title: '报修单数',
-        dataIndex: 'total',
-        key: 'total',
+        title: '累计数量',
+        dataIndex: 'totalCount',
+        key: 'totalCount',
         align: 'center',
     },
     {
-        title: '当日报修单完成数',
-        dataIndex: 'finished',
-        key: 'finished',
+        title: '占比',
+        dataIndex: 'ratio',
+        key: 'ratio',
         align: 'center',
     },
     {
-        title: '当日报修单未完成数',
-        dataIndex: 'unfinished',
-        key: 'unfinished',
+        title: '当年新增数量',
+        dataIndex: 'currentCount',
+        key: 'currentCount',
         align: 'center',
     },
     {
-        title: '报修单延误数',
-        dataIndex: 'delay',
-        key: 'delay',
+        title: '环比',
+        dataIndex: 'chainRatio',
+        key: 'chainRatio',
         align: 'center',
-    },
-    {
-        title: '有偿服务单数',
-        dataIndex: 'paid',
-        key: 'paid',
-        align: 'center',
-    },
-    {
-        title: '无偿服务单数',
-        dataIndex: 'unpaid',
-        key: 'unpaid',
-        align: 'center',
-    },
-    {
-        title: '维修费用',
-        dataIndex: 'cost',
-        key: 'cost',
-        align: 'center',
-        render: (cost, record) => <span>{cost ? cost : '--'}</span>,
     },
 ]
-const detailColumns = [
+// 知识产权统计-详情列表-商标
+const markColumns = [
     {
-        title: '报修地址',
-        dataIndex: 'repairLocation',
-        key: 'repairLocation',
-        render: (text, record) => <span>{text ? text : '--'}</span>,
+        title: '类型',
+        dataIndex: 'type',
+        key: 'type',
     },
     {
-        title: '报修大类',
-        dataIndex: 'category',
-        key: 'category',
+        title: '商标名称',
+        dataIndex: 'tmName',
+        key: 'tmName',
         align: 'center',
     },
     {
-        title: '报修小类',
-        dataIndex: 'classify',
-        key: 'classify',
+        title: '商标类型',
+        dataIndex: 'intCls',
+        key: 'intCls',
         align: 'center',
-        render: (text, record) => <span>{text ? text : '--'}</span>,
     },
     {
-        title: '报修时间',
-        dataIndex: 'reportTime',
-        key: 'reportTime',
+        title: '注册号',
+        dataIndex: 'regNo',
+        key: 'regNo',
         align: 'center',
-        render: (text, record) => <span>{text ? text : '--'}</span>,
     },
     {
-        title: '当日是否完成',
-        dataIndex: 'finished',
-        key: 'finished',
+        title: '申请时间',
+        dataIndex: 'appDate',
+        key: 'appDate',
         align: 'center',
-        render: (text, record) => <span>{text ? text : '--'}</span>,
     },
     {
-        title: '当日是否延误',
-        dataIndex: 'delay',
-        key: 'delay',
+        title: '公司',
+        dataIndex: 'name',
+        key: 'name',
         align: 'center',
-        render: (text, record) => <span>{text ? text : '--'}</span>,
     },
     {
-        title: '维修时长',
-        dataIndex: 'fixDuration',
-        key: 'fixDuration',
+        title: '申请进度',
+        dataIndex: 'status',
+        key: 'status',
         align: 'center',
-        render: (text, record) => <span>{text ? text : '--'}</span>,
+    },
+]
+// 知识产权统计-详情列表-专利
+const patentColumns = [
+    {
+        title: '类型',
+        dataIndex: 'type',
+        key: 'type',
     },
     {
-        title: '维修费用',
-        dataIndex: 'totalCosts',
-        key: 'totalCosts',
+        title: '专利名称',
+        dataIndex: 'patentName',
+        key: 'patentName',
         align: 'center',
-        render: (text, record) => <span>{text ? text : '--'}</span>,
+    },
+    {
+        title: '专利类型',
+        dataIndex: 'patentType',
+        key: 'patentType',
+        align: 'center',
+    },
+    {
+        title: '申请号',
+        dataIndex: 'appnumber',
+        key: 'appnumber',
+        align: 'center',
+    },
+    {
+        title: '申请日期',
+        dataIndex: 'applicationTime',
+        key: 'applicationTime',
+        align: 'center',
+    },
+    {
+        title: '授权日期',
+        dataIndex: 'impowerDate',
+        key: 'impowerDate',
+        align: 'center',
+    },
+    {
+        title: '专利发明人',
+        dataIndex: 'inventor',
+        key: 'inventor',
+        align: 'center',
+    },
+    {
+        title: '专利申请人',
+        dataIndex: 'applicantname',
+        key: 'applicantname',
+        align: 'center',
+    },
+    {
+        title: '专利代理机构',
+        dataIndex: 'agency',
+        key: 'agency',
+        align: 'center',
+    },
+    {
+        title: '公开（公告号）',
+        dataIndex: 'pubnumber',
+        key: 'pubnumber',
+        align: 'center',
+    },
+    {
+        title: '专利说明',
+        dataIndex: 'abstracts',
+        key: 'abstracts',
+        align: 'center',
+    },
+]
+// 知识产权统计-详情列表-软件著作权
+const softwareColumns = [
+    {
+        title: '著作权名称',
+        dataIndex: 'fullname',
+        key: 'fullname',
+    },
+    {
+        title: '简称',
+        dataIndex: 'simplename',
+        key: 'simplename',
+        align: 'center',
+    },
+    {
+        title: '登记号',
+        dataIndex: 'regnum',
+        key: 'regnum',
+        align: 'center',
+    },
+    {
+        title: '登记日期',
+        dataIndex: 'regtime',
+        key: 'regtime',
+        align: 'center',
+    },
+    {
+        title: '分类号',
+        dataIndex: 'catnum',
+        key: 'catnum',
+        align: 'center',
+    },
+]
+// 知识产权统计-详情列表-作品著作权
+const productColumns = [
+    {
+        title: '著作权名称',
+        dataIndex: 'fullname',
+        key: 'fullname',
+    },
+    {
+        title: '著作权类别',
+        dataIndex: 'type',
+        key: 'type',
+        align: 'center',
+    },
+    {
+        title: '登记号',
+        dataIndex: 'regnum',
+        key: 'regnum',
+        align: 'center',
+    },
+    {
+        title: '著作权人',
+        dataIndex: 'authorNationality',
+        key: 'authorNationality',
+        align: 'center',
+    },
+    {
+        title: '登记日期',
+        dataIndex: 'regtime',
+        key: 'regtime',
+        align: 'center',
+    },
+    {
+        title: '完成创作时间',
+        dataIndex: 'finishTime',
+        key: 'finishTime',
+        align: 'center',
+    },
+]
+// 知识产权统计-详情列表-网站域名
+const websiteColumns = [
+    {
+        title: '主办单位/域名/网站',
+        dataIndex: 'ym',
+        key: 'ym',
+    },
+    {
+        title: '主办单位性质',
+        dataIndex: 'companyType',
+        key: 'companyType',
+        align: 'center',
+    },
+    {
+        title: '备案号',
+        dataIndex: 'liscense',
+        key: 'liscense',
+        align: 'center',
+    },
+    {
+        title: '审核时间',
+        dataIndex: 'examineDate',
+        key: 'examineDate',
+        align: 'center',
+    },
+    {
+        title: '网站首页',
+        dataIndex: 'webSite',
+        key: 'webSite',
+        align: 'center',
     },
 ]
 const { RangePicker } = DatePicker
@@ -216,7 +357,7 @@ class Rights extends PureComponent {
                     }
                 >
                     <Alert
-                        message={`报修单数共${0}项`}
+                        message={`共${0}项`}
                         type="info"
                         showIcon
                         style={{ marginBottom: '15px' }}
@@ -266,14 +407,14 @@ class Rights extends PureComponent {
                     }
                 >
                     <Alert
-                        message={`报修单数共${0}项`}
+                        message={`共${0}项`}
                         type="info"
                         showIcon
                         style={{ marginBottom: '15px' }}
                     />
                     <Table
                         dataSource={[]}
-                        columns={detailColumns}
+                        columns={patentColumns}
                         pagination={{
                             current: detailPager.pageNo,
                             // showSizeChanger: true,
