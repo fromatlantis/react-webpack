@@ -13,6 +13,7 @@ import styles from './PieChart.module.css'
 export default class PieChart extends PureComponent {
     static defaultProps = {
         data: [],
+        name: '', //饼图或者环图，不传默认饼图
     }
     static propTypes = {
         data: PropTypes.array,
@@ -38,7 +39,7 @@ export default class PieChart extends PureComponent {
         })
     }
     setOption = props => {
-        let { title, data, hollow } = props,
+        let { title, data, hollow, name } = props,
             names = []
         data.map(x => {
             let item = {
@@ -86,7 +87,7 @@ export default class PieChart extends PureComponent {
                 {
                     name: '比例',
                     type: 'pie',
-                    radius: [hollow ? '40%' : '0%', '40%'],
+                    radius: name == 'circle' ? ['30%', '50%'] : [hollow ? '40%' : '0%', '40%'],
                     color: [
                         '#ec5b48',
                         '#f48138',
@@ -120,14 +121,15 @@ export default class PieChart extends PureComponent {
         return option
     }
     render() {
+        console.log('sdfadf', this.props.circle)
         const { data } = this.props
         if (data && data.length > 0) {
             return <div ref="pieChart" className={styles.root} />
         } else {
             return (
-                <div className={styles.root}>
+                <ul className={styles.root}>
                     <Empty />
-                </div>
+                </ul>
             )
         }
     }

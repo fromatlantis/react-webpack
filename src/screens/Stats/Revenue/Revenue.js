@@ -288,7 +288,7 @@ class Revenue extends PureComponent {
                     </Button>
                 </div>
                 <Alert
-                    message={`共${financeCountList.totalCount}项`}
+                    message={`共${financeCountList.totalCount || 0}项`}
                     type="info"
                     showIcon
                     style={{ marginTop: '70px' }}
@@ -336,7 +336,7 @@ class Revenue extends PureComponent {
                     </Button>
                 </div>
                 <Alert
-                    message={`共${financeDetailList.totalCount}项`}
+                    message={`共${financeDetailList.totalCount || 0}项`}
                     type="info"
                     showIcon
                     style={{ marginTop: '50px' }}

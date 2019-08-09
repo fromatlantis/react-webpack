@@ -291,7 +291,7 @@ class Quantity extends PureComponent {
                     </Button>
                 </div>
                 <Alert
-                    message={`共${companyCountList.totalCount}项`}
+                    message={`共${companyCountList.totalCount || 0}项`}
                     type="info"
                     showIcon
                     style={{ marginTop: '70px' }}
@@ -339,7 +339,7 @@ class Quantity extends PureComponent {
                     </Button>
                 </div>
                 <Alert
-                    message={`共${companyDetailList.totalCount}项`}
+                    message={`共${companyDetailList.totalCount || 0}项`}
                     type="info"
                     showIcon
                     style={{ marginTop: '50px' }}

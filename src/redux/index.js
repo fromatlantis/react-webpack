@@ -23,6 +23,10 @@ import qualification from './qualification'
 import revenueAndFinancing from './revenueAndFinancing'
 import staff from './staff'
 import revenue from './revenue'
+import statOverview from './statOverview'
+import parkStaff from './parkStaff'
+import knowledgeRight from './knowledgeRight'
+
 export default history =>
     combineReducers({
         router: connectRouter(history),
@@ -48,4 +52,7 @@ export default history =>
         revenueAndFinancing,
         staff,
         revenue,
+        statOverview,
+        parkStaff,
+        knowledgeRight,
     })

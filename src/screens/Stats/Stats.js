@@ -11,7 +11,7 @@ import Financing from './Financing/Financing'
 
 const menu = [
     {
-        title: '物业统计总览',
+        title: '园区企业总览',
         icon: '',
         path: '/stats/overview',
         component: Overview,

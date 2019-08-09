@@ -291,7 +291,7 @@ class Financing extends PureComponent {
                     </Button>
                 </div>
                 <Alert
-                    message={`共${financingHisCountList.totalCount}项`}
+                    message={`共${financingHisCountList.totalCount || 0}项`}
                     type="info"
                     showIcon
                     style={{ marginTop: '70px' }}
@@ -339,7 +339,7 @@ class Financing extends PureComponent {
                     </Button>
                 </div>
                 <Alert
-                    message={`共${financingHisDetailList.totalCount}项`}
+                    message={`共${financingHisDetailList.totalCount || 0}项`}
                     type="info"
                     showIcon
                     style={{ marginTop: '50px' }}
