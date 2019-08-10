@@ -5,6 +5,7 @@ import { message, notification } from 'antd'
 import qs from 'qs'
 import { actions as companyDetailsActions } from './companyDetails'
 import { actions as requireActions } from './agencyRequire'
+import { APPID } from '../config'
 const model = {
     namespace: 'company',
     state: {
@@ -14,15 +15,21 @@ const model = {
         importList: [], //导入
         archivesDetail: {}, //档案详情
         archives: {}, //档案列表
+        principal: [], //企服、招商负责人
+        serviceModel: [],
     },
     actions: [
         {
             name: 'searchCompany',
             *effect(action) {
-                console.log(qs.stringify(action.payload))
                 const res = yield call(request, {
                     type: 'post',
-                    url: `/enterprise/searchCompany?${qs.stringify(action.payload)}`,
+                    contentType: 'multipart/form-data',
+                    url: `/enterprise/searchCompany`,
+                    data: {
+                        ...action.payload,
+                        appIdentity: APPID,
+                    },
                 })
                 if (res.code === 1000) {
                     yield put(actions('searchCompanyOk')(res.data))
@@ -72,6 +79,40 @@ const model = {
             name: 'getCompanyListOk',
             reducer: 'companyList',
         },
+        // 指派相关
+        {
+            // 获取指定权限的用户列表
+            name: 'getPrincipalList',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/getPrincipalList`,
+                    data: { ...action.payload, appIdendity: APPID },
+                })
+                if (res.code === 1000) {
+                    yield put(actions('getPrincipalListOK')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getPrincipalListOK',
+            reducer: 'principal',
+        },
+        {
+            // 获取服务模块列表
+            name: 'getServiceModel',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/getServiceModel`,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('getServiceModelOK')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getServiceModelOK',
+            reducer: 'serviceModel',
+        },
         {
             name: 'assignServiceStaff',
             *effect(action) {
@@ -79,10 +120,10 @@ const model = {
                     type: 'post',
                     url: `/enterprise/assignServiceStaff`,
                     contentType: 'multipart/form-data',
-                    data: action.payload,
+                    data: { ...action.payload, appIdentity: APPID },
                 })
                 if (res.code === 1000) {
-                    message.success('保存成功')
+                    message.success('指派成功')
                 }
             },
         },
@@ -113,6 +154,7 @@ const model = {
                     contentType: 'multipart/form-data',
                     data: {
                         enterprises: JSON.stringify(action.payload),
+                        appIdentity: APPID,
                     },
                 })
                 if (res.code === 1000) {

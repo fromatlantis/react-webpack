@@ -28,6 +28,38 @@
         border-radius:0;
         margin-right: 0.3rem;
         align-self: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 32px;
+    }
+    & .levelChip {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        top: 0.14rem;
+        left: 0;
+        height: 0.32rem;
+        padding-left: 0.1rem;
+        padding-right: 0.04rem;
+        background-color: #188FFD;
+        color: #fff;
+        border-top-right-radius: 0.24rem;
+        border-bottom-right-radius: 0.24rem;
+    }
+    & .level {
+        width: 0.24rem;
+        height: 0.24rem;
+        margin-left: 0.04rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background: #fff;
+        font-size: 18px;
+        font-family:PingFangSC-Semibold;
+        font-weight:600;
+        color:rgba(24,143,253,1);
     }
     & .intro {
         flex: 1;
@@ -38,12 +70,15 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-bottom: 0.1rem;
         & span {
             margin-right: 10px;
         }
     }
     & .toobar {
-       
+       font-size: 16px;
+       color: #188FFD;
+       cursor: pointer;
     }
     & .info {
         display: flex;
@@ -54,7 +89,6 @@
     }
     & .status {
         align-self: center;
-        text-align: center;
     }
 }
 .stepCard {

@@ -1,10 +1,45 @@
 import React, { PureComponent } from 'react'
 import { Button, Input, Select } from 'antd'
 import styles from './Company.module.css'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { push } from 'connected-react-router'
+import { Link } from 'react-router-dom'
+import { actions } from 'reduxDir/configure'
 const { Option, OptGroup } = Select
-export default class SearchChip extends PureComponent {
+const mapStateToProps = state => {
+    return {
+        industryList: state.configure.industryList.map(item => ({
+            id: item.id,
+            label: item.label,
+            labelType: 'industry',
+        })),
+        qualityList: state.configure.qualityList.map(item => ({
+            id: item.id,
+            label: item.label,
+            labelType: 'qualification',
+        })),
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getLabelList: actions('getLabelList'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class SearchChip extends PureComponent {
     state = {
         column: 'name',
+    }
+    componentDidMount() {
+        this.props.getLabelList({ type: 'industry' })
+        this.props.getLabelList({ type: 'quality' })
     }
     change = column => {
         this.setState({ column })
@@ -18,16 +53,17 @@ export default class SearchChip extends PureComponent {
     changeIndustry = e => {
         this.setState({ industry: e.target.value })
     }
-    changeTags = tags => {
-        this.setState({ tags })
+    changeTags = labels => {
+        this.setState({ labels })
     }
-    changeGrade = grade => {
+    changeGrade = companyLevel => {
         this.setState({
-            grade,
+            companyLevel,
         })
     }
     renderInput = () => {
-        const { column, name, person, industry, tags, grade } = this.state
+        const { column, name, person, industry, labels, companyLevel } = this.state
+        const { industryList, qualityList } = this.props
         if (column === 'name') {
             return (
                 <Input
@@ -55,31 +91,34 @@ export default class SearchChip extends PureComponent {
                     onChange={this.changeIndustry}
                 />
             )
-        } else if (column === 'tags') {
+        } else if (column === 'labels') {
             return (
                 <Select
                     size="large"
                     placeholder="请选择标签"
                     mode="multiple"
-                    value={tags}
+                    value={labels}
                     onChange={this.changeTags}
                 >
-                    <OptGroup label="行业标签">
-                        <Option value="jack">Jack</Option>
-                        <Option value="lucy">Lucy</Option>
+                    <OptGroup label="行业标签" key="1">
+                        {industryList.map(item => (
+                            <Option value={item.label}>{item.label}</Option>
+                        ))}
                     </OptGroup>
-                    <OptGroup label="资质标签">
-                        <Option value="Yiminghe">yiminghe</Option>
+                    <OptGroup label="资质标签" key="2">
+                        {qualityList.map(item => (
+                            <Option value={item.label}>{item.label}</Option>
+                        ))}
                     </OptGroup>
                 </Select>
             )
-        } else if (column === 'grade') {
+        } else if (column === 'companyLevel') {
             return (
                 <Select
                     size="large"
                     placeholder="请选择等级"
                     mode="multiple"
-                    value={grade}
+                    value={companyLevel}
                     onChange={this.changeGrade}
                 >
                     <Option value="A">A级</Option>
@@ -105,8 +144,8 @@ export default class SearchChip extends PureComponent {
                     <Option value="name">查公司</Option>
                     <Option value="legal_person_name">查法人</Option>
                     <Option value="industry">查行业</Option>
-                    <Option value="tags">查标签</Option>
-                    <Option value="grade">查分级</Option>
+                    <Option value="labels">查标签</Option>
+                    <Option value="companyLevel">查分级</Option>
                 </Select>
                 <div className={styles.input}>{this.renderInput()}</div>
                 <Button
@@ -120,3 +159,4 @@ export default class SearchChip extends PureComponent {
         )
     }
 }
+export default SearchChip

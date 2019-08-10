@@ -117,25 +117,32 @@ class Home extends PureComponent {
         this.props.searchCompany(params)
     }
     batchAssign = () => {
-        this.props.getCompanyList()
-        this.props.getDirectorList()
-        this.setState({
-            batchAssign: true,
-        })
+        // this.props.getCompanyList()
+        // this.props.getDirectorList()
+        const { checkedList } = this.state
+        if (checkedList.length === 0) {
+            message.warning('请选择企业')
+        } else {
+            this.setState({
+                batchAssign: true,
+            })
+        }
     }
     batchAssignOk = () => {
-        const companyIds = this.refs.batchAssignCompany.state.targetKeys
-        const { targetKeys } = this.refs.batchAssignPerson.state
-        const { directorList } = this.props
-        this.props.assignServiceStaff({
-            companyIds: companyIds,
-            userIds: targetKeys,
-            userNames: directorList
-                .filter(item => targetKeys.includes(item.id))
-                .map(item => item.name),
-        })
-        this.setState({
-            batchAssign: false,
+        this.batchTransferForm.validateFields((errors, values) => {
+            if (!errors) {
+                const [userId, userName] = values.person.split('-')
+                const { checkedList } = this.state
+                this.props.assignServiceStaff({
+                    companyIds: checkedList.join(','),
+                    userIds: userId,
+                    userName: userName,
+                    modelKeys: values.modelKeys.join(','),
+                })
+                this.setState({
+                    batchAssign: false,
+                })
+            }
         })
     }
     batchAssignCancel = () => {
@@ -144,7 +151,7 @@ class Home extends PureComponent {
         })
     }
     assign = companyId => {
-        this.props.getDirectorList(companyId)
+        // this.props.getDirectorList(companyId)
         this.setState({
             assign: true,
             companyId: companyId,
@@ -152,18 +159,20 @@ class Home extends PureComponent {
     }
     // 确认指派
     assignOk = () => {
-        const { targetKeys } = this.refs.assign.state
-        const { companyId } = this.state
-        const { directorList } = this.props
-        this.props.assignServiceStaff({
-            companyIds: [companyId],
-            userIds: targetKeys,
-            userNames: directorList
-                .filter(item => targetKeys.includes(item.id))
-                .map(item => item.name),
-        })
-        this.setState({
-            assign: false,
+        this.transferForm.validateFields((errors, values) => {
+            if (!errors) {
+                const [userId, userName] = values.person.split('-')
+                const { companyId } = this.state
+                this.props.assignServiceStaff({
+                    companyIds: companyId,
+                    userIds: userId,
+                    userName: userName,
+                    modelKeys: values.modelKeys.join(','),
+                })
+                this.setState({
+                    assign: false,
+                })
+            }
         })
     }
     assignCancel = () => {
@@ -196,7 +205,7 @@ class Home extends PureComponent {
         this.setState({ current })
     }
     toEdit = item => {
-        sessionStorage.setItem('companyId', item.company_id)
+        sessionStorage.setItem('companyId', item.companyId)
         //sessionStorage.setItem('companyName', item.name)
         this.props.push('/newCompany/info')
     }
@@ -212,20 +221,35 @@ class Home extends PureComponent {
     renderItem = () => {
         const { company } = this.props
         return (company.list || []).map(item => {
+            const qualification = item.companyLabels.filter(item => item.type === 'qualification')
+            const industry = item.companyLabels.filter(item => item.type === 'industry')
             return (
                 <div className={styles.itemCard} key={item.companyId}>
                     <Checkbox
                         value={item.companyId}
                         style={{ marginRight: '10px', alignSelf: 'center' }}
                     />
-                    <Avatar className={styles.avatar} src={item.logo} shape="square" />
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div style={{ position: 'relative' }}>
+                            <Avatar className={styles.avatar} src={item.logo} shape="square">
+                                {item.name.substring(0, 4)}
+                            </Avatar>
+                            <div className={styles.levelChip}>
+                                <div>实驻企业</div>
+                                <div className={styles.level}>{item.companyLevel}</div>
+                            </div>
+                        </div>
+                    </div>
                     <div className={styles.intro}>
                         <div className={styles.title}>
                             <div
-                                style={{ display: 'flex', alignItems: 'center', fontSize: '22px' }}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    fontSize: '22px',
+                                }}
                             >
                                 <span>{item.name}</span>
-                                <Tag color="orange">实驻企业</Tag>
                             </div>
                             <div className={styles.toobar}>
                                 <span
@@ -235,8 +259,8 @@ class Home extends PureComponent {
                                         this.assign(item.companyId)
                                     }}
                                 >
-                                    <IconFont type="icondetails" />
-                                    <span>指派</span>
+                                    <IconFont type="iconzhifeiji" />
+                                    <span style={{ marginLeft: '5px' }}>指派</span>
                                 </span>
                                 <span
                                     type="link"
@@ -247,8 +271,8 @@ class Home extends PureComponent {
                                         )
                                     }}
                                 >
-                                    <IconFont type="icondetails" />
-                                    <span>详情</span>
+                                    <IconFont type="icongengduo" />
+                                    <span style={{ marginLeft: '5px' }}>详情</span>
                                 </span>
                                 <span
                                     type="link"
@@ -258,9 +282,27 @@ class Home extends PureComponent {
                                     }}
                                 >
                                     <IconFont type="iconbianji" />
-                                    <span>编辑</span>
+                                    <span style={{ marginLeft: '5px' }}>编辑</span>
+                                </span>
+                                <span
+                                    type="link"
+                                    size="small"
+                                    onClick={() => {
+                                        this.toEdit(item)
+                                    }}
+                                >
+                                    <IconFont type="iconyaoqing" />
+                                    <span style={{ marginLeft: '5px' }}>邀请</span>
                                 </span>
                             </div>
+                        </div>
+                        <div>
+                            {industry.map(item => (
+                                <Tag color="red">{item.label}</Tag>
+                            ))}
+                            {qualification.map(item => (
+                                <Tag color="blue">{item.label}</Tag>
+                            ))}
                         </div>
                         <div className={styles.info}>
                             <div>
@@ -324,8 +366,11 @@ class Home extends PureComponent {
                             <ul className={styles.status}>
                                 <Tag color="green">{item.regStatus}</Tag>
                                 <p>
-                                    {item.director_name && <Tag color="volcano">已指派</Tag>}
-                                    {!item.director_name && <Tag color="blue">未指派</Tag>}
+                                    {item.commerceName || item.enterpriseName ? (
+                                        <Tag color="blue">已指派</Tag>
+                                    ) : (
+                                        <Tag color="red">未指派</Tag>
+                                    )}
                                 </p>
                             </ul>
                         </div>
@@ -356,7 +401,7 @@ class Home extends PureComponent {
         }
         let { current, importResponse, allChecked } = this.state
         const { company, directorList, companyList } = this.props
-        const chks = (company.list || []).map(item => item.company_id)
+        const chks = (company.list || []).map(item => item.companyId)
         return (
             <div className={styles.root}>
                 <div className={styles.searchBox}>
@@ -430,22 +475,23 @@ class Home extends PureComponent {
 
                 {/* <List dataSource={data} renderItem={this.renderItem} /> */}
                 <Modal
-                    width={1000}
                     title="批量指派"
                     visible={this.state.batchAssign}
                     onOk={this.batchAssignOk}
                     onCancel={this.batchAssignCancel}
-                    //footer={null}
+                    bodyStyle={{ height: '390px' }}
                 >
                     <div style={{ display: 'flex' }}>
-                        <TransferView
+                        {/* <TransferView
                             titles={['源列表', '目标列表']}
                             data={companyList}
                             ref="batchAssignCompany"
+                        /> */}
+                        <TransferModules
+                            forwardedRef={ref => {
+                                this.batchTransferForm = ref
+                            }}
                         />
-                        <div style={{ marginLeft: '20px', flex: 1 }}>
-                            <TransferModules />
-                        </div>
                     </div>
                 </Modal>
                 <Modal
@@ -454,9 +500,13 @@ class Home extends PureComponent {
                     visible={this.state.assign}
                     onOk={this.assignOk}
                     onCancel={this.assignCancel}
-                    //footer={null}
+                    bodyStyle={{ height: '390px' }}
                 >
-                    <TransferModules />
+                    <TransferModules
+                        forwardedRef={ref => {
+                            this.transferForm = ref
+                        }}
+                    />
                 </Modal>
                 <Modal
                     title="导入"

@@ -8,8 +8,22 @@
     left: 0;
     bottom: 0;
     & :global {
+        & .ant-menu-item {
+            font-size: 16px;
+        }
+        & .ant-menu-submenu-title {
+            font-size: 16px;
+        }
+        & .ant-menu-sub {
+            & .ant-menu-item {
+                font-size: 14px;
+            }
+        }
         & .ant-menu-item > a {
             color: #ffffff;
+        }
+        & .ant-menu-submenu > .ant-menu {
+            background: var(--sider-background);
         }
     }
 }

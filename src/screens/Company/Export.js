@@ -195,7 +195,7 @@ export default class Export extends PureComponent {
                     visible={this.state.exportModal}
                     onOk={this.exportModalOk}
                     onCancel={this.exportModalCancel}
-                    width={830}
+                    width={930}
                     footer={
                         <div className="steps-action">
                             {current < steps.length - 1 && (

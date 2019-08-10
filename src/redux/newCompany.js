@@ -67,6 +67,20 @@ const model = {
             name: 'saveBasicInfoOk',
             reducer: 'baseInfo',
         },
+        // 编辑企业名片
+        {
+            name: 'updateBasicInfo',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/updateBasicInfo`,
+                    data: JSON.stringify(action.payload),
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                }
+            },
+        },
         {
             name: 'storeLoadAll',
             reducer: 'loadAll',

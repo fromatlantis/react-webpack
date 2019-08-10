@@ -6,7 +6,7 @@ import { UploadImg, FormView } from 'components'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/newCompany'
-
+import { actions as configureActions } from 'reduxDir/configure'
 import AutoComplete from './AutoComplete'
 import Toolbar from '../../Toolbar/Toolbar'
 
@@ -16,6 +16,8 @@ const mapStateToProps = state => {
         baseInfo: state.newCompany.baseInfo,
         loadAll: state.newCompany.loadAll,
         // complate: state.loading.complate,
+        industryList: state.configure.industryList,
+        qualityList: state.configure.qualityList,
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -24,8 +26,10 @@ const mapDispatchToProps = dispatch => {
             saveBasicInfo: actions('saveBasicInfo'),
             queryBasicInfoDetial: actions('queryBasicInfoDetial'),
             loadEnterpriseInfo: actions('loadEnterpriseInfo'),
+            updateBasicInfo: actions('updateBasicInfo'),
             changeBasicInfoApprove: actions('changeBasicInfoApprove'),
             storeLoadAll: actions('storeLoadAll'),
+            getLabelList: configureActions('getLabelList'),
         },
         dispatch,
     )
@@ -39,6 +43,8 @@ class Info extends PureComponent {
         dataSource: [],
     }
     componentDidMount = () => {
+        this.props.getLabelList({ type: 'industry' })
+        this.props.getLabelList({ type: 'quality' })
         const companyId = sessionStorage.getItem('companyId')
         if (companyId) {
             this.props.queryBasicInfoDetial(companyId)
@@ -49,16 +55,32 @@ class Info extends PureComponent {
         values.estiblishTime = moment(values.estiblishTime.format('YYYY-MM-DD')).format('x')
         if (companyId === '000000') {
             // 新增
+            const { industries, qualification, ...basicInfo } = values
             const { baseInfo, saveBasicInfo } = this.props
-            values.companyId = baseInfo.companyId
-            saveBasicInfo(values)
+            basicInfo.companyId = baseInfo.companyId
+            saveBasicInfo({
+                basicInfo,
+                industries: industries.join(','),
+                qualification: qualification.join(','),
+            })
         } else {
             // 编辑
-            const { baseInfo, changeBasicInfoApprove } = this.props
-            changeBasicInfoApprove({ ...baseInfo, ...values })
+            const { baseInfo, updateBasicInfo } = this.props
+            const { industries = [], qualification = [], ...basicInfo } = values
+            updateBasicInfo({
+                basicInfo: {
+                    keyId: baseInfo.keyId,
+                    parkId: baseInfo.parkId,
+                    tenantId: baseInfo.tenantId,
+                    ...basicInfo,
+                },
+                industries: industries.join(','),
+                qualification: qualification.join(','),
+            })
         }
     }
     render() {
+        const { industryList, qualityList } = this.props
         const items = [
             {
                 label: '企业名称',
@@ -76,12 +98,6 @@ class Info extends PureComponent {
             {
                 label: '企业logo',
                 field: 'logo',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入信息',
-                    },
-                ],
                 component: <UploadImg />,
             },
             {
@@ -115,7 +131,7 @@ class Info extends PureComponent {
                     },
                 ],
                 formatter: estiblishTime => {
-                    return moment(parseInt(estiblishTime))
+                    return moment(estiblishTime)
                 },
                 component: <DatePicker />,
             },
@@ -155,12 +171,6 @@ class Info extends PureComponent {
             {
                 label: '企业邮箱',
                 field: 'email',
-                rules: [
-                    {
-                        required: true,
-                        message: '请输入信息',
-                    },
-                ],
                 component: <Input />,
             },
             {
@@ -193,8 +203,8 @@ class Info extends PureComponent {
             },
             {
                 label: '企业分级',
-                field: 'level',
-                initialValue: '1',
+                field: 'companyLevel',
+                initialValue: 'A',
                 rules: [
                     {
                         required: true,
@@ -203,38 +213,40 @@ class Info extends PureComponent {
                 ],
                 component: (
                     <Select>
-                        <Option value="1">A类企业</Option>
-                        <Option value="2">B类企业</Option>
+                        <Option value="A">A级</Option>
+                        <Option value="B">B级</Option>
+                        <Option value="C">C级</Option>
+                        <Option value="D">D级</Option>
                     </Select>
                 ),
             },
             {
                 label: '引入时间',
-                field: 'time',
-                formatter: estiblishTime => {
-                    return moment(parseInt(estiblishTime))
+                field: 'introduceTime',
+                formatter: introduceTime => {
+                    return moment(introduceTime)
                 },
                 component: <DatePicker />,
             },
             {
                 label: '行业标签',
-                field: 'industry',
+                field: 'industries',
                 component: (
-                    <Select mode="multiple">
-                        <Option value="one">选项一</Option>
-                        <Option value="two">选项二</Option>
-                        <Option value="three">选项三</Option>
+                    <Select mode="multiple" placeholder="请选择行业标签">
+                        {industryList.map(item => (
+                            <Option value={item.id}>{item.label}</Option>
+                        ))}
                     </Select>
                 ),
             },
             {
                 label: '资质标签',
-                field: 'quality',
+                field: 'qualification',
                 component: (
-                    <Select mode="multiple">
-                        <Option value="one">选项一</Option>
-                        <Option value="two">选项二</Option>
-                        <Option value="three">选项三</Option>
+                    <Select mode="multiple" placeholder="请选择资质标签">
+                        {qualityList.map(item => (
+                            <Option value={item.id}>{item.label}</Option>
+                        ))}
                     </Select>
                 ),
             },
@@ -243,17 +255,17 @@ class Info extends PureComponent {
             },
             {
                 label: '联系人',
-                field: 'person',
+                field: 'linkman',
                 component: <Input />,
             },
             {
                 label: '联系人手机号',
-                field: 'telephone',
+                field: 'linkPhone',
                 component: <Input />,
             },
             {
                 label: '联系人邮箱',
-                field: 'email',
+                field: 'linkEmail',
                 component: <Input />,
             },
         ]
