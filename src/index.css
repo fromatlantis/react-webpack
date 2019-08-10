@@ -61,3 +61,22 @@ em {
         font-size: 625%;
     }
 }
+/* antd中table表格字体 */
+.ant-table-tbody{
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(89,89,89,1);
+}
+/* table表格-表头字体 */
+.ant-table-thead{
+    font-size:0.14rem;
+    font-family:PingFangSC-Semibold;
+    font-weight:600;
+}
+/* table组件-分页距离表格的间距 */
+.ant-table-wrapper .ant-table-pagination.ant-pagination{
+     margin-top: 0.4rem;
+}
+.ant-table-content .ant-table-thead > tr > th{
+background:rgba(232,232,232,1)
+}

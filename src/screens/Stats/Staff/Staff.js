@@ -1,125 +1,108 @@
 import React, { PureComponent, Fragment } from 'react'
-import { Alert, Button, Card, DatePicker, Statistic, Table, message } from 'antd'
-import { YearPicker } from 'components'
+import { Alert, Button, Card, DatePicker, Table, Divider, message } from 'antd'
 import { PieChart } from 'components/Charts'
 import moment from 'moment'
 import styles from '../Stats.module.css'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-// import { actions } from 'reduxDir/statOrder'
+import { actions } from 'reduxDir/parkStaff'
+
 const columns = [
     {
-        title: '时间',
-        dataIndex: 'date',
-        key: 'date',
+        title: '学历',
+        dataIndex: 'academic',
+        key: 'academic',
     },
     {
-        title: '报修单数',
-        dataIndex: 'total',
-        key: 'total',
+        title: '人数',
+        dataIndex: 'totalCount',
+        key: 'totalCount',
         align: 'center',
     },
     {
-        title: '当日报修单完成数',
-        dataIndex: 'finished',
-        key: 'finished',
+        title: '当年新增人数',
+        dataIndex: 'currentCount',
+        key: 'currentCount',
         align: 'center',
     },
     {
-        title: '当日报修单未完成数',
-        dataIndex: 'unfinished',
-        key: 'unfinished',
+        title: '环比',
+        dataIndex: 'chainRatio',
+        key: 'chainRatio',
         align: 'center',
-    },
-    {
-        title: '报修单延误数',
-        dataIndex: 'delay',
-        key: 'delay',
-        align: 'center',
-    },
-    {
-        title: '有偿服务单数',
-        dataIndex: 'paid',
-        key: 'paid',
-        align: 'center',
-    },
-    {
-        title: '无偿服务单数',
-        dataIndex: 'unpaid',
-        key: 'unpaid',
-        align: 'center',
-    },
-    {
-        title: '维修费用',
-        dataIndex: 'cost',
-        key: 'cost',
-        align: 'center',
-        render: (cost, record) => <span>{cost ? cost : '--'}</span>,
     },
 ]
 const detailColumns = [
     {
-        title: '报修地址',
-        dataIndex: 'repairLocation',
-        key: 'repairLocation',
+        title: '排名',
+        dataIndex: 'num',
+        key: 'num',
+        align: 'center',
+        render: (text, record, index) => <span key={text}>{index + 1}</span>,
+    },
+    {
+        title: '企业名称',
+        dataIndex: 'name',
+        key: 'name',
+        align: 'center',
+    },
+    {
+        title: '学历',
+        dataIndex: 'academic',
+        key: 'academic',
+        align: 'center',
+    },
+    {
+        title: '人数',
+        dataIndex: 'staffCount',
+        key: 'staffCount',
+        align: 'center',
         render: (text, record) => <span>{text ? text : '--'}</span>,
     },
     {
-        title: '报修大类',
+        title: '所属行业',
+        dataIndex: 'industry',
+        key: 'industry',
+        align: 'center',
+        render: (text, record) => <span>{text ? text : '--'}</span>,
+    },
+    {
+        title: '企业类型',
         dataIndex: 'category',
         key: 'category',
         align: 'center',
-    },
-    {
-        title: '报修小类',
-        dataIndex: 'classify',
-        key: 'classify',
-        align: 'center',
         render: (text, record) => <span>{text ? text : '--'}</span>,
     },
     {
-        title: '报修时间',
-        dataIndex: 'reportTime',
-        key: 'reportTime',
-        align: 'center',
-        render: (text, record) => <span>{text ? text : '--'}</span>,
-    },
-    {
-        title: '当日是否完成',
-        dataIndex: 'finished',
-        key: 'finished',
-        align: 'center',
-        render: (text, record) => <span>{text ? text : '--'}</span>,
-    },
-    {
-        title: '当日是否延误',
-        dataIndex: 'delay',
-        key: 'delay',
-        align: 'center',
-        render: (text, record) => <span>{text ? text : '--'}</span>,
-    },
-    {
-        title: '维修时长',
-        dataIndex: 'fixDuration',
-        key: 'fixDuration',
-        align: 'center',
-        render: (text, record) => <span>{text ? text : '--'}</span>,
-    },
-    {
-        title: '维修费用',
-        dataIndex: 'totalCosts',
-        key: 'totalCosts',
+        title: '引入时间',
+        dataIndex: 'introduceTime',
+        key: 'introduceTime',
         align: 'center',
         render: (text, record) => <span>{text ? text : '--'}</span>,
     },
 ]
-const { RangePicker } = DatePicker
 const mapStateToProps = state => {
-    return {}
+    return {
+        staffDistribute: state.parkStaff.staffDistribute.map(item => ({
+            name: item.name,
+            value: item.count,
+        })),
+        staffCountList: state.parkStaff.staffCountList,
+        staffDetailList: state.parkStaff.staffDetailList,
+    }
 }
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({}, dispatch)
+    return bindActionCreators(
+        {
+            getStaffDistribute: actions('getStaffDistribute'),
+            getStaffCountList: actions('getStaffCountList'),
+            getStaffDetailList: actions('getStaffDetailList'),
+            exportStaffCountList: actions('exportStaffCountList'),
+            exportStaffDetailList: actions('exportStaffDetailList'),
+        },
+        dispatch,
+    )
 }
 @connect(
     mapStateToProps,
@@ -127,13 +110,10 @@ const mapDispatchToProps = dispatch => {
 )
 class Staff extends PureComponent {
     state = {
+        isopen: false,
+        time: null,
         rowIndex: 0,
-        dateRange: [
-            moment()
-                .subtract(7, 'days')
-                .format('YYYY-MM-DD'),
-            moment().format('YYYY-MM-DD'),
-        ],
+        year: moment().year(),
         countPager: {
             pageNo: 1,
             pageSize: 10,
@@ -142,97 +122,210 @@ class Staff extends PureComponent {
             pageNo: 1,
             pageSize: 10,
         },
-        date: '',
+        academic: '',
     }
-    componentDidMount() {}
-    componentWillReceiveProps(nextProps) {}
-    onChange = (data, dateStr) => {}
-    renderData = params => {}
-    renderDetailData = date => {}
+    componentDidMount() {
+        const year = this.state.year
+        this.renderData({ year })
+    }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.staffCountList !== nextProps.staffCountList) {
+            const [first] = nextProps.staffCountList.list
+            if (first) {
+                this.renderDetailData(first.academic) //默认获取选中第一条数据的详情
+            }
+        }
+    }
+    renderData = params => {
+        const { countPager } = this.state
+        const { getStaffDistribute, getStaffCountList } = this.props
+        getStaffDistribute(params)
+        getStaffCountList({
+            ...params,
+            ...countPager,
+        })
+    }
+    renderDetailData = academic => {
+        this.setState({ academic: academic })
+        const year = this.state.year
+        this.props.getStaffDetailList({
+            academic,
+            year,
+            ...this.state.detailPager,
+            pageNo: 1,
+        })
+    }
     setRowClassName = (_, index) => {
         return index === this.state.rowIndex ? 'row-active' : ''
     }
+    handlePanelChange = value => {
+        if (value.year() > moment().year()) {
+            message.info('选择的年份不能大于当前年份')
+        } else {
+            this.setState({
+                time: value,
+                isopen: false,
+                year: value.year(),
+            })
+            this.renderData({ year: value.year() })
+        }
+    }
+    handleOpenChange = status => {
+        if (status) {
+            this.setState({ isopen: true })
+        } else {
+            this.setState({ isopen: false })
+        }
+    }
     // 分页
-    onCountPageChange = (pageNo, _) => {
+    // 数量列表的pageNo改变
+    onCountPageNoChange = (pageNo, pageSize) => {
         this.setState({
             countPager: {
-                ...this.state.countPager,
+                pageSize,
                 pageNo,
             },
         })
+        const year = this.state.year
+        let parm = { pageNo: pageNo, pageSize: pageSize, year }
+        this.props.getStaffCountList(parm)
     }
-    onDetailPageChange = (pageNo, _) => {
+    // 数量列表的pageSize改变
+    onCountPageSizeChange = (pageNo, pageSize) => {
+        this.setState({
+            countPager: {
+                pageSize: pageSize,
+                pageNo: 1,
+            },
+        })
+        const year = this.state.year
+        let parm = { pageNo: 1, pageSize: pageSize, year }
+        this.props.getStaffCountList(parm)
+    }
+    // 详情列表的pageNo改变
+    onDetailPageNoChange = (pageNo, pageSize) => {
+        const academic = this.state.academic
         this.setState({
             detailPager: {
-                ...this.state.detailPager,
-                pageNo,
+                pageSize: pageSize,
+                pageNo: pageNo,
             },
         })
+        const year = this.state.year
+        let parm = { pageNo: pageNo, pageSize: pageSize, year, academic }
+        this.props.getStaffDetailList(parm)
     }
-    //导出详细
-    exportBig = () => {}
-    exportAllbig = () => {}
-    //导出明细
-    exportDetail = () => {}
-    exportAllDetail = () => {}
+    // 详情列表的pageSize改变
+    onDetailPageSizeChange = (pageNo, pageSize) => {
+        const academic = this.state.academic
+        this.setState({
+            detailPager: {
+                pageSize: pageSize,
+                pageNo: 1,
+            },
+        })
+        const year = this.state.year
+        let parm = { pageNo: 1, pageSize: pageSize, year, academic }
+        this.props.getStaffDetailList(parm)
+    }
+    //导出基本列表
+    exportTable = flag => {
+        const year = this.state.year
+        if (flag === 0) {
+            const { pageNo, pageSize } = this.state.countPager
+            this.props.exportStaffCountList({
+                year: year,
+                pageNo: pageNo,
+                pageSize: pageSize,
+            })
+        } else if (flag === 1) {
+            this.props.exportStaffCountList({
+                year: year,
+            })
+        }
+    }
+    //导出详情列表
+    exportTableDetail = flag => {
+        const year = this.state.year
+        if (flag === 0) {
+            const { pageNo, pageSize } = this.state.detailPager
+            this.props.exportStaffDetailList({
+                academic: this.state.academic,
+                year: year,
+                pageNo: pageNo,
+                pageSize: pageSize,
+            })
+        } else if (flag === 1) {
+            this.props.exportStaffDetailList({
+                academic: this.state.academic,
+                year: year,
+            })
+        }
+    }
     render() {
         const { countPager, detailPager } = this.state
-        const [beginDate, endDate] = this.state.dateRange
-        const { dailyRepairsOrders, dateCount, dateDetail } = this.props
+        const { staffDistribute, staffCountList, staffDetailList } = this.props
         return (
             <Fragment>
-                <Card
-                    title="园区人员统计"
-                    bordered={false}
-                    style={{ marginTop: '5px' }}
-                    extra={
-                        <Fragment>
-                            <b>选择年份：</b>
-                            <YearPicker />
-                        </Fragment>
-                    }
-                >
-                    <div className={styles.card}>
-                        <PieChart data={[]} />
-                    </div>
-                </Card>
-                <Card
-                    title="详细信息"
-                    bordered={false}
-                    extra={
-                        <div>
-                            <Button type="primary" size="small" onClick={this.exportBig}>
-                                导出当前页
-                            </Button>
-                            <Button
-                                style={{ marginLeft: 10 }}
-                                type="primary"
-                                size="small"
-                                onClick={this.exportAllbig}
-                            >
-                                导出全部
-                            </Button>
-                        </div>
-                    }
-                >
-                    <Alert
-                        message={`报修单数共${0}项`}
-                        type="info"
-                        showIcon
-                        style={{ marginBottom: '15px' }}
+                <div className={styles.selectYear}>
+                    <b className={styles.yearStyle}>选择年份：</b>
+                    <DatePicker
+                        value={this.state.time}
+                        open={this.state.isopen}
+                        mode="year"
+                        placeholder="请选择年份"
+                        format="YYYY"
+                        onOpenChange={this.handleOpenChange}
+                        onPanelChange={this.handlePanelChange}
                     />
+                </div>
+                <div className={styles.rectangle}>
+                    <div className={styles.titleFont}>
+                        <Divider
+                            style={{
+                                width: '4px',
+                                height: '24px',
+                                background: 'rgba(64,152,255,1)',
+                            }}
+                            type="vertical"
+                        />
+                        园区人员统计
+                    </div>
+                    <div className={styles.card} style={{ paddingLeft: '0.4rem' }}>
+                        <PieChart name="circle" data={staffDistribute} />
+                    </div>
+
+                    <div style={{ display: 'flex' }} className={styles.distance}>
+                        <Alert
+                            message={`共${staffCountList.totalCount || 0}项`}
+                            type="info"
+                            showIcon
+                            style={{ flex: 1 }}
+                        />
+                        <Button
+                            type="primary"
+                            style={{ marginLeft: '0.1rem', marginRight: '0.1rem' }}
+                            onClick={() => this.exportTable(0)}
+                        >
+                            导出当前页
+                        </Button>
+                        <Button type="primary" onClick={() => this.exportTable(1)}>
+                            导出全部
+                        </Button>
+                    </div>
                     <Table
-                        dataSource={[]}
+                        className={`${styles.tableTop} ${styles.distance}`}
+                        dataSource={staffCountList.list}
                         columns={columns}
                         rowClassName={this.setRowClassName}
                         pagination={{
                             current: countPager.pageNo,
-                            // showSizeChanger: true,
+                            showSizeChanger: true,
                             showQuickJumper: true,
-                            // pageSizeOptions: ['10', '20', '30'],
-                            total: 30,
-                            // onShowSizeChange: this.onShowSizeChange,
-                            onChange: this.onCountPageChange,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: staffCountList.totalCount,
+                            onShowSizeChange: this.onCountPageSizeChange,
+                            onChange: this.onCountPageNoChange,
                         }}
                         onRow={(record, index) => {
                             return {
@@ -240,51 +333,47 @@ class Staff extends PureComponent {
                                     this.setState({
                                         rowIndex: index,
                                     })
-                                    this.renderDetailData(record.date)
+                                    this.renderDetailData(record.academic)
                                 }, // 点击行
                             }
                         }}
                     />
-                </Card>
-                <Card
-                    title="明细信息"
-                    bordered={false}
-                    extra={
-                        <div>
-                            <Button type="primary" size="small" onClick={this.exportDetail}>
-                                导出当前页
-                            </Button>
-                            <Button
-                                style={{ marginLeft: 10 }}
-                                type="primary"
-                                size="small"
-                                onClick={this.exportAllDetail}
-                            >
-                                导出全部
-                            </Button>
-                        </div>
-                    }
-                >
-                    <Alert
-                        message={`报修单数共${0}项`}
-                        type="info"
-                        showIcon
-                        style={{ marginBottom: '15px' }}
-                    />
+                    <div style={{ display: 'flex' }} className={styles.distance}>
+                        <Alert
+                            message={`共${staffDetailList.totalCount || 0}项`}
+                            type="info"
+                            showIcon
+                            style={{ flex: 1 }}
+                        />
+                        <Button
+                            type="primary"
+                            style={{ marginLeft: '0.1rem', marginRight: '0.1rem' }}
+                            onClick={() => {
+                                this.exportTableDetail(0)
+                            }}
+                        >
+                            导出当前页
+                        </Button>
+                        <Button type="primary" onClick={() => this.exportTableDetail(1)}>
+                            导出全部
+                        </Button>
+                    </div>
                     <Table
-                        dataSource={[]}
+                        className={`${styles.tableTop} ${styles.distance}`}
+                        style={{ paddingBottom: '0.4rem' }}
+                        dataSource={staffDetailList.list}
                         columns={detailColumns}
                         pagination={{
                             current: detailPager.pageNo,
-                            // showSizeChanger: true,
+                            showSizeChanger: true,
                             showQuickJumper: true,
-                            // pageSizeOptions: ['10', '20', '30'],
-                            total: 30,
-                            // onShowSizeChange: this.onShowSizeChange,
-                            onChange: this.onDetailPageChange,
+                            pageSizeOptions: ['10', '20', '30'],
+                            total: staffDetailList.totalCount,
+                            onShowSizeChange: this.onDetailPageSizeChange,
+                            onChange: this.onDetailPageNoChange,
                         }}
                     />
-                </Card>
+                </div>
             </Fragment>
         )
     }

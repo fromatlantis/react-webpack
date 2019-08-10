@@ -277,7 +277,11 @@ class Revenue extends PureComponent {
         ]
         const { revenue, searchParams } = this.props
         return (
-            <Card title="财务信息" bordered={false} extra={<Toolbar />}>
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>财务信息</div>
+                    <Toolbar />
+                </div>
                 <div className={styles.searchBox}>
                     <FormView
                         ref={form => {
@@ -308,22 +312,24 @@ class Revenue extends PureComponent {
                     </div>
                 </div>
 
-                <Skeleton loading={revenue.list ? false : true} active avatar>
-                    <Table
-                        bordered
-                        dataSource={revenue.list}
-                        columns={columns}
-                        pagination={{
-                            current: searchParams.pageNo,
-                            showSizeChanger: true,
-                            showQuickJumper: true,
-                            pageSizeOptions: ['10', '15', '20'],
-                            total: revenue.totalCount,
-                            onShowSizeChange: this.onShowSizeChange,
-                            onChange: this.onChange,
-                        }}
-                    />
-                </Skeleton>
+                <div className={styles.tableSty}>
+                    <Skeleton loading={revenue.list ? false : true} active avatar>
+                        <Table
+                            bordered
+                            dataSource={revenue.list}
+                            columns={columns}
+                            pagination={{
+                                current: searchParams.pageNo,
+                                showSizeChanger: true,
+                                showQuickJumper: true,
+                                pageSizeOptions: ['10', '15', '20'],
+                                total: revenue.totalCount,
+                                onShowSizeChange: this.onShowSizeChange,
+                                onChange: this.onChange,
+                            }}
+                        />
+                    </Skeleton>
+                </div>
                 <Modal
                     title="财务信息"
                     visible={this.state.visible}
@@ -333,7 +339,7 @@ class Revenue extends PureComponent {
                 >
                     {this.renderNewForm()}
                 </Modal>
-            </Card>
+            </div>
         )
     }
 }

@@ -1,10 +1,11 @@
-import React, { PureComponent } from 'react'
-import { Card, Button, Alert, Table, Tooltip, DatePicker, message } from 'antd'
+import React, { PureComponent, Fragment } from 'react'
+import { Divider, Button, Alert, Table, Tooltip, DatePicker, message } from 'antd'
 import { BarChart } from 'components/Charts'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { actions } from 'reduxDir/qualification'
 import moment from 'moment'
+import styles from '../Stats.module.css'
 
 const columnsCount = [
     {
@@ -258,9 +259,9 @@ class Quantity extends PureComponent {
         const { countPager, detailPager } = this.state
         const { introducedCompanyCount, companyCountList, companyDetailList } = this.props
         return (
-            <Card title="企业数量统计" style={{ position: 'relative' }} bordered={false}>
-                <div style={{ position: 'absolute', right: '30px', top: '15px' }}>
-                    <b>选择年份：</b>
+            <Fragment>
+                <div className={styles.selectYear}>
+                    <b className={styles.yearStyle}>选择年份：</b>
                     <DatePicker
                         value={this.state.time}
                         open={this.state.isopen}
@@ -271,33 +272,41 @@ class Quantity extends PureComponent {
                         onPanelChange={this.handlePanelChange}
                     />
                 </div>
-                <div style={{ height: '400px', marginTop: '30px' }}>
-                    <BarChart data={introducedCompanyCount} />
-                </div>
-                <div style={{ position: 'absolute', right: '10px', margin: '20px' }}>
-                    <Button
-                        type="primary"
-                        onClick={() => this.exportTable(0)}
-                        style={{ marginRight: '20px' }}
-                    >
-                        导出当前页
-                    </Button>
-                    <Button
-                        type="primary"
-                        onClick={() => this.exportTable(1)}
-                        style={{ marginRight: '10px' }}
-                    >
-                        导出全部
-                    </Button>
-                </div>
-                <Alert
-                    message={`共${companyCountList.totalCount}项`}
-                    type="info"
-                    showIcon
-                    style={{ marginTop: '70px' }}
-                />
-                <div style={{ marginTop: '10px' }}>
+                <div className={styles.rectangle}>
+                    <div className={styles.titleFont}>
+                        <Divider
+                            style={{
+                                width: '4px',
+                                height: '24px',
+                                background: 'rgba(64,152,255,1)',
+                            }}
+                            type="vertical"
+                        />
+                        企业数量统计
+                    </div>
+                    <div className={`${styles.card} ${styles.distance}`}>
+                        <BarChart data={introducedCompanyCount} />
+                    </div>
+                    <div style={{ display: 'flex' }} className={styles.distance}>
+                        <Alert
+                            message={`共${companyCountList.totalCount || 0}项`}
+                            type="info"
+                            showIcon
+                            style={{ flex: 1 }}
+                        />
+                        <Button
+                            type="primary"
+                            onClick={() => this.exportTable(0)}
+                            style={{ marginLeft: '0.1rem', marginRight: '0.1rem' }}
+                        >
+                            导出当前页
+                        </Button>
+                        <Button type="primary" onClick={() => this.exportTable(1)}>
+                            导出全部
+                        </Button>
+                    </div>
                     <Table
+                        className={`${styles.tableTop} ${styles.distance}`}
                         dataSource={companyCountList.list}
                         columns={columnsCount}
                         rowClassName={this.setRowClassName}
@@ -321,31 +330,27 @@ class Quantity extends PureComponent {
                             }
                         }}
                     />
-                </div>
-                <div style={{ position: 'absolute', right: '30px' }}>
-                    <Button
-                        type="primary"
-                        onClick={() => this.exportTableDetail(0)}
-                        style={{ marginRight: '20px' }}
-                    >
-                        导出当前页
-                    </Button>
-                    <Button
-                        type="primary"
-                        onClick={() => this.exportTableDetail(1)}
-                        style={{ marginRight: '10px' }}
-                    >
-                        导出全部
-                    </Button>
-                </div>
-                <Alert
-                    message={`共${companyDetailList.totalCount}项`}
-                    type="info"
-                    showIcon
-                    style={{ marginTop: '50px' }}
-                />
-                <div style={{ marginTop: '10px' }}>
+                    <div style={{ display: 'flex' }} className={styles.distance}>
+                        <Alert
+                            message={`共${companyDetailList.totalCount || 0}项`}
+                            type="info"
+                            showIcon
+                            style={{ flex: 1 }}
+                        />
+                        <Button
+                            type="primary"
+                            onClick={() => this.exportTableDetail(0)}
+                            style={{ marginLeft: '0.1rem', marginRight: '0.1rem' }}
+                        >
+                            导出当前页
+                        </Button>
+                        <Button type="primary" onClick={() => this.exportTableDetail(1)}>
+                            导出全部
+                        </Button>
+                    </div>
                     <Table
+                        className={`${styles.tableTop} ${styles.distance}`}
+                        style={{ paddingBottom: '0.4rem' }}
                         columns={columnsDetail}
                         dataSource={companyDetailList.list}
                         pagination={{
@@ -359,7 +364,7 @@ class Quantity extends PureComponent {
                         }}
                     />
                 </div>
-            </Card>
+            </Fragment>
         )
     }
 }

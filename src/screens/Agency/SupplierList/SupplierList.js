@@ -198,7 +198,8 @@ class SupplierList extends PureComponent {
         })
         return (
             <div className={styles.containerSup}>
-                <Card title="供应商列表" bordered={false}>
+                <div className={styles.titleSty}>供应商列表</div>
+                <div className={styles.searchSty}>
                     <div className={styles.typeTitle}>
                         <span style={{ marginRight: 5 }}>供应商类型：</span>
                         <span
@@ -234,17 +235,23 @@ class SupplierList extends PureComponent {
                             }
                         })}
                     </div>
-                    <Form layout="inline" onSubmit={this.handleSubmit}>
-                        <Form.Item label="供应商名称：">
-                            {getFieldDecorator('supplier')(
-                                <Input placeholder="请输入" style={{ width: 220 }} />,
-                            )}
-                        </Form.Item>
-                        <Form.Item label="供应商联系人：">
-                            {getFieldDecorator('contract', { initialValue: '' })(
-                                <Input placeholder="请输入" style={{ width: 220 }} />,
-                            )}
-                        </Form.Item>
+                    <Form
+                        layout="inline"
+                        onSubmit={this.handleSubmit}
+                        style={{ display: 'flex', justifyContent: 'space-between' }}
+                    >
+                        <div>
+                            <Form.Item label="供应商名称：">
+                                {getFieldDecorator('supplier')(
+                                    <Input placeholder="请输入" style={{ width: 220 }} />,
+                                )}
+                            </Form.Item>
+                            <Form.Item label="供应商联系人：">
+                                {getFieldDecorator('contract', { initialValue: '' })(
+                                    <Input placeholder="请输入" style={{ width: 220 }} />,
+                                )}
+                            </Form.Item>
+                        </div>
                         <Form.Item>
                             <Button
                                 style={{ marginRight: 10, marginLeft: 10 }}
@@ -261,6 +268,8 @@ class SupplierList extends PureComponent {
                             </Button>
                         </Form.Item>
                     </Form>
+                </div>
+                <div className={styles.tableSty}>
                     <Table
                         style={{ marginTop: 20 }}
                         columns={columns}
@@ -276,7 +285,7 @@ class SupplierList extends PureComponent {
                             onChange: this.onChange.bind(this),
                         }}
                     />
-                </Card>
+                </div>
             </div>
         )
     }

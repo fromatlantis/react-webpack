@@ -21,6 +21,9 @@ import { effects as qualificationEffects } from './qualification'
 import { effects as revenueAndFinancingEffects } from './revenueAndFinancing'
 import { effects as staffEffects } from './staff'
 import { effects as revenueEffects } from './revenue'
+import { effects as statOverviewEffects } from './statOverview'
+import { effects as parkStaffEffects } from './parkStaff'
+import { effects as knowledgeRightEffects } from './knowledgeRight'
 // 监听action的调用，然后调用异步generate函数
 
 export function* watchFetchData() {
@@ -47,5 +50,8 @@ export function* watchFetchData() {
         ...revenueAndFinancingEffects,
         ...staffEffects,
         ...revenueEffects,
+        ...statOverviewEffects,
+        ...parkStaffEffects,
+        ...knowledgeRightEffects,
     ])
 }

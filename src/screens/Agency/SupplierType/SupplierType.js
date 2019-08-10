@@ -146,7 +146,7 @@ class SearchTree extends React.Component {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 5 },
+            labelCol: { span: 6 },
             wrapperCol: { span: 14 },
         }
         return (
@@ -188,7 +188,7 @@ class SearchTree extends React.Component {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 5 },
+            labelCol: { span: 6 },
             wrapperCol: { span: 14 },
         }
         const parentFilter = this.state.parentFilter
@@ -313,7 +313,7 @@ class SearchTree extends React.Component {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 5 },
+            labelCol: { span: 6 },
             wrapperCol: { span: 14 },
         }
         const childFilter = this.state.childFilter
@@ -674,11 +674,12 @@ class SearchTree extends React.Component {
                 }
             })
         return (
-            <div>
-                <Card title="供应商类型" bordered={false}>
-                    <div style={{ paddingLeft: 10 }}>
+            <div className={styles.containerType}>
+                <div className={styles.titleSty}>供应商类型</div>
+                <div className={styles.mainSty}>
+                    <div>
                         <Search
-                            style={{ marginBottom: 8, width: 350 }}
+                            style={{ marginBottom: '0.28rem', width: '5.2rem', height: '0.4rem' }}
                             placeholder="供应商类型"
                             onChange={this.onChange}
                         />
@@ -707,7 +708,7 @@ class SearchTree extends React.Component {
                     </div>
                     {/* 添加父节点 */}
                     <Modal
-                        style={{ width: 250 }}
+                        style={{ width: '5.26rem' }}
                         title="供应商类型"
                         visible={this.state.visibleF}
                         onOk={this.addHandleOk}
@@ -717,7 +718,7 @@ class SearchTree extends React.Component {
                     </Modal>
                     {/* 子节点编辑和详情 */}
                     <Modal
-                        style={{ width: 250 }}
+                        style={{ width: '5.26rem' }}
                         title="供应商类型"
                         visible={this.state.visible}
                         onOk={this.handleOk}
@@ -727,7 +728,7 @@ class SearchTree extends React.Component {
                     </Modal>
                     {/* 父节点编辑 */}
                     <Modal
-                        style={{ width: 250 }}
+                        style={{ width: '5.26rem' }}
                         title="供应商类型"
                         visible={this.state.parentEditvisible}
                         onOk={this.parentEditOk}
@@ -735,7 +736,7 @@ class SearchTree extends React.Component {
                     >
                         {this.parentForm()}
                     </Modal>
-                </Card>
+                </div>
             </div>
         )
     }

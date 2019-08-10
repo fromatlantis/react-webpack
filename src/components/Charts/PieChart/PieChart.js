@@ -13,6 +13,7 @@ import styles from './PieChart.module.css'
 export default class PieChart extends PureComponent {
     static defaultProps = {
         data: [],
+        name: '', //饼图或者环图，不传默认饼图
     }
     static propTypes = {
         data: PropTypes.array,
@@ -38,7 +39,7 @@ export default class PieChart extends PureComponent {
         })
     }
     setOption = props => {
-        let { title, data, hollow } = props,
+        let { title, data, hollow, name } = props,
             names = []
         data.map(x => {
             let item = {
@@ -71,8 +72,9 @@ export default class PieChart extends PureComponent {
             legend: {
                 bottom: 0,
                 // orient: 'vertical',
-                left: 'left',
+                left: 'center',
                 itemWidth: 10,
+                // itemGap: 50, // 设置间距
                 data: names,
             },
             grid: {
@@ -86,21 +88,26 @@ export default class PieChart extends PureComponent {
                 {
                     name: '比例',
                     type: 'pie',
-                    radius: [hollow ? '40%' : '0%', '40%'],
+                    radius: name == 'circle' ? ['30%', '40%'] : [hollow ? '40%' : '0%', '40%'],
                     color: [
-                        '#ec5b48',
-                        '#f48138',
-                        '#fbc42e',
-                        '#ebeb3b',
-                        '#abc931',
-                        '#69af47',
-                        '#5ad478',
-                        '#58e4a6',
-                        '#69f7f6',
-                        '#4cc3fd',
-                        '#3d84f9',
-                        '#4ba6f9',
-                        '#4ecac8',
+                        '#63DBED',
+                        '#FFDD1F',
+                        '#4098FF',
+                        '#FF7792',
+                        '#BC79F9',
+                        // '#ec5b48',
+                        // '#f48138',
+                        // '#fbc42e',
+                        // '#ebeb3b',
+                        // '#abc931',
+                        // '#69af47',
+                        // '#5ad478',
+                        // '#58e4a6',
+                        // '#69f7f6',
+                        // '#4cc3fd',
+                        // '#3d84f9',
+                        // '#4ba6f9',
+                        // '#4ecac8',
                     ].reverse(),
                     data: data,
                     itemStyle: {
@@ -120,14 +127,15 @@ export default class PieChart extends PureComponent {
         return option
     }
     render() {
+        console.log('sdfadf', this.props.circle)
         const { data } = this.props
         if (data && data.length > 0) {
             return <div ref="pieChart" className={styles.root} />
         } else {
             return (
-                <div className={styles.root}>
+                <ul className={styles.root}>
                     <Empty />
-                </div>
+                </ul>
             )
         }
     }

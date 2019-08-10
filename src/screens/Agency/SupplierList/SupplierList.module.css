@@ -1,7 +1,8 @@
 
 .active{
-    background-color: #1E90FF;
+    background-color: rgba(24,143,253,1);
     color: #fff;
+    border:1px solid rgba(24,143,253,1)!important;
 }
 .inputWidth{
     width:240px;
@@ -13,9 +14,9 @@
 }
 .typeBut{
     display: inline-block;
-    margin-right: 13px;
+    margin-right: 0.2rem;
     float: left;
-    padding: 1px 8px;
+    padding: 2px 10px;
     cursor: pointer;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -45,7 +46,34 @@
     position: relative;
     margin-bottom:20px;
 }
+.containerSup{
+    padding:0.28rem 0.4rem 1rem 0.27rem;
+   background:rgba(240,242,245,1);
+}
 .containerSup :global .ant-form-inline .ant-form-item > .ant-form-item-label {
     width: auto;
     text-align: right;
+}
+.titleSty{
+    margin-left:0.12rem;
+    font-size:0.3rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(89,89,89,1);
+    margin-bottom:0.28rem;
+}
+.searchSty{
+    padding:0.35rem 0.44rem 0.3rem 0.46rem;
+    height:1.54rem;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0.04rem 0.1rem 0px rgba(167,191,227,0.37);
+    border-radius:0.1rem;
+}
+.tableSty{
+    margin-top:0.2rem;
+    padding:0.4rem;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0.04rem 0.1rem 0px rgba(167,191,227,0.37);
+    border-radius:10px;
+    min-height:0.25rem;
 }

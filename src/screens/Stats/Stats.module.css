@@ -16,3 +16,36 @@
     padding: 10px 10px 0 10px;
     font-size: 16px;
 }
+.yearStyle{
+    padding-left: 0.28rem;
+    padding-top: 0.36rem;
+    color: rgba(89,89,89,1);
+}
+.selectYear{
+    padding-top: 0.3rem;
+}
+.rectangle{
+    background: rgba(255,255,255,1);
+    box-shadow: 0px 0.04rem 0.1rem 0px rgba(167,191,227,0.37);
+    margin: 0.3rem 0.28rem 0.56rem 0.28rem; 
+}
+.titleFont{
+    font-size: 0.26rem;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: rgba(51,51,51,1);
+    padding-left: 0.4rem;
+    padding-top: 0.3rem;
+}
+.distance{
+    margin-left: 0.5rem;
+    margin-right: 0.62rem;
+    margin-top: 0.6rem;
+}
+.tableTop{
+    margin-top: 0.1rem;
+}
+.chart{
+    margin-left: 0.5rem;
+    margin-right: 0.62rem;
+}
