@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
-import { Alert, Button, Card, DatePicker, Table, Tooltip, message } from 'antd'
+import { Alert, Button, Card, DatePicker, Table, Tooltip, Divider, message } from 'antd'
 import { PieChart } from 'components/Charts'
 import moment from 'moment'
 import styles from '../Stats.module.css'
@@ -101,7 +101,7 @@ const patentColumns = [
         width: '120px',
         render: patentName => (
             <Tooltip placement="right" title={patentName}>
-                {patentName.length > 5 ? patentName.substring(0, 5) + '...' : patentName}
+                {patentName.length > 4 ? patentName.substring(0, 4) + '...' : patentName}
             </Tooltip>
         ),
     },
@@ -175,7 +175,7 @@ const patentColumns = [
         width: '120px',
         render: agency => (
             <Tooltip placement="right" title={agency}>
-                {agency.length > 5 ? agency.substring(0, 5) + '...' : agency}
+                {agency.length > 4 ? agency.substring(0, 4) + '...' : agency}
             </Tooltip>
         ),
     },
@@ -606,55 +606,53 @@ class Rights extends PureComponent {
         const { knowledgeRightList, knowledgeRightCountList } = this.props
         return (
             <Fragment>
-                <Card
-                    title="知识产权统计"
-                    bordered={false}
-                    style={{ marginTop: '5px' }}
-                    extra={
-                        <Fragment>
-                            <b>选择年份：</b>
-                            <DatePicker
-                                value={this.state.time}
-                                open={this.state.isopen}
-                                mode="year"
-                                placeholder="请选择年份"
-                                format="YYYY"
-                                onOpenChange={this.handleOpenChange}
-                                onPanelChange={this.handlePanelChange}
-                            />
-                        </Fragment>
-                    }
-                >
-                    <div className={styles.card}>
+                <div className={styles.selectYear}>
+                    <b className={styles.yearStyle}>选择年份：</b>
+                    <DatePicker
+                        value={this.state.time}
+                        open={this.state.isopen}
+                        mode="year"
+                        placeholder="请选择年份"
+                        format="YYYY"
+                        onOpenChange={this.handleOpenChange}
+                        onPanelChange={this.handlePanelChange}
+                    />
+                </div>
+                <div className={styles.rectangle}>
+                    <div className={styles.titleFont}>
+                        <Divider
+                            style={{
+                                width: '4px',
+                                height: '24px',
+                                background: 'rgba(64,152,255,1)',
+                            }}
+                            type="vertical"
+                        />
+                        知识产权统计
+                    </div>
+                    <div className={styles.card} style={{ paddingLeft: '0.4rem' }}>
                         <PieChart data={knowledgeRightList} />
                     </div>
-                </Card>
-                <Card
-                    title="详细信息"
-                    bordered={false}
-                    extra={
-                        <div>
-                            <Button type="primary" size="small" onClick={() => this.exportTable(0)}>
-                                导出当前页
-                            </Button>
-                            <Button
-                                style={{ marginLeft: 10 }}
-                                type="primary"
-                                size="small"
-                                onClick={() => this.exportTable(1)}
-                            >
-                                导出全部
-                            </Button>
-                        </div>
-                    }
-                >
-                    <Alert
-                        message={`共${knowledgeRightCountList.totalCount || 0}项`}
-                        type="info"
-                        showIcon
-                        style={{ marginBottom: '15px' }}
-                    />
+                    <div style={{ display: 'flex' }} className={styles.distance}>
+                        <Alert
+                            message={`共${knowledgeRightCountList.totalCount || 0}项`}
+                            type="info"
+                            showIcon
+                            style={{ flex: 1 }}
+                        />
+                        <Button
+                            type="primary"
+                            style={{ marginLeft: '0.1rem', marginRight: '0.1rem' }}
+                            onClick={() => this.exportTable(0)}
+                        >
+                            导出当前页
+                        </Button>
+                        <Button type="primary" onClick={() => this.exportTable(1)}>
+                            导出全部
+                        </Button>
+                    </div>
                     <Table
+                        className={`${styles.tableTop} ${styles.distance}`}
                         dataSource={knowledgeRightCountList.list}
                         columns={columns}
                         rowClassName={this.setRowClassName}
@@ -679,40 +677,30 @@ class Rights extends PureComponent {
                             }
                         }}
                     />
-                </Card>
-                <Card
-                    title="明细信息"
-                    bordered={false}
-                    extra={
-                        <div>
-                            <Button
-                                type="primary"
-                                size="small"
-                                onClick={() => this.exportTableDetail(0)}
-                            >
-                                导出当前页
-                            </Button>
-                            <Button
-                                style={{ marginLeft: 10 }}
-                                type="primary"
-                                size="small"
-                                onClick={() => this.exportTableDetail(1)}
-                            >
-                                导出全部
-                            </Button>
-                        </div>
-                    }
-                >
-                    {this.getData(type) ? (
-                        <Alert
-                            message={`共${this.getData(type).totalCount || 0}项`}
-                            type="info"
-                            showIcon
-                            style={{ marginBottom: '15px' }}
-                        />
-                    ) : null}
+                    <div style={{ display: 'flex' }} className={styles.distance}>
+                        {this.getData(type) ? (
+                            <Alert
+                                message={`共${this.getData(type).totalCount || 0}项`}
+                                type="info"
+                                showIcon
+                                style={{ flex: 1 }}
+                            />
+                        ) : null}
+                        <Button
+                            type="primary"
+                            style={{ marginLeft: '0.1rem', marginRight: '0.1rem' }}
+                            onClick={() => this.exportTableDetail(0)}
+                        >
+                            导出当前页
+                        </Button>
+                        <Button type="primary" onClick={() => this.exportTableDetail(1)}>
+                            导出全部
+                        </Button>
+                    </div>
                     {this.getData(type) ? (
                         <Table
+                            className={`${styles.tableTop} ${styles.distance}`}
+                            style={{ paddingBottom: '0.4rem' }}
                             dataSource={this.getData(type).list}
                             columns={this.state.columns}
                             scroll={{ x: 1350 }}
@@ -727,7 +715,7 @@ class Rights extends PureComponent {
                             }}
                         />
                     ) : null}
-                </Card>
+                </div>
             </Fragment>
         )
     }

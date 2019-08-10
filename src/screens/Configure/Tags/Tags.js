@@ -5,6 +5,7 @@ import { Card, Tabs, Input, Tag, Tooltip, Icon, Modal } from 'antd'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from '../../../redux/configure'
+import { relative } from 'path'
 
 const { TabPane } = Tabs
 const { confirm } = Modal
@@ -39,6 +40,7 @@ class Tags extends PureComponent {
         type: 'industry',
         industryTags: [],
         qualityTags: [],
+        butType: '0',
     }
     componentDidMount = () => {
         const type = this.state.type
@@ -64,12 +66,12 @@ class Tags extends PureComponent {
         this.props.getLabelList(type, label)
     }
 
-    callback = key => {
-        if (key == 1) {
+    callback = flag => {
+        if (flag === 0) {
             this.setState({ type: 'industry' })
             this.props.closeLabelList()
             this.props.getLabelList({ type: 'industry' })
-        } else if (key == 2) {
+        } else if (flag === 1) {
             this.setState({ type: 'qualification' })
             this.props.closeLabelList()
             this.props.getLabelList({ type: 'qualification' })
@@ -131,118 +133,144 @@ class Tags extends PureComponent {
     saveInputRef = input => (this.input = input)
 
     render() {
-        const { inputVisible, inputValue, industryTags, qualityTags } = this.state
+        const { inputVisible, inputValue, industryTags, qualityTags, butType } = this.state
         return (
             <div className={styles.outerLayer}>
                 <div className={styles.labelNav}>企业标签</div>
-                <Tabs onChange={this.callback} type="card" className={styles.tabsStyle}>
-                    <TabPane tab="行业标签" key="1" className={styles.rectangle}>
-                        <div style={{ display: 'inline-block' }}>
-                            <span className={styles.spanStyle}>标签：</span>
-                            <Input.Search
-                                placeholder="请输入标签关键词"
-                                onSearch={value =>
-                                    this.renderData({ type: this.state.type, label: value })
-                                }
-                                className={styles.search}
+                <div style={{ display: 'flex' }}>
+                    <div
+                        onClick={() => {
+                            this.setState({ butType: '0' })
+                            this.callback(0)
+                        }}
+                        className={`${styles.industyAndquality} ${
+                            butType === '0' ? styles.industyAndqualityActive : null
+                        }`}
+                    >
+                        行业标签
+                    </div>
+                    <div
+                        onClick={() => {
+                            this.setState({ butType: '1' })
+                            this.callback(1)
+                        }}
+                        className={`${styles.industyAndquality} ${
+                            butType === '1' ? styles.industyAndqualityActive : null
+                        }`}
+                    >
+                        资质标签
+                    </div>
+                </div>
+                <div
+                    style={{ display: butType === '0' ? 'block' : 'none' }}
+                    className={styles.rectangle}
+                >
+                    <div style={{ display: 'inline-block' }}>
+                        <span className={styles.spanStyle}>标签：</span>
+                        <Input.Search
+                            placeholder="请输入标签关键词"
+                            onSearch={value =>
+                                this.renderData({ type: this.state.type, label: value })
+                            }
+                            className={styles.search}
+                        />
+                    </div>
+                    <div className={styles.labelCont}>
+                        {!inputVisible && (
+                            <Tag onClick={this.showInput} className={styles.tagLabel}>
+                                <Icon type="plus" /> 标签
+                            </Tag>
+                        )}
+                        {inputVisible && (
+                            <Input
+                                ref={this.saveInputRef}
+                                type="text"
+                                size="small"
+                                style={{ width: 100 }}
+                                value={inputValue}
+                                onChange={this.handleInputChange}
+                                onBlur={this.handleInputConfirm}
+                                onPressEnter={this.handleInputConfirm}
                             />
-                        </div>
-                        <div className={styles.labelCont}>
-                            {!inputVisible && (
-                                <Tag onClick={this.showInput} className={styles.tagLabel}>
-                                    <Icon type="plus" /> 标签
+                        )}
+                        {industryTags.map((tag, index) => {
+                            const isLongTag = tag.length > 20
+                            const tagElem = (
+                                <Tag
+                                    className={styles.tagCont}
+                                    key={tag.id}
+                                    closable="true"
+                                    onClose={() => this.handleClose(tag, this)}
+                                >
+                                    {isLongTag ? `${tag.label.slice(0, 20)}...` : tag.label}
                                 </Tag>
-                            )}
-                            {inputVisible && (
-                                <Input
-                                    ref={this.saveInputRef}
-                                    type="text"
-                                    size="small"
-                                    style={{ width: 100 }}
-                                    value={inputValue}
-                                    onChange={this.handleInputChange}
-                                    onBlur={this.handleInputConfirm}
-                                    onPressEnter={this.handleInputConfirm}
-                                />
-                            )}
-                            {industryTags.map((tag, index) => {
-                                const isLongTag = tag.length > 20
-                                const tagElem = (
-                                    <Tag
-                                        className={styles.tagCont}
-                                        key={tag.id}
-                                        closable="true"
-                                        onClose={() => this.handleClose(tag, this)}
-                                    >
-                                        {isLongTag ? `${tag.label.slice(0, 20)}...` : tag.label}
-                                    </Tag>
-                                )
-                                return isLongTag ? (
-                                    <Tooltip title={tag.label} key={tag.id}>
-                                        {tagElem}
-                                    </Tooltip>
-                                ) : (
-                                    tagElem
-                                )
-                            })}
-                        </div>
-                    </TabPane>
-                    <TabPane tab="资质标签" key="2" className={styles.rectangle}>
-                        <div style={{ display: 'inline-block' }}>
-                            <span className={styles.spanStyle}>标签：</span>
-                            <Input.Search
-                                placeholder="请输入标签关键词"
-                                onSearch={value =>
-                                    this.renderData({ type: this.state.type, label: value })
-                                }
-                                className={styles.search}
+                            )
+                            return isLongTag ? (
+                                <Tooltip title={tag.label} key={tag.id}>
+                                    {tagElem}
+                                </Tooltip>
+                            ) : (
+                                tagElem
+                            )
+                        })}
+                    </div>
+                </div>
+                <div
+                    style={{ display: butType === '1' ? 'block' : 'none' }}
+                    className={styles.rectangle}
+                >
+                    <div style={{ display: 'inline-block' }}>
+                        <span className={styles.spanStyle}>标签：</span>
+                        <Input.Search
+                            placeholder="请输入标签关键词"
+                            onSearch={value =>
+                                this.renderData({ type: this.state.type, label: value })
+                            }
+                            className={styles.search}
+                        />
+                    </div>
+                    <div className={styles.labelCont}>
+                        {!inputVisible && (
+                            <Tag onClick={this.showInput} className={styles.tagLabel}>
+                                <Icon type="plus" /> 标签
+                            </Tag>
+                        )}
+                        {inputVisible && (
+                            <Input
+                                ref={this.saveInputRef}
+                                type="text"
+                                size="small"
+                                style={{ width: 100 }}
+                                value={inputValue}
+                                onChange={this.handleInputChange}
+                                onBlur={this.handleInputConfirm}
+                                onPressEnter={this.handleInputConfirm}
                             />
-                        </div>
-                        <div className={styles.labelCont}>
-                            {!inputVisible && (
-                                <Tag onClick={this.showInput} className={styles.tagLabel}>
-                                    <Icon type="plus" /> 标签
-                                </Tag>
-                            )}
-                            {inputVisible && (
-                                <Input
-                                    ref={this.saveInputRef}
-                                    type="text"
-                                    size="small"
-                                    style={{ width: 100 }}
-                                    value={inputValue}
-                                    onChange={this.handleInputChange}
-                                    onBlur={this.handleInputConfirm}
-                                    onPressEnter={this.handleInputConfirm}
-                                />
-                            )}
-                            {qualityTags.length
-                                ? qualityTags.map((tag, index) => {
-                                      const isLongTag = tag.length > 20
-                                      const tagElem = (
-                                          <Tag
-                                              className={styles.tagCont}
-                                              key={tag.id}
-                                              closable="true"
-                                              onClose={() => this.handleClose(tag, this)}
-                                          >
-                                              {isLongTag
-                                                  ? `${tag.label.slice(0, 20)}...`
-                                                  : tag.label}
-                                          </Tag>
-                                      )
-                                      return isLongTag ? (
-                                          <Tooltip title={tag.label} key={tag.id}>
-                                              {tagElem}
-                                          </Tooltip>
-                                      ) : (
-                                          tagElem
-                                      )
-                                  })
-                                : null}
-                        </div>
-                    </TabPane>
-                </Tabs>
+                        )}
+                        {qualityTags.length
+                            ? qualityTags.map((tag, index) => {
+                                  const isLongTag = tag.length > 20
+                                  const tagElem = (
+                                      <Tag
+                                          className={styles.tagCont}
+                                          key={tag.id}
+                                          closable="true"
+                                          onClose={() => this.handleClose(tag, this)}
+                                      >
+                                          {isLongTag ? `${tag.label.slice(0, 20)}...` : tag.label}
+                                      </Tag>
+                                  )
+                                  return isLongTag ? (
+                                      <Tooltip title={tag.label} key={tag.id}>
+                                          {tagElem}
+                                      </Tooltip>
+                                  ) : (
+                                      tagElem
+                                  )
+                              })
+                            : null}
+                    </div>
+                </div>
             </div>
         )
     }

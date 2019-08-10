@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
-import { Alert, Button, Card, DatePicker, Table, message } from 'antd'
+import { Alert, Button, Card, DatePicker, Table, Divider, message } from 'antd'
 import { YearPicker } from 'components'
 import { PieChart } from 'components/Charts'
 import moment from 'moment'
@@ -260,55 +260,53 @@ class Industry extends PureComponent {
         const { industryDistribute, industryCountList, industryDetailList } = this.props
         return (
             <Fragment>
-                <Card
-                    title="园区行业统计"
-                    bordered={false}
-                    style={{ marginTop: '5px' }}
-                    extra={
-                        <Fragment>
-                            <b>选择年份：</b>
-                            <DatePicker
-                                value={this.state.time}
-                                open={this.state.isopen}
-                                mode="year"
-                                placeholder="请选择年份"
-                                format="YYYY"
-                                onOpenChange={this.handleOpenChange}
-                                onPanelChange={this.handlePanelChange}
-                            />
-                        </Fragment>
-                    }
-                >
-                    <div className={styles.card}>
+                <div className={styles.selectYear}>
+                    <b className={styles.yearStyle}>选择年份：</b>
+                    <DatePicker
+                        value={this.state.time}
+                        open={this.state.isopen}
+                        mode="year"
+                        placeholder="请选择年份"
+                        format="YYYY"
+                        onOpenChange={this.handleOpenChange}
+                        onPanelChange={this.handlePanelChange}
+                    />
+                </div>
+                <div className={styles.rectangle}>
+                    <div className={styles.titleFont}>
+                        <Divider
+                            style={{
+                                width: '4px',
+                                height: '24px',
+                                background: 'rgba(64,152,255,1)',
+                            }}
+                            type="vertical"
+                        />
+                        园区行业统计
+                    </div>
+                    <div className={styles.card} style={{ paddingLeft: '0.4rem' }}>
                         <PieChart data={industryDistribute} />
                     </div>
-                </Card>
-                <Card
-                    title="详细信息"
-                    bordered={false}
-                    extra={
-                        <div>
-                            <Button type="primary" size="small" onClick={() => this.exportTable(0)}>
-                                导出当前页
-                            </Button>
-                            <Button
-                                style={{ marginLeft: 10 }}
-                                type="primary"
-                                size="small"
-                                onClick={() => this.exportTable(0)}
-                            >
-                                导出全部
-                            </Button>
-                        </div>
-                    }
-                >
-                    <Alert
-                        message={`共${industryCountList.totalCount || 0}项`}
-                        type="info"
-                        showIcon
-                        style={{ marginBottom: '15px' }}
-                    />
+                    <div style={{ display: 'flex' }} className={styles.distance}>
+                        <Alert
+                            message={`共${industryCountList.totalCount || 0}项`}
+                            type="info"
+                            showIcon
+                            style={{ flex: 1 }}
+                        />
+                        <Button
+                            type="primary"
+                            style={{ marginLeft: '0.1rem', marginRight: '0.1rem' }}
+                            onClick={() => this.exportTable(0)}
+                        >
+                            导出当前页
+                        </Button>
+                        <Button type="primary" onClick={() => this.exportTable(0)}>
+                            导出全部
+                        </Button>
+                    </div>
                     <Table
+                        className={`${styles.tableTop} ${styles.distance}`}
                         dataSource={industryCountList.list}
                         columns={columns}
                         rowClassName={this.setRowClassName}
@@ -332,37 +330,27 @@ class Industry extends PureComponent {
                             }
                         }}
                     />
-                </Card>
-                <Card
-                    title="明细信息"
-                    bordered={false}
-                    extra={
-                        <div>
-                            <Button
-                                type="primary"
-                                size="small"
-                                onClick={() => this.exportTableDetail(0)}
-                            >
-                                导出当前页
-                            </Button>
-                            <Button
-                                style={{ marginLeft: 10 }}
-                                type="primary"
-                                size="small"
-                                onClick={() => this.exportTableDetail(1)}
-                            >
-                                导出全部
-                            </Button>
-                        </div>
-                    }
-                >
-                    <Alert
-                        message={`共${industryDetailList.totalCount || 0}项`}
-                        type="info"
-                        showIcon
-                        style={{ marginBottom: '15px' }}
-                    />
+                    <div style={{ display: 'flex' }} className={styles.distance}>
+                        <Alert
+                            message={`共${industryDetailList.totalCount || 0}项`}
+                            type="info"
+                            showIcon
+                            style={{ flex: 1 }}
+                        />
+                        <Button
+                            type="primary"
+                            style={{ marginLeft: '0.1rem', marginRight: '0.1rem' }}
+                            onClick={() => this.exportTableDetail(0)}
+                        >
+                            导出当前页
+                        </Button>
+                        <Button type="primary" onClick={() => this.exportTableDetail(1)}>
+                            导出全部
+                        </Button>
+                    </div>
                     <Table
+                        className={`${styles.tableTop} ${styles.distance}`}
+                        style={{ paddingBottom: '0.4rem' }}
                         dataSource={industryDetailList.list}
                         columns={detailColumns}
                         pagination={{
@@ -375,7 +363,7 @@ class Industry extends PureComponent {
                             onChange: this.onDetailPageNoChange,
                         }}
                     />
-                </Card>
+                </div>
             </Fragment>
         )
     }

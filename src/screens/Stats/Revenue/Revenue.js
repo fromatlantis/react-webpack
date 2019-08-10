@@ -1,10 +1,11 @@
-import React, { PureComponent } from 'react'
-import { Card, Button, Alert, Table, DatePicker, message } from 'antd'
+import React, { PureComponent, Fragment } from 'react'
+import { Button, Alert, Table, DatePicker, Divider, message } from 'antd'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { actions } from 'reduxDir/revenueAndFinancing'
 import moment from 'moment'
 import LineChart from './RevenueCharts'
+import styles from '../Stats.module.css'
 
 const columnsCount = [
     {
@@ -255,9 +256,9 @@ class Revenue extends PureComponent {
         const { countPager, detailPager } = this.state
         const { financialStatus, financeCountList, financeDetailList } = this.props
         return (
-            <Card title="园区营收统计" bordered={false} style={{ position: 'relative' }}>
-                <div style={{ position: 'absolute', right: '30px', top: '15px' }}>
-                    <b>选择年份：</b>
+            <Fragment>
+                <div className={styles.selectYear}>
+                    <b className={styles.yearStyle}>选择年份：</b>
                     <DatePicker
                         value={this.state.time}
                         open={this.state.isopen}
@@ -268,33 +269,41 @@ class Revenue extends PureComponent {
                         onPanelChange={this.handlePanelChange}
                     />
                 </div>
-                <div style={{ height: '400px', marginTop: '30px' }}>
-                    <LineChart data={financialStatus} />
-                </div>
-                <div style={{ position: 'absolute', right: '10px', margin: '20px' }}>
-                    <Button
-                        type="primary"
-                        onClick={() => this.exportTable(0)}
-                        style={{ marginRight: '20px' }}
-                    >
-                        导出当前页
-                    </Button>
-                    <Button
-                        type="primary"
-                        onClick={() => this.exportTable(1)}
-                        style={{ marginRight: '10px' }}
-                    >
-                        导出全部
-                    </Button>
-                </div>
-                <Alert
-                    message={`共${financeCountList.totalCount || 0}项`}
-                    type="info"
-                    showIcon
-                    style={{ marginTop: '70px' }}
-                />
-                <div style={{ marginTop: '10px' }}>
+                <div className={styles.rectangle}>
+                    <div className={styles.titleFont}>
+                        <Divider
+                            style={{
+                                width: '4px',
+                                height: '24px',
+                                background: 'rgba(64,152,255,1)',
+                            }}
+                            type="vertical"
+                        />
+                        园区营收统计
+                    </div>
+                    <div className={`${styles.card} ${styles.chart}`}>
+                        <LineChart data={financialStatus} />
+                    </div>
+                    <div style={{ display: 'flex' }} className={styles.distance}>
+                        <Alert
+                            message={`共${financeCountList.totalCount || 0}项`}
+                            type="info"
+                            showIcon
+                            style={{ flex: 1 }}
+                        />
+                        <Button
+                            type="primary"
+                            onClick={() => this.exportTable(0)}
+                            style={{ marginLeft: '0.1rem', marginRight: '0.1rem' }}
+                        >
+                            导出当前页
+                        </Button>
+                        <Button type="primary" onClick={() => this.exportTable(1)}>
+                            导出全部
+                        </Button>
+                    </div>
                     <Table
+                        className={`${styles.tableTop} ${styles.distance}`}
                         dataSource={financeCountList.list}
                         columns={columnsCount}
                         rowClassName={this.setRowClassName}
@@ -318,31 +327,27 @@ class Revenue extends PureComponent {
                             }
                         }}
                     />
-                </div>
-                <div style={{ position: 'absolute', right: '30px' }}>
-                    <Button
-                        type="primary"
-                        onClick={() => this.exportTableDetail(0)}
-                        style={{ marginRight: '20px' }}
-                    >
-                        导出当前页
-                    </Button>
-                    <Button
-                        type="primary"
-                        onClick={() => this.exportTableDetail(1)}
-                        style={{ marginRight: '10px' }}
-                    >
-                        导出全部
-                    </Button>
-                </div>
-                <Alert
-                    message={`共${financeDetailList.totalCount || 0}项`}
-                    type="info"
-                    showIcon
-                    style={{ marginTop: '50px' }}
-                />
-                <div style={{ marginTop: '10px' }}>
+                    <div style={{ display: 'flex' }} className={styles.distance}>
+                        <Alert
+                            message={`共${financeDetailList.totalCount || 0}项`}
+                            type="info"
+                            showIcon
+                            style={{ flex: 1 }}
+                        />
+                        <Button
+                            type="primary"
+                            onClick={() => this.exportTableDetail(0)}
+                            style={{ marginLeft: '0.1rem', marginRight: '0.1rem' }}
+                        >
+                            导出当前页
+                        </Button>
+                        <Button type="primary" onClick={() => this.exportTableDetail(1)}>
+                            导出全部
+                        </Button>
+                    </div>
                     <Table
+                        className={`${styles.tableTop} ${styles.distance}`}
+                        style={{ paddingBottom: '0.4rem' }}
                         columns={columnsDetail}
                         dataSource={financeDetailList.list}
                         pagination={{
@@ -356,7 +361,7 @@ class Revenue extends PureComponent {
                         }}
                     />
                 </div>
-            </Card>
+            </Fragment>
         )
     }
 }
