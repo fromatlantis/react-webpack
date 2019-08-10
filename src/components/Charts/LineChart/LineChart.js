@@ -121,7 +121,7 @@ export default class LineChart extends PureComponent {
             series: [
                 {
                     type: 'line',
-                    smooth: true,
+                    // smooth: true,
                     // symbol: 'circle',
                     lineStyle: {
                         normal: {
@@ -145,17 +145,27 @@ export default class LineChart extends PureComponent {
                             // width: 2,
                         },
                     },
-                    // areaStyle: {
-                    //     normal: {
-                    //         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                    //             offset: 0,
-                    //             color: 'rgba(0, 136, 212, 1)'
-                    //         }, {
-                    //             offset: 1,
-                    //             color: 'rgba(0, 136, 212, 0)'
-                    //         }], false),
-                    //     }
-                    // },
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(
+                                0,
+                                0,
+                                0,
+                                1,
+                                [
+                                    {
+                                        offset: 0,
+                                        color: 'rgba(0, 136, 212, 1)',
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(0, 136, 212, 0)',
+                                    },
+                                ],
+                                false,
+                            ),
+                        },
+                    },
                     itemStyle: {
                         normal: {
                             color: '#4ba6f9',

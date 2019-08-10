@@ -101,12 +101,12 @@ export default class RevenueCharts extends PureComponent {
                     // symbolSize: 0, // 拐点圆的大小
                     itemStyle: {
                         normal: {
-                            color: '#289df5', // 折线条的颜色
-                            borderColor: '#289df5', // 拐点边框颜色
-                            areaStyle: {
-                                type: 'default',
-                                opacity: 0.2,
-                            },
+                            color: '#188FFD', // 折线条的颜色
+                            borderColor: '#188FFD', // 拐点边框颜色
+                            // areaStyle: {
+                            //     type: 'default',
+                            //     opacity: 0.2,
+                            // }, //面积
                         },
                     },
                     data: pay,
@@ -119,12 +119,12 @@ export default class RevenueCharts extends PureComponent {
                     // symbolSize: 0,
                     itemStyle: {
                         normal: {
-                            color: '#fbc01b',
-                            borderColor: '#fbc01b',
-                            areaStyle: {
-                                type: 'default',
-                                opacity: 0.2,
-                            },
+                            color: '#BC79F9',
+                            borderColor: '#BC79F9',
+                            // areaStyle: {
+                            //     type: 'default',
+                            //     opacity: 0.2,
+                            // }, //面积
                         },
                     },
                     data: revenue,
