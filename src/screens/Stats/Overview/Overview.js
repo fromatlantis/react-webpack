@@ -138,28 +138,45 @@ class Overview extends PureComponent {
                     <Col span={16}>
                         <Card bordered={false} title="企业分析">
                             <div className={styles.nums}>
-                                <Statistic title="企业" value={companyInfosCount.company} />
                                 <Statistic
+                                    className={styles.viewBlue}
+                                    title="企业"
+                                    value={companyInfosCount.company}
+                                />
+                                <Statistic
+                                    className={styles.viewBlue}
                                     title="实驻企业"
                                     value={companyInfosCount.settledCompany}
                                 />
                                 <Statistic
+                                    className={styles.viewBlue}
                                     title="虚拟企业"
                                     value={companyInfosCount.unsettledCompany}
                                 />
-                                <Statistic title="企业人数" value={companyInfosCount.staff} />
+                                <Statistic
+                                    className={styles.viewBlue}
+                                    title="企业人数"
+                                    value={companyInfosCount.staff}
+                                />
                             </div>
                             <div className={styles.nums}>
                                 <Statistic
+                                    className={styles.viewPink}
                                     title="知识产权"
                                     value={companyInfosCount.totalKnowledgeRight}
                                 />
                                 <Statistic
+                                    className={styles.viewPink}
                                     title="新增知识产权"
                                     value={companyInfosCount.currentKnowledgeRight}
                                 />
-                                <Statistic title="专利" value={companyInfosCount.totalPatent} />
                                 <Statistic
+                                    title="专利"
+                                    className={styles.viewPink}
+                                    value={companyInfosCount.totalPatent}
+                                />
+                                <Statistic
+                                    className={styles.viewPink}
                                     title="新增专利"
                                     value={companyInfosCount.currentPatent}
                                 />

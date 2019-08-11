@@ -49,3 +49,13 @@
     margin-left: 0.5rem;
     margin-right: 0.62rem;
 }
+.viewBlue{
+    background: #F0F8FF;
+    text-align: center;
+    padding: 20px 54px 20px 54px;
+}
+.viewPink{
+    background: #FFF4F6;
+    text-align: center;
+    padding: 20px 48px 20px 48px;
+}
