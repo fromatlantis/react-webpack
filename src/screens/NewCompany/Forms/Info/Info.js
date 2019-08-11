@@ -44,7 +44,7 @@ class Info extends PureComponent {
     }
     componentDidMount = () => {
         this.props.getLabelList({ type: 'industry' })
-        this.props.getLabelList({ type: 'quality' })
+        this.props.getLabelList({ type: 'qualification' })
         const companyId = sessionStorage.getItem('companyId')
         if (companyId) {
             this.props.queryBasicInfoDetial(companyId)

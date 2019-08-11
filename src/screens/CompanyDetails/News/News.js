@@ -41,24 +41,23 @@ class News extends PureComponent {
             this.props.getRecentNews({ companyId: company_id, limit: 5 })
         }
     }
-
     render() {
         const { company_id } = this.state
         return (
             <Fragment>
-                <div className={styles.messageCard}>
-                    <Card
-                        id="news"
-                        title={
-                            <div>
-                                <span style={{ color: '#1890ff' }}>新闻舆情</span>
+                <div className={styles.detailCard}>
+                    <div className={styles.titleChip}>
+                        <div>
+                            <span className={styles.divider}>|</span>
+                            <span className={styles.title}>
+                                新闻舆情
                                 <span style={{ color: 'red' }}>
                                     （{this.props.RecentNews.totalCount}）
                                 </span>
-                            </div>
-                        }
-                        extra={
-                            company_id && (
+                            </span>
+                        </div>
+                        <div>
+                            {company_id && (
                                 <Button
                                     type="link"
                                     onClick={() => {
@@ -67,40 +66,36 @@ class News extends PureComponent {
                                 >
                                     展开更多>>
                                 </Button>
-                            )
-                        }
-                        className={styles.cardSty}
-                    >
-                        <List
-                            itemLayout="horizontal"
-                            dataSource={this.props.RecentNews.resultList}
-                            renderItem={item => (
-                                <List.Item
-                                    style={{ padding: '15px 100px 15px 30px' }}
-                                    actions={[
-                                        <NavLink
-                                            exact
-                                            to={`/companyDetails/newsDetails/${company_id}/details`}
-                                        >
-                                            详情
-                                        </NavLink>,
-                                    ]}
-                                >
-                                    <Skeleton avatar title={false} loading={item.loading} active>
-                                        <List.Item.Meta
-                                            title={
-                                                <span className={styles.titleSty}>
-                                                    {item.title}
-                                                </span>
-                                            }
-                                            description={item.website}
-                                        />
-                                        <div>发布时间：{item.time}</div>
-                                    </Skeleton>
-                                </List.Item>
                             )}
-                        />
-                    </Card>
+                        </div>
+                    </div>
+                    <List
+                        itemLayout="horizontal"
+                        dataSource={this.props.RecentNews.resultList}
+                        renderItem={item => (
+                            <List.Item
+                                style={{ padding: '15px 100px 15px 30px' }}
+                                actions={[
+                                    <NavLink
+                                        exact
+                                        to={`/companyDetails/newsDetails/${company_id}/details`}
+                                    >
+                                        详情
+                                    </NavLink>,
+                                ]}
+                            >
+                                <Skeleton avatar title={false} loading={item.loading} active>
+                                    <List.Item.Meta
+                                        title={
+                                            <span className={styles.titleSty}>{item.title}</span>
+                                        }
+                                        description={item.website}
+                                    />
+                                    <div>发布时间：{item.time}</div>
+                                </Skeleton>
+                            </List.Item>
+                        )}
+                    />
                 </div>
             </Fragment>
         )

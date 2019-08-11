@@ -2,7 +2,7 @@
  * 企服首页（企服管理）/企业详情==> Information 基本信息
  */
 import React, { PureComponent, Fragment } from 'react'
-import { Card, Table, Button } from 'antd'
+import { Card, Table, Button, Descriptions } from 'antd'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
@@ -71,269 +71,237 @@ class Information extends PureComponent {
         const baseInfoDetial = this.props.BaseInfoDetial
         return (
             <Fragment>
-                <div className={styles.messageCard}>
-                    <Card
-                        id="information:1"
-                        title={<span style={{ color: '#1890ff' }}>企业动态</span>}
-                        extra={
-                            company_id && (
-                                <Button
-                                    type="link"
-                                    onClick={() => {
-                                        this.props.getRecentNews({ companyId: company_id })
-                                        this.paginationCon(0)
-                                    }}
-                                >
-                                    展开更多>>
-                                </Button>
-                            )
-                        }
-                        className={styles.cardSty}
-                        // tabList={[{ key: '企业动态', tab: '企业动态' }]}
-                    >
-                        <Table
-                            bordered={true} //边框
-                            pagination={paginationShu[0]} //分页器
-                            rowKey={(record, index) => `complete${record.id}${index}`}
-                            columns={[
-                                {
-                                    title: '标题',
-                                    dataIndex: 'title',
-                                    key: 'title',
-                                    align: 'center',
-                                },
-                                {
-                                    title: '新闻来源',
-                                    dataIndex: 'website',
-                                    key: 'website',
-                                    align: 'center',
-                                },
-                                {
-                                    title: '发布时间',
-                                    dataIndex: 'time',
-                                    key: 'time',
-                                    align: 'center',
-                                },
-                            ]}
-                            dataSource={this.props.RecentNews.resultList}
-                        />
-                    </Card>
-                    <Card
-                        id="information:2"
-                        className={styles.cardSty}
-                        tabList={[{ key: '工商信息', tab: '工商信息' }]}
-                    >
-                        <table style={{ width: '100%' }}>
-                            <tbody>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>法人</td>
-                                    <td className={styles.tdright}>
-                                        {baseInfoDetial.legalPersonName}
-                                    </td>
-                                    <td className={styles.tdleft}>注册资本</td>
-                                    <td className={styles.tdright}>{baseInfoDetial.regCapital}</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>经营状态</td>
-                                    <td className={styles.tdright}>{baseInfoDetial.regStatus}</td>
-                                    <td className={styles.tdleft}>实缴资本</td>
-                                    <td className={styles.tdright}>
-                                        {baseInfoDetial.actualCapital}
-                                    </td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>统一社会信用代码</td>
-                                    <td className={styles.tdright}>{baseInfoDetial.creditCode}</td>
-                                    <td className={styles.tdleft}>成立日期</td>
-                                    <td className={styles.tdright}>
-                                        {moment(parseInt(baseInfoDetial.estiblishTime)).format(
-                                            'YYYY-MM-DD',
-                                        )}
-                                    </td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>工商注册号</td>
-                                    <td className={styles.tdright}>{baseInfoDetial.regNumber}</td>
-                                    <td className={styles.tdleft}>纳税人识别号</td>
-                                    <td className={styles.tdright}>{baseInfoDetial.taxNumber}</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>公司类型</td>
-                                    <td className={styles.tdright}>
-                                        {baseInfoDetial.companyOrgType}
-                                    </td>
-                                    <td className={styles.tdleft}>组织机构代码</td>
-                                    <td className={styles.tdright}>{baseInfoDetial.orgNumber}</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>核准日期</td>
-                                    <td className={styles.tdright}>
-                                        {moment(parseInt(baseInfoDetial.approvedTime)).format(
-                                            'YYYY-MM-DD',
-                                        )}
-                                    </td>
-                                    <td className={styles.tdleft}>所属行业</td>
-                                    <td className={styles.tdright}>{baseInfoDetial.industry}</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>所属地区</td>
-                                    <td className={styles.tdright}>北京市</td>
-                                    <td className={styles.tdleft}>登记机关</td>
-                                    <td className={styles.tdright}>
-                                        {baseInfoDetial.regInstitute}
-                                    </td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>曾用名</td>
-                                    <td className={styles.tdright}>
-                                        {baseInfoDetial.historyNames}
-                                    </td>
-                                    <td className={styles.tdleft}>英文名</td>
-                                    <td className={styles.tdright}>{baseInfoDetial.property3}</td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>人员规模</td>
-                                    <td className={styles.tdright}>
-                                        {baseInfoDetial.staffNumRange}
-                                    </td>
-                                    <td className={styles.tdleft}>参保人数</td>
-                                    <td className={styles.tdright}>
-                                        {baseInfoDetial.socialStaffNum}
-                                    </td>
-                                </tr>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>企业地址</td>
-                                    <td className={styles.tdright}>{baseInfoDetial.regLocation}</td>
-                                    <td className={styles.tdleft}>营业期限</td>
-                                    <td className={styles.tdright}>
-                                        {moment(parseInt(baseInfoDetial.fromTime)).format(
-                                            'YYYY-MM-DD',
-                                        )}
-                                        至
-                                        {moment(parseInt(baseInfoDetial.toTime)).format(
-                                            'YYYY-MM-DD',
-                                        )}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table style={{ width: '100%' }}>
-                            <tbody>
-                                <tr className={styles.tabletr}>
-                                    <td className={styles.tdleft}>经营范围</td>
-                                    <td
-                                        style={{
-                                            width: '84%',
-                                            border: '1px rgb(230, 235, 241) solid',
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        {baseInfoDetial.businessScope}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </Card>
-                    <Card
-                        id="information:3"
-                        title={<span style={{ color: '#1890ff' }}>融资历程</span>}
-                        extra={
-                            company_id && (
-                                <Button
-                                    type="link"
-                                    onClick={() => {
-                                        this.props.getFinancingList({ companyId: company_id })
-                                        this.paginationCon(1)
-                                    }}
-                                >
-                                    展开更多>>
-                                </Button>
-                            )
-                        }
-                        className={styles.cardSty}
-                    >
-                        <Table
-                            bordered={true} //边框
-                            pagination={paginationShu[1]} //分页器
-                            rowKey={(record, index) => `complete${record.id}${index}`}
-                            columns={[
-                                {
-                                    title: '时间',
-                                    dataIndex: 'date',
-                                    key: 'date',
-                                    align: 'center',
-                                    render: date => (
-                                        <span>{moment(date).format('YYYY-MM-DD')}</span>
-                                    ),
-                                },
-                                {
-                                    title: '金额',
-                                    dataIndex: 'money',
-                                    key: 'money',
-                                    align: 'center',
-                                },
-                                {
-                                    title: '投资方',
-                                    dataIndex: 'investorName',
-                                    key: 'investorName',
-                                    align: 'center',
-                                },
-                            ]}
-                            dataSource={this.props.FinancingList}
-                        />
-                    </Card>
-                    <Card
-                        id="information:4"
-                        title={<span style={{ color: '#1890ff' }}>核心人员</span>}
-                        extra={
-                            company_id && (
-                                <Button
-                                    type="link"
-                                    onClick={() => {
-                                        this.props.getCoreTeamList({ companyId: company_id })
-                                        this.paginationCon(2)
-                                    }}
-                                >
-                                    展开更多>>
-                                </Button>
-                            )
-                        }
-                        className={styles.cardSty}
-                    >
-                        <Table
-                            bordered={true} //边框
-                            pagination={paginationShu[2]} //分页器
-                            rowKey={(record, index) => `complete${record.id}${index}`}
-                            columns={[
-                                {
-                                    title: '姓名',
-                                    dataIndex: 'name',
-                                    key: 'name',
-                                    align: 'center',
-                                    width: '30%',
-                                },
-                                {
-                                    title: '职位',
-                                    dataIndex: 'title',
-                                    key: 'title',
-                                    align: 'center',
-                                    width: '30%',
-                                },
-                                {
-                                    title: '介绍',
-                                    dataIndex: 'description',
-                                    key: 'description',
-                                    align: 'center',
-                                },
-                            ]}
-                            dataSource={this.props.CoreTeamList}
-                        />
-                    </Card>
-                    <Card
-                        id="information:5"
-                        title={<span style={{ color: '#1890ff' }}>主要产品</span>}
-                        extra={
-                            company_id && (
+                <div className={styles.detailCard}>
+                    <div className={styles.titleChip}>
+                        <div>
+                            <span className={styles.divider}>|</span>
+                            <span className={styles.title}>企业动态</span>
+                        </div>
+                        <div>
+                            <Button
+                                type="link"
+                                onClick={() => {
+                                    this.props.getRecentNews({ companyId: company_id })
+                                    this.paginationCon(0)
+                                }}
+                            >
+                                展开更多>>
+                            </Button>
+                        </div>
+                    </div>
+                    <Table
+                        bordered={true} //边框
+                        pagination={paginationShu[0]} //分页器
+                        rowKey={(record, index) => `complete${record.id}${index}`}
+                        columns={[
+                            {
+                                title: '标题',
+                                dataIndex: 'title',
+                                key: 'title',
+                                align: 'center',
+                            },
+                            {
+                                title: '新闻来源',
+                                dataIndex: 'website',
+                                key: 'website',
+                                align: 'center',
+                            },
+                            {
+                                title: '发布时间',
+                                dataIndex: 'time',
+                                key: 'time',
+                                align: 'center',
+                            },
+                        ]}
+                        dataSource={this.props.RecentNews.resultList}
+                    />
+                </div>
+                <div className={styles.detailCard}>
+                    <div className={styles.titleChip}>
+                        <div>
+                            <span className={styles.divider}>|</span>
+                            <span className={styles.title}>工商信息</span>
+                        </div>
+                        <div>
+                            <Button
+                                type="link"
+                                onClick={() => {
+                                    this.props.getRecentNews({ companyId: company_id })
+                                    this.paginationCon(0)
+                                }}
+                            >
+                                展开更多>>
+                            </Button>
+                        </div>
+                    </div>
+                    <Descriptions title="" bordered column={2}>
+                        <Descriptions.Item label="法人">
+                            {baseInfoDetial.legalPersonName}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="注册资本">
+                            {baseInfoDetial.regCapital}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="经营状态">
+                            {baseInfoDetial.regStatus}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="实缴资本">
+                            {baseInfoDetial.actualCapital}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="统一社会信用代码">
+                            {baseInfoDetial.creditCode}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="成立日期">
+                            {moment(parseInt(baseInfoDetial.estiblishTime)).format('YYYY-MM-DD')}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="工商注册号">
+                            {baseInfoDetial.regNumber}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="纳税人识别号">
+                            {baseInfoDetial.taxNumber}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="公司类型">
+                            {baseInfoDetial.companyOrgType}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="组织机构代码">
+                            {baseInfoDetial.orgNumber}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="核准日期">
+                            {moment(parseInt(baseInfoDetial.approvedTime)).format('YYYY-MM-DD')}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="所属行业">
+                            {baseInfoDetial.industry}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="所属地区">
+                            {baseInfoDetial.base}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="登记机关">
+                            {baseInfoDetial.regInstitute}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="曾用名">
+                            {baseInfoDetial.historyNames}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="英文名">
+                            {baseInfoDetial.property3}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="人员规模">
+                            {baseInfoDetial.staffNumRange}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="参保人数">
+                            {baseInfoDetial.socialStaffNum}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="企业地址">
+                            {baseInfoDetial.regLocation}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="营业期限">
+                            {moment(parseInt(baseInfoDetial.fromTime)).format('YYYY-MM-DD')}至
+                            {moment(parseInt(baseInfoDetial.toTime)).format('YYYY-MM-DD')}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="经营范围" span={2}>
+                            {baseInfoDetial.businessScope}
+                        </Descriptions.Item>
+                    </Descriptions>
+                </div>
+                <div className={styles.detailCard}>
+                    <div className={styles.titleChip}>
+                        <div>
+                            <span className={styles.divider}>|</span>
+                            <span className={styles.title}>融资历程</span>
+                        </div>
+                        <div>
+                            <Button
+                                type="link"
+                                onClick={() => {
+                                    this.props.getFinancingList({ companyId: company_id })
+                                    this.paginationCon(1)
+                                }}
+                            >
+                                展开更多>>
+                            </Button>
+                        </div>
+                    </div>
+                    <Table
+                        bordered={true} //边框
+                        pagination={paginationShu[1]} //分页器
+                        rowKey={(record, index) => `complete${record.id}${index}`}
+                        columns={[
+                            {
+                                title: '时间',
+                                dataIndex: 'date',
+                                key: 'date',
+                                align: 'center',
+                                render: date => <span>{moment(date).format('YYYY-MM-DD')}</span>,
+                            },
+                            {
+                                title: '金额',
+                                dataIndex: 'money',
+                                key: 'money',
+                                align: 'center',
+                            },
+                            {
+                                title: '投资方',
+                                dataIndex: 'investorName',
+                                key: 'investorName',
+                                align: 'center',
+                            },
+                        ]}
+                        dataSource={this.props.FinancingList}
+                    />
+                </div>
+                <div className={styles.detailCard}>
+                    <div className={styles.titleChip}>
+                        <div>
+                            <span className={styles.divider}>|</span>
+                            <span className={styles.title}>核心人员</span>
+                        </div>
+                        <div>
+                            <Button
+                                type="link"
+                                onClick={() => {
+                                    this.props.getCoreTeamList({ companyId: company_id })
+                                    this.paginationCon(2)
+                                }}
+                            >
+                                展开更多>>
+                            </Button>
+                        </div>
+                    </div>
+                    <Table
+                        bordered={true} //边框
+                        pagination={paginationShu[2]} //分页器
+                        rowKey={(record, index) => `complete${record.id}${index}`}
+                        columns={[
+                            {
+                                title: '姓名',
+                                dataIndex: 'name',
+                                key: 'name',
+                                align: 'center',
+                                width: '30%',
+                            },
+                            {
+                                title: '职位',
+                                dataIndex: 'title',
+                                key: 'title',
+                                align: 'center',
+                                width: '30%',
+                            },
+                            {
+                                title: '介绍',
+                                dataIndex: 'description',
+                                key: 'description',
+                                align: 'center',
+                            },
+                        ]}
+                        dataSource={this.props.CoreTeamList}
+                    />
+                </div>
+                <div className={styles.detailCard}>
+                    <div className={styles.titleChip}>
+                        <div>
+                            <span className={styles.divider}>|</span>
+                            <span className={styles.title}>主要产品</span>
+                        </div>
+                        <div>
+                            {company_id && (
                                 <Button
                                     type="link"
                                     onClick={() => {
@@ -343,39 +311,37 @@ class Information extends PureComponent {
                                 >
                                     展开更多>>
                                 </Button>
-                            )
-                        }
-                        className={styles.cardSty}
-                    >
-                        <Table
-                            bordered={true} //边框
-                            pagination={paginationShu[3]} //分页器
-                            rowKey={(record, index) => `complete${record.id}${index}`}
-                            columns={[
-                                {
-                                    title: '产品名称',
-                                    dataIndex: 'name',
-                                    key: 'name',
-                                    align: 'center',
-                                    width: '20%',
-                                },
-                                {
-                                    title: '产品介绍',
-                                    dataIndex: 'brief',
-                                    key: 'brief',
-                                    align: 'center',
-                                    width: '40%',
-                                },
-                                {
-                                    title: '领域',
-                                    dataIndex: 'classes',
-                                    key: 'classes',
-                                    align: 'center',
-                                },
-                            ]}
-                            dataSource={this.props.ProductInfoList}
-                        />
-                    </Card>
+                            )}
+                        </div>
+                    </div>
+                    <Table
+                        bordered={true} //边框
+                        pagination={paginationShu[3]} //分页器
+                        rowKey={(record, index) => `complete${record.id}${index}`}
+                        columns={[
+                            {
+                                title: '产品名称',
+                                dataIndex: 'name',
+                                key: 'name',
+                                align: 'center',
+                                width: '20%',
+                            },
+                            {
+                                title: '产品介绍',
+                                dataIndex: 'brief',
+                                key: 'brief',
+                                align: 'center',
+                                width: '40%',
+                            },
+                            {
+                                title: '领域',
+                                dataIndex: 'classes',
+                                key: 'classes',
+                                align: 'center',
+                            },
+                        ]}
+                        dataSource={this.props.ProductInfoList}
+                    />
                 </div>
             </Fragment>
         )

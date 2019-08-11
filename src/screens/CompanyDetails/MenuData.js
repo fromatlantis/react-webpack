@@ -73,27 +73,28 @@ export const menuData = [
             },
         ],
     },
-    {
-        title: '企业关系',
-        icon: '',
-        path: 'relation',
-        key: 'relation',
-        component: Relation,
-        // children: [
-        //     {
-        //         title: '企业图谱',
-        //         path: 'relation',
-        //         key: 'relation:1',
-        //         component: Relation,
-        //     },
-        //     {
-        //         title: '投资图谱',
-        //         path: 'relation',
-        //         key: 'relation:2',
-        //         component: Relation,
-        //     },
-        // ],
-    },
+    // 功能不完善
+    // {
+    //     title: '企业关系',
+    //     icon: '',
+    //     path: 'relation',
+    //     key: 'relation',
+    //     component: Relation,
+    //     // children: [
+    //     //     {
+    //     //         title: '企业图谱',
+    //     //         path: 'relation',
+    //     //         key: 'relation:1',
+    //     //         component: Relation,
+    //     //     },
+    //     //     {
+    //     //         title: '投资图谱',
+    //     //         path: 'relation',
+    //     //         key: 'relation:2',
+    //     //         component: Relation,
+    //     //     },
+    //     // ],
+    // },
     {
         title: '知识产权',
         icon: '',
@@ -159,26 +160,20 @@ export const menuData = [
         key: 'news',
         component: News,
     },
+    // 2.1版本取消
+    // {
+    //     title: '企业需求',
+    //     icon: '',
+    //     path: 'need',
+    //     key: 'need',
+    //     component: Need,
+    // },
     {
-        title: '企业需求',
-        icon: '',
-        path: 'need',
-        key: 'need',
-        component: Need,
-    },
-    {
-        title: '改进建议',
+        title: '需求和建议',
         icon: '',
         path: 'advice',
         key: 'advice',
         component: Advice,
-    },
-    {
-        title: '其他信息',
-        icon: '',
-        path: 'otherMes',
-        key: 'otherMes',
-        component: OtherMes,
     },
     {
         title: '企业档案',

@@ -1,30 +1,63 @@
 @import '~ThemeVariables';
-.routesDiv{
-    height: calc(100vh - var(--headerHeight) - var(--footerHeight) - 50px);
-    overflow-y: scroll;
-}
 /* 面包屑导航 */
 .BreadcrumbSty{
-    padding: 20px 60px;
+    padding: 0.3rem 0.4rem;
+    font-size: 30px;
 }
-/* 导航标题 */
-.SubMenuTitle{
-    font-size: 16px;
-    color: rgb(134, 125, 125);
-}
-/* 公司详情卡片 */
-.flexDiv{
+.infoCard {
+    padding: 0.3rem 0.4rem;
+    background: #fff;
     display: flex;
-    flex-direction: row;
 }
-/* 卡片 */
-.cardSty{
-    margin: 0 50px 20px;
-    /* 阴影（水平阴影的位置，垂直阴影的位置，模糊距离，颜色） */
-    box-shadow: 1px 1px 6px rgba(0,0,0,.1);
+.avatar {
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 8px;
+    margin-right: 0.3rem;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+}
+.levelChip {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0.14rem;
+    left: 0;
+    height: 0.32rem;
+    padding-left: 0.1rem;
+    padding-right: 0.04rem;
+    background-color: #188FFD;
+    color: #fff;
+    border-top-right-radius: 0.24rem;
+    border-bottom-right-radius: 0.24rem;
+}
+.level {
+    width: 0.24rem;
+    height: 0.24rem;
+    margin-left: 0.04rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: #fff;
+    font-size: 18px;
+    font-family:PingFangSC-Semibold;
+    font-weight:600;
+    color:rgba(24,143,253,1);
+}
+/* 菜单 */
+.menu {
+    margin-top: 0.4rem;
+    padding: 0.1rem 0.4rem 0;
+    font-size: 18px;
 }
 /* 所有de表格所在卡片消除padding */
 .messageCard{
+    padding-top: 0.7rem;
+    background: #fff;
     padding-bottom: 10px;
     & :global .ant-card-body {
         padding: 0;
@@ -80,5 +113,32 @@
     height: 30px;
 }
 .modalTd{
-    font-weight: bold;
+    color: #333333;
+    font-size: 22px;
+    margin-bottom: 6px;
+}
+/*UI调整*/
+.detailCard {
+    padding:0.5rem 0.4rem;
+    background: #fff;
+    & .titleChip {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 0.2rem;
+    }
+    & .divider {
+        font-size: 26px;
+        font-weight: bold;
+        color: rgba(64,152,255,1);
+    }
+    & .title {
+        font-size: 26px;
+    }
+    & :global .ant-descriptions-bordered :global .ant-descriptions-item-label {
+        background-color: #EBF5FF;
+    }
+    /* & :global .ant-table-content .ant-table-thead > tr > th {
+        background: #EBF5FF;
+    } */
 }

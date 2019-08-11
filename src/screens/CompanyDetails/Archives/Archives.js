@@ -35,13 +35,27 @@ export default class Archives extends PureComponent {
         const { company_id, type } = this.state
         if (type === 'company') {
             return (
-                <div style={{ margin: '0 50px 20px' }}>
+                <div className={styles.detailCard}>
+                    <div className={styles.titleChip}>
+                        <div>
+                            <span className={styles.divider}>|</span>
+                            <span className={styles.title}>企业档案</span>
+                        </div>
+                        <div />
+                    </div>
                     <ArchivesList company_id={company_id} />
                 </div>
             )
         } else if (company_id) {
             return (
-                <div>
+                <div className={styles.detailCard}>
+                    <div className={styles.titleChip}>
+                        <div>
+                            <span className={styles.divider}>|</span>
+                            <span className={styles.title}>企业档案</span>
+                        </div>
+                        <div />
+                    </div>
                     <Information company_id={company_id} />
                     <Investment company_id={company_id} />
                     <Relation company_id={company_id} />
@@ -55,7 +69,14 @@ export default class Archives extends PureComponent {
             )
         } else {
             return (
-                <div>
+                <div className={styles.detailCard}>
+                    <div className={styles.titleChip}>
+                        <div>
+                            <span className={styles.divider}>|</span>
+                            <span className={styles.title}>企业档案</span>
+                        </div>
+                        <div />
+                    </div>
                     <Information />
                     <Investment />
                     <Relation />

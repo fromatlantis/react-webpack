@@ -37,46 +37,46 @@ class Advice extends PureComponent {
         const { suggestionList } = this.props
         return (
             <Fragment>
-                <div className={styles.messageCard}>
-                    <Card
-                        id="advice"
-                        title={<span style={{ color: '#1890ff' }}>改进建议</span>}
-                        // extra={<Button type="link">展开更多>></Button>}
-                        className={styles.cardSty}
-                    >
-                        <Table
-                            bordered={true} //边框
-                            // pagination={false} //分页器
-                            columns={[
-                                {
-                                    title: '序号',
-                                    dataIndex: 'key',
-                                    key: 'key',
-                                    align: 'center',
-                                    render: (text, record, index) => <span>{index + 1}</span>,
-                                },
-                                {
-                                    title: '提出人',
-                                    dataIndex: 'submitterName',
-                                    key: 'submitterName',
-                                    align: 'center',
-                                },
-                                {
-                                    title: '提出时间',
-                                    dataIndex: 'createTime',
-                                    key: 'createTime',
-                                    align: 'center',
-                                },
-                                {
-                                    title: '建议内容',
-                                    dataIndex: 'content',
-                                    key: 'content',
-                                    align: 'center',
-                                },
-                            ]}
-                            dataSource={suggestionList}
-                        />
-                    </Card>
+                <div className={styles.detailCard}>
+                    <div className={styles.titleChip}>
+                        <div>
+                            <span className={styles.divider}>|</span>
+                            <span className={styles.title}>需求和建议</span>
+                        </div>
+                        <div />
+                    </div>
+                    <Table
+                        bordered={true} //边框
+                        // pagination={false} //分页器
+                        columns={[
+                            {
+                                title: '序号',
+                                dataIndex: 'key',
+                                key: 'key',
+                                align: 'center',
+                                render: (text, record, index) => <span>{index + 1}</span>,
+                            },
+                            {
+                                title: '提出人',
+                                dataIndex: 'submitterName',
+                                key: 'submitterName',
+                                align: 'center',
+                            },
+                            {
+                                title: '提出时间',
+                                dataIndex: 'createTime',
+                                key: 'createTime',
+                                align: 'center',
+                            },
+                            {
+                                title: '建议内容',
+                                dataIndex: 'content',
+                                key: 'content',
+                                align: 'center',
+                            },
+                        ]}
+                        dataSource={suggestionList}
+                    />
                 </div>
             </Fragment>
         )
