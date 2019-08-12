@@ -16,6 +16,12 @@
     padding: 10px 10px 0 10px;
     font-size: 16px;
 }
+<<<<<<< HEAD
+/* 园区企业总览*/
+.containerTotal{
+    background:rgba(240,242,245,1);
+    padding:0.3rem 0.28rem 0.2rem 0.28rem;
+=======
 .yearStyle{
     padding-left: 0.28rem;
     padding-top: 0.36rem;
@@ -49,13 +55,50 @@
     margin-left: 0.5rem;
     margin-right: 0.62rem;
 }
+.dividerSty{
+    background: #4098FF;
+    width: 0.04rem;
+    height: 0.24rem;
+}
+.dividerTitle{
+    font-size: 0.26rem;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: rgba(51,51,51,1);
+}
 .viewBlue{
-    background: #F0F8FF;
-    text-align: center;
-    padding: 20px 54px 20px 54px;
+    width: 1.63rem;
+    // width: 2.14rem;
+    height: 1.10rem;
+    background: rgba(240,248,255,1);
+    border-radius: 4px;
 }
 .viewPink{
-    background: #FFF4F6;
+    width: 1.63rem;
+    // width: 2.14rem;
+    height: 1.10rem;
+    background: rgba(255,244,246,1);
+    border-radius: 4px;
+}
+.figureBlue{
+    font-size: 0.36rem;
+    font-family: Impact;
+    color: rgba(64,152,255,1);
+    text-shadow: 0px 3px 6px rgba(64,152,255,0.15);
     text-align: center;
-    padding: 20px 48px 20px 48px;
+}
+.figurePink{
+    font-size: 0.36rem;
+    font-family: Impact;
+    color: rgba(255,119,146,1);
+    text-shadow: 0px 0.04rem 0.08rem rgba(255,119,146,0.2);
+    text-align: center;
+}
+.character{
+    font-size: 0.14rem;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(31,31,31,1);
+    text-align: center;
+>>>>>>> 33ec6c8e049dc0d6f1ce7ccd788f8bc399ab9583
 }
