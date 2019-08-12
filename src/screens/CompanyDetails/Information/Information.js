@@ -18,6 +18,7 @@ import styles from '../CompanyDetails.module.css'
             FinancingList: state.companyDetails.FinancingList, //融资信息分页列表
             CoreTeamList: state.companyDetails.CoreTeamList, //核心人员的列表
             ProductInfoList: state.companyDetails.ProductInfoList, //主要产品的详情列表
+            staff: state.companyDetails.staff,
         }
     },
     dispatch => {
@@ -29,6 +30,7 @@ import styles from '../CompanyDetails.module.css'
                 getFinancingList: actions('getFinancingList'),
                 getCoreTeamList: actions('getCoreTeamList'),
                 getProductInfoList: actions('getProductInfoList'),
+                getStaffEdusList: actions('getStaffEdusList'),
             },
             dispatch,
         )
@@ -38,7 +40,7 @@ class Information extends PureComponent {
     state = {
         //企业id
         company_id: '',
-        paginationShu: [false, false, false, false],
+        paginationShu: [false, false, false, false, false],
     }
     //生命周期
     componentDidMount = () => {
@@ -58,6 +60,8 @@ class Information extends PureComponent {
             this.props.getCoreTeamList({ companyId: company_id, limit: 5 })
             //主要产品
             this.props.getProductInfoList({ companyId: company_id, limit: 5 })
+            // 人员情况
+            this.props.getStaffEdusList({ companyId: company_id, pageNo: 1, pageSize: 5 })
         }
     }
     paginationCon = num => {
@@ -122,17 +126,7 @@ class Information extends PureComponent {
                             <span className={styles.divider}>|</span>
                             <span className={styles.title}>工商信息</span>
                         </div>
-                        <div>
-                            <Button
-                                type="link"
-                                onClick={() => {
-                                    this.props.getRecentNews({ companyId: company_id })
-                                    this.paginationCon(0)
-                                }}
-                            >
-                                展开更多>>
-                            </Button>
-                        </div>
+                        <div />
                     </div>
                     <Descriptions title="" bordered column={2}>
                         <Descriptions.Item label="法人">
@@ -298,6 +292,79 @@ class Information extends PureComponent {
                     <div className={styles.titleChip}>
                         <div>
                             <span className={styles.divider}>|</span>
+                            <span className={styles.title}>人员情况</span>
+                        </div>
+                        <div>
+                            <Button
+                                type="link"
+                                onClick={() => {
+                                    this.props.getStaffEdusList({ companyId: company_id })
+                                    this.paginationCon(3)
+                                }}
+                            >
+                                展开更多>>
+                            </Button>
+                        </div>
+                    </div>
+                    <Table
+                        bordered={true} //边框
+                        pagination={paginationShu[3]} //分页器
+                        rowKey={(record, index) => `complete${record.id}${index}`}
+                        scroll={{ x: 1300 }}
+                        columns={[
+                            {
+                                title: '年份',
+                                dataIndex: 'years',
+                                key: 'years',
+                            },
+                            {
+                                title: '就业人员',
+                                dataIndex: 'employment',
+                                key: 'employment',
+                            },
+                            {
+                                title: '博士',
+                                dataIndex: 'doctoral',
+                                key: 'doctoral',
+                            },
+                            {
+                                title: '入选区、本市和国家相关人才计划的人员',
+                                dataIndex: 'talents',
+                                key: 'talents',
+                            },
+                            {
+                                title: '留学生人员',
+                                dataIndex: 'overseasStudent',
+                                key: 'overseasStudent',
+                            },
+                            {
+                                title: '本科及以上学历人员',
+                                dataIndex: 'undergraduate',
+                                key: 'undergraduate',
+                            },
+                            {
+                                title: '大专及以上学历人员',
+                                dataIndex: 'juniorCollege',
+                                key: 'juniorCollege',
+                            },
+                            {
+                                title: '本公司社保缴纳人员',
+                                dataIndex: 'socialPay',
+                                key: 'socialPay',
+                            },
+                            {
+                                title: '更新日期',
+                                dataIndex: 'updateTime',
+                                key: 'updateTime',
+                            },
+                        ]}
+                        dataSource={this.props.staff.list}
+                    />
+                </div>
+                <div className={styles.detailCard}>
+                    <div className={styles.titleChip}>
+                        <div>
+                            <span className={styles.divider}>|</span>
                             <span className={styles.title}>主要产品</span>
                         </div>
                         <div>
@@ -306,7 +373,7 @@ class Information extends PureComponent {
                                     type="link"
                                     onClick={() => {
                                         this.props.getProductInfoList({ companyId: company_id })
-                                        this.paginationCon(3)
+                                        this.paginationCon(4)
                                     }}
                                 >
                                     展开更多>>
@@ -316,7 +383,7 @@ class Information extends PureComponent {
                     </div>
                     <Table
                         bordered={true} //边框
-                        pagination={paginationShu[3]} //分页器
+                        pagination={paginationShu[4]} //分页器
                         rowKey={(record, index) => `complete${record.id}${index}`}
                         columns={[
                             {

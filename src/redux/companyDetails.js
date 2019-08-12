@@ -27,6 +27,9 @@ const model = {
         changeRecords: [], //历史记录
         suggestionList: [], //建议
         otherInfoList: [], //其他
+        // v2.1新增
+        staff: {}, //人员情况
+        revenue: {}, //财务情况
     },
     actions: [
         {
@@ -468,6 +471,44 @@ const model = {
         {
             name: 'getOtherInfoListOk',
             reducer: 'otherInfoList',
+        },
+        // 人员情况
+        {
+            name: 'getStaffEdusList',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/getStaffEduList`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('getStaffEdusListOK')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getStaffEdusListOK',
+            reducer: 'staff',
+        },
+        // 财务情况
+        {
+            name: 'getFinanceInfosList',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/getFinanceInfosList`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('getFinanceInfosListOK')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getFinanceInfosListOK',
+            reducer: 'revenue',
         },
     ],
 }

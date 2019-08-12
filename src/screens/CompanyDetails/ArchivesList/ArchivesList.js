@@ -99,7 +99,7 @@ class ArchivesList extends PureComponent {
         const { archives, archivesDetail } = this.props
         return (
             <div>
-                <Table dataSource={archives.resultList} columns={columns} />
+                <Table bordered dataSource={archives.resultList} columns={columns} />
                 <Modal
                     title="档案详情"
                     visible={this.state.visible}

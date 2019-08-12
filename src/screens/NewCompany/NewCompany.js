@@ -19,6 +19,12 @@ import {
     Staff,
     Revenue,
 } from './Forms'
+
+// redux
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/newCompany'
+
 const menu = [
     {
         title: '企业名片',
@@ -160,8 +166,34 @@ const menu = [
         component: Suggest,
     },
 ]
-export default class NewCompany extends PureComponent {
-    render() {
-        return <MenuLayout menu={menu} />
+
+const mapStateToProps = state => {
+    return {
+        modelList: state.newCompany.modelList.map(item => ({
+            name: item.model,
+        })),
     }
 }
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getModelList: actions('getModelList'),
+        },
+        dispatch,
+    )
+}
+
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class NewCompany extends PureComponent {
+    componentDidMount() {
+        this.props.getModelList()
+    }
+    render() {
+        const { modelList } = this.props
+        return <MenuLayout menu={menu} privateAuths={modelList} />
+    }
+}
+export default NewCompany

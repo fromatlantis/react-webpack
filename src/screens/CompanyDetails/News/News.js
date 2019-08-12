@@ -2,7 +2,7 @@
  * 企服首页（企服管理）/企业详情==> News 新闻舆情
  */
 import React, { PureComponent, Fragment } from 'react'
-import { Card, List, Skeleton, Button } from 'antd'
+import { Badge, List, Skeleton, Button } from 'antd'
 import { NavLink } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -51,9 +51,7 @@ class News extends PureComponent {
                             <span className={styles.divider}>|</span>
                             <span className={styles.title}>
                                 新闻舆情
-                                <span style={{ color: 'red' }}>
-                                    （{this.props.RecentNews.totalCount}）
-                                </span>
+                                <Badge count={this.props.RecentNews.totalCount} />
                             </span>
                         </div>
                         <div>

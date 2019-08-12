@@ -2,28 +2,21 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { push } from 'connected-react-router'
-import { Link } from 'react-router-dom'
 import { actions } from 'reduxDir/company'
-import moment from 'moment'
 import {
     Avatar,
     Alert,
     Button,
     Checkbox,
-    Input,
-    Select,
     Tag,
     Modal,
-    Divider,
     Steps,
     message,
-    Radio,
     Upload,
     Pagination,
 } from 'antd'
-import { IconFont, FormView } from 'components'
+import { IconFont } from 'components'
 import SearchChip from './SearchChip'
-import TransferView from './TransferView'
 import TransferModules from './TransferModules'
 import ImportTable from './ImportTable'
 import Export from './Export'
@@ -31,6 +24,7 @@ import styles from './Company.module.css'
 
 const Step = Steps.Step
 const CheckboxGroup = Checkbox.Group
+const { confirm } = Modal
 
 const steps = [
     {
@@ -68,6 +62,7 @@ const Dragger = Upload.Dragger
                 assignServiceStaff: actions('assignServiceStaff'),
                 batchImport: actions('batchImport'),
                 batchLoad: actions('batchLoad'),
+                inviteCompany: actions('inviteCompany'), //邀请
             },
             dispatch,
         )
@@ -81,6 +76,7 @@ class Home extends PureComponent {
         current: 0,
         importResponse: [],
         companyId: null, //指派公司id
+        params: {}, //查询参数
         column: 'name', //查询类型
         keyWord: '',
         pageSize: 10,
@@ -93,10 +89,10 @@ class Home extends PureComponent {
         this.props.searchCompany({ pageNo: 1, pageSize: 10 })
     }
     search = params => {
-        let { column, pageSize, pageNo } = this.state
-        // this.setState({
-        //     keyWord,
-        // })
+        this.setState({
+            params,
+        })
+        let { pageSize } = this.state
         if (params.keyWord) {
             this.props.searchCompany({ pageNo: 1, pageSize, ...params })
         } else {
@@ -105,16 +101,28 @@ class Home extends PureComponent {
     }
     // 分页
     onPageChange = pageNo => {
-        let { keyWord, column, pageSize } = this.state
-        let params = { pageNo, pageSize }
-        if (keyWord) params = { ...params, keyWord }
-        this.props.searchCompany(params)
+        this.setState({
+            allChecked: false,
+            checkedList: [],
+        })
+        let { params, pageSize } = this.state
+        this.props.searchCompany({
+            ...params,
+            pageNo,
+            pageSize,
+        })
     }
     onShowSizeChange = (_, pageSize) => {
-        let { keyWord, column } = this.state
-        let params = { pageNo: 1, pageSize }
-        if (keyWord) params = { ...params, keyWord }
-        this.props.searchCompany(params)
+        this.setState({
+            allChecked: false,
+            checkedList: [],
+        })
+        let { params } = this.state
+        this.props.searchCompany({
+            ...params,
+            pageNo: 1,
+            pageSize,
+        })
     }
     batchAssign = () => {
         // this.props.getCompanyList()
@@ -288,7 +296,26 @@ class Home extends PureComponent {
                                     type="link"
                                     size="small"
                                     onClick={() => {
-                                        this.toEdit(item)
+                                        const { inviteCompany } = this.props
+                                        confirm({
+                                            title: '请确认是否邀请该企业？',
+                                            okText: '继续',
+                                            content: (
+                                                <span>
+                                                    <span style={{ color: '#F04134' }}>
+                                                        邀请成功后，企业可登录进行信息录入，
+                                                        但不会修改企服数据。
+                                                    </span>
+                                                    你还要继续吗？
+                                                </span>
+                                            ),
+                                            onOk() {
+                                                inviteCompany({ companyId: item.companyId })
+                                            },
+                                            onCancel() {
+                                                // console.log('Cancel')
+                                            },
+                                        })
                                     }}
                                 >
                                     <IconFont type="iconyaoqing" />

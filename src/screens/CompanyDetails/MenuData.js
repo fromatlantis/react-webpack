@@ -11,8 +11,8 @@ import Need from './Need/Need'
 import Advice from './Advice/Advice'
 import OtherMes from './OtherMes/OtherMes'
 import Archives from './Archives/Archives'
-
 import NewsDetails from './News/NewsDetails'
+import Revenue from './Revenue/Revenue'
 
 export const menuData = [
     {
@@ -159,6 +159,13 @@ export const menuData = [
         path: 'news',
         key: 'news',
         component: News,
+    },
+    {
+        title: '财务信息',
+        icon: '',
+        path: 'revenue',
+        key: 'revenue',
+        component: Revenue,
     },
     // 2.1版本取消
     // {

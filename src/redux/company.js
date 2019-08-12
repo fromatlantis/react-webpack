@@ -290,6 +290,19 @@ const model = {
             name: 'getArchivesListOk',
             reducer: 'archives',
         },
+        // 邀请
+        {
+            name: 'inviteCompany',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/inviteCompany`,
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('邀请成功')
+                }
+            },
+        },
     ],
 }
 const newCompany = blaze(model)

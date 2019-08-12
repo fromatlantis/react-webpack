@@ -196,7 +196,6 @@ class Staff extends PureComponent {
                 title: '年份',
                 dataIndex: 'years',
                 key: 'years',
-                width: 80,
             },
             {
                 title: '就业人员',
@@ -212,7 +211,6 @@ class Staff extends PureComponent {
                 title: '入选区、本市和国家相关人才计划的人员',
                 dataIndex: 'talents',
                 key: 'talents',
-                width: 120,
             },
             {
                 title: '留学生人员',
@@ -223,31 +221,28 @@ class Staff extends PureComponent {
                 title: '本科及以上学历人员',
                 dataIndex: 'undergraduate',
                 key: 'undergraduate',
-                width: 110,
             },
             {
                 title: '大专及以上学历人员',
                 dataIndex: 'juniorCollege',
                 key: 'juniorCollege',
-                width: 110,
             },
             {
                 title: '本公司社保缴纳人员',
                 dataIndex: 'socialPay',
                 key: 'socialPay',
-                width: 110,
             },
             {
                 title: '更新日期',
                 dataIndex: 'updateTime',
                 key: 'updateTime',
-                width: 130,
             },
             {
                 title: '操作',
+                fixed: 'right',
+                width: 130,
                 dataIndex: 'actions',
                 key: 'actions',
-                width: 100,
                 align: 'center',
                 render: (_, record) => (
                     <Fragment>
@@ -312,6 +307,7 @@ class Staff extends PureComponent {
                     <Skeleton loading={staff.list ? false : true} active avatar>
                         <Table
                             bordered
+                            scroll={{ x: 1300 }}
                             dataSource={staff.list}
                             columns={columns}
                             pagination={{

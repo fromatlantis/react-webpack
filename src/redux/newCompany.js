@@ -2,13 +2,14 @@ import { put, call, select } from 'redux-saga/effects'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
-
+import { APPID } from '../config'
 const model = {
     namespace: 'newCompany',
     state: {
         searchWord: [],
         baseInfo: {},
         loadAll: 'no',
+        modelList: [],
     },
     actions: [
         {
@@ -169,6 +170,22 @@ const model = {
                     message.success('其他信息保存成功')
                 }
             },
+        },
+        // 获取对应的权限模块
+        {
+            name: 'getModelList',
+            *effect(action) {
+                const res = yield call(request, {
+                    url: `/enterprise/getModelList?appIdentity=${APPID}`,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('getModelListOK')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getModelListOK',
+            reducer: 'modelList',
         },
     ],
 }

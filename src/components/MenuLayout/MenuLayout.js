@@ -14,7 +14,10 @@ import styles from './MenuLayout.module.css'
 })
 class Repair extends PureComponent {
     render() {
-        const { menu, auths } = this.props
+        let { menu, auths, privateAuths } = this.props
+        if (privateAuths) {
+            auths = privateAuths
+        }
         const authRoute = getRoutes(
             menu,
             auths,

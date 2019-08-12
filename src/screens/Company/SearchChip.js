@@ -39,7 +39,7 @@ class SearchChip extends PureComponent {
     }
     componentDidMount() {
         this.props.getLabelList({ type: 'industry' })
-        this.props.getLabelList({ type: 'quality' })
+        this.props.getLabelList({ type: 'qualification' })
     }
     change = column => {
         this.setState({ column })
@@ -62,7 +62,7 @@ class SearchChip extends PureComponent {
         })
     }
     renderInput = () => {
-        const { column, name, person, industry, labels, companyLevel } = this.state
+        const { column, name, legal_person_name, industry, labels, companyLevel } = this.state
         const { industryList, qualityList } = this.props
         if (column === 'name') {
             return (
@@ -78,7 +78,7 @@ class SearchChip extends PureComponent {
                 <Input
                     size="large"
                     placeholder="请输入法人名称"
-                    value={person}
+                    value={legal_person_name}
                     onChange={this.changePerson}
                 />
             )
@@ -131,9 +131,10 @@ class SearchChip extends PureComponent {
     }
     handleSearch = () => {
         const { column } = this.state
+        const value = this.state[column]
         this.props.onSearch({
             column,
-            keyWord: this.state[column],
+            keyWord: Array.isArray(value) ? value.join(',') : value,
         })
     }
     render() {

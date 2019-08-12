@@ -211,19 +211,16 @@ class Revenue extends PureComponent {
                 title: '营业收入/元',
                 dataIndex: 'operatingRevenue',
                 key: 'operatingRevenue',
-                width: 100,
             },
             {
                 title: '出口总额/元',
                 dataIndex: 'grossExport',
                 key: 'grossExport',
-                width: 100,
             },
             {
                 title: '专利产品年产值/元',
                 dataIndex: 'patentYearValue',
                 key: 'patentYearValue',
-                width: 100,
             },
             {
                 title: '研发费用/元',
@@ -234,13 +231,11 @@ class Revenue extends PureComponent {
                 title: '上缴税金/元',
                 dataIndex: 'taxes',
                 key: 'taxes',
-                width: 100,
             },
             {
                 title: '利润总额/元',
                 dataIndex: 'totalProfit',
                 key: 'totalProfit',
-                width: 100,
             },
             {
                 title: '净利润/元',
@@ -251,7 +246,8 @@ class Revenue extends PureComponent {
                 title: '操作',
                 dataIndex: 'actions',
                 key: 'actions',
-                width: 100,
+                fixed: 'right',
+                width: 130,
                 align: 'center',
                 render: (_, record) => (
                     <Fragment>
@@ -316,6 +312,7 @@ class Revenue extends PureComponent {
                     <Skeleton loading={revenue.list ? false : true} active avatar>
                         <Table
                             bordered
+                            scroll={{ x: 1100 }}
                             dataSource={revenue.list}
                             columns={columns}
                             pagination={{
