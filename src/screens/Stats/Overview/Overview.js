@@ -131,33 +131,58 @@ class Overview extends PureComponent {
                 />
                 <Row style={{ marginTop: '0.3rem' }} gutter={12}>
                     <Col span={16}>
-                        <Card bordered={false} title="企业分析">
-                            <div className={styles.nums}>
-                                <Statistic title="企业" value={companyInfosCount.company} />
-                                <Statistic
-                                    title="实驻企业"
-                                    value={companyInfosCount.settledCompany}
-                                />
-                                <Statistic
-                                    title="虚拟企业"
-                                    value={companyInfosCount.unsettledCompany}
-                                />
-                                <Statistic title="企业人数" value={companyInfosCount.staff} />
+                        <Card bordered={false}>
+                            <div className={styles.dividerTitle}>
+                                <Divider className={styles.dividerSty} type="vertical" />
+                                企业分析
                             </div>
                             <div className={styles.nums}>
-                                <Statistic
-                                    title="知识产权"
-                                    value={companyInfosCount.totalKnowledgeRight}
-                                />
-                                <Statistic
-                                    title="新增知识产权"
-                                    value={companyInfosCount.currentKnowledgeRight}
-                                />
-                                <Statistic title="专利" value={companyInfosCount.totalPatent} />
-                                <Statistic
-                                    title="新增专利"
-                                    value={companyInfosCount.currentPatent}
-                                />
+                                <div className={styles.viewBlue}>
+                                    <p className={styles.figureBlue}>{companyInfosCount.company}</p>
+                                    <p className={styles.character}>企业</p>
+                                </div>
+                                <div className={styles.viewBlue}>
+                                    <p className={styles.figureBlue}>
+                                        {companyInfosCount.settledCompany}
+                                    </p>
+                                    <p className={styles.character}>实驻企业</p>
+                                </div>
+                                <div className={styles.viewBlue}>
+                                    <p className={styles.figureBlue}>
+                                        {companyInfosCount.unsettledCompany}
+                                    </p>
+                                    <p className={styles.character}>虚拟企业</p>
+                                </div>
+                                <div className={styles.viewBlue}>
+                                    <p className={styles.figureBlue}>{companyInfosCount.staff}</p>
+                                    <p className={styles.character}>企业人数</p>
+                                </div>
+                            </div>
+                            <div className={styles.nums}>
+                                <div className={styles.viewPink}>
+                                    <p className={styles.figurePink}>
+                                        {companyInfosCount.totalKnowledgeRight}
+                                    </p>
+                                    <p className={styles.character}>知识产权</p>
+                                </div>
+                                <div className={styles.viewPink}>
+                                    <p className={styles.figurePink}>
+                                        {companyInfosCount.currentKnowledgeRight}
+                                    </p>
+                                    <p className={styles.character}>新增知识产权</p>
+                                </div>
+                                <div className={styles.viewPink}>
+                                    <p className={styles.figurePink}>
+                                        {companyInfosCount.totalPatent}
+                                    </p>
+                                    <p className={styles.character}>专利</p>
+                                </div>
+                                <div className={styles.viewPink}>
+                                    <p className={styles.figurePink}>
+                                        {companyInfosCount.currentPatent}
+                                    </p>
+                                    <p className={styles.character}>新增专利</p>
+                                </div>
                             </div>
                             <Row>
                                 <Col span={12} className={styles.card}>
@@ -184,16 +209,20 @@ class Overview extends PureComponent {
                         </Card>
                     </Col>
                     <Col span={8}>
-                        <Card bordered={false} title="融资趋势">
+                        <Card bordered={false}>
+                            <div className={styles.dividerTitle}>
+                                <Divider className={styles.dividerSty} type="vertical" />
+                                融资趋势
+                            </div>
                             <div style={{ height: '230px', display: 'flex' }}>
                                 <LineChart titleTop data={financingTrend} />
                             </div>
                         </Card>
-                        <Card
-                            bordered={false}
-                            title="企业资质"
-                            style={{ marginTop: '12px', height: '280px' }}
-                        >
+                        <Card bordered={false} style={{ marginTop: '12px', height: '280px' }}>
+                            <div className={styles.dividerTitle}>
+                                <Divider className={styles.dividerSty} type="vertical" />
+                                企业资质
+                            </div>
                             {intelligenceCompanyCount.map(item => (
                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <div>{item.name}</div>
@@ -205,21 +234,33 @@ class Overview extends PureComponent {
                 </Row>
                 <Row style={{ marginTop: '12px' }} gutter={12}>
                     <Col span={8}>
-                        <Card bordered={false} title="人才建设">
+                        <Card bordered={false}>
+                            <div className={styles.dividerTitle}>
+                                <Divider className={styles.dividerSty} type="vertical" />
+                                人才建设
+                            </div>
                             <div className={styles.card}>
                                 <PieChart name="circle" data={staffDistribute} />
                             </div>
                         </Card>
                     </Col>
                     <Col span={8}>
-                        <Card bordered={false} title="行业分布">
+                        <Card bordered={false}>
+                            <div className={styles.dividerTitle}>
+                                <Divider className={styles.dividerSty} type="vertical" />
+                                行业分布
+                            </div>
                             <div className={styles.card}>
                                 <PieChart data={industryDistribute} />
                             </div>
                         </Card>
                     </Col>
                     <Col span={8}>
-                        <Card bordered={false} title="营收和纳税情况">
+                        <Card bordered={false}>
+                            <div className={styles.dividerTitle}>
+                                <Divider className={styles.dividerSty} type="vertical" />
+                                营收和纳税情况
+                            </div>
                             <div className={styles.card}>
                                 <RevenueCharts data={financialStatus} />
                             </div>

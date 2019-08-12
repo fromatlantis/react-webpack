@@ -35,7 +35,7 @@
     line-height: 60px;
 }
 .search{
-    width: 7rem;
+    width: 6rem;
     height:0.4rem;
     margin-bottom: 10px;
     margin-left: 5px;
@@ -55,19 +55,21 @@
     font-weight: 400;
     color: rgba(89,89,89,1);
 }
-.tabsStyle{
-    margin-top: 0.3rem;
-}
 .rectangle{
     margin-top: 0.3rem;
-    height: 7.8rem;
+    min-height: 3.8rem;
     background: rgba(255,255,255,1);
     box-shadow: 0px 0.04rem 0.1rem 0px rgba(167,191,227,0.37);
     border-radius: 0.1rem;
+    padding-bottom: 0.3rem;
 }
 .spanStyle{
     margin-left: 0.4rem;
     margin-top: 0.48rem;
+    font-size: 0.18rem;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(89,89,89,1);
 }
 .labelCont{
     margin-left: 0.4rem;
@@ -93,4 +95,24 @@
     color: rgba(24,143,253,1);
     line-height: 0.3rem;
     margin-left: 0.3rem;
+}
+.industyAndquality{
+    margin-top: 0.3rem;
+    margin-right: 0.3rem;
+    width: 1rem;
+    height: 0.5rem;
+    border-radius: 0.08rem;
+    border: 0.01rem solid rgba(24,143,253,1);
+    font-size: 0.18rem;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(24,143,253,1);
+    line-height: 0.5rem;
+    text-align: center;
+    cursor: pointer;
+}
+.industyAndqualityActive{
+    background: rgba(24,143,253,1);
+    box-shadow:0px 4px 10px 0px rgba(167,191,227,0.37);
+    color: #fff;
 }
