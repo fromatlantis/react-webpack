@@ -16,3 +16,8 @@
     padding: 10px 10px 0 10px;
     font-size: 16px;
 }
+/* 园区企业总览*/
+.containerTotal{
+    background:rgba(240,242,245,1);
+    padding:0.3rem 0.28rem 0.2rem 0.28rem;
+}

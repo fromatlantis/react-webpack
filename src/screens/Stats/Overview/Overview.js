@@ -118,12 +118,7 @@ class Overview extends PureComponent {
             financialStatus,
         } = this.props
         return (
-            <Card
-                bordered={false}
-                title=""
-                style={{ background: '#f0f2f5' }}
-                bodyStyle={{ padding: '12px' }}
-            >
+            <div className={styles.containerTotal}>
                 <b>选择年份：</b>
                 <DatePicker
                     value={this.state.time}
@@ -134,7 +129,7 @@ class Overview extends PureComponent {
                     onOpenChange={this.handleOpenChange}
                     onPanelChange={this.handlePanelChange}
                 />
-                <Row style={{ marginTop: '12px' }} gutter={12}>
+                <Row style={{ marginTop: '0.3rem' }} gutter={12}>
                     <Col span={16}>
                         <Card bordered={false} title="企业分析">
                             <div className={styles.nums}>
@@ -231,7 +226,7 @@ class Overview extends PureComponent {
                         </Card>
                     </Col>
                 </Row>
-            </Card>
+            </div>
         )
     }
 }
