@@ -25,6 +25,12 @@ const buildTree = data => {
             }
         })
     }
+    if (result[0]) {
+        result[0].unshift({
+            label: '全部',
+            value: 'allModel',
+        })
+    }
     return result[0]
 }
 @connect(

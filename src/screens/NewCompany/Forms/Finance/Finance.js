@@ -3,6 +3,7 @@ import { Button, Card, Table, Modal, Input, DatePicker, Divider } from 'antd'
 import moment from 'moment'
 import { FormView } from 'components'
 import Toolbar from '../../Toolbar/Toolbar'
+import styles from '../index.module.css'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -144,10 +145,9 @@ class Finance extends PureComponent {
     render() {
         const { finance, searchParams } = this.props
         return (
-            <Card
-                title="融资信息"
-                bordered={false}
-                extra={
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>融资信息</div>
                     <div style={{ display: 'flex' }}>
                         <Button
                             type="primary"
@@ -158,22 +158,22 @@ class Finance extends PureComponent {
                         </Button>
                         <Toolbar />
                     </div>
-                }
-            >
-                <Table
-                    bordered
-                    dataSource={finance.list}
-                    columns={columns}
-                    pagination={{
-                        current: searchParams.pageNo,
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        pageSizeOptions: ['10', '15', '20'],
-                        total: finance.totalCount,
-                        onShowSizeChange: this.onShowSizeChange,
-                        onChange: this.onChange,
-                    }}
-                />
+                </div>
+                <div className={styles.tableSty}>
+                    <Table
+                        dataSource={finance.list}
+                        columns={columns}
+                        pagination={{
+                            current: searchParams.pageNo,
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: finance.totalCount,
+                            onShowSizeChange: this.onShowSizeChange,
+                            onChange: this.onChange,
+                        }}
+                    />
+                </div>
                 <Modal
                     //className={styles.modalBox}
                     title="融资信息"
@@ -184,7 +184,7 @@ class Finance extends PureComponent {
                 >
                     {this.renderForm()}
                 </Modal>
-            </Card>
+            </div>
         )
     }
 }

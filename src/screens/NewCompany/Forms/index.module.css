@@ -1,12 +1,12 @@
 .searchCard {
-    & :global .ant-form-inline .ant-form-item {
-        width: 300px;
-    }
-    & :global .ant-form-inline .ant-form-item > .ant-form-item-label {
-        width: 120px;
-        text-align: right;
-    }
     margin-bottom: 20px;
+    padding: 0.3rem 0.4rem;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0.04rem 0.1rem 0px rgba(167,191,227,0.37);
+    border-radius:0.1rem;
+    & :global .ant-form-inline .ant-form-item {
+        width: 260px;
+    }
 }
 .newFormInline {
     & :global .ant-form-inline .ant-form-item {
@@ -33,4 +33,41 @@
         font-family: SimSun, sans-serif;
         line-height: 1;
     }
+}
+/* 新版ui */
+.contianer{
+    padding:0.3rem 0.4rem 0.41rem 0.28rem;
+}
+.searchBox{
+    display: flex;
+    align-items: center;
+    margin:0.19rem 0 0.2rem 0;
+    background:rgba(255,255,255,1);
+    height:0.93rem;
+    box-shadow:0px 0.04rem 0.1rem 0px rgba(167,191,227,0.37);
+    border-radius:0.1rem;
+    padding-left:0.4rem;
+}
+.toobar{
+    margin-left:0.6rem;
+}
+.titleSty{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.26rem;
+}
+.titleName{
+    font-size:0.3rem;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(89,89,89,1);
+    margin-left:0.12rem;
+}
+
+.tableSty{
+    padding:0.4rem;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0.04rem 0.1rem 0px rgba(167,191,227,0.37);
+    border-radius:0.1rem;
+    /* height:4.91rem; */
 }

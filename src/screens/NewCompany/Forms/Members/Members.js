@@ -3,8 +3,7 @@ import { Button, Card, Divider, Modal, Input, Skeleton, Table } from 'antd'
 import Toolbar from '../../Toolbar/Toolbar'
 import { FormView, SearchView } from 'components'
 import { UploadImg } from 'components'
-import styles from './Members.module.css'
-
+import styles from '../index.module.css'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -206,7 +205,11 @@ class Members extends PureComponent {
         ]
         const { team, searchParams } = this.props
         return (
-            <Card title="核心人员" bordered={false} extra={<Toolbar />}>
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>核心人员</div>
+                    <Toolbar />
+                </div>
                 <div className={styles.searchBox}>
                     <FormView
                         ref={form => {
@@ -236,23 +239,23 @@ class Members extends PureComponent {
                         </Button>
                     </div>
                 </div>
-
-                <Skeleton loading={team.list ? false : true} active avatar>
-                    <Table
-                        bordered
-                        dataSource={team.list}
-                        columns={columns}
-                        pagination={{
-                            current: searchParams.pageNo,
-                            showSizeChanger: true,
-                            showQuickJumper: true,
-                            pageSizeOptions: ['10', '15', '20'],
-                            total: team.totalCount,
-                            onShowSizeChange: this.onShowSizeChange,
-                            onChange: this.onChange,
-                        }}
-                    />
-                </Skeleton>
+                <div className={styles.tableSty}>
+                    <Skeleton loading={team.list ? false : true} active avatar>
+                        <Table
+                            dataSource={team.list}
+                            columns={columns}
+                            pagination={{
+                                current: searchParams.pageNo,
+                                showSizeChanger: true,
+                                showQuickJumper: true,
+                                pageSizeOptions: ['10', '15', '20'],
+                                total: team.totalCount,
+                                onShowSizeChange: this.onShowSizeChange,
+                                onChange: this.onChange,
+                            }}
+                        />
+                    </Skeleton>
+                </div>
                 <Modal
                     title="核心人员"
                     visible={this.state.visible}
@@ -262,7 +265,7 @@ class Members extends PureComponent {
                 >
                     {this.renderNewForm()}
                 </Modal>
-            </Card>
+            </div>
         )
     }
 }

@@ -517,7 +517,11 @@ class Website extends PureComponent {
     }
     render() {
         return (
-            <Card title="知识产权-网站域名" bordered={false} extra={<Toolbar />}>
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>网站域名</div>
+                    <Toolbar />
+                </div>
                 {/* <div style={{ marginBottom: '20px' }} className={styles.searchCard}>
                     {this.renderForm('search')}
                 </div> */}
@@ -541,27 +545,28 @@ class Website extends PureComponent {
                         </Button>
                     </div>
                 </div>
-                <Table
-                    bordered
-                    pagination={false}
-                    dataSource={this.state.List.list}
-                    columns={this.state.columns}
-                />
-                {/* totalCount */}
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        paddingTop: '15px',
-                    }}
-                >
-                    <Pagination
-                        defaultCurrent={1}
-                        total={this.state.List.totalCount}
-                        hideOnSinglePage={true}
-                        onChange={(page, pageSize) => this.pageOnChange(page, pageSize)}
-                        current={this.state.page}
+                <div className={styles.tableSty}>
+                    <Table
+                        pagination={false}
+                        dataSource={this.state.List.list}
+                        columns={this.state.columns}
                     />
+                    {/* totalCount */}
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            paddingTop: '15px',
+                        }}
+                    >
+                        <Pagination
+                            defaultCurrent={1}
+                            total={this.state.List.totalCount}
+                            hideOnSinglePage={true}
+                            onChange={(page, pageSize) => this.pageOnChange(page, pageSize)}
+                            current={this.state.page}
+                        />
+                    </div>
                 </div>
                 <Modal
                     title="网站域名信息"
@@ -571,7 +576,7 @@ class Website extends PureComponent {
                 >
                     <div className={styles.searchCard}>{this.renderFormNo()}</div>
                 </Modal>
-            </Card>
+            </div>
         )
     }
 }

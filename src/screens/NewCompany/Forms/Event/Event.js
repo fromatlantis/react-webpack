@@ -90,8 +90,8 @@ class Event extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 10 },
+            wrapperCol: { span: 14 },
         }
         return (
             <FormView
@@ -228,7 +228,11 @@ class Event extends PureComponent {
         ]
         const { event, searchParams } = this.props
         return (
-            <Card title="投资事件" bordered={false} extra={<Toolbar />}>
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>投资事件</div>
+                    <Toolbar />
+                </div>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>
@@ -249,20 +253,21 @@ class Event extends PureComponent {
                         </Button>
                     </div>
                 </div>
-                <Table
-                    bordered
-                    dataSource={event.list}
-                    columns={columns}
-                    pagination={{
-                        current: searchParams.pageNo,
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        pageSizeOptions: ['10', '15', '20'],
-                        total: event.totalCount,
-                        onShowSizeChange: this.onShowSizeChange,
-                        onChange: this.onChange,
-                    }}
-                />
+                <div className={styles.tableSty}>
+                    <Table
+                        dataSource={event.list}
+                        columns={columns}
+                        pagination={{
+                            current: searchParams.pageNo,
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: event.totalCount,
+                            onShowSizeChange: this.onShowSizeChange,
+                            onChange: this.onChange,
+                        }}
+                    />
+                </div>
                 <Modal
                     title="投资事件"
                     visible={this.state.visible}
@@ -272,7 +277,7 @@ class Event extends PureComponent {
                 >
                     {this.renderNewForm()}
                 </Modal>
-            </Card>
+            </div>
         )
     }
 }

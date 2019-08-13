@@ -3,6 +3,7 @@ import { Button, Card, Table, Modal, Input, DatePicker, Divider } from 'antd'
 import { UploadImg, FormView, SearchView } from 'components'
 import logo from 'assets/hz.png'
 import Toolbar from '../../Toolbar/Toolbar'
+import styles from '../index.module.css'
 // redux
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -209,14 +210,12 @@ class Product extends PureComponent {
         ]
         const { product, searchParams } = this.props
         return (
-            <Card title="主要产品" bordered={false} extra={<Toolbar />}>
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        marginBottom: '20px',
-                    }}
-                >
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>主要产品</div>
+                    <Toolbar />
+                </div>
+                <div className={styles.searchBox}>
                     <FormView
                         ref={form => {
                             this.form = form
@@ -227,7 +226,7 @@ class Product extends PureComponent {
                         layout="inline"
                         saveBtn={false}
                     />
-                    <div>
+                    <div className={styles.toobar}>
                         <Button type="ghost" onClick={this.handleReset}>
                             清除
                         </Button>
@@ -245,20 +244,21 @@ class Product extends PureComponent {
                         </Button>
                     </div>
                 </div>
-                <Table
-                    bordered
-                    dataSource={product.list}
-                    columns={columns}
-                    pagination={{
-                        current: searchParams.pageNo,
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        pageSizeOptions: ['10', '15', '20'],
-                        total: product.totalCount,
-                        onShowSizeChange: this.onShowSizeChange,
-                        onChange: this.onChange,
-                    }}
-                />
+                <div className={styles.tableSty}>
+                    <Table
+                        dataSource={product.list}
+                        columns={columns}
+                        pagination={{
+                            current: searchParams.pageNo,
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: product.totalCount,
+                            onShowSizeChange: this.onShowSizeChange,
+                            onChange: this.onChange,
+                        }}
+                    />
+                </div>
                 <Modal
                     title="主要产品"
                     visible={this.state.visible}
@@ -268,7 +268,7 @@ class Product extends PureComponent {
                 >
                     {this.renderForm()}
                 </Modal>
-            </Card>
+            </div>
         )
     }
 }

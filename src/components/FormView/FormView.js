@@ -52,7 +52,12 @@ class FormView extends PureComponent {
                 })}
                 {saveBtn && (
                     <Form.Item wrapperCol={{ offset: formItemLayout.labelCol.span }}>
-                        <Button type="primary" htmlType="submit" loading={this.props.loading}>
+                        <Button
+                            style={this.props.btnStyle}
+                            type="primary"
+                            htmlType="submit"
+                            loading={this.props.loading}
+                        >
                             保存
                         </Button>
                     </Form.Item>

@@ -270,7 +270,7 @@ class Staff extends PureComponent {
         return (
             <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
                 <div className={styles.titleSty}>
-                    <div className={styles.titleName}>财务信息</div>
+                    <div className={styles.titleName}>人员情况</div>
                     <Toolbar />
                 </div>
                 <div className={styles.searchBox}>

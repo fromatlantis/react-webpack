@@ -265,8 +265,8 @@ class Copyright extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 10 },
+            wrapperCol: { span: 14 },
         }
         return (
             <SearchView
@@ -397,7 +397,11 @@ class Copyright extends PureComponent {
     }
     render() {
         return (
-            <Card title="知识产权-软件著作权" bordered={false} extra={<Toolbar />}>
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>软件著作权</div>
+                    <Toolbar />
+                </div>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>
@@ -418,26 +422,28 @@ class Copyright extends PureComponent {
                         </Button>
                     </div>
                 </div>
-                <Table
-                    bordered
-                    pagination={false}
-                    dataSource={this.state.List.list}
-                    columns={this.state.columns}
-                />
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        paddingTop: '15px',
-                    }}
-                >
-                    <Pagination
-                        defaultCurrent={1}
-                        total={this.state.List.totalCount}
-                        hideOnSinglePage={true}
-                        onChange={(page, pageSize) => this.pageOnChange(page, pageSize)}
-                        current={this.state.page}
+                <div className={styles.tableSty}>
+                    <Table
+                        pagination={false}
+                        dataSource={this.state.List.list}
+                        columns={this.state.columns}
                     />
+
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            paddingTop: '15px',
+                        }}
+                    >
+                        <Pagination
+                            defaultCurrent={1}
+                            total={this.state.List.totalCount}
+                            hideOnSinglePage={true}
+                            onChange={(page, pageSize) => this.pageOnChange(page, pageSize)}
+                            current={this.state.page}
+                        />
+                    </div>
                 </div>
                 <Modal
                     title="软件著作权信息"
@@ -448,7 +454,7 @@ class Copyright extends PureComponent {
                 >
                     <div className={styles.searchCard}>{this.renderFormNo()}</div>
                 </Modal>
-            </Card>
+            </div>
         )
     }
 }

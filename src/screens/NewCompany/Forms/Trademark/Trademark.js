@@ -104,8 +104,8 @@ class Trademark extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 8 },
+            wrapperCol: { span: 16 },
         }
         //const FormView = formView({ items, data: {} })
         return (
@@ -248,7 +248,11 @@ class Trademark extends PureComponent {
         ]
         const { trademark, searchParams } = this.props
         return (
-            <Card title="商标信息" bordered={false} extra={<Toolbar />}>
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>商标信息</div>
+                    <Toolbar />
+                </div>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>
@@ -269,20 +273,21 @@ class Trademark extends PureComponent {
                         </Button>
                     </div>
                 </div>
-                <Table
-                    bordered
-                    dataSource={trademark.list}
-                    columns={columns}
-                    pagination={{
-                        current: searchParams.pageNo,
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        pageSizeOptions: ['10', '15', '20'],
-                        total: trademark.totalCount,
-                        onShowSizeChange: this.onShowSizeChange,
-                        onChange: this.onChange,
-                    }}
-                />
+                <div className={styles.tableSty}>
+                    <Table
+                        dataSource={trademark.list}
+                        columns={columns}
+                        pagination={{
+                            current: searchParams.pageNo,
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: trademark.totalCount,
+                            onShowSizeChange: this.onShowSizeChange,
+                            onChange: this.onChange,
+                        }}
+                    />
+                </div>
                 <Modal
                     title="商标信息"
                     visible={this.state.visible}
@@ -291,7 +296,7 @@ class Trademark extends PureComponent {
                 >
                     {this.renderNewForm()}
                 </Modal>
-            </Card>
+            </div>
         )
     }
 }

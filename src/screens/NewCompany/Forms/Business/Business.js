@@ -9,7 +9,8 @@ import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/business'
 import { actions as dictionaryActions } from 'reduxDir/dictionary'
 
-import styles from './Business.module.css'
+import bstyles from './Business.module.css'
+import styles from '../index.module.css'
 
 const Option = Select.Option
 
@@ -227,14 +228,23 @@ class Business extends PureComponent {
         ]
         const { businessInfo } = this.props
         return (
-            <Card title="工商信息" bordered={false} className={styles.root} extra={<Toolbar />}>
-                <FormView
-                    layout="inline"
-                    items={items}
-                    data={businessInfo}
-                    onSubmit={this.onSubmit}
-                />
-            </Card>
+            <div className={bstyles.root}>
+                <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                    <div className={styles.titleSty}>
+                        <div className={styles.titleName}>工商信息</div>
+                        <Toolbar />
+                    </div>
+                    <div className={styles.tableSty}>
+                        <FormView
+                            layout="inline"
+                            items={items}
+                            data={businessInfo}
+                            onSubmit={this.onSubmit}
+                            btnStyle={{ marginLeft: '76px', marginTop: '20px' }}
+                        />
+                    </div>
+                </div>
+            </div>
         )
     }
 }

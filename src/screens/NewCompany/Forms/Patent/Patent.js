@@ -130,8 +130,8 @@ class Patent extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 12 },
+            labelCol: { span: 10 },
+            wrapperCol: { span: 14 },
         }
         return (
             <FormView
@@ -274,13 +274,11 @@ class Patent extends PureComponent {
                 title: '申请号',
                 dataIndex: 'appnumber',
                 key: 'appnumber',
-                width: '10%',
             },
             {
                 title: '申请日期',
                 dataIndex: 'applicationTime',
                 key: 'applicationTime',
-                width: '10%',
             },
             // {
             //     title: '授权日期',
@@ -291,31 +289,26 @@ class Patent extends PureComponent {
                 title: '专利发明人',
                 dataIndex: 'inventor',
                 key: 'inventor',
-                width: '10%',
             },
             {
                 title: '专利申请人',
                 dataIndex: 'applicantName',
                 key: 'applicantName',
-                width: '10%',
             },
             {
                 title: '专利类型',
                 dataIndex: 'patentType',
                 key: 'patentType',
-                width: '10%',
             },
             {
                 title: '专利代理结构',
                 dataIndex: 'agency',
                 key: 'agency',
-                width: '10%',
             },
             {
                 title: '公开号',
                 dataIndex: 'pubnumber',
                 key: 'pubnumber',
-                width: '10%',
             },
             // {
             //     title: '法律状态',
@@ -326,7 +319,7 @@ class Patent extends PureComponent {
                 title: '专利说明',
                 dataIndex: 'abstracts',
                 key: 'abstracts',
-                //width: '15%',
+
                 render: abstracts => {
                     return (
                         <Tooltip placement="left" title={abstracts}>
@@ -356,12 +349,11 @@ class Patent extends PureComponent {
         ]
         const { patent, searchParams } = this.props
         return (
-            <Card
-                title="专利信息"
-                style={{ width: 'calc(100vw - 256px)' }}
-                bordered={false}
-                extra={<Toolbar />}
-            >
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>专利信息</div>
+                    <Toolbar />
+                </div>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>
@@ -382,22 +374,22 @@ class Patent extends PureComponent {
                         </Button>
                     </div>
                 </div>
-                <Table
-                    style={{ width: '100%' }}
-                    bordered
-                    dataSource={patent.list}
-                    columns={columns}
-                    scroll={{ x: 2000 }}
-                    pagination={{
-                        current: searchParams.pageNo,
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        pageSizeOptions: ['10', '15', '20'],
-                        total: patent.totalCount,
-                        onShowSizeChange: this.onShowSizeChange,
-                        onChange: this.onChange,
-                    }}
-                />
+                <div className={styles.tableSty}>
+                    <Table
+                        dataSource={patent.list}
+                        columns={columns}
+                        scroll={{ x: 2000 }}
+                        pagination={{
+                            current: searchParams.pageNo,
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: patent.totalCount,
+                            onShowSizeChange: this.onShowSizeChange,
+                            onChange: this.onChange,
+                        }}
+                    />
+                </div>
                 <Modal
                     title="专利信息"
                     visible={this.state.visible}
@@ -408,7 +400,7 @@ class Patent extends PureComponent {
                 >
                     {this.renderNewForm()}
                 </Modal>
-            </Card>
+            </div>
         )
     }
 }

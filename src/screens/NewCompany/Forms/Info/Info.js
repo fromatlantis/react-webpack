@@ -9,7 +9,7 @@ import { actions } from 'reduxDir/newCompany'
 import { actions as configureActions } from 'reduxDir/configure'
 import AutoComplete from './AutoComplete'
 import Toolbar from '../../Toolbar/Toolbar'
-
+import styles from '../index.module.css'
 const Option = Select.Option
 const mapStateToProps = state => {
     return {
@@ -233,6 +233,7 @@ class Info extends PureComponent {
                 field: 'industries',
                 component: (
                     <Select mode="multiple" placeholder="请选择行业标签">
+                        <Option value="all_industry">全部</Option>
                         {industryList.map(item => (
                             <Option value={item.id}>{item.label}</Option>
                         ))}
@@ -244,6 +245,7 @@ class Info extends PureComponent {
                 field: 'qualification',
                 component: (
                     <Select mode="multiple" placeholder="请选择资质标签">
+                        <Option value="all_qualification">全部</Option>
                         {qualityList.map(item => (
                             <Option value={item.id}>{item.label}</Option>
                         ))}
@@ -288,14 +290,20 @@ class Info extends PureComponent {
             })
         // alert(this.props.complate)
         return (
-            <Card title="企业信息" bordered={false} extra={<Toolbar />}>
-                <FormView
-                    items={items}
-                    data={baseInfo}
-                    onSubmit={this.onSubmit}
-                    // loading={!this.props.complate}
-                />
-            </Card>
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>人员情况</div>
+                    <Toolbar />
+                </div>
+                <div className={styles.tableSty}>
+                    <FormView
+                        items={items}
+                        data={baseInfo}
+                        onSubmit={this.onSubmit}
+                        // loading={!this.props.complate}
+                    />
+                </div>
+            </div>
         )
     }
 }

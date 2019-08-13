@@ -125,7 +125,7 @@ class Outward extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
+            labelCol: { span: 12 },
             wrapperCol: { span: 12 },
         }
         return (
@@ -249,19 +249,16 @@ class Outward extends PureComponent {
                 title: '被投资公司名称',
                 dataIndex: 'name',
                 key: 'name',
-                width: 150,
             },
             {
                 title: '被投资法定代表人',
                 dataIndex: 'legalPersonName',
                 key: 'legalPersonName',
-                width: 110,
             },
             {
                 title: '注册资本',
                 dataIndex: 'regCapital',
                 key: 'regCapital',
-                width: 150,
             },
             {
                 title: '投资金额',
@@ -291,6 +288,8 @@ class Outward extends PureComponent {
                 dataIndex: 'actions',
                 key: 'actions',
                 align: 'center',
+                fixed: 'right',
+                width: 80,
                 render: (_, record) => (
                     <Button
                         type="link"
@@ -305,7 +304,11 @@ class Outward extends PureComponent {
         ]
         const { outward, searchParams } = this.props
         return (
-            <Card title="对外投资" bordered={false} extra={<Toolbar />}>
+            <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
+                <div className={styles.titleSty}>
+                    <div className={styles.titleName}>对外投资</div>
+                    <Toolbar />
+                </div>
                 <div className={styles.searchCard}>
                     {this.renderForm('search')}
                     <div style={{ marginTop: '10px', textAlign: 'right' }}>
@@ -326,20 +329,21 @@ class Outward extends PureComponent {
                         </Button>
                     </div>
                 </div>
-                <Table
-                    bordered
-                    dataSource={outward.resultList}
-                    columns={columns}
-                    pagination={{
-                        current: searchParams.pageNo,
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        pageSizeOptions: ['10', '15', '20'],
-                        total: outward.totalCount,
-                        onShowSizeChange: this.onShowSizeChange,
-                        onChange: this.onChange,
-                    }}
-                />
+                <div className={styles.tableSty}>
+                    <Table
+                        dataSource={outward.resultList}
+                        columns={columns}
+                        pagination={{
+                            current: searchParams.pageNo,
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            pageSizeOptions: ['10', '15', '20'],
+                            total: outward.totalCount,
+                            onShowSizeChange: this.onShowSizeChange,
+                            onChange: this.onChange,
+                        }}
+                    />
+                </div>
                 <Modal
                     title="对外投资"
                     visible={this.state.visible}
@@ -349,7 +353,7 @@ class Outward extends PureComponent {
                 >
                     {this.renderNewForm()}
                 </Modal>
-            </Card>
+            </div>
         )
     }
 }
