@@ -324,11 +324,15 @@ class Home extends PureComponent {
                             </div>
                         </div>
                         <div>
-                            {industry.map(item => (
-                                <Tag color="red">{item.label}</Tag>
+                            {industry.map((item, index) => (
+                                <Tag color="red" key={index}>
+                                    {item.label}
+                                </Tag>
                             ))}
-                            {qualification.map(item => (
-                                <Tag color="blue">{item.label}</Tag>
+                            {qualification.map((item, index) => (
+                                <Tag color="blue" key={index}>
+                                    {item.label}
+                                </Tag>
                             ))}
                         </div>
                         <div className={styles.info}>
@@ -465,7 +469,7 @@ class Home extends PureComponent {
                         <Button type="primary" onClick={this.batchAssign}>
                             批量指派
                         </Button>
-                        <Export title="批量导出" />
+                        <Export title="批量导出" ids={this.state.checkedList} />
                         <Export title="全部导出" />
                     </div>
                 </div>

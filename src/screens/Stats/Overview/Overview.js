@@ -218,13 +218,22 @@ class Overview extends PureComponent {
                                 <LineChart titleTop data={financingTrend} />
                             </div>
                         </Card>
-                        <Card bordered={false} style={{ marginTop: '12px', height: '280px' }}>
+                        <Card
+                            bordered={false}
+                            style={{ marginTop: '12px', height: '358px', paddingBottom: '0.3rem' }}
+                        >
                             <div className={styles.dividerTitle}>
                                 <Divider className={styles.dividerSty} type="vertical" />
                                 企业资质
                             </div>
                             {intelligenceCompanyCount.map(item => (
-                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        paddingTop: '0.2rem',
+                                    }}
+                                >
                                     <div>{item.name}</div>
                                     <div>{item.count}家</div>
                                 </div>

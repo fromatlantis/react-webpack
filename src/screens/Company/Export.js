@@ -1,8 +1,12 @@
 import React, { PureComponent, Fragment } from 'react'
-import { Button, Checkbox, Modal, Steps, Table } from 'antd'
+import { Button, Checkbox, Modal, Steps, Table, message } from 'antd'
 import { YearPicker, IconFont } from 'components'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actions } from 'reduxDir/configure'
+import { actions as companyActions } from 'reduxDir/company'
+import moment from 'moment'
 const Step = Steps.Step
-const CheckboxGroup = Checkbox.Group
 const steps = [
     {
         title: '导出设置',
@@ -18,141 +22,192 @@ const steps = [
 const revenueChks = [
     {
         label: '营业收入',
-        value: '1',
+        key: 'operating_revenue',
+        type: 'revenu',
     },
     {
         label: '出口总额',
-        value: '2',
+        key: 'gross_export',
+        type: 'revenu',
     },
     {
         label: '专利产品年产值',
-        value: '3',
+        key: 'patent_year_value',
+        type: 'revenu',
     },
     {
         label: '研发费用',
-        value: '4',
+        key: 'research_expenditure',
+        type: 'revenu',
     },
     {
         label: '上缴税金',
-        value: '5',
+        key: 'taxes',
+        type: 'revenu',
     },
     {
         label: '利润总额',
-        value: '6',
+        key: 'total_profit',
+        type: 'revenu',
     },
     {
         label: '净利润',
-        value: '7',
+        key: 'retained_profits',
+        type: 'revenu',
     },
 ]
 const personChks = [
     {
         label: '就业人员数',
-        value: '11',
+        key: 'employment',
+        type: 'staff',
     },
     {
         label: '博士人数',
-        value: '22',
+        key: 'doctoral',
+        type: 'staff',
     },
     {
         label: '留学生人数',
-        value: '33',
+        key: 'overseas_student',
+        type: 'staff',
     },
     {
         label: '本科及以上学历人数',
-        value: '44',
+        key: 'undergraduate',
+        type: 'staff',
     },
     {
         label: '大专及以上学历人数',
-        value: '55',
+        key: 'junior_college',
+        type: 'staff',
     },
     {
         label: '本公司社保缴纳人员',
-        value: '66',
+        key: 'social_pay',
+        type: 'staff',
     },
 ]
 const copyrightChks = [
     {
         label: '有效知识产权数',
-        value: '111',
+        key: 'validRights',
+        type: 'rights',
     },
     {
         label: '软件著作数',
-        value: '222',
+        key: 'copyright',
+        type: 'rights',
     },
     {
         label: '有效专利数',
-        value: '333',
+        key: 'patent',
+        type: 'rights',
     },
     {
         label: '发明专利数',
-        value: '444',
+        key: 'inventionPatent',
+        type: 'rights',
     },
     {
         label: '集成电路布图数',
-        value: '555',
+        key: 'icLayout',
+        type: 'rights',
     },
     {
         label: '当年新申请知识产权数',
-        value: '666',
+        key: 'newRights',
+        type: 'rights',
     },
     {
         label: '当年新授权专利数',
-        value: '777',
+        key: 'social_pay',
+        type: 'rights',
     },
     {
         label: '商标数',
-        value: '888',
+        key: 'trademark',
+        type: 'rights',
     },
     {
         label: '技术合同交易数',
-        value: '999',
+        key: 'social_pay',
+        type: 'rights',
     },
     {
         label: '技术合同交易额',
-        value: '1000',
+        key: 'social_pay',
+        type: 'rights',
     },
 ]
-const dataSource = [
-    {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-]
-
 const columns = [
     {
-        title: '姓名',
+        title: '企业名称',
         dataIndex: 'name',
         key: 'name',
     },
     {
-        title: '年龄',
-        dataIndex: 'age',
-        key: 'age',
+        title: '统一社会信用代码',
+        dataIndex: 'credit_code',
+        key: 'credit_code',
     },
     {
-        title: '住址',
-        dataIndex: 'address',
-        key: 'address',
+        title: '企服负责人',
+        dataIndex: 'enterprise_name',
+        key: 'enterprise_name',
+    },
+    {
+        title: '招商负责人',
+        dataIndex: 'commerce_name',
+        key: 'commerce_name',
     },
 ]
-
-export default class Export extends PureComponent {
+let otherColumns = []
+const mapStateToProps = state => {
+    return {
+        qualityList: state.configure.qualityList.map(item => ({
+            label: `是否${item.label}`,
+            key: item.label,
+            type: 'aptitude',
+        })),
+        previewExport: state.company.previewExport,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            getLabelList: actions('getLabelList'),
+            exportPreview: companyActions('exportPreview'),
+        },
+        dispatch,
+    )
+}
+@connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)
+class Export extends PureComponent {
     state = {
         current: 0,
         exportModal: false,
         checkedList: [],
         indeterminate: false,
         checkAll: false,
+        years: moment(),
+    }
+    componentDidMount() {
+        this.props.getLabelList({ type: 'qualification' })
+    }
+    // 打开弹窗
+    openModal = () => {
+        const { ids } = this.props
+        if (ids && ids.length === 0) {
+            message.warning('请选择企业')
+        } else {
+            this.setState({
+                exportModal: true,
+            })
+        }
     }
     exportModalCancel = () => {
         this.setState({
@@ -160,34 +215,70 @@ export default class Export extends PureComponent {
         })
     }
     onCheckAllChange = e => {
-        const chks = [...revenueChks, ...personChks, ...copyrightChks].map(item => item.value)
+        const { qualityList } = this.props
+        const chks = [...revenueChks, ...personChks, ...copyrightChks, ...qualityList]
         this.setState({
             checkedList: e.target.checked ? chks : [],
             checkAll: !this.state.checkAll,
             indeterminate: false,
         })
     }
+    // 选择
+    onCheck = checkedList => {
+        const { qualityList } = this.props
+        const chks = [...revenueChks, ...personChks, ...copyrightChks, ...qualityList]
+        // console.log(checkedList)
+        this.setState({
+            checkedList,
+            indeterminate: !!checkedList.length && checkedList.length < chks.length,
+            checkAll: checkedList.length === chks.length,
+        })
+    }
     next() {
         const current = this.state.current + 1
-        this.setState({ current })
+        const { checkedList, years } = this.state
+        const { exportPreview, ids } = this.props
+        if (checkedList.length === 0) {
+            message.warning('请选择导出项')
+        } else {
+            otherColumns = checkedList.map(item => ({
+                title: item.label,
+                dataIndex: item.key,
+                key: item.key,
+            }))
+            exportPreview({
+                years: years.format('YYYY'),
+                companyIds: ids.join(','),
+                revenue: checkedList
+                    .filter(item => item.type === 'revenue')
+                    .map(item => item.key)
+                    .join(','),
+                staff: checkedList
+                    .filter(item => item.type === 'staff')
+                    .map(item => item.key)
+                    .join(','),
+                rights: checkedList
+                    .filter(item => item.type === 'rights')
+                    .map(item => item.key)
+                    .join(','),
+                aptitude: checkedList
+                    .filter(item => item.type === 'aptitude')
+                    .map(item => item.key)
+                    .join(','),
+            })
+            this.setState({ current })
+        }
     }
     prev() {
         const current = this.state.current - 1
         this.setState({ current })
     }
     render() {
-        const { current } = this.state
-        const { title } = this.props
+        const { current, years } = this.state
+        const { title, qualityList, previewExport } = this.props
         return (
             <Fragment>
-                <Button
-                    type="primary"
-                    onClick={() => {
-                        this.setState({
-                            exportModal: true,
-                        })
-                    }}
-                >
+                <Button type="primary" onClick={this.openModal}>
                     {title}
                 </Button>
                 <Modal
@@ -227,15 +318,23 @@ export default class Export extends PureComponent {
                             >
                                 选择全部
                             </Checkbox>
-                            <YearPicker />
-                            <Checkbox.Group value={this.state.checkedList} onChange={this.onChange}>
+                            <b>选择年份：</b>
+                            <YearPicker
+                                value={years}
+                                onChange={year => {
+                                    this.setState({
+                                        years: year,
+                                    })
+                                }}
+                            />
+                            <Checkbox.Group value={this.state.checkedList} onChange={this.onCheck}>
                                 <p style={{ margin: '6px 0' }}>
                                     <b>营收类：</b>
                                 </p>
                                 <div style={{ marginLeft: '50px', display: 'flex' }}>
                                     {revenueChks.map(item => (
                                         <div style={{ margin: '5px' }}>
-                                            <Checkbox value={item.value}>{item.label}</Checkbox>
+                                            <Checkbox value={item}>{item.label}</Checkbox>
                                         </div>
                                     ))}
                                 </div>
@@ -251,7 +350,7 @@ export default class Export extends PureComponent {
                                 >
                                     {personChks.map(item => (
                                         <div style={{ margin: '5px' }}>
-                                            <Checkbox value={item.value}>{item.label}</Checkbox>
+                                            <Checkbox value={item}>{item.label}</Checkbox>
                                         </div>
                                     ))}
                                 </div>
@@ -267,7 +366,7 @@ export default class Export extends PureComponent {
                                 >
                                     {copyrightChks.map(item => (
                                         <div style={{ margin: '5px' }}>
-                                            <Checkbox value={item.value}>{item.label}</Checkbox>
+                                            <Checkbox value={item}>{item.label}</Checkbox>
                                         </div>
                                     ))}
                                 </div>
@@ -281,18 +380,25 @@ export default class Export extends PureComponent {
                                         flexWrap: 'wrap',
                                     }}
                                 >
-                                    {copyrightChks.map(item => (
+                                    {qualityList.map(item => (
                                         <div style={{ margin: '5px' }}>
-                                            <Checkbox value={item.value}>{item.label}</Checkbox>
+                                            <Checkbox value={item}>{item.label}</Checkbox>
                                         </div>
                                     ))}
                                 </div>
                             </Checkbox.Group>
                         </div>
                     )}
-                    {current === 1 && <Table dataSource={dataSource} columns={columns} />}
+                    {current === 1 && (
+                        <Table
+                            dataSource={previewExport}
+                            columns={[...columns, ...otherColumns]}
+                            scroll={{ x: 1300 }}
+                        />
+                    )}
                 </Modal>
             </Fragment>
         )
     }
 }
+export default Export

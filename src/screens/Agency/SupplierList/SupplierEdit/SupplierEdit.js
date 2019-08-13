@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react'
 import { Button, Form, Input, Select, Breadcrumb, Card } from 'antd'
 import styles from './SupplierEdit.module.css'
 import { Link } from 'react-router-dom'
-
+import { UploadImg } from 'components'
 const { TextArea } = Input
 
 class supplierEdit extends PureComponent {
@@ -14,12 +14,13 @@ class supplierEdit extends PureComponent {
     componentDidMount = () => {
         let id = this.props.match.params.id
         this.props.getSupplierDetail({ supplierId: id })
-        this.props.getServiceTypeList()
+        // this.props.getServiceTypeList()
     }
     // 初始化细类
     componentWillReceiveProps(nextProps) {
-        if (this.props.detail !== nextProps.detail) {
-            const category = this.props.ServiceTypeList.filter(item => item.level === '2').filter(
+        if (this.props.ServiceTypeList !== nextProps.ServiceTypeList) {
+            console.log(nextProps.ServiceTypeList)
+            const category = nextProps.ServiceTypeList.filter(item => item.level === '2').filter(
                 item => nextProps.detail.classifyId.split(',').includes(item.id),
             )
             this.setState({
@@ -93,6 +94,9 @@ class supplierEdit extends PureComponent {
                     bordered={false}
                 >
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+                        <Form.Item {...formItemLayout} label="LOGO:">
+                            {getFieldDecorator('logo', {})(<UploadImg />)}
+                        </Form.Item>
                         <Form.Item {...formItemLayout} label="供应商分类:">
                             {getFieldDecorator('categories', {
                                 rules: [{ required: true, message: '请选择供应商类型' }],
@@ -180,6 +184,7 @@ export default Form.create({
     mapPropsToFields(props) {
         console.log(props.detail.categoryId)
         return {
+            logo: Form.createFormField({ value: props.detail.logo }),
             supplier: Form.createFormField({ value: props.detail.supplier }),
             contract: Form.createFormField({ value: props.detail.contract }),
             telephone: Form.createFormField({ value: props.detail.telephone }),

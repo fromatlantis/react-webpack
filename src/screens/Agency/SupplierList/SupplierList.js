@@ -172,6 +172,8 @@ class SupplierList extends PureComponent {
             {
                 title: '操作',
                 dataIndex: 'handle',
+                fixed: 'right',
+                width: 160,
                 key: 'handle',
                 align: 'center',
                 render: (text, record) => (
@@ -273,6 +275,7 @@ class SupplierList extends PureComponent {
                     <Table
                         style={{ marginTop: 20 }}
                         columns={columns}
+                        scroll={{ x: 1200 }}
                         rowKey={(record, index) => `complete${record.id}${index}`}
                         dataSource={this.props.supperList}
                         pagination={{

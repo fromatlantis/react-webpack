@@ -47,6 +47,7 @@ export default class YearPicker extends PureComponent {
                 mode="year"
                 placeholder="请选择年份"
                 format="YYYY"
+                allowClear={false}
                 onOpenChange={this.handleOpenChange}
                 onPanelChange={this.handlePanelChange}
                 onChange={this.clearValue}

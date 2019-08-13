@@ -188,6 +188,7 @@ const model = {
                     data: action.payload,
                 })
                 if (res.code === 1000) {
+                    yield put(actions('getServiceTypeList')())
                     yield put(actions('getSupplierDetailOK')(res.data))
                 }
             },

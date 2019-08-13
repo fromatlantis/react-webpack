@@ -303,6 +303,25 @@ const model = {
                 }
             },
         },
+        // 导出预览
+        {
+            name: 'exportPreview',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/exportPreview`,
+                    contentType: 'multipart/form-data',
+                    data: { ...action.payload, appIdentity: APPID },
+                })
+                if (res.code === 1000) {
+                    yield put(actions('exportPreviewOk')(res.data))
+                }
+            },
+        },
+        {
+            name: 'exportPreviewOk',
+            reducer: 'previewExport',
+        },
     ],
 }
 const newCompany = blaze(model)
