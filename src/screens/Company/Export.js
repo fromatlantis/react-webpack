@@ -23,37 +23,37 @@ const revenueChks = [
     {
         label: '营业收入',
         key: 'operating_revenue',
-        type: 'revenu',
+        type: 'revenue',
     },
     {
         label: '出口总额',
         key: 'gross_export',
-        type: 'revenu',
+        type: 'revenue',
     },
     {
         label: '专利产品年产值',
         key: 'patent_year_value',
-        type: 'revenu',
+        type: 'revenue',
     },
     {
         label: '研发费用',
         key: 'research_expenditure',
-        type: 'revenu',
+        type: 'revenue',
     },
     {
         label: '上缴税金',
         key: 'taxes',
-        type: 'revenu',
+        type: 'revenue',
     },
     {
         label: '利润总额',
         key: 'total_profit',
-        type: 'revenu',
+        type: 'revenue',
     },
     {
         label: '净利润',
         key: 'retained_profits',
-        type: 'revenu',
+        type: 'revenue',
     },
 ]
 const personChks = [
@@ -178,6 +178,7 @@ const mapDispatchToProps = dispatch => {
         {
             getLabelList: actions('getLabelList'),
             exportPreview: companyActions('exportPreview'),
+            exportCompanyData: companyActions('exportCompanyData'),
         },
         dispatch,
     )
@@ -248,7 +249,7 @@ class Export extends PureComponent {
             }))
             exportPreview({
                 years: years.format('YYYY'),
-                companyIds: ids.join(','),
+                ...(ids ? { companyIds: ids.join(',') } : null),
                 revenue: checkedList
                     .filter(item => item.type === 'revenue')
                     .map(item => item.key)
@@ -273,6 +274,33 @@ class Export extends PureComponent {
         const current = this.state.current - 1
         this.setState({ current })
     }
+    exportXls = () => {
+        const { checkedList, years } = this.state
+        const { exportCompanyData, previewExport } = this.props
+        exportCompanyData({
+            years: years.format('YYYY'),
+            dataJson: JSON.stringify(previewExport),
+            revenue: checkedList
+                .filter(item => item.type === 'revenue')
+                .map(item => item.key)
+                .join(','),
+            staff: checkedList
+                .filter(item => item.type === 'staff')
+                .map(item => item.key)
+                .join(','),
+            rights: checkedList
+                .filter(item => item.type === 'rights')
+                .map(item => item.key)
+                .join(','),
+            aptitude: checkedList
+                .filter(item => item.type === 'aptitude')
+                .map(item => item.key)
+                .join(','),
+        })
+        this.setState({
+            exportModal: false,
+        })
+    }
     render() {
         const { current, years } = this.state
         const { title, qualityList, previewExport } = this.props
@@ -294,7 +322,11 @@ class Export extends PureComponent {
                                     下一步
                                 </Button>
                             )}
-                            {current === steps.length - 1 && <Button type="primary">完成</Button>}
+                            {current === steps.length - 1 && (
+                                <Button type="primary" onClick={this.exportXls}>
+                                    完成
+                                </Button>
+                            )}
                             {current > 0 && (
                                 <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
                                     上一步

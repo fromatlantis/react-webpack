@@ -322,6 +322,21 @@ const model = {
             name: 'exportPreviewOk',
             reducer: 'previewExport',
         },
+        // 导出
+        {
+            name: 'exportCompanyData',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/exportCompanyData`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    window.location.href = res.data
+                }
+            },
+        },
     ],
 }
 const newCompany = blaze(model)
