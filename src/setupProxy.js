@@ -5,4 +5,5 @@ module.exports = function(app) {
     app.use(proxy('/authuser/', { target: 'http://62.234.115.117:8804/houzai' }))
     app.use(proxy('/enterprise/', { target: 'http://62.234.115.117:8804/houzai' }))
     app.use(proxy('/jurisdiction/', { target: 'http://62.234.115.117:8804/houzai' }))
+    app.use(proxy('/upload/', { target: 'http://62.234.115.117:8804/houzai' }))
 }

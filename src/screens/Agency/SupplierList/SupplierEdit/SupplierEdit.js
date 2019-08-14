@@ -1,6 +1,9 @@
 // 企业需求/办理
 import React, { PureComponent } from 'react'
-import { Button, Form, Input, Select, Breadcrumb, Card } from 'antd'
+import { Button, Form, Input, Select, Breadcrumb, Card, Upload, Icon } from 'antd'
+import BraftEditor from 'braft-editor'
+import { ContentUtils } from 'braft-utils'
+import request from '../../../../utils/request'
 import styles from './SupplierEdit.module.css'
 import { Link } from 'react-router-dom'
 import { UploadImg } from 'components'
@@ -42,6 +45,7 @@ class supplierEdit extends PureComponent {
                 // values.category = this.props.supperList.id
                 let id = this.props.match.params.id
                 values.id = id
+                values.introduce = values.introduce.toHTML()
                 this.props.updateSupplier(values)
             }
         })
@@ -62,7 +66,94 @@ class supplierEdit extends PureComponent {
         })
         this.setState({ classifyMap: data })
     }
+    uploadHandler = param => {
+        if (!param.file) {
+            return false
+        }
+        let that = this
+        request({
+            type: 'post',
+            url: '/upload/upload/uploadFile',
+            data: { files: param.file },
+            contentType: 'multipart/form-data',
+        })
+            .then(json => {
+                if (json.code === 1000 && json.data.retMessage === 'success') {
+                    let introduce = that.props.form.getFieldValue('introduce')
+                    that.props.form.setFieldsValue({
+                        introduce: ContentUtils.insertMedias(introduce, [
+                            {
+                                type: 'IMAGE',
+                                url: json.data.filename,
+                            },
+                        ]),
+                    })
+                } else {
+                    console.log(json.message)
+                }
+            })
+            .catch(res => {
+                console.log(res)
+            })
+    }
     render() {
+        const controls = [
+            'undo',
+            'redo',
+            'separator',
+            'font-size',
+            'line-height',
+            'letter-spacing',
+            'separator',
+            'text-color',
+            'bold',
+            'italic',
+            'underline',
+            'strike-through',
+            'separator',
+            'superscript',
+            'subscript',
+            'remove-styles',
+            'emoji',
+            'separator',
+            'text-indent',
+            'text-align',
+            'separator',
+            'headings',
+            'list-ul',
+            'list-ol',
+            'blockquote',
+            'code',
+            'separator',
+            'link',
+            'separator',
+            'hr',
+            'separator',
+            'separator',
+            'clear',
+        ]
+        const extendControls = [
+            {
+                key: 'antd-uploader',
+                type: 'component',
+                component: (
+                    <Upload
+                        accept="image/*"
+                        showUploadList={false}
+                        customRequest={this.uploadHandler}
+                    >
+                        {/* 这里的按钮最好加上type="button"，以避免在表单容器中触发表单提交，用Antd的Button组件则无需如此 */}
+                        <button
+                            type="button"
+                            className="control-item button upload-button"
+                            data-title="插入图片"
+                        >
+                            <Icon type="picture" theme="filled" />
+                        </button>
+                    </Upload>
+                ),
+            },
+        ]
         const { getFieldDecorator } = this.props.form
         const { classifyMap } = this.state
         let list = this.props.ServiceTypeList
@@ -162,7 +253,15 @@ class supplierEdit extends PureComponent {
                         <Form.Item {...formItemLayout} label="供应商简介:" layout="inline">
                             {getFieldDecorator('introduce', {
                                 rules: [{ required: true, message: '请输入供应商简介' }],
-                            })(<TextArea rows={6} style={{ width: '85%' }} />)}
+                            })(
+                                <BraftEditor
+                                    // value={this.state.editorState}
+                                    // onChange={this.handleChange}
+                                    controls={controls}
+                                    extendControls={extendControls}
+                                    style={{ border: '1px solid #d9d9d9', borderRadius: '3px' }}
+                                />,
+                            )}
                         </Form.Item>
                     </Form>
                     <div className={styles.btn}>
@@ -190,7 +289,9 @@ export default Form.create({
             telephone: Form.createFormField({ value: props.detail.telephone }),
             email: Form.createFormField({ value: props.detail.email }),
             website: Form.createFormField({ value: props.detail.website }),
-            introduce: Form.createFormField({ value: props.detail.introduce }),
+            introduce: Form.createFormField({
+                value: BraftEditor.createEditorState(props.detail.introduce),
+            }),
             categories: Form.createFormField({
                 value: props.detail.categoryId ? props.detail.categoryId.split(',') : [],
             }),

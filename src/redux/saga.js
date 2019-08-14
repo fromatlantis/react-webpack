@@ -24,6 +24,7 @@ import { effects as revenueEffects } from './revenue'
 import { effects as statOverviewEffects } from './statOverview'
 import { effects as parkStaffEffects } from './parkStaff'
 import { effects as knowledgeRightEffects } from './knowledgeRight'
+import { effects as approvalEffects } from './approval'
 // 监听action的调用，然后调用异步generate函数
 
 export function* watchFetchData() {
@@ -53,5 +54,6 @@ export function* watchFetchData() {
         ...statOverviewEffects,
         ...parkStaffEffects,
         ...knowledgeRightEffects,
+        ...approvalEffects,
     ])
 }

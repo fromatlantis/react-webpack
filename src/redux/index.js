@@ -26,7 +26,7 @@ import revenue from './revenue'
 import statOverview from './statOverview'
 import parkStaff from './parkStaff'
 import knowledgeRight from './knowledgeRight'
-
+import approval from './approval'
 export default history =>
     combineReducers({
         router: connectRouter(history),
@@ -55,4 +55,5 @@ export default history =>
         statOverview,
         parkStaff,
         knowledgeRight,
+        approval,
     })

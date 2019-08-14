@@ -55,6 +55,7 @@ class LeftMenu extends PureComponent {
     render() {
         let { pathname } = this.props.router.location
         const { menuData } = this.props
+        console.log(menuData)
         return (
             <Menu
                 className={styles.menu}

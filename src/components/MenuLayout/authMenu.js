@@ -10,19 +10,34 @@ const flatRoute = (routes, nodes, auths = []) => {
         }
     })
 }
-export const filterMenu = (nodes, auths = []) => {
-    const navs = []
-    nodes.map(node => {
-        if (node.path) {
-            if (!node.role || (node.role && auths.includes(node.role))) {
-                navs.push(node)
-            }
-        }
-        if (Array.isArray(node.children)) {
-            node.children = filterMenu(node.children, auths)
+const filterByAuths = (routes = [], auths = []) => {
+    return routes.filter(route => {
+        if (route.children && route.children.length > 0) {
+            return route.children.map(child => {
+                if (!route.role || auths.includes(child.role)) {
+                    return true
+                } else {
+                    return false
+                }
+            })
+        } else {
+            // 没有配置role，则全部可见
+            return !route.role || auths.includes(route.role)
         }
     })
-    return navs
+}
+export const getNav = (routes, auths) => {
+    const navs = routes.map(item => {
+        const children = filterByAuths(item.children, auths)
+        return {
+            title: item.title,
+            path: item.path,
+            icon: item.icon,
+            role: item.role,
+            ...(children.length > 0 ? { children } : null),
+        }
+    })
+    return filterByAuths(navs, auths)
 }
 export default (menu, auths) => {
     let routes = []

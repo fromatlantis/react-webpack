@@ -3,7 +3,7 @@ import { Route, Redirect, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { LeftMenu, AuthWrapper } from 'components'
-import getRoutes, { filterMenu } from './authMenu'
+import getRoutes, { getNav } from './authMenu'
 import styles from './MenuLayout.module.css'
 
 @connect(state => {
@@ -23,28 +23,27 @@ class Repair extends PureComponent {
             auths,
         ) /*.filter(item => auths.includes(item.title) || item.display === 'none')*/
         const [first] = authRoute
+        const navs = getNav(menu, auths)
         return (
-            <div className={styles.root}>
-                <LeftMenu
-                    menuData={
-                        filterMenu(menu, auths) /*.filter(item => auths.includes(item.title))*/
-                    }
-                />
-                <Switch>
-                    {authRoute.map((item, index) => {
-                        return (
-                            <Route
-                                exact
-                                //strict
-                                path={item.path}
-                                component={item.component}
-                            />
-                        )
-                    })}
-                    {first && <Redirect to={first.path} />}
-                    <div>「没有相关权限」</div>
-                </Switch>
-            </div>
+            auths.length > 0 && (
+                <div className={styles.root}>
+                    <LeftMenu menuData={navs} />
+                    <Switch>
+                        {authRoute.map((item, index) => {
+                            return (
+                                <Route
+                                    exact
+                                    //strict
+                                    path={item.path}
+                                    component={item.component}
+                                />
+                            )
+                        })}
+                        {first && <Redirect to={first.path} />}
+                        <div>「没有相关权限」</div>
+                    </Switch>
+                </div>
+            )
         )
     }
 }

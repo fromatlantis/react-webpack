@@ -110,6 +110,7 @@ class Revenue extends PureComponent {
             {
                 label: '年份',
                 field: 'years',
+                initialValue: moment(),
                 formatter: years => moment(years),
                 component: <YearPicker />,
             },
