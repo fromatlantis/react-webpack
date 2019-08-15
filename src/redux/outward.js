@@ -62,6 +62,24 @@ const model = {
             reducer: 'detail',
         },
         {
+            name: 'increaseInvestmentAbroad',
+            *effect(action) {
+                let params = action.payload
+                params.companyId = sessionStorage.getItem('companyId')
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/increaseInvestmentAbroad`,
+                    contentType: 'multipart/form-data',
+                    data: {
+                        newContent: JSON.stringify(action.payload),
+                    },
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                }
+            },
+        },
+        {
             name: 'increaseInvestmentAbroadApprove',
             *effect(action) {
                 let params = action.payload
@@ -71,6 +89,22 @@ const model = {
                     url: `/enterprise/increaseInvestmentAbroadApprove`,
                     data: {
                         params,
+                    },
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                }
+            },
+        },
+        {
+            name: 'changeInvestmentAbroad',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/changeInvestmentAbroad`,
+                    contentType: 'multipart/form-data',
+                    data: {
+                        newContent: JSON.stringify(action.payload),
                     },
                 })
                 if (res.code === 1000) {

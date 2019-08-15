@@ -40,6 +40,24 @@ const model = {
             reducer: 'finance',
         },
         {
+            name: 'increaseFinancing',
+            *effect(action) {
+                let params = action.payload
+                params.companyId = sessionStorage.getItem('companyId')
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/increaseFinancing`,
+                    data: {
+                        params,
+                    },
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                    yield put(actions('getFinancingList')())
+                }
+            },
+        },
+        {
             name: 'increaseFinancingApprove',
             *effect(action) {
                 let params = action.payload

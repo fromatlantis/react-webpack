@@ -23,8 +23,8 @@ const mapDispatchToProps = dispatch => {
         {
             getPatentList: actions('getPatentList'),
             queryPatentDetail: actions('queryPatentDetail'),
-            increasePatentApprove: actions('increasePatentApprove'),
-            changePatentApprove: actions('changePatentApprove'),
+            increasePatent: actions('increasePatent'),
+            changePatent: actions('changePatent'),
             getDictionary: dictionaryActions('getDictionary'),
         },
         dispatch,
@@ -56,16 +56,16 @@ class Patent extends PureComponent {
         this.newForm.validateFields((errors, values) => {
             if (!errors) {
                 const { isEdit } = this.state
-                const { changePatentApprove, increasePatentApprove, detail } = this.props
+                const { changePatent, increasePatent, detail } = this.props
                 if (values.applicationTime) {
                     values.applicationTime = moment(values.applicationTime).format(dateStr)
                 }
                 if (isEdit) {
                     // 编辑
-                    changePatentApprove({ ...detail, ...values })
+                    changePatent({ ...detail, ...values })
                 } else {
                     // 新增
-                    increasePatentApprove(values)
+                    increasePatent(values)
                 }
                 this.setState({
                     visible: false,
@@ -323,7 +323,11 @@ class Patent extends PureComponent {
                 render: abstracts => {
                     return (
                         <Tooltip placement="left" title={abstracts}>
-                            <span>{abstracts.substring(0, 26)}...</span>
+                            <span>
+                                {abstracts && abstracts.length > 25
+                                    ? `${abstracts.substring(0, 26)}...`
+                                    : abstracts}
+                            </span>
                         </Tooltip>
                     )
                 },

@@ -203,7 +203,10 @@ const mapDispatchToProps = dispatch => {
 class NewCompany extends PureComponent {
     componentDidMount() {
         this.props.getServiceModel()
-        this.props.getModelList()
+        const { companyId } = sessionStorage
+        if (companyId && companyId !== '000000') {
+            this.props.getModelList(companyId)
+        }
     }
     render() {
         const { modelList, serviceModel } = this.props

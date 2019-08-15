@@ -115,18 +115,18 @@ class Copyright extends PureComponent {
             }
             values.companyId = sessionStorage.getItem('companyId')
             let newValue = {
-                params: {
-                    companyId: sessionStorage.getItem('companyId'),
-                    fullname: values.fullname,
-                    simplename: values.simplename,
-                    regtime: values.regtime,
-                    regnum: values.regnum,
-                    catnum: values.catnum,
-                    authorNationality: values.authorNationality,
-                },
+                // params: {
+                companyId: sessionStorage.getItem('companyId'),
+                fullname: values.fullname,
+                simplename: values.simplename,
+                regtime: values.regtime,
+                regnum: values.regnum,
+                catnum: values.catnum,
+                authorNationality: values.authorNationality,
+                // },
             }
             if (that.state.type === 'add') {
-                that.increaseSoftwareCopyrightApprove(newValue)
+                that.increaseSoftwareCopyright(newValue)
             } else {
                 let newValue = {
                     companyId: sessionStorage.getItem('companyId'),
@@ -138,38 +138,43 @@ class Copyright extends PureComponent {
                     authorNationality: values.authorNationality,
                 }
                 newValue = { ...that.state.FormView, ...newValue }
-                that.changeSoftwareCopyrightApprove(newValue)
+                that.changeSoftwareCopyright(newValue)
             }
         })
         this.setState({
             visible: false,
         })
     }
-    async increaseSoftwareCopyrightApprove(data) {
+    increaseSoftwareCopyright = async data => {
+        var that = this
         var result = await request({
             type: 'post',
-            url: '/enterprise/increaseSoftwareCopyrightApprove',
-            data: data,
-            // contentType: 'multipart/form-data',
+            url: '/enterprise/increaseSoftwareCopyright',
+            contentType: 'multipart/form-data',
+            data: {
+                newContent: JSON.stringify(data),
+            },
         })
         if (result.code === 1000) {
-            message.success('成功')
+            message.success('保存成功')
+            that.DidMount()
         } else {
             message.error(result.message)
         }
     }
-    async changeSoftwareCopyrightApprove(data) {
+    changeSoftwareCopyright = async data => {
+        var that = this
         var result = await request({
             type: 'post',
-            url: '/enterprise/changeSoftwareCopyrightApprove',
-            data: {
-                newContent: JSON.stringify(data),
-                records: '我也不知道传点什么好',
-            },
+            url: '/enterprise/changeSoftwareCopyright',
             contentType: 'multipart/form-data',
+            data: {
+                content: JSON.stringify(data),
+            },
         })
         if (result.code === 1000) {
             message.success('成功')
+            that.DidMount()
         } else {
             message.error(result.message)
         }
@@ -209,7 +214,7 @@ class Copyright extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
+            labelCol: { span: 6 },
             wrapperCol: { span: 12 },
         }
         return (
@@ -428,7 +433,6 @@ class Copyright extends PureComponent {
                         dataSource={this.state.List.list}
                         columns={this.state.columns}
                     />
-
                     <div
                         style={{
                             display: 'flex',
@@ -452,7 +456,7 @@ class Copyright extends PureComponent {
                     onCancel={this.handleCancel}
                     //footer={null}
                 >
-                    <div className={styles.searchCard}>{this.renderFormNo()}</div>
+                    {this.renderFormNo()}
                 </Modal>
             </div>
         )
@@ -470,7 +474,7 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             push: push,
-            increaseSoftwareCopyrightApprove: actions('increaseSoftwareCopyrightApprove'),
+            increaseSoftwareCopyright: actions('increaseSoftwareCopyright'),
         },
         dispatch,
     )

@@ -4,7 +4,7 @@ import Toolbar from '../../Toolbar/Toolbar'
 import { FormView, SearchView, YearPicker } from 'components'
 import { UploadImg } from 'components'
 import moment from 'moment'
-import styles from './Staff.module.css'
+import styles from '../index.module.css'
 
 // redux
 import { connect } from 'react-redux'
@@ -101,6 +101,7 @@ class Staff extends PureComponent {
             {
                 label: '年份',
                 field: 'years',
+                initialValue: moment(),
                 formatter: years => moment(years),
                 component: <YearPicker />,
                 rules: [
@@ -278,7 +279,7 @@ class Staff extends PureComponent {
                         ref={form => {
                             this.form = form
                         }}
-                        formItemLayout={{}}
+                        formItemLayout={{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }}
                         items={searchItems}
                         data={searchParams}
                         layout="inline"
@@ -307,7 +308,7 @@ class Staff extends PureComponent {
                     <Skeleton loading={staff.list ? false : true} active avatar>
                         <Table
                             bordered
-                            scroll={{ x: 1300 }}
+                            scroll={{ x: 1500 }}
                             dataSource={staff.list}
                             columns={columns}
                             pagination={{

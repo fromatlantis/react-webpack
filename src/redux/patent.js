@@ -62,6 +62,25 @@ const model = {
             reducer: 'detail',
         },
         {
+            name: 'increasePatent',
+            *effect(action) {
+                let params = action.payload
+                params.companyId = sessionStorage.getItem('companyId')
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/increasePatent`,
+                    contentType: 'multipart/form-data',
+                    data: {
+                        newContent: JSON.stringify(action.payload),
+                    },
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                    yield put(actions('getPatentList')())
+                }
+            },
+        },
+        {
             name: 'increasePatentApprove',
             *effect(action) {
                 let params = action.payload
@@ -75,6 +94,23 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('保存成功')
+                }
+            },
+        },
+        {
+            name: 'changePatent',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/changePatent`,
+                    contentType: 'multipart/form-data',
+                    data: {
+                        content: JSON.stringify(action.payload),
+                    },
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                    yield put(actions('getPatentList')())
                 }
             },
         },

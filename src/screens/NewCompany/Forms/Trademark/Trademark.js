@@ -22,8 +22,8 @@ const mapDispatchToProps = dispatch => {
         {
             getTrademarkList: actions('getTrademarkList'),
             queryTrademarkDetail: actions('queryTrademarkDetail'),
-            increaseTrademarkApprove: actions('increaseTrademarkApprove'),
-            changeTrademarkApprove: actions('changeTrademarkApprove'),
+            increaseTrademark: actions('increaseTrademark'),
+            changeTrademark: actions('changeTrademark'),
         },
         dispatch,
     )
@@ -53,16 +53,16 @@ class Trademark extends PureComponent {
         this.newForm.validateFields((errors, values) => {
             if (!errors) {
                 const { isEdit } = this.state
-                const { changeTrademarkApprove, increaseTrademarkApprove, detail } = this.props
+                const { changeTrademark, increaseTrademark, detail } = this.props
                 if (values.appDate) {
                     values.appDate = moment(values.appDate.format('YYYY-MM-DD')).format(dateStr)
                 }
                 if (isEdit) {
                     // 编辑
-                    changeTrademarkApprove({ ...detail, ...values })
+                    changeTrademark({ ...detail, ...values })
                 } else {
                     // 新增
-                    increaseTrademarkApprove(values)
+                    increaseTrademark(values)
                 }
                 this.setState({
                     visible: false,

@@ -35,7 +35,11 @@ const model = {
                     url: `/enterprise/getBaseInfo?name=${action.payload}`,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getBaseInfoOk')(res.data))
+                    yield put(
+                        actions('getBaseInfoOk')({
+                            basicInfo: res.data,
+                        }),
+                    )
                 }
             },
             reducer: (state, action) => {
@@ -47,7 +51,12 @@ const model = {
         },
         {
             name: 'getBaseInfoOk',
-            reducer: 'baseInfo',
+            reducer: (state, action) => {
+                return {
+                    ...state,
+                    baseInfo: action.payload,
+                }
+            },
         },
         {
             name: 'saveBasicInfo',
@@ -79,6 +88,7 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('保存成功')
+                    yield put(actions('queryBasicInfoDetial')(sessionStorage.getItem('companyId')))
                 }
             },
         },
@@ -95,12 +105,12 @@ const model = {
                     url: `/enterprise/loadEnterpriseInfo`,
                     contentType: 'multipart/form-data',
                     data: {
-                        baseStr: JSON.stringify(baseInfo),
+                        baseStr: JSON.stringify(baseInfo.basicInfo),
                     },
                 })
-                yield put(actions('storeLoadAll')('no'))
+                // yield put(actions('storeLoadAll')('no'))
                 if (res.code === 1000) {
-                    message.success('保存成功')
+                    message.success('后台正在全力加载其他信息项中')
                     sessionStorage.setItem('companyId', res.data.companyId)
                     //yield put(actions('saveBasicInfoOk')({}))
                 }
@@ -176,7 +186,9 @@ const model = {
             name: 'getModelList',
             *effect(action) {
                 const res = yield call(request, {
-                    url: `/enterprise/getModelList?appIdentity=${APPID}`,
+                    url: `/enterprise/getModelList?appIdentity=${APPID}&companyId=${
+                        action.payload
+                    }`,
                 })
                 if (res.code === 1000) {
                     yield put(actions('getModelListOK')(res.data))

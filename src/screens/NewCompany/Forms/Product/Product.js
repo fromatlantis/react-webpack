@@ -21,34 +21,14 @@ const mapDispatchToProps = dispatch => {
         {
             getProductInfoList: actions('getProductInfoList'),
             queryProductInfoDetial: actions('queryProductInfoDetial'),
-            increaseProductInfoApprove: actions('increaseProductInfoApprove'),
-            changeProductInfoApprove: actions('changeProductInfoApprove'),
+            increaseProductInfo: actions('increaseProductInfo'),
+            changeProductInfo: actions('changeProductInfo'),
         },
         dispatch,
     )
 }
 
 const { TextArea } = Input
-const dataSource = [
-    {
-        key: '1',
-        photo: logo,
-        name: '新能源电池',
-        function:
-            '九号平衡车体积小巧，重量只有12.8公斤，拥有超高性能，时速可达16km/h，可以让驾驶者体会到4倍于行走的速度。',
-        intro: '九号平衡车，是小米公司推出“次时代玩具”。',
-        update: '2019-05-20',
-    },
-    {
-        key: '2',
-        photo: logo,
-        name: '新能源电池',
-        function:
-            '九号平衡车体积小巧，重量只有12.8公斤，拥有超高性能，时速可达16km/h，可以让驾驶者体会到4倍于行走的速度。',
-        intro: '九号平衡车，是小米公司推出“次时代玩具”。',
-        update: '2019-05-20',
-    },
-]
 
 @connect(
     mapStateToProps,
@@ -72,13 +52,13 @@ class Product extends PureComponent {
         this.newForm.validateFields((errors, values) => {
             if (!errors) {
                 const { isEdit } = this.state
-                const { changeProductInfoApprove, increaseProductInfoApprove, detail } = this.props
+                const { changeProductInfo, increaseProductInfo, detail } = this.props
                 if (isEdit) {
                     // 编辑
-                    changeProductInfoApprove({ ...detail, ...values })
+                    changeProductInfo({ ...detail, ...values })
                 } else {
                     // 新增
-                    increaseProductInfoApprove(values)
+                    increaseProductInfo(values)
                 }
                 this.setState({
                     visible: false,
@@ -119,6 +99,8 @@ class Product extends PureComponent {
             wrapperCol: { span: 14 },
         }
         //const FormView = formView({ items, data: {} })
+        const { detail } = this.props
+        const { isEdit } = this.state
         return (
             <FormView
                 ref={form => {
@@ -126,7 +108,7 @@ class Product extends PureComponent {
                 }}
                 items={items}
                 formItemLayout={formItemLayout}
-                //layout="inline"
+                data={isEdit ? detail : {}}
                 saveBtn={false}
             />
         )
@@ -183,8 +165,8 @@ class Product extends PureComponent {
             },
             {
                 title: '产品功能',
-                dataIndex: 'function',
-                key: 'function',
+                dataIndex: 'classes',
+                key: 'classes',
             },
             {
                 title: '产品介绍',

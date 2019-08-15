@@ -85,13 +85,15 @@ const model = {
             },
         },
         {
-            name: 'increaseWebsiteRecordsApprove',
+            name: 'increaseWebsiteRecords',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: '/enterprise/increaseWebsiteRecordsApprove',
-                    data: action.payload,
-                    // contentType: 'multipart/form-data',
+                    url: '/enterprise/increaseWebsiteRecords',
+                    contentType: 'multipart/form-data',
+                    data: {
+                        newContent: JSON.stringify(action.payload),
+                    },
                 })
                 console.log(res, '========================')
                 if (res.code === 1000) {
@@ -100,13 +102,15 @@ const model = {
             },
         },
         {
-            name: 'increaseProductTrademarkApprove',
+            name: 'increaseProductTrademark',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: '/enterprise/increaseProductTrademarkApprove',
-                    data: action.payload,
-                    // contentType: 'multipart/form-data',
+                    url: '/enterprise/increaseProductTrademark',
+                    contentType: 'multipart/form-data',
+                    data: {
+                        newContent: JSON.stringify(action.payload),
+                    },
                 })
                 console.log(res, '========================')
                 if (res.code === 1000) {
@@ -115,13 +119,15 @@ const model = {
             },
         },
         {
-            name: 'increaseSoftwareCopyrightApprove',
+            name: 'increaseSoftwareCopyright',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: '/enterprise/increaseSoftwareCopyrightApprove',
-                    data: action.payload,
-                    // contentType: 'multipart/form-data',
+                    url: '/enterprise/increaseSoftwareCopyright',
+                    contentType: 'multipart/form-data',
+                    data: {
+                        newContent: JSON.stringify(action.payload),
+                    },
                 })
                 console.log(res, '========================')
                 if (res.code === 1000) {

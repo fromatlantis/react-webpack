@@ -124,6 +124,7 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('指派成功')
+                    yield put(actions('searchCompany')({ pageSize: 10, pageNo: 1 }))
                 }
             },
         },

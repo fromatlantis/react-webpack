@@ -137,6 +137,7 @@
     }
     & :global .ant-descriptions-bordered :global .ant-descriptions-item-label {
         background-color: #EBF5FF;
+        width: 260px;
     }
     /* & :global .ant-table-content .ant-table-thead > tr > th {
         background: #EBF5FF;

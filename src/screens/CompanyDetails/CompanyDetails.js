@@ -18,7 +18,8 @@ import { Link, NavLink, Route } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { actions } from '../../redux/companyDetails'
+import { actions } from 'reduxDir/companyDetails'
+
 import moment from 'moment'
 import styles from './CompanyDetails.module.css'
 import { menuData } from './MenuData'
@@ -122,6 +123,12 @@ class CompanyDetails extends PureComponent {
     render() {
         const item = this.props.BasicInfoDetial
         const { type } = this.state
+        let qualification = [],
+            industry = []
+        if (item.companyLabels) {
+            qualification = item.companyLabels.filter(item => item.type === 'qualification')
+            industry = item.companyLabels.filter(item => item.type === 'industry')
+        }
         return (
             <Fragment>
                 <Breadcrumb className={styles.BreadcrumbSty}>
@@ -161,6 +168,18 @@ class CompanyDetails extends PureComponent {
                             <Tag color="#188FFD" onClick={this.showModal}>
                                 发票抬头
                             </Tag>
+                        </div>
+                        <div style={{ marginTop: '10px' }}>
+                            {industry.map((item, index) => (
+                                <Tag color="red" key={index}>
+                                    {item.label}
+                                </Tag>
+                            ))}
+                            {qualification.map((item, index) => (
+                                <Tag color="blue" key={index}>
+                                    {item.label}
+                                </Tag>
+                            ))}
                         </div>
                         <Row gutter={16} style={{ marginTop: 6 }}>
                             <Col span={7}>

@@ -62,6 +62,23 @@ const model = {
             reducer: 'detail',
         },
         {
+            name: 'increaseProductInfo',
+            *effect(action) {
+                let params = action.payload
+                params.companyId = sessionStorage.getItem('companyId')
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/increaseProductInfo`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                    yield put(actions('getProductInfoList')())
+                }
+            },
+        },
+        {
             name: 'increaseProductInfoApprove',
             *effect(action) {
                 let params = action.payload
@@ -74,6 +91,21 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('保存成功')
+                }
+            },
+        },
+        {
+            name: 'changeProductInfo',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/changeProductInfo`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                    yield put(actions('getProductInfoList')())
                 }
             },
         },

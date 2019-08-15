@@ -62,6 +62,24 @@ const model = {
             reducer: 'detail',
         },
         {
+            name: 'increaseCoreTeam',
+            *effect(action) {
+                let params = action.payload
+                params.companyId = sessionStorage.getItem('companyId')
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/increaseCoreTeam`,
+                    contentType: 'multipart/form-data',
+                    data: params,
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                    yield put(actions('getCoreTeamList')())
+                }
+            },
+        },
+        // 新增-需要审批
+        {
             name: 'increaseCoreTeamApprove',
             *effect(action) {
                 let params = action.payload
@@ -77,6 +95,24 @@ const model = {
                 }
             },
         },
+        {
+            name: 'changeCoreTeam',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/enterprise/changeCoreTeam`,
+                    contentType: 'multipart/form-data',
+                    data: {
+                        newContent: JSON.stringify(action.payload),
+                    },
+                })
+                if (res.code === 1000) {
+                    message.success('保存成功')
+                    yield put(actions('getCoreTeamList')())
+                }
+            },
+        },
+        // 更新-需要审批
         {
             name: 'changeCoreTeamApprove',
             *effect(action) {

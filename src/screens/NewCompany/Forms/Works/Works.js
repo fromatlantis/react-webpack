@@ -151,18 +151,18 @@ class Works extends PureComponent {
 
             values.companyId = sessionStorage.getItem('companyId')
             let newValue = {
-                params: {
-                    companyId: sessionStorage.getItem('companyId'),
-                    fullname: values.fullname,
-                    type: values.type,
-                    regtime: values.regtime,
-                    regnum: values.regnum,
-                    finishTime: values.finishTime,
-                    authorNationality: values.authorNationality,
-                },
+                // params: {
+                companyId: sessionStorage.getItem('companyId'),
+                fullname: values.fullname,
+                type: values.type,
+                regtime: values.regtime,
+                regnum: values.regnum,
+                finishTime: values.finishTime,
+                authorNationality: values.authorNationality,
+                // },
             }
             if (that.state.type === 'add') {
-                that.increaseProductTrademarkApprove(newValue)
+                that.increaseProductTrademark(newValue)
             } else {
                 let newValue = {
                     companyId: sessionStorage.getItem('companyId'),
@@ -174,37 +174,43 @@ class Works extends PureComponent {
                     authorNationality: values.authorNationality,
                 }
                 newValue = { ...that.state.FormView, ...newValue }
-                that.changeProductTrademarkApprove(newValue)
+                that.changeProductTrademark(newValue)
             }
         })
         this.setState({
             visible: false,
         })
     }
-    async increaseProductTrademarkApprove(data) {
+    increaseProductTrademark = async data => {
+        var that = this
         var result = await request({
             type: 'post',
-            url: '/enterprise/increaseProductTrademarkApprove',
-            data,
+            url: '/enterprise/increaseProductTrademark',
+            contentType: 'multipart/form-data',
+            data: {
+                newContent: JSON.stringify(data),
+            },
         })
         if (result.code === 1000) {
             message.success('成功')
+            that.DidMount()
         } else {
             message.error(result.message)
         }
     }
-    async changeProductTrademarkApprove(data) {
+    changeProductTrademark = async data => {
+        var that = this
         var result = await request({
             type: 'post',
-            url: '/enterprise/changeProductTrademarkApprove',
-            data: {
-                newContent: JSON.stringify(data),
-                records: '我也不知道传点什么好',
-            },
+            url: '/enterprise/changeProductTrademark',
             contentType: 'multipart/form-data',
+            data: {
+                content: JSON.stringify(data),
+            },
         })
         if (result.code === 1000) {
             message.success('成功')
+            that.DidMount()
         } else {
             message.error(result.message)
         }
@@ -290,7 +296,7 @@ class Works extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
+            labelCol: { span: 6 },
             wrapperCol: { span: 12 },
         }
         return (
@@ -586,9 +592,9 @@ class Works extends PureComponent {
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
-                    className={styles.searchCard}
+                    // className={styles.searchCard}
                 >
-                    <div className={styles.searchCard}>{this.renderFormNo()}</div>
+                    {this.renderFormNo()}
                 </Modal>
             </div>
         )

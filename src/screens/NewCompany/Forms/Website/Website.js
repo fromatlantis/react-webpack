@@ -131,18 +131,18 @@ class Website extends PureComponent {
             }
             values.companyId = sessionStorage.getItem('companyId')
             let newValue = {
-                params: {
-                    companyId: sessionStorage.getItem('companyId'),
-                    ym: values.ym,
-                    liscense: values.liscense,
-                    webSite: values.webSite,
-                    examineDate: values.examineDate,
-                    companyType: values.companyType,
-                    sourceTime: values.sourceTime,
-                },
+                // params: {
+                companyId: sessionStorage.getItem('companyId'),
+                ym: values.ym,
+                liscense: values.liscense,
+                webSite: values.webSite,
+                examineDate: values.examineDate,
+                companyType: values.companyType,
+                sourceTime: values.sourceTime,
+                // },
             }
             if (that.state.type === 'add') {
-                that.increaseWebsiteRecordsApprove(newValue)
+                that.increaseWebsiteRecords(newValue)
             } else {
                 let newValue = {
                     companyId: sessionStorage.getItem('companyId'),
@@ -154,21 +154,26 @@ class Website extends PureComponent {
                     sourceTime: values.sourceTime || that.state.FormView.sourceTime,
                 }
                 newValue = { ...that.state.FormView, ...newValue }
-                that.changeWebsiteRecordsApprove(newValue)
+                that.changeWebsiteRecords(newValue)
             }
         })
         this.setState({
             visible: false,
         })
     }
-    async increaseWebsiteRecordsApprove(data) {
+    increaseWebsiteRecords = async data => {
+        var that = this
         var result = await request({
             type: 'post',
-            url: '/enterprise/increaseWebsiteRecordsApprove',
-            data,
+            url: '/enterprise/increaseWebsiteRecords',
+            contentType: 'multipart/form-data',
+            data: {
+                newContent: JSON.stringify(data),
+            },
         })
         if (result.code === 1000) {
             message.success('成功')
+            that.DidMount()
         } else {
             message.error(result.message)
         }
@@ -245,7 +250,7 @@ class Website extends PureComponent {
             // },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
+            labelCol: { span: 8 },
             wrapperCol: { span: 12 },
         }
         return (
@@ -378,7 +383,7 @@ class Website extends PureComponent {
             },
         ]
         const formItemLayout = {
-            labelCol: { span: 3 },
+            labelCol: { span: 12 },
             wrapperCol: { span: 12 },
         }
         return (
@@ -492,16 +497,16 @@ class Website extends PureComponent {
             type: 'set',
         })
     }
-    async changeWebsiteRecordsApprove(data) {
+    changeWebsiteRecords = async data => {
         var result = await request({
             type: 'post',
-            url: '/enterprise/changeWebsiteRecordsApprove',
-            data: {
-                newContent: JSON.stringify(data),
-                records: '我也不知道传点什么好',
-            },
+            url: '/enterprise/changeWebsiteRecords',
             contentType: 'multipart/form-data',
+            data: {
+                content: JSON.stringify(data),
+            },
         })
+        this.DidMount()
         message.info(result.message)
     }
 
@@ -574,7 +579,7 @@ class Website extends PureComponent {
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
                 >
-                    <div className={styles.searchCard}>{this.renderFormNo()}</div>
+                    {this.renderFormNo()}
                 </Modal>
             </div>
         )

@@ -22,8 +22,8 @@ const mapDispatchToProps = dispatch => {
         {
             getInvestmentAbroadList: actions('getInvestmentAbroadList'),
             queryInvestmentAbroadDetial: actions('queryInvestmentAbroadDetial'),
-            increaseInvestmentAbroadApprove: actions('increaseInvestmentAbroadApprove'),
-            changeInvestmentAbroadApprove: actions('changeInvestmentAbroadApprove'),
+            increaseInvestmentAbroad: actions('increaseInvestmentAbroad'),
+            changeInvestmentAbroad: actions('changeInvestmentAbroad'),
         },
         dispatch,
     )
@@ -51,11 +51,7 @@ class Outward extends PureComponent {
         this.newForm.validateFields((errors, values) => {
             if (!errors) {
                 const { isEdit } = this.state
-                const {
-                    changeInvestmentAbroadApprove,
-                    increaseInvestmentAbroadApprove,
-                    detail,
-                } = this.props
+                const { changeInvestmentAbroad, increaseInvestmentAbroad, detail } = this.props
                 if (values.estiblishTime) {
                     values.estiblishTime = moment(values.estiblishTime.format('YYYY-MM-DD')).format(
                         dateStr,
@@ -63,10 +59,10 @@ class Outward extends PureComponent {
                 }
                 if (isEdit) {
                     // 编辑
-                    changeInvestmentAbroadApprove({ ...detail, ...values })
+                    changeInvestmentAbroad({ ...detail, ...values })
                 } else {
                     // 新增
-                    increaseInvestmentAbroadApprove(values)
+                    increaseInvestmentAbroad(values)
                 }
                 this.setState({
                     visible: false,
@@ -333,6 +329,7 @@ class Outward extends PureComponent {
                     <Table
                         dataSource={outward.resultList}
                         columns={columns}
+                        scroll={{ x: 1300 }}
                         pagination={{
                             current: searchParams.pageNo,
                             showSizeChanger: true,

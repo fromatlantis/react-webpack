@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Button, Card, Divider, Modal, Input, Skeleton, Table } from 'antd'
+import { Avatar, Button, Card, Divider, Modal, Input, Skeleton, Table, Select } from 'antd'
 import Toolbar from '../../Toolbar/Toolbar'
 import { FormView, SearchView } from 'components'
 import { UploadImg } from 'components'
@@ -8,7 +8,7 @@ import styles from '../index.module.css'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/members'
-
+const { Option } = Select
 const mapStateToProps = state => {
     return {
         team: state.members.team,
@@ -21,8 +21,8 @@ const mapDispatchToProps = dispatch => {
         {
             getCoreTeamList: actions('getCoreTeamList'),
             queryCoreTeamDetail: actions('queryCoreTeamDetail'),
-            increaseCoreTeamApprove: actions('increaseCoreTeamApprove'),
-            changeCoreTeamApprove: actions('changeCoreTeamApprove'),
+            increaseCoreTeam: actions('increaseCoreTeam'),
+            changeCoreTeam: actions('changeCoreTeam'),
         },
         dispatch,
     )
@@ -53,13 +53,13 @@ class Members extends PureComponent {
         this.newForm.validateFields((errors, values) => {
             if (!errors) {
                 const { isEdit } = this.state
-                const { changeCoreTeamApprove, increaseCoreTeamApprove, detail } = this.props
+                const { changeCoreTeam, increaseCoreTeam, detail } = this.props
                 if (isEdit) {
                     // 编辑
-                    changeCoreTeamApprove({ ...detail, ...values })
+                    changeCoreTeam({ ...detail, ...values })
                 } else {
                     // 新增
-                    increaseCoreTeamApprove(values)
+                    increaseCoreTeam(values)
                 }
                 this.setState({
                     visible: false,
@@ -77,28 +77,68 @@ class Members extends PureComponent {
             {
                 label: '形象照片',
                 field: 'icon',
+                component: <UploadImg />,
                 rules: [
                     {
                         required: true,
-                        message: '请输入企业名称',
+                        message: '请上传头像',
                     },
                 ],
-                component: <UploadImg />,
             },
             {
                 label: '姓名',
                 field: 'name',
                 component: <Input />,
+                rules: [
+                    {
+                        required: true,
+                        message: '请填写姓名',
+                    },
+                ],
             },
             {
                 label: '职务',
                 field: 'title',
                 component: <Input />,
+                rules: [
+                    {
+                        required: true,
+                        message: '请填写职务',
+                    },
+                ],
             },
             {
                 label: '介绍',
                 field: 'description',
                 component: <TextArea autosize={{ minRows: 5 }} />,
+            },
+            {
+                label: '学历',
+                field: 'education',
+                initialValue: '博士',
+                component: (
+                    <Select>
+                        <Option value="博士">博士</Option>
+                        <Option value="入选区、本市和国家相关人才计划的人员">
+                            入选区、本市和国家相关人才计划的人员
+                        </Option>
+                        <Option value="留学生">留学生</Option>
+                        <Option value="本科及以上学历">本科及以上学历</Option>
+                        <Option value="大专及以上学历">大专及以上学历</Option>
+                    </Select>
+                ),
+            },
+            {
+                label: '职称',
+                field: 'jobTitle',
+                initialValue: '初级职称',
+                component: (
+                    <Select>
+                        <Option value="初级职称">初级职称</Option>
+                        <Option value="中级职称">中级职称</Option>
+                        <Option value="高级职称">高级职称</Option>
+                    </Select>
+                ),
             },
         ]
         const formItemLayout = {
@@ -165,8 +205,9 @@ class Members extends PureComponent {
                 title: '形象照片',
                 dataIndex: 'icon',
                 key: 'icon',
+                align: 'center',
                 width: 150,
-                render: icon => <img src={icon} alt="" style={{ width: '120px' }} />,
+                render: icon => <Avatar src={icon} size={120} />,
             },
             {
                 title: '姓名',
@@ -178,6 +219,18 @@ class Members extends PureComponent {
                 title: '职务',
                 dataIndex: 'title',
                 key: 'title',
+                width: 100,
+            },
+            {
+                title: '学历',
+                dataIndex: 'education',
+                key: 'education',
+                width: 100,
+            },
+            {
+                title: '职称',
+                dataIndex: 'jobTitle',
+                key: 'jobTitle',
                 width: 100,
             },
             {

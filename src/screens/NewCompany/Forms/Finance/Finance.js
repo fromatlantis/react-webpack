@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Button, Card, Table, Modal, Input, DatePicker, Divider } from 'antd'
+import { Button, Card, Table, Modal, Input, InputNumber, DatePicker, Divider, Radio } from 'antd'
 import moment from 'moment'
 import { FormView } from 'components'
 import Toolbar from '../../Toolbar/Toolbar'
@@ -20,7 +20,7 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             getFinancingList: actions('getFinancingList'),
-            increaseFinancingApprove: actions('increaseFinancingApprove'),
+            increaseFinancing: actions('increaseFinancing'),
         },
         dispatch,
     )
@@ -44,14 +44,19 @@ const columns = [
         key: 'investorName',
     },
     {
+        title: '轮次',
+        dataIndex: 'round',
+        key: 'round',
+    },
+    {
         title: '更新人',
-        dataIndex: 'person',
-        key: 'person',
+        dataIndex: 'editorName',
+        key: 'editorName',
     },
     {
         title: '更新时间',
-        dataIndex: 'update',
-        key: 'update',
+        dataIndex: 'sourceTime',
+        key: 'sourceTime',
     },
 ]
 
@@ -80,8 +85,8 @@ class Finance extends PureComponent {
                 })
                 values.companyId = sessionStorage.getItem('companyId')
                 values.date = moment(values.date.format('YYYY-MM-DD')).format(dateStr)
-                console.log(values)
-                this.props.increaseFinancingApprove(values)
+                // console.log(values)
+                this.props.increaseFinancing(values)
             }
         })
     }
@@ -96,16 +101,44 @@ class Finance extends PureComponent {
                 label: '出资方',
                 field: 'investorName',
                 component: <Input />,
+                rules: [
+                    {
+                        required: true,
+                        message: '请填写出资方',
+                    },
+                ],
             },
             {
                 label: '金额',
                 field: 'money',
-                component: <Input />,
+                component: <InputNumber style={{ width: 200 }} />,
+                rules: [
+                    {
+                        required: true,
+                        message: '请填写金额',
+                    },
+                ],
             },
             {
                 label: '时间',
                 field: 'date',
                 component: <DatePicker />,
+            },
+            {
+                label: '轮次',
+                field: 'round',
+                component: <Input />,
+            },
+            {
+                label: '是否公示',
+                field: 'isShow',
+                initialValue: '1',
+                component: (
+                    <Radio.Group>
+                        <Radio value="0">不公示</Radio>
+                        <Radio value="1">公示</Radio>
+                    </Radio.Group>
+                ),
             },
             // {
             //     label: '更新人',

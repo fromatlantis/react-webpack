@@ -46,7 +46,7 @@ class Info extends PureComponent {
         this.props.getLabelList({ type: 'industry' })
         this.props.getLabelList({ type: 'qualification' })
         const companyId = sessionStorage.getItem('companyId')
-        if (companyId) {
+        if (companyId && companyId !== '000000') {
             this.props.queryBasicInfoDetial(companyId)
         }
     }
@@ -55,26 +55,26 @@ class Info extends PureComponent {
         values.estiblishTime = moment(values.estiblishTime.format('YYYY-MM-DD')).format('x')
         if (companyId === '000000') {
             // 新增
-            const { industries, qualification, ...basicInfo } = values
+            const { industry = [], qualification = [], ...basicInfo } = values
             const { baseInfo, saveBasicInfo } = this.props
-            basicInfo.companyId = baseInfo.companyId
+            basicInfo.companyId = baseInfo.basicInfo.companyId
             saveBasicInfo({
                 basicInfo,
-                industries: industries.join(','),
+                industry: industry.join(','),
                 qualification: qualification.join(','),
             })
         } else {
             // 编辑
             const { baseInfo, updateBasicInfo } = this.props
-            const { industries = [], qualification = [], ...basicInfo } = values
+            const { industry = [], qualification = [], ...basicInfo } = values
             updateBasicInfo({
                 basicInfo: {
-                    keyId: baseInfo.keyId,
-                    parkId: baseInfo.parkId,
-                    tenantId: baseInfo.tenantId,
+                    keyId: baseInfo.basicInfo.keyId,
+                    parkId: baseInfo.basicInfo.parkId,
+                    tenantId: baseInfo.basicInfo.tenantId,
                     ...basicInfo,
                 },
-                industries: industries.join(','),
+                industry: industry.join(','),
                 qualification: qualification.join(','),
             })
         }
@@ -196,8 +196,8 @@ class Info extends PureComponent {
                 ],
                 component: (
                     <Select>
-                        <Option value="1">实驻企业</Option>
-                        <Option value="2">虚拟企业</Option>
+                        <Option value="实驻企业">实驻企业</Option>
+                        <Option value="虚拟企业">虚拟企业</Option>
                     </Select>
                 ),
             },
@@ -230,7 +230,7 @@ class Info extends PureComponent {
             },
             {
                 label: '行业标签',
-                field: 'industries',
+                field: 'industry',
                 component: (
                     <Select mode="multiple" placeholder="请选择行业标签">
                         <Option value="all_industry">全部</Option>
@@ -272,16 +272,12 @@ class Info extends PureComponent {
             },
         ]
         let { loadAll, baseInfo } = this.props
-        // 时间处理
-        if (baseInfo.estiblishTime) {
-            console.log(baseInfo.estiblishTime)
-            //baseInfo.estiblishTime = moment(parseInt(baseInfo.estiblishTime))
-        }
         loadAll === 'yes' &&
             Modal.confirm({
                 title: '是否保存其他信息?',
                 content: '点击确定初始化其他全部信息',
                 onOk: () => {
+                    this.props.storeLoadAll('no')
                     this.props.loadEnterpriseInfo()
                 },
                 onCancel: () => {
@@ -289,6 +285,14 @@ class Info extends PureComponent {
                 },
             })
         // alert(this.props.complate)
+        let { industry, qualification, basicInfo = {} } = baseInfo
+        let formData = { ...basicInfo }
+        // 时间处理
+        if (formData.estiblishTime) {
+            formData.estiblishTime = moment(parseInt(formData.estiblishTime))
+        }
+        formData.industry = industry && industry.split(',')
+        formData.qualification = qualification && qualification.split(',')
         return (
             <div className={styles.contianer} style={{ background: 'rgba(240,242,245,1)' }}>
                 <div className={styles.titleSty}>
@@ -298,7 +302,7 @@ class Info extends PureComponent {
                 <div className={styles.tableSty}>
                     <FormView
                         items={items}
-                        data={baseInfo}
+                        data={formData}
                         onSubmit={this.onSubmit}
                         // loading={!this.props.complate}
                     />

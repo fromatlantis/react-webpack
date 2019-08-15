@@ -27,16 +27,18 @@ const filterByAuths = (routes = [], auths = []) => {
     })
 }
 export const getNav = (routes, auths) => {
-    const navs = routes.map(item => {
-        const children = filterByAuths(item.children, auths)
-        return {
-            title: item.title,
-            path: item.path,
-            icon: item.icon,
-            role: item.role,
-            ...(children.length > 0 ? { children } : null),
-        }
-    })
+    const navs = routes
+        .filter(item => !item.display && item.display !== 'none')
+        .map(item => {
+            const children = filterByAuths(item.children, auths)
+            return {
+                title: item.title,
+                path: item.path,
+                icon: item.icon,
+                role: item.role,
+                ...(children.length > 0 ? { children } : null),
+            }
+        })
     return filterByAuths(navs, auths)
 }
 export default (menu, auths) => {

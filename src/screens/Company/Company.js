@@ -15,7 +15,7 @@ import {
     Upload,
     Pagination,
 } from 'antd'
-import { IconFont } from 'components'
+import { AuthWrapper, IconFont } from 'components'
 import SearchChip from './SearchChip'
 import TransferModules from './TransferModules'
 import ImportTable from './ImportTable'
@@ -260,16 +260,18 @@ class Home extends PureComponent {
                                 <span>{item.name}</span>
                             </div>
                             <div className={styles.toobar}>
-                                <span
-                                    type="link"
-                                    size="small"
-                                    onClick={() => {
-                                        this.assign(item.companyId)
-                                    }}
-                                >
-                                    <IconFont type="iconzhifeiji" />
-                                    <span style={{ marginLeft: '5px' }}>指派</span>
-                                </span>
+                                <AuthWrapper role="指派">
+                                    <span
+                                        type="link"
+                                        size="small"
+                                        onClick={() => {
+                                            this.assign(item.companyId)
+                                        }}
+                                    >
+                                        <IconFont type="iconzhifeiji" />
+                                        <span style={{ marginLeft: '5px' }}>指派</span>
+                                    </span>
+                                </AuthWrapper>
                                 <span
                                     type="link"
                                     size="small"
@@ -466,9 +468,12 @@ class Home extends PureComponent {
                         <Button type="primary" onClick={this.importList}>
                             导入
                         </Button>
-                        <Button type="primary" onClick={this.batchAssign}>
-                            批量指派
-                        </Button>
+                        <AuthWrapper role="批量指派">
+                            <Button type="primary" onClick={this.batchAssign}>
+                                批量指派
+                            </Button>
+                        </AuthWrapper>
+
                         <Export title="批量导出" ids={this.state.checkedList} />
                         <Export title="全部导出" />
                     </div>

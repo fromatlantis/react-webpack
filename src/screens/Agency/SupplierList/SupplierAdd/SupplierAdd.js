@@ -187,6 +187,7 @@ class supplierEdit extends PureComponent {
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                         <Form.Item {...formItemLayout} label="LOGO:">
                             {getFieldDecorator('logo', {})(<UploadImg />)}
+                            <span style={{ color: '#999' }}>图片大小不可超过10M</span>
                         </Form.Item>
                         <Form.Item {...formItemLayout} label="供应商分类:">
                             {getFieldDecorator('categories', {

@@ -31,7 +31,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 32px;
+        font-size: 28px;
+        background: #EBF6FB;
+        color: #8BD1FA;
     }
     & .levelChip {
         position: absolute;

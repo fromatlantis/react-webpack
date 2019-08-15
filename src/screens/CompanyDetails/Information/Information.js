@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { actions } from '../../../redux/companyDetails'
+import { actions as dictionaryActions } from 'reduxDir/dictionary'
 import moment from 'moment'
 import styles from '../CompanyDetails.module.css'
 
@@ -19,6 +20,7 @@ import styles from '../CompanyDetails.module.css'
             CoreTeamList: state.companyDetails.CoreTeamList, //核心人员的列表
             ProductInfoList: state.companyDetails.ProductInfoList, //主要产品的详情列表
             staff: state.companyDetails.staff,
+            PROVINCE: state.dictionary.PROVINCE,
         }
     },
     dispatch => {
@@ -31,6 +33,7 @@ import styles from '../CompanyDetails.module.css'
                 getCoreTeamList: actions('getCoreTeamList'),
                 getProductInfoList: actions('getProductInfoList'),
                 getStaffEdusList: actions('getStaffEdusList'),
+                getDictionary: dictionaryActions('getDictionary'),
             },
             dispatch,
         )
@@ -62,6 +65,7 @@ class Information extends PureComponent {
             this.props.getProductInfoList({ companyId: company_id, limit: 5 })
             // 人员情况
             this.props.getStaffEdusList({ companyId: company_id, pageNo: 1, pageSize: 5 })
+            this.props.getDictionary('PROVINCE')
         }
     }
     paginationCon = num => {
@@ -73,6 +77,7 @@ class Information extends PureComponent {
     render() {
         const { company_id, paginationShu } = this.state
         const baseInfoDetial = this.props.BaseInfoDetial
+        const [province] = this.props.PROVINCE.filter(item => item.value === baseInfoDetial.base)
         return (
             <Fragment>
                 <div className={styles.detailCard}>
@@ -145,7 +150,8 @@ class Information extends PureComponent {
                             {baseInfoDetial.creditCode}
                         </Descriptions.Item>
                         <Descriptions.Item label="成立日期">
-                            {moment(parseInt(baseInfoDetial.estiblishTime)).format('YYYY-MM-DD')}
+                            {baseInfoDetial.estiblishTime &&
+                                moment(parseInt(baseInfoDetial.estiblishTime)).format('YYYY-MM-DD')}
                         </Descriptions.Item>
                         <Descriptions.Item label="工商注册号">
                             {baseInfoDetial.regNumber}
@@ -160,13 +166,14 @@ class Information extends PureComponent {
                             {baseInfoDetial.orgNumber}
                         </Descriptions.Item>
                         <Descriptions.Item label="核准日期">
-                            {moment(parseInt(baseInfoDetial.approvedTime)).format('YYYY-MM-DD')}
+                            {baseInfoDetial.approvedTime &&
+                                moment(parseInt(baseInfoDetial.approvedTime)).format('YYYY-MM-DD')}
                         </Descriptions.Item>
                         <Descriptions.Item label="所属行业">
                             {baseInfoDetial.industry}
                         </Descriptions.Item>
                         <Descriptions.Item label="所属地区">
-                            {baseInfoDetial.base}
+                            {province && province.type}
                         </Descriptions.Item>
                         <Descriptions.Item label="登记机关">
                             {baseInfoDetial.regInstitute}
@@ -187,8 +194,11 @@ class Information extends PureComponent {
                             {baseInfoDetial.regLocation}
                         </Descriptions.Item>
                         <Descriptions.Item label="营业期限">
-                            {moment(parseInt(baseInfoDetial.fromTime)).format('YYYY-MM-DD')}至
-                            {moment(parseInt(baseInfoDetial.toTime)).format('YYYY-MM-DD')}
+                            {baseInfoDetial.fromTime &&
+                                moment(parseInt(baseInfoDetial.fromTime)).format('YYYY-MM-DD')}
+                            至
+                            {baseInfoDetial.toTime &&
+                                moment(parseInt(baseInfoDetial.toTime)).format('YYYY-MM-DD')}
                         </Descriptions.Item>
                         <Descriptions.Item label="经营范围" span={2}>
                             {baseInfoDetial.businessScope}

@@ -22,8 +22,8 @@ const mapDispatchToProps = dispatch => {
         {
             getInvestmentEventList: actions('getInvestmentEventList'),
             queryInvestmentEventDetial: actions('queryInvestmentEventDetial'),
-            increaseInvestmentEventApprove: actions('increaseInvestmentEventApprove'),
-            changeInvestmentEventApprove: actions('changeInvestmentEventApprove'),
+            increaseInvestmentEvent: actions('increaseInvestmentEvent'),
+            changeInvestmentEvent: actions('changeInvestmentEvent'),
         },
         dispatch,
     )
@@ -36,6 +36,7 @@ const mapDispatchToProps = dispatch => {
 class Event extends PureComponent {
     state = {
         visible: false,
+        isEdit: false,
     }
     componentDidMount = () => {
         this.props.getInvestmentEventList()
@@ -43,13 +44,24 @@ class Event extends PureComponent {
     newInfo = () => {
         this.setState({
             visible: true,
+            isEdit: false,
         })
     }
     handleOk = () => {
         this.newForm.validateFields((errors, values) => {
             if (!errors) {
-                console.log(values)
-                this.props.increaseInvestmentEventApprove(values)
+                const { isEdit } = this.state
+                const { increaseInvestmentEvent, changeInvestmentEvent, detail } = this.props
+                if (values.tzdate) {
+                    values.tzdate = moment(values.tzdate.format('YYYY-MM-DD')).format(dateStr)
+                }
+                if (isEdit) {
+                    // 编辑
+                    changeInvestmentEvent({ ...detail, ...values })
+                } else {
+                    // 新增
+                    increaseInvestmentEvent(values)
+                }
                 this.setState({
                     visible: false,
                 })
@@ -138,12 +150,17 @@ class Event extends PureComponent {
             labelCol: { span: 6 },
             wrapperCol: { span: 12 },
         }
+        const { isEdit } = this.state
+        const { detail } = this.props
+        // 时间处理
+        detail.tzdate = moment(detail.tzdate, dateStr)
         return (
             <FormView
                 ref={form => {
                     this.newForm = form
                 }}
                 items={items}
+                data={isEdit ? detail : {}}
                 formItemLayout={formItemLayout}
                 //layout="inline"
                 saveBtn={false}
@@ -176,7 +193,7 @@ class Event extends PureComponent {
     }
     // 编辑
     edit = keyId => {
-        this.props.queryInvestmentAbroadDetial(keyId)
+        this.props.queryInvestmentEventDetial(keyId)
         this.setState({
             visible: true,
             isEdit: true,
@@ -203,6 +220,7 @@ class Event extends PureComponent {
                 title: '投资时间',
                 dataIndex: 'tzdate',
                 key: 'tzdate',
+                render: tzdate => <span>{moment(parseInt(tzdate)).format('YYYY-MM-DD')}</span>,
             },
             {
                 title: '轮次',

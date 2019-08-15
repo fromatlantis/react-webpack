@@ -1,10 +1,21 @@
 import React, { PureComponent, Fragment } from 'react'
-import { Button, Card, DatePicker, Divider, Modal, Input, InputNumber, Skeleton, Table } from 'antd'
+import {
+    Button,
+    Card,
+    DatePicker,
+    Divider,
+    Modal,
+    Input,
+    InputNumber,
+    Skeleton,
+    Table,
+    message,
+} from 'antd'
 import Toolbar from '../../Toolbar/Toolbar'
 import { FormView, YearPicker } from 'components'
 import { UploadImg } from 'components'
 import moment from 'moment'
-import styles from './Revenue.module.css'
+import styles from '../index.module.css'
 
 // redux
 import { connect } from 'react-redux'
@@ -75,18 +86,30 @@ class Revenue extends PureComponent {
     handleOk = () => {
         this.newForm.validateFields((errors, values) => {
             if (!errors) {
+                console.log(values)
                 const { isEdit } = this.state
                 const { updateFinanceInfo, addFinanceInfo, detail } = this.props
-                if (isEdit) {
-                    // 编辑
-                    updateFinanceInfo({ ...detail, ...values })
-                } else {
-                    // 新增
-                    addFinanceInfo(values)
+                let allEmpty = true
+                const { years, ...other } = values
+                for (let key in other) {
+                    if (other[key]) {
+                        allEmpty = false
+                    }
                 }
-                this.setState({
-                    visible: false,
-                })
+                if (!allEmpty) {
+                    if (isEdit) {
+                        // 编辑
+                        updateFinanceInfo({ ...detail, ...values })
+                    } else {
+                        // 新增
+                        addFinanceInfo(values)
+                    }
+                    this.setState({
+                        visible: false,
+                    })
+                } else {
+                    message.error('数据不能全部为空')
+                }
             }
         })
     }
@@ -284,7 +307,7 @@ class Revenue extends PureComponent {
                         ref={form => {
                             this.form = form
                         }}
-                        formItemLayout={{}}
+                        formItemLayout={{ labelCol: { span: 8 }, wrapperCol: { span: 16 } }}
                         items={searchItems}
                         data={searchParams}
                         layout="inline"
@@ -313,7 +336,7 @@ class Revenue extends PureComponent {
                     <Skeleton loading={revenue.list ? false : true} active avatar>
                         <Table
                             bordered
-                            scroll={{ x: 1100 }}
+                            scroll={{ x: 1500 }}
                             dataSource={revenue.list}
                             columns={columns}
                             pagination={{
