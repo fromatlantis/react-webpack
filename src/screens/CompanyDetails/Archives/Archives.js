@@ -48,44 +48,28 @@ export default class Archives extends PureComponent {
             )
         } else if (company_id) {
             return (
-                <div className={styles.detailCard}>
-                    <div className={styles.titleChip}>
-                        <div>
-                            <span className={styles.divider}>|</span>
-                            <span className={styles.title}>企业档案</span>
-                        </div>
-                        <div />
-                    </div>
+                <div>
                     <Information company_id={company_id} />
                     <Investment company_id={company_id} />
-                    <Relation company_id={company_id} />
+                    {/* <Relation company_id={company_id} /> */}
                     <Property company_id={company_id} />
                     <Renew company_id={company_id} />
                     <News company_id={company_id} />
-                    <Need company_id={company_id} />
+                    {/* <Need company_id={company_id} /> */}
                     <Advice company_id={company_id} />
-                    <OtherMes company_id={company_id} />
                 </div>
             )
         } else {
             return (
-                <div className={styles.detailCard}>
-                    <div className={styles.titleChip}>
-                        <div>
-                            <span className={styles.divider}>|</span>
-                            <span className={styles.title}>企业档案</span>
-                        </div>
-                        <div />
-                    </div>
+                <div>
                     <Information />
                     <Investment />
-                    <Relation />
+                    {/* <Relation /> */}
                     <Property />
                     <Renew />
                     <News />
-                    <Need />
+                    {/* <Need /> */}
                     <Advice />
-                    <OtherMes />
                 </div>
             )
         }
