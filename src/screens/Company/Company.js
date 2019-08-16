@@ -247,7 +247,7 @@ class Home extends PureComponent {
                                 {item.name.substring(0, 4)}
                             </Avatar>
                             <div className={styles.levelChip}>
-                                <div>实驻企业</div>
+                                <div>{item.category}</div>
                                 <div className={styles.level}>{item.companyLevel}</div>
                             </div>
                         </div>

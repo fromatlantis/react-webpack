@@ -2,7 +2,7 @@
 /* 面包屑导航 */
 .BreadcrumbSty{
     padding: 0.3rem 0.4rem;
-    font-size: 30px;
+    font-size: 0.18rem;
 }
 .infoCard {
     padding: 0.3rem 0.4rem;
@@ -52,7 +52,7 @@
 .menu {
     margin-top: 0.4rem;
     padding: 0.1rem 0.4rem 0;
-    font-size: 22px;
+    font-size: 0.18rem;
 }
 /* 所有de表格所在卡片消除padding */
 .messageCard{
@@ -119,7 +119,7 @@
 }
 /*UI调整*/
 .detailCard {
-    padding:0.5rem 0.4rem;
+    padding:0.4rem;
     background: #fff;
     & .titleChip {
         display: flex;
@@ -128,12 +128,12 @@
         padding-bottom: 0.2rem;
     }
     & .divider {
-        font-size: 26px;
+        font-size: 0.16rem;
         font-weight: bold;
         color: rgba(64,152,255,1);
     }
     & .title {
-        font-size: 26px;
+        font-size: 0.16rem;
     }
     & :global .ant-descriptions-bordered :global .ant-descriptions-item-label {
         background-color: #EBF5FF;
