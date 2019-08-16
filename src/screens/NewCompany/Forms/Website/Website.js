@@ -125,8 +125,8 @@ class Website extends PureComponent {
                 )
             }
             if (values.sourceTime) {
-                values.sourceTime = moment(values.sourceTime.format('YYYY-MM-DD hh:mm:ss')).format(
-                    'YYYY-MM-DD hh:mm:ss',
+                values.sourceTime = moment(values.sourceTime.format('YYYY-MM-DD')).format(
+                    'YYYY-MM-DD',
                 )
             }
             values.companyId = sessionStorage.getItem('companyId')
@@ -454,7 +454,7 @@ class Website extends PureComponent {
                     if (result.data.list[i].sourceTime) {
                         result.data.list[i].sourceTime = moment(
                             result.data.list[i].sourceTime,
-                        ).format('YYYY-MM-DD hh:mm:ss')
+                        ).format('YYYY-MM-DD')
                     }
                 }
                 this.setState({

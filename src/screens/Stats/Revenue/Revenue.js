@@ -107,7 +107,7 @@ const mapDispatchToProps = dispatch => {
 class Revenue extends PureComponent {
     state = {
         isopen: false,
-        time: null,
+        time: moment(),
         rowIndex: 0,
         year: moment().year(),
         countPager: {

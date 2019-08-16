@@ -21,7 +21,7 @@ import TransferModules from './TransferModules'
 import ImportTable from './ImportTable'
 import Export from './Export'
 import styles from './Company.module.css'
-
+import moment from 'moment'
 const Step = Steps.Step
 const CheckboxGroup = Checkbox.Group
 const { confirm } = Modal
@@ -204,8 +204,12 @@ class Home extends PureComponent {
         })
     }
     next() {
-        const current = this.state.current + 1
-        this.setState({ current })
+        const { importResponse, current } = this.state
+        if (importResponse.length === 0) {
+            message.error('未查询到相关企业信息，请重新上传')
+        } else {
+            this.setState({ current: current + 1 })
+        }
     }
 
     prev() {
@@ -377,7 +381,12 @@ class Home extends PureComponent {
                             <div>
                                 <p>
                                     <b>成立时间：</b>
-                                    <span>{item.establishTime}</span>
+                                    <span>
+                                        {item.establishTime &&
+                                            moment(parseInt(item.establishTime)).format(
+                                                'YYYY-MM-DD',
+                                            )}
+                                    </span>
                                 </p>
                                 <p>
                                     <b>官网：</b>
@@ -416,7 +425,10 @@ class Home extends PureComponent {
         const uploadProps = {
             name: 'excelFile',
             multiple: false,
-            action: '/houzai/enterprise/batchImport',
+            action:
+                process.env.NODE_ENV === 'production'
+                    ? '/houzai/enterprise/batchImport'
+                    : '/enterprise/batchImport',
             onChange: info => {
                 const status = info.file.status
                 if (status !== 'uploading') {
@@ -592,11 +604,20 @@ class Home extends PureComponent {
                                 <p className="ant-upload-text">将文件拖拽至此区域或点击上传文件</p>
                                 <p className="ant-upload-hint">导入说明：文件必须为XLS或XLSX格式</p>
                             </Dragger>
-                            <div style={{ padding: '20px', textAlign: 'right' }}>
-                                没有模版？
-                                <a href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190614/72fee9a0-c97d-4082-a889-0b575ebe376b-批量导入企业XLSX模板.xlsx">
-                                    下载模版
-                                </a>
+                            <div
+                                style={{
+                                    padding: '20px',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                }}
+                            >
+                                <div>提示：重复的信息将不会被覆盖</div>
+                                <div>
+                                    没有模版？
+                                    <a href="https://houzai-prod-1257833666.cos.ap-beijing.myqcloud.com/20190614/72fee9a0-c97d-4082-a889-0b575ebe376b-批量导入企业XLSX模板.xlsx">
+                                        下载模版
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     )}

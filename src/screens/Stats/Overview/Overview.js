@@ -61,7 +61,7 @@ const mapDispatchToProps = dispatch => {
 class Overview extends PureComponent {
     state = {
         isopen: false,
-        time: null,
+        time: moment(),
         year: moment().year(),
     }
     componentDidMount() {

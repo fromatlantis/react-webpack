@@ -109,9 +109,7 @@ class Copyright extends PureComponent {
         let that = this
         this.newForm.validateFields((errors, values) => {
             if (values.regtime) {
-                values.regtime = moment(values.regtime.format('YYYY-MM-DD hh:mm:ss')).format(
-                    dateStr,
-                )
+                values.regtime = moment(values.regtime.format('YYYY-MM-DD')).format(dateStr)
             }
             values.companyId = sessionStorage.getItem('companyId')
             let newValue = {
@@ -378,7 +376,7 @@ class Copyright extends PureComponent {
             for (let i = 0; i < result.data.list.length; i++) {
                 if (result.data.list[i].regtime) {
                     result.data.list[i].regtime = moment(result.data.list[i].regtime).format(
-                        'YYYY-MM-DD hh:mm:ss',
+                        'YYYY-MM-DD',
                     )
                 }
             }

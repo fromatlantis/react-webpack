@@ -53,7 +53,12 @@ const columns = [
 export default class ImportTable extends PureComponent {
     render() {
         return (
-            <Table dataSource={this.props.dataSource || []} columns={columns} pagination={false} />
+            <Table
+                scroll={{ x: 900 }}
+                dataSource={this.props.dataSource || []}
+                columns={columns}
+                pagination={false}
+            />
         )
     }
 }

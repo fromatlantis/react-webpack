@@ -342,7 +342,7 @@ const mapDispatchToProps = dispatch => {
 class Rights extends PureComponent {
     state = {
         isopen: false,
-        time: null,
+        time: moment(),
         rowIndex: 0,
         type: '',
         year: moment().year(),

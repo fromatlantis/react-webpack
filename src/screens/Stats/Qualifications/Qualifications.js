@@ -98,7 +98,7 @@ const mapDispatchToProps = dispatch => {
 class Qualifications extends PureComponent {
     state = {
         isopen: false,
-        time: null,
+        time: moment(),
         rowIndex: 0,
         year: moment().year(),
         countPager: {

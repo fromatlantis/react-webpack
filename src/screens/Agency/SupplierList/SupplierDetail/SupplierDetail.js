@@ -57,7 +57,12 @@ class SupplierDetail extends PureComponent {
                     <Descriptions.Item label="联系人电话">{detail.telephone}</Descriptions.Item>
                     <Descriptions.Item label="邮箱">{detail.email}</Descriptions.Item>
                     <Descriptions.Item label="官网">{detail.website}</Descriptions.Item>
-                    <Descriptions.Item label="供应商简介">{detail.introduce}</Descriptions.Item>
+                    <Descriptions.Item label="供应商简介">
+                        <div
+                            style={{ marginTop: '6px' }}
+                            dangerouslySetInnerHTML={{ __html: detail.introduce }}
+                        />
+                    </Descriptions.Item>
                 </Descriptions>
             </Card>
         )

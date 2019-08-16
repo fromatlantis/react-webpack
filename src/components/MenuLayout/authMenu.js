@@ -28,7 +28,7 @@ const filterByAuths = (routes = [], auths = []) => {
 }
 export const getNav = (routes, auths) => {
     const navs = routes
-        .filter(item => !item.display && item.display !== 'none')
+        .filter(item => item.display !== 'none')
         .map(item => {
             const children = filterByAuths(item.children, auths)
             return {

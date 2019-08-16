@@ -187,15 +187,15 @@ class Info extends PureComponent {
             {
                 label: '企业类型',
                 field: 'category',
-                initialValue: '1',
+                // initialValue: '1',
                 rules: [
                     {
                         required: true,
-                        message: '请输入信息',
+                        message: '请选择企业类型',
                     },
                 ],
                 component: (
-                    <Select>
+                    <Select placeholder="请选择企业类型">
                         <Option value="实驻企业">实驻企业</Option>
                         <Option value="虚拟企业">虚拟企业</Option>
                     </Select>
@@ -204,15 +204,14 @@ class Info extends PureComponent {
             {
                 label: '企业分级',
                 field: 'companyLevel',
-                initialValue: 'A',
                 rules: [
                     {
                         required: true,
-                        message: '请输入信息',
+                        message: '请选择企业分级',
                     },
                 ],
                 component: (
-                    <Select>
+                    <Select placeholder="请选择企业分级">
                         <Option value="A">A级</Option>
                         <Option value="B">B级</Option>
                         <Option value="C">C级</Option>

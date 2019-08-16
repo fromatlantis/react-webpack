@@ -110,7 +110,7 @@ const mapDispatchToProps = dispatch => {
 class Quantity extends PureComponent {
     state = {
         isopen: false,
-        time: null,
+        time: moment(),
         rowIndex: 0,
         year: moment().year(),
         countPager: {

@@ -138,12 +138,10 @@ class Works extends PureComponent {
         let that = this
         this.newForm.validateFields((errors, values) => {
             if (values.regtime) {
-                values.regtime = moment(values.regtime.format('YYYY-MM-DD hh:mm:ss')).format(
-                    dateStr,
-                )
+                values.regtime = moment(values.regtime.format('YYYY-MM-DD')).format(dateStr)
             }
             if (values.finishTime) {
-                values.finishTime = moment(values.finishTime.format('YYYY-MM-DD hh:mm:ss')).format(
+                values.finishTime = moment(values.finishTime.format('YYYY-MM-DD')).format(
                     'YYYY-MM-DD ',
                 )
             }
@@ -507,12 +505,12 @@ class Works extends PureComponent {
             for (let i = 0; i < result.data.list.length; i++) {
                 if (result.data.list[i].regtime) {
                     result.data.list[i].regtime = moment(result.data.list[i].regtime).format(
-                        'YYYY-MM-DD hh:mm:ss',
+                        'YYYY-MM-DD',
                     )
                 }
                 if (result.data.list[i].finishTime) {
                     result.data.list[i].finishTime = moment(result.data.list[i].finishTime).format(
-                        'YYYY-MM-DD hh:mm:ss',
+                        'YYYY-MM-DD',
                     )
                 }
             }
