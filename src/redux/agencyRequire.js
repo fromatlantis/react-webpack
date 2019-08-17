@@ -89,7 +89,7 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
-                    url: '/enterprise/getServiceTypeList',
+                    url: '/enterprise/getServiceTypes',
                 })
                 if (res.data) {
                     yield put(actions('getServiceTypeListSucc')(res.data))
