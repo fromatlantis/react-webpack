@@ -88,7 +88,7 @@ const model = {
             name: 'getServiceTypeList',
             *effect(action) {
                 const res = yield call(request, {
-                    // type: 'post',
+                    type: 'post',
                     url: '/enterprise/getServiceTypeList',
                 })
                 if (res.data) {

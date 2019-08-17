@@ -23,8 +23,6 @@ const model = {
             name: 'searchCompany',
             *effect(action) {
                 const res = yield call(request, {
-                    type: 'post',
-                    contentType: 'multipart/form-data',
                     url: `/enterprise/searchCompany`,
                     data: {
                         ...action.payload,
