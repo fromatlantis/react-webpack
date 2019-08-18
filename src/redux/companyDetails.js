@@ -5,7 +5,7 @@ import { put, call, select } from 'redux-saga/effects'
 import { replace, goBack } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
-
+import { APPID } from '../config'
 const model = {
     namespace: 'companyDetails',
     state: {
@@ -395,7 +395,9 @@ const model = {
             },
             *effect(action) {
                 const res = yield call(request, {
-                    url: `/enterprise/getChangesList?companyId=${action.payload}`,
+                    url: `/enterprise/getChangesList?companyId=${
+                        action.payload
+                    }&appIdentity=${APPID}`,
                 })
                 if (res.data) {
                     yield put(actions('getChangesListOk')(res.data))

@@ -195,6 +195,13 @@ class NewCompany extends PureComponent {
                 component: Approval,
             },
             {
+                title: '更新审批待办',
+                icon: '',
+                display: 'none',
+                path: '/newCompany/approval/:id',
+                component: Approval,
+            },
+            {
                 title: '需求和建议',
                 role: '需求和建议',
                 icon: '',
