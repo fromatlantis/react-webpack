@@ -45,3 +45,15 @@ em {
 .ant-timeline-item-last > .ant-timeline-item-content {
     min-height: 0px;
 }
+/* rem适配 */
+@media screen and (min-width: 1200px) {
+    html {
+        font-size: 625%;
+        /* font-size: 395%; */
+    }
+}
+@media screen and (min-width: 1900px) {
+    html {
+        font-size: 625%;
+    }
+}

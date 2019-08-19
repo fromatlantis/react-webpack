@@ -1,27 +1,33 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/bar'
 // 引入提示框和标题组件
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
+import 'echarts/lib/component/dataZoom'
+import { Empty } from 'antd'
 import styles from './BarChart.module.css'
 export default class BarChart extends PureComponent {
     static defaultProps = {
         direction: 'column',
-        data: {},
+        data: [],
     }
     static propTypes = {
-        data: PropTypes.object,
+        data: PropTypes.array,
     }
     componentDidMount = () => {
-        this.initChart()
+        if (this.refs.barChart) {
+            this.initChart()
+        }
     }
     componentDidUpdate() {
-        this.initChart()
+        if (this.refs.barChart) {
+            this.initChart()
+        }
     }
     initChart = () => {
-        let { data, fullLabel, title, direction } = this.props,
+        let { data, fullLabel, title, direction, dataZoom } = this.props,
             cValues
         let names = [],
             values = []
@@ -93,18 +99,28 @@ export default class BarChart extends PureComponent {
                 top: 5,
             },
             grid: {
-                top: 10,
+                top: title ? 50 : 10,
                 right: 10,
                 left: 10,
-                bottom: 10,
+                bottom: dataZoom ? 50 : 10,
                 containLabel: true,
             },
             tooltip: {},
+            ...(dataZoom
+                ? {
+                      dataZoom: [
+                          {
+                              type: 'slider',
+                          },
+                      ],
+                  }
+                : null),
             xAxis: direction === 'row' ? valueOption : categoryOption,
             yAxis: direction === 'row' ? categoryOption : valueOption,
             series: [
                 {
                     type: 'bar',
+                    barWidth: '60%',
                     itemStyle: {
                         normal: {
                             color: new echarts.graphic.LinearGradient(
@@ -126,7 +142,7 @@ export default class BarChart extends PureComponent {
                             ),
                         },
                     },
-                    data: values,
+                    data: data,
                 },
             ],
         }
@@ -168,11 +184,26 @@ export default class BarChart extends PureComponent {
         }
         // 绘制图表
         myChart.setOption(option)
+        myChart.on('click', params => {
+            if (this.props.handleClick) {
+                this.props.handleClick(params)
+            }
+        })
         window.addEventListener('resize', function() {
             myChart.resize()
         })
     }
     render() {
-        return <div ref="barChart" className={styles.root} />
+        const { data } = this.props
+        if (data && data.length > 0) {
+            console.log(data)
+            return <div ref="barChart" className={styles.root} />
+        } else {
+            return (
+                <ul className={styles.root}>
+                    <Empty />
+                </ul>
+            )
+        }
     }
 }

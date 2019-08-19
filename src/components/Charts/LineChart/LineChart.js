@@ -6,6 +6,7 @@ import 'echarts/lib/chart/line'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legendScroll'
+import { Empty } from 'antd'
 import styles from './LineChart.module.css'
 
 export default class LineChart extends PureComponent {
@@ -24,10 +25,14 @@ export default class LineChart extends PureComponent {
         unit: PropTypes.string,
     }
     componentDidMount = () => {
-        this.initChart()
+        if (this.refs.lineChart) {
+            this.initChart()
+        }
     }
     componentDidUpdate() {
-        this.initChart()
+        if (this.refs.lineChart) {
+            this.initChart()
+        }
     }
     initChart = () => {
         let { data } = this.props
@@ -41,7 +46,7 @@ export default class LineChart extends PureComponent {
         })
     }
     setOption = data => {
-        let { title, styleFlge, unit } = this.props
+        let { title, styleFlge, unit, titleTop } = this.props
         let names = [],
             values = []
         data.map(x => {
@@ -69,7 +74,7 @@ export default class LineChart extends PureComponent {
                 // },
             },
             grid: {
-                top: 10,
+                top: titleTop ? 50 : 0,
                 right: 10,
                 left: 10,
                 bottom: 10,
@@ -116,7 +121,7 @@ export default class LineChart extends PureComponent {
             series: [
                 {
                     type: 'line',
-                    smooth: true,
+                    // smooth: true,
                     // symbol: 'circle',
                     lineStyle: {
                         normal: {
@@ -140,17 +145,27 @@ export default class LineChart extends PureComponent {
                             // width: 2,
                         },
                     },
-                    // areaStyle: {
-                    //     normal: {
-                    //         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                    //             offset: 0,
-                    //             color: 'rgba(0, 136, 212, 1)'
-                    //         }, {
-                    //             offset: 1,
-                    //             color: 'rgba(0, 136, 212, 0)'
-                    //         }], false),
-                    //     }
-                    // },
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(
+                                0,
+                                0,
+                                0,
+                                1,
+                                [
+                                    {
+                                        offset: 0,
+                                        color: 'rgba(0, 136, 212, 1)',
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(0, 136, 212, 0)',
+                                    },
+                                ],
+                                false,
+                            ),
+                        },
+                    },
                     itemStyle: {
                         normal: {
                             color: '#4ba6f9',
@@ -191,7 +206,15 @@ export default class LineChart extends PureComponent {
         return option
     }
     render() {
-        let { style } = this.props
-        return <div ref="lineChart" className={styles.root} style={style} />
+        let { style, data } = this.props
+        if (data && data.length > 0) {
+            return <div ref="lineChart" className={styles.root} style={style} />
+        } else {
+            return (
+                <ul className={styles.root}>
+                    <Empty />
+                </ul>
+            )
+        }
     }
 }

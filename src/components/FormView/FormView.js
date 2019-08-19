@@ -9,6 +9,7 @@ class FormView extends PureComponent {
         saveBtn: true,
         items: [],
         data: {},
+        loading: false,
     }
     static propTypes = {
         formItemLayout: PropTypes.object,
@@ -16,6 +17,7 @@ class FormView extends PureComponent {
         saveBtn: PropTypes.bool,
         items: PropTypes.array,
         data: PropTypes.object,
+        loading: PropTypes.bool,
     }
     handleSubmit = e => {
         e.preventDefault()
@@ -35,25 +37,27 @@ class FormView extends PureComponent {
         return (
             <Form {...formItemLayout} layout={layout} onSubmit={this.handleSubmit}>
                 {items.map((item, index) => {
-                    if (item.hasOwnProperty('visible') && !item.visible) {
-                        return null
-                    } else {
-                        return (
-                            <Form.Item label={item.label} style={item.style} key={index}>
-                                {/* {item.component} */}
-                                {item.field
-                                    ? getFieldDecorator(item.field, {
-                                          initialValue: item.initialValue,
-                                          rules: item.rules,
-                                      })(item.component)
-                                    : item.component}
-                            </Form.Item>
-                        )
-                    }
+                    return (
+                        <Form.Item label={item.label} style={item.style} key={index}>
+                            {/* {item.component} */}
+                            {item.field
+                                ? getFieldDecorator(item.field, {
+                                      initialValue: item.initialValue,
+                                      rules: item.rules,
+                                  })(item.component)
+                                : item.component}
+                            {item.suffix && item.suffix()}
+                        </Form.Item>
+                    )
                 })}
                 {saveBtn && (
                     <Form.Item wrapperCol={{ offset: formItemLayout.labelCol.span }}>
-                        <Button type="primary" htmlType="submit">
+                        <Button
+                            style={this.props.btnStyle}
+                            type="primary"
+                            htmlType="submit"
+                            loading={this.props.loading}
+                        >
                             保存
                         </Button>
                         {this.props.goBack && (

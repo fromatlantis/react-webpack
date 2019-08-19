@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { LeftMenu } from 'components'
-import routes from './authMenu'
+import { LeftMenu, AuthWrapper } from 'components'
+import getRoutes, { getNav } from './authMenu'
 import styles from './MenuLayout.module.css'
 
 @connect(state => {
@@ -14,27 +14,36 @@ import styles from './MenuLayout.module.css'
 })
 class Repair extends PureComponent {
     render() {
-        const { menu, auths } = this.props
-        const authRoute = menu.filter(item => auths.includes(item.title) || item.display === 'none')
-        // console.log(authRoute)
+        let { menu, auths, privateAuths } = this.props
+        if (privateAuths) {
+            auths = privateAuths
+        }
+        const authRoute = getRoutes(
+            menu,
+            auths,
+        ) /*.filter(item => auths.includes(item.title) || item.display === 'none')*/
+        const [first] = authRoute
+        const navs = getNav(menu, auths)
         return (
-            <div className={styles.root}>
-                <LeftMenu menuData={menu.filter(item => auths.includes(item.title))} />
-                <Switch>
-                    {authRoute.map((item, index) => {
-                        return (
-                            <Route
-                                exact
-                                //strict
-                                path={item.path}
-                                component={item.component}
-                                key={index}
-                            />
-                        )
-                    })}
-                    <Redirect to={authRoute[0].path} />
-                </Switch>
-            </div>
+            auths.length > 0 && (
+                <div className={styles.root}>
+                    <LeftMenu menuData={navs} />
+                    <Switch>
+                        {authRoute.map((item, index) => {
+                            return (
+                                <Route
+                                    exact
+                                    //strict
+                                    path={item.path}
+                                    component={item.component}
+                                />
+                            )
+                        })}
+                        {first && <Redirect to={first.path} />}
+                        <div>「没有相关权限」</div>
+                    </Switch>
+                </div>
+            )
         )
     }
 }

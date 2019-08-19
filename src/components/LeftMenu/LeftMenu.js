@@ -1,7 +1,8 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Menu, Icon } from 'antd'
+import { AuthWrapper } from 'components'
 
 import styles from './LeftMenu.module.css'
 
@@ -21,7 +22,7 @@ class LeftMenu extends PureComponent {
                         key={index}
                         title={
                             <span>
-                                <Icon type={item.icon ? item.icon : 'appstore'} />
+                                {/* <Icon type={item.icon ? item.icon : 'appstore'} /> */}
                                 <span>{item.title}</span>
                             </span>
                         }
@@ -33,7 +34,7 @@ class LeftMenu extends PureComponent {
                 return (
                     <Menu.Item key={item.path}>
                         <NavLink to={item.path}>
-                            <Icon type={item.icon ? item.icon : 'appstore'} />
+                            {/* <Icon type={item.icon ? item.icon : 'appstore'} /> */}
                             <span>{item.title}</span>
                         </NavLink>
                     </Menu.Item>
@@ -58,7 +59,8 @@ class LeftMenu extends PureComponent {
             <Menu
                 className={styles.menu}
                 selectedKeys={[pathname]}
-                openKeys={this.state.openKeys}
+                defaultOpenKeys={['0']}
+                // openKeys={this.state.openKeys}
                 onOpenChange={this.onOpenChange}
                 mode="inline"
             >
