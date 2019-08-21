@@ -37,7 +37,7 @@ class FormView extends PureComponent {
         return (
             <Form {...formItemLayout} layout={layout} onSubmit={this.handleSubmit}>
                 {items.map((item, index) => {
-                    return (
+                    return item.display !== 'none' ? (
                         <Form.Item label={item.label} style={item.style} key={index}>
                             {/* {item.component} */}
                             {item.field
@@ -48,7 +48,7 @@ class FormView extends PureComponent {
                                 : item.component}
                             {item.suffix && item.suffix()}
                         </Form.Item>
-                    )
+                    ) : null
                 })}
                 {saveBtn && (
                     <Form.Item wrapperCol={{ offset: formItemLayout.labelCol.span }}>

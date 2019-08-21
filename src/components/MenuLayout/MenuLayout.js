@@ -12,7 +12,7 @@ import styles from './MenuLayout.module.css'
         router: state.router,
     }
 })
-class Repair extends PureComponent {
+class MenuLayout extends PureComponent {
     render() {
         let { menu, auths, privateAuths } = this.props
         if (privateAuths) {
@@ -24,14 +24,19 @@ class Repair extends PureComponent {
         ) /*.filter(item => auths.includes(item.title) || item.display === 'none')*/
         const [first] = authRoute
         const navs = getNav(menu, auths)
+        let rootStyle = styles.root
+        if (navs.length === 0) {
+            rootStyle = `${styles.root} ${styles.noNav}`
+        }
         return (
             auths.length > 0 && (
-                <div className={styles.root}>
-                    <LeftMenu menuData={navs} />
+                <div className={rootStyle}>
+                    {navs.length > 0 && <LeftMenu menuData={navs} />}
                     <Switch>
                         {authRoute.map((item, index) => {
                             return (
                                 <Route
+                                    key={index}
                                     exact
                                     //strict
                                     path={item.path}
@@ -47,4 +52,4 @@ class Repair extends PureComponent {
         )
     }
 }
-export default Repair
+export default MenuLayout

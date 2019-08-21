@@ -12,6 +12,7 @@ import LeftMenu from './LeftMenu/LeftMenu'
 import MenuLayout from './MenuLayout/MenuLayout'
 import YearPicker from './YearPicker/YearPicker'
 import AuthWrapper from './AuthWrapper/AuthWrapper'
+import TagsRadio from './TagsRadio/TagsRadio'
 export {
     FormView,
     SearchView,
@@ -28,4 +29,5 @@ export {
     MenuLayout,
     YearPicker,
     AuthWrapper,
+    TagsRadio,
 }

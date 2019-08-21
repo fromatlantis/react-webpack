@@ -10,25 +10,7 @@ const routes = [
             role: 'home',
         },
         component: Loadable({
-            loader: () => import(/* webpackChunkName: "bill" */ '../screens/Bill/Bill'),
-            loading: Loading,
-        }),
-    },
-    {
-        path: '/bill/newCustomer',
-        name: '客户维护',
-        component: Loadable({
-            loader: () =>
-                import(/* webpackChunkName: "newCustomer" */ '../screens/NewCustomer/NewCustomer'),
-            loading: Loading,
-        }),
-    },
-    {
-        path: '/bill/detail',
-        name: '企业详情',
-        component: Loadable({
-            loader: () =>
-                import(/* webpackChunkName: "billDetail" */ '../screens/Bill/Detail/Detail'),
+            loader: () => import(/* webpackChunkName: "bill" */ '../screens/Bill'),
             loading: Loading,
         }),
     },
@@ -41,21 +23,12 @@ const routes = [
             role: 'home',
         },
         component: Loadable({
-            loader: () => import(/* webpackChunkName: "record" */ '../screens/Record/Record'),
+            loader: () => import(/* webpackChunkName: "record" */ '../screens/Record'),
             loading: Loading,
         }),
     },
     {
-        path: '/record/detail',
-        name: '费用详情',
-        component: Loadable({
-            loader: () =>
-                import(/* webpackChunkName: "recordDetail" */ '../screens/Record/Detail/Detail'),
-            loading: Loading,
-        }),
-    },
-    {
-        path: '/stat*',
+        path: '/stats',
         name: '统计分析',
         icon: 'appstore',
         navAttr: {
@@ -63,7 +36,7 @@ const routes = [
             role: 'home',
         },
         component: Loadable({
-            loader: () => import(/* webpackChunkName: "stat" */ '../screens/Stat/Stat'),
+            loader: () => import(/* webpackChunkName: "stats" */ '../screens/Stat/Stat'),
             loading: Loading,
         }),
     },

@@ -64,3 +64,7 @@ em {
         font-size: 625%;
     }
 }
+/* 左侧菜单 */
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: #1156A2;
+}

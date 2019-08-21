@@ -1,7 +1,31 @@
+@import '~ThemeVariables';
 .menu {
-    width: 256px;
+    width: var(--siderWidth);
+    background: var(--sider-background);
+    color: #ffffff;
     position: fixed;
     top: 64px;
     left: 0;
     bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    & :global {
+        & .ant-menu-item {
+            font-size: 16px;
+        }
+        & .ant-menu-submenu-title {
+            font-size: 16px;
+        }
+        & .ant-menu-sub {
+            & .ant-menu-item {
+                font-size: 14px;
+            }
+        }
+        & .ant-menu-item > a {
+            color: #ffffff;
+        }
+        & .ant-menu-submenu > .ant-menu {
+            background: var(--sider-background);
+        }
+    }
 }

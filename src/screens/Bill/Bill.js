@@ -1,102 +1,134 @@
 import React, { PureComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { Alert, Button, Table, Input } from 'antd'
-import { FormView } from 'components'
+import { Alert, Button, DatePicker, Table, Input, Select } from 'antd'
+import { FormView, TagsRadio } from 'components'
 import theme from 'Theme'
 // redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
+import { actions } from 'reduxDir/bill'
+const { RangePicker } = DatePicker
+const { Option } = Select
 const searchItems = [
     {
         label: '楼栋',
-        field: 'name',
-        component: <Input />,
+        field: 'building',
+        component: <Input placeholder="请输入" />,
     },
     {
         label: '房号',
-        field: 'title',
-        component: <Input />,
+        field: 'room',
+        component: <Input placeholder="请输入" />,
     },
     {
         label: '客户名称',
-        field: 'name',
-        component: <Input />,
+        field: 'customerName',
+        component: <Input placeholder="请输入" />,
     },
     {
         label: '应收款所属期',
-        field: 'title',
-        component: <Input />,
+        field: 'receiveDate',
+        component: <RangePicker />,
     },
     {
         label: '应缴截止日期',
-        field: 'name',
-        component: <Input />,
+        field: 'limitDate',
+        component: <DatePicker placeholder="请选择" />,
     },
     {
         label: '状态',
-        field: 'title',
-        component: <Input />,
+        field: 'status',
+        component: (
+            <Select placeholder="请选择">
+                <Option value="0">未确认</Option>
+                <Option value="1">已确认</Option>
+            </Select>
+        ),
     },
 ]
 const formItemLayout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 }
-const dataSource = [
-    {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-    },
-    {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-    },
-]
 const columns = [
     {
-        title: '姓名',
-        dataIndex: 'name',
-        key: 'name',
+        title: '楼栋',
+        dataIndex: 'building',
+        key: 'building',
     },
     {
-        title: '年龄',
-        dataIndex: 'age',
-        key: 'age',
+        title: '房号',
+        dataIndex: 'room',
+        key: 'room',
     },
     {
-        title: '住址',
-        dataIndex: 'address',
-        key: 'address',
+        title: '客户名称',
+        dataIndex: 'customerName',
+        key: 'customerName',
+    },
+    {
+        title: '应收款所属期',
+        dataIndex: 'receiveDate',
+        key: 'receiveDate',
+    },
+    {
+        title: '合计应收款（元）',
+        dataIndex: 'amount',
+        key: 'amount',
+    },
+    {
+        title: '应缴截止日期',
+        dataIndex: 'limitDate',
+        key: 'limitDate',
+    },
+    {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
+    },
+    {
+        title: '已确认账单数',
+        dataIndex: 'confirmedCount',
+        key: 'confirmedCount',
+    },
+    {
+        title: '未确认账单数',
+        dataIndex: 'unconfirmedCount',
+        key: 'unconfirmedCount',
     },
 ]
 @connect(
-    state => ({}),
+    state => ({
+        bill: state.bill.bill,
+    }),
     dispatch => {
         return bindActionCreators(
             {
                 push: push,
+                getCustomerBillList: actions('getCustomerBillList'),
             },
             dispatch,
         )
     },
 )
 class Bill extends PureComponent {
+    componentDidMount() {
+        this.props.getCustomerBillList()
+    }
     render() {
+        const { bill } = this.props
         return (
             <div className={`${theme.content} ${theme.defaultBg}`}>
                 <FormView
+                    onChange={this.onChange}
                     items={searchItems}
                     layout="inline"
                     saveBtn={false}
                     formItemLayout={formItemLayout}
                 />
                 <div className={theme.flex} style={{ margin: '15px 0' }}>
-                    <Alert style={{ flex: 1 }} message="共100项" />
+                    <Alert style={{ flex: 1 }} message={`共${bill.totalCount}项`} />
                     <div className={theme.btnGroup}>
                         <Button type="primary">清空</Button>
                         <Button type="primary">查询</Button>
@@ -110,7 +142,7 @@ class Bill extends PureComponent {
                 </div>
                 <Table
                     style={{ background: '#fff' }}
-                    dataSource={dataSource}
+                    dataSource={bill.list}
                     columns={columns}
                     pagination={{ hideOnSinglePage: true }}
                     onRow={record => {
