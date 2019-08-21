@@ -8,13 +8,14 @@ export default class TagsRadio extends React.Component {
         selectedTags: ['all'],
     }
     static getDerivedStateFromProps(props, state) {
-        const { tags } = props
-        if (tags !== state.tags) {
-            return {
-                tags,
-            }
+        const { tags, value = [] } = props
+        // if (tags !== state.tags) {
+        return {
+            tags,
+            selectedTags: value,
         }
-        return null
+        // }
+        // return null
     }
     handleChange(tag, checked) {
         const { selectedTags } = this.state

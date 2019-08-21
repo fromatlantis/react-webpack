@@ -51,6 +51,20 @@ const formItemLayout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 }
+const dataSource = [
+    {
+        key: '1',
+        name: '胡彦斌',
+        age: 32,
+        address: '西湖区湖底公园1号',
+    },
+    {
+        key: '2',
+        name: '胡彦祖',
+        age: 42,
+        address: '西湖区湖底公园1号',
+    },
+]
 const columns = [
     {
         title: '楼栋',
@@ -113,11 +127,28 @@ const columns = [
     },
 )
 class Bill extends PureComponent {
+    state = {
+        test: '',
+        tag1v: [],
+        tags2: [],
+        tag2v: [],
+    }
     componentDidMount() {
         this.props.getCustomerBillList()
+        this.setState({
+            test: 'test',
+        })
     }
     render() {
         const { bill } = this.props
+        const tagsFromServer = [
+            { label: '全部', value: 'all' },
+            { label: '知识产权', value: 'knowlage' },
+            { label: '财务服务', value: 'finace' },
+            { label: '法律服务', value: 'law' },
+            { label: '人力服务', value: 'person' },
+        ]
+        console.log(this.state.tag2v)
         return (
             <div className={`${theme.content} ${theme.defaultBg}`}>
                 <FormView
@@ -127,6 +158,7 @@ class Bill extends PureComponent {
                     saveBtn={false}
                     formItemLayout={formItemLayout}
                 />
+                {this.state.test}
                 <div className={theme.flex} style={{ margin: '15px 0' }}>
                     <Alert style={{ flex: 1 }} message={`共${bill.totalCount}项`} />
                     <div className={theme.btnGroup}>
