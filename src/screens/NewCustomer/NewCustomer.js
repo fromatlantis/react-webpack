@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom'
 import { Button, Breadcrumb, Input, Select, DatePicker, Divider } from 'antd'
 import { FormView } from 'components'
 import theme from 'Theme'
+// redux
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { push } from 'connected-react-router'
+import { actions } from 'reduxDir/customerBill'
 const { Option } = Select
 const rentItems = [
     {
@@ -32,17 +37,17 @@ const rentItems = [
     },
     {
         label: '免租起始日期',
-        field: 'customerName',
-        component: <DatePicker />,
-    },
-    {
-        label: '免租终止日期',
         field: 'freeStartDate',
         component: <DatePicker />,
     },
     {
-        label: '免租期限',
+        label: '免租终止日期',
         field: 'freeEndDate',
+        component: <DatePicker />,
+    },
+    {
+        label: '免租期限',
+        field: 'freeLimit',
         component: <Input placeholder="请输入" />,
     },
     {
@@ -97,7 +102,21 @@ const formItemLayout = {
     labelCol: { span: 9 },
     wrapperCol: { span: 15 },
 }
-export default class NewCustomer extends PureComponent {
+@connect(
+    state => ({
+        bill: state.customerBill.bill,
+    }),
+    dispatch => {
+        return bindActionCreators(
+            {
+                push: push,
+                addCustomer: actions('addCustomer'),
+            },
+            dispatch,
+        )
+    },
+)
+class NewCustomer extends PureComponent {
     state = {
         base: {
             rentType: '1',
@@ -112,6 +131,17 @@ export default class NewCustomer extends PureComponent {
             },
         })
     }
+    add = () => {
+        this.baseForm.validateFields((errors, values) => {
+            if (!errors) {
+                const other = this.otherForm.getFieldsValue()
+                this.props.addCustomer({
+                    ...values,
+                    ...other,
+                })
+            }
+        })
+    }
     render() {
         const { base } = this.state
         const items = [
@@ -122,6 +152,7 @@ export default class NewCustomer extends PureComponent {
                 rules: [
                     {
                         required: true,
+                        message: '请填写产品类型',
                     },
                 ],
             },
@@ -137,6 +168,7 @@ export default class NewCustomer extends PureComponent {
                 rules: [
                     {
                         required: true,
+                        message: '请选择租售类型',
                     },
                 ],
             },
@@ -147,6 +179,7 @@ export default class NewCustomer extends PureComponent {
                 rules: [
                     {
                         required: true,
+                        message: '请填写楼栋信息',
                     },
                 ],
             },
@@ -157,22 +190,24 @@ export default class NewCustomer extends PureComponent {
                 rules: [
                     {
                         required: true,
+                        message: '请填写房号',
                     },
                 ],
             },
             {
                 label: '客户名称',
-                field: 'title',
+                field: 'customerName',
                 component: <Input placeholder="请输入" />,
                 rules: [
                     {
                         required: true,
+                        message: '请填写客户名称',
                     },
                 ],
             },
             {
                 label: '业主姓名',
-                field: 'customerName',
+                field: 'ownerName',
                 component: <Input placeholder="请输入" />,
             },
             {
@@ -182,6 +217,7 @@ export default class NewCustomer extends PureComponent {
                 rules: [
                     {
                         required: true,
+                        message: '请填写手机号',
                     },
                 ],
             },
@@ -192,6 +228,7 @@ export default class NewCustomer extends PureComponent {
                 rules: [
                     {
                         required: true,
+                        message: '请填写邮箱',
                     },
                 ],
             },
@@ -244,8 +281,8 @@ export default class NewCustomer extends PureComponent {
                             data={base}
                             layout="inline"
                             saveBtn={false}
-                            ref={base => {
-                                this.base = base
+                            ref={baseForm => {
+                                this.baseForm = baseForm
                             }}
                             formItemLayout={formItemLayout}
                         />
@@ -254,13 +291,22 @@ export default class NewCustomer extends PureComponent {
                             items={base.rentType === '1' ? rentItems : sellItems}
                             layout="inline"
                             saveBtn={false}
+                            ref={otherForm => {
+                                this.otherForm = otherForm
+                            }}
                             formItemLayout={formItemLayout}
                         />
                         <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                            <Button type="primary" style={{ marginRight: '20px' }}>
+                            <Button
+                                type="primary"
+                                style={{ marginRight: '20px' }}
+                                onClick={this.add}
+                            >
                                 保存
                             </Button>
-                            <Button>取消</Button>
+                            <Button>
+                                <Link to="/bill">取消</Link>
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -268,3 +314,4 @@ export default class NewCustomer extends PureComponent {
         )
     }
 }
+export default NewCustomer

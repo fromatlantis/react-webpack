@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { MenuLayout } from 'components'
-import Bill from './Bill'
+import CustomerBill from './CustomerBill'
 import Detail from './Detail/Detail'
 import NewCustomer from '../NewCustomer/NewCustomer'
 const menu = [
@@ -9,7 +9,7 @@ const menu = [
         display: 'none',
         icon: '',
         path: '/bill',
-        component: Bill,
+        component: CustomerBill,
     },
     {
         title: '客户维护',
@@ -22,7 +22,7 @@ const menu = [
         title: '客户详情',
         display: 'none',
         icon: '',
-        path: '/bill/detail',
+        path: '/bill/detail/:id',
         component: Detail,
     },
 ]

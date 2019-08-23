@@ -10,7 +10,7 @@ const routes = [
             role: 'home',
         },
         component: Loadable({
-            loader: () => import(/* webpackChunkName: "bill" */ '../screens/Bill'),
+            loader: () => import(/* webpackChunkName: "customerBill" */ '../screens/CustomerBill'),
             loading: Loading,
         }),
     },

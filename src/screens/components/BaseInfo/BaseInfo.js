@@ -2,9 +2,17 @@ import React, { PureComponent } from 'react'
 import { Descriptions, Table } from 'antd'
 import moment from 'moment'
 import theme from 'Theme'
-export default class BaseInfo extends PureComponent {
+import { connect } from 'react-redux'
+@connect(state => ({
+    customerBaseInfo: state.customer.customerBaseInfo,
+    customerRentInfo: state.customer.customerRentInfo,
+}))
+class BaseInfo extends PureComponent {
     render() {
-        const baseInfoDetial = {}
+        const baseInfoDetial = this.props.customerRentInfo
+        const {
+            customerBaseInfo: { rentType },
+        } = this.props
         return (
             <div className={theme.detailCard}>
                 <div className={theme.titleChip}>
@@ -13,73 +21,91 @@ export default class BaseInfo extends PureComponent {
                         <span className={theme.title}>基本信息</span>
                     </div>
                 </div>
-                <Descriptions title="" bordered column={2}>
-                    <Descriptions.Item label="法人">
-                        {baseInfoDetial.legalPersonName}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="注册资本">
-                        {baseInfoDetial.regCapital}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="经营状态">
-                        {baseInfoDetial.regStatus}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="实缴资本">
-                        {baseInfoDetial.actualCapital}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="统一社会信用代码">
-                        {baseInfoDetial.creditCode}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="成立日期">
-                        {baseInfoDetial.estiblishTime &&
-                            moment(parseInt(baseInfoDetial.estiblishTime)).format('YYYY-MM-DD')}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="工商注册号">
-                        {baseInfoDetial.regNumber}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="纳税人识别号">
-                        {baseInfoDetial.taxNumber}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="公司类型">
-                        {baseInfoDetial.companyOrgType}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="组织机构代码">
-                        {baseInfoDetial.orgNumber}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="核准日期">
-                        {baseInfoDetial.approvedTime &&
-                            moment(parseInt(baseInfoDetial.approvedTime)).format('YYYY-MM-DD')}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="所属行业">
-                        {baseInfoDetial.industry}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="登记机关">
-                        {baseInfoDetial.regInstitute}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="曾用名">
-                        {baseInfoDetial.historyNames}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="英文名">{baseInfoDetial.property3}</Descriptions.Item>
-                    <Descriptions.Item label="人员规模">
-                        {baseInfoDetial.staffNumRange}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="参保人数">
-                        {baseInfoDetial.socialStaffNum}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="企业地址">
-                        {baseInfoDetial.regLocation}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="营业期限">
-                        {baseInfoDetial.fromTime &&
-                            moment(parseInt(baseInfoDetial.fromTime)).format('YYYY-MM-DD')}
-                        至
-                        {baseInfoDetial.toTime &&
-                            moment(parseInt(baseInfoDetial.toTime)).format('YYYY-MM-DD')}
-                    </Descriptions.Item>
-                    <Descriptions.Item label="经营范围" span={2}>
-                        {baseInfoDetial.businessScope}
-                    </Descriptions.Item>
-                </Descriptions>
+                {rentType === '1' && (
+                    <Descriptions title="" bordered column={2}>
+                        <Descriptions.Item label="合同编号">
+                            {baseInfoDetial.contractNo}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="营业执照编号">
+                            {baseInfoDetial.licenseNo}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="签约日期">
+                            {baseInfoDetial.signDate}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="付款方式">
+                            {baseInfoDetial.payType}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="实际面积（㎡））">
+                            {baseInfoDetial.realArea}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="租赁起始日期">
+                            {baseInfoDetial.startDate}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="租赁终止日期">
+                            {baseInfoDetial.endDate}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="租赁期限">
+                            {baseInfoDetial.rentLimit}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="租赁单价（元/㎡）">
+                            {baseInfoDetial.realPrice}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="免租起始日期">
+                            {baseInfoDetial.freeStartDate}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="免租终止日期">
+                            {baseInfoDetial.freeEndDate}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="免租期限">
+                            {baseInfoDetial.freeLimit}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="租赁押金">
+                            {baseInfoDetial.deposit}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="租金总计（元）">
+                            {baseInfoDetial.realPriceTotal}
+                        </Descriptions.Item>
+                    </Descriptions>
+                )}
+                {rentType === '2' && (
+                    <Descriptions title="" bordered column={2}>
+                        <Descriptions.Item label="合同编号">
+                            {baseInfoDetial.contractNo}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="营业执照编号">
+                            {baseInfoDetial.licenseNo}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="签约日期">
+                            {baseInfoDetial.signDate}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="付款方式">
+                            {baseInfoDetial.payType}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="预售面积（㎡）">
+                            {baseInfoDetial.advanceArea}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="预售面积单价（元/㎡）">
+                            {baseInfoDetial.advancePrice}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="预售总价（元）">
+                            {baseInfoDetial.advancePriceTotal}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="实际面积（㎡）">
+                            {baseInfoDetial.realArea}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="实际面积单价（元/㎡）">
+                            {baseInfoDetial.realPrice}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="实际最终总价（元）">
+                            {baseInfoDetial.realPriceTotal}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="交房日期">
+                            {baseInfoDetial.startDate}
+                        </Descriptions.Item>
+                    </Descriptions>
+                )}
             </div>
         )
     }
 }
+export default BaseInfo

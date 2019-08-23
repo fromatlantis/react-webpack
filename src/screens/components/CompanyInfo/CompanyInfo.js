@@ -2,30 +2,33 @@ import React, { PureComponent } from 'react'
 import { Avatar, Row, Col } from 'antd'
 import moment from 'moment'
 import styles from './CompanyInfo.module.css'
-export default class CompanyInfo extends PureComponent {
+import { connect } from 'react-redux'
+@connect(state => ({
+    customerBaseInfo: state.customer.customerBaseInfo,
+}))
+class CompanyInfo extends PureComponent {
     render() {
-        const item = {
-            name: '钛罗（上海）机器人科技有限公司',
+        const item = this.props.customerBaseInfo
+        const rentTypeStr = {
+            '1': '租',
+            '2': '售',
         }
         return (
             <div className={styles.infoCard}>
-                <Avatar className={styles.avatar} src={item.logo} shape="square">
-                    {item.name && item.name.substring(0, 4)}
+                <Avatar className={styles.avatar} shape="square">
+                    {item.customerName && item.customerName.substring(0, 4)}
                 </Avatar>
                 <div className={styles.detail}>
-                    <h1 className={styles.title}>{item.name}</h1>
+                    <h1 className={styles.title}>{item.customerName}</h1>
                     <Row gutter={16} style={{ marginTop: 6 }}>
                         <Col span={7}>
-                            <div>法人：{item.legalPersonName}</div>
+                            <div>业主名称：{item.ownerName}</div>
                         </Col>
                         <Col span={7}>
-                            <div>注册资金：{item.regCapital}</div>
+                            <div>楼栋：{item.building}</div>
                         </Col>
                         <Col span={7}>
-                            <div>
-                                成立时间：
-                                {moment(parseInt(item.estiblishTime)).format('YYYY-MM-DD')}
-                            </div>
+                            <div>房号：{item.room}</div>
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginTop: 6 }}>
@@ -33,15 +36,21 @@ export default class CompanyInfo extends PureComponent {
                             <div>邮箱：{item.email}</div>
                         </Col>
                         <Col span={7}>
-                            <div>联系电话：{item.phoneNumber}</div>
+                            <div>手机号：{item.phone}</div>
                         </Col>
                         <Col span={7}>
-                            <div>官网：{item.websiteList}</div>
+                            <div>租售类型：{rentTypeStr[item.rentType]}</div>
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginTop: 6 }}>
-                        <Col span={16}>
-                            <div>企业地址：{item.regLocation}</div>
+                        <Col span={7}>
+                            <div>产品类型：{item.productType}</div>
+                        </Col>
+                        <Col span={7}>
+                            <div>业务员：{item.businessManager}</div>
+                        </Col>
+                        <Col span={7}>
+                            <div>中介：{item.medium}</div>
                         </Col>
                     </Row>
                 </div>
@@ -49,3 +58,4 @@ export default class CompanyInfo extends PureComponent {
         )
     }
 }
+export default CompanyInfo

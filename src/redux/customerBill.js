@@ -5,7 +5,7 @@ import { blaze } from '../utils/blaze'
 import { message } from 'antd'
 
 const model = {
-    namespace: 'bill',
+    namespace: 'customerBill',
     state: {
         bill: {},
         detail: {},
@@ -16,7 +16,7 @@ const model = {
     },
     actions: [
         {
-            name: 'getBillList',
+            name: 'getCustomerBillList',
             reducer: (state, action) => {
                 return {
                     ...state,
@@ -24,24 +24,24 @@ const model = {
                 }
             },
             *effect(action) {
-                const params = yield select(rootState => rootState.bill.searchParams)
+                const params = yield select(rootState => rootState.customerBill.searchParams)
                 const res = yield call(request, {
-                    // type: 'post',
-                    url: `/charge/getBillList`,
-                    // contentType: 'multipart/form-data',
+                    type: 'post',
+                    url: `/charge/getCustomerBillList`,
+                    contentType: 'multipart/form-data',
                     data: params,
                 })
                 if (res.code === 1000) {
-                    yield put(actions('getBillListOK')(res.data))
+                    yield put(actions('getCustomerBillListOK')(res.data))
                 }
             },
         },
         {
-            name: 'getBillListOK',
+            name: 'getCustomerBillListOK',
             reducer: 'bill',
         },
         {
-            name: 'operateAddBill',
+            name: 'addCustomer',
             *effect(action) {
                 const res = yield call(request, {
                     type: 'post',
@@ -51,16 +51,16 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('添加成功')
-                    yield put(actions('getBillList')())
+                    yield put(push('/bill'))
                 }
             },
         },
     ],
 }
-const bill = blaze(model)
+const customerBill = blaze(model)
 // reducer combineReducers使用
-export default bill.reducers
+export default customerBill.reducers
 // action connect组件使用
-export const actions = bill.actions
+export const actions = customerBill.actions
 // effects saga监听副作用函数使用
-export const effects = bill.effects
+export const effects = customerBill.effects

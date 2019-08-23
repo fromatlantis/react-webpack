@@ -1,43 +1,48 @@
 import React, { PureComponent } from 'react'
-import { Table } from 'antd'
+import { Button, Table } from 'antd'
 import theme from 'Theme'
 // redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { actions } from 'reduxDir/changes'
+import { actions } from 'reduxDir/bill'
 @connect(
     state => ({
-        changes: state.changes.changes,
-        customerBaseInfo: state.customer.customerBaseInfo,
+        bill: state.bill.bill,
+        router: state.router,
     }),
     dispatch => {
         return bindActionCreators(
             {
-                getRecordsList: actions('getRecordsList'),
+                push: push,
+                getBillList: actions('getBillList'),
             },
             dispatch,
         )
     },
 )
-class Changes extends PureComponent {
-    componentWillReceiveProps(nextProps) {
-        if (this.props.customerBaseInfo !== nextProps.customerBaseInfo) {
-            if (nextProps.customerBaseInfo.id) {
-                this.props.getRecordsList({
-                    customerId: nextProps.customerBaseInfo.id,
-                })
-            }
-        }
+class Bill extends PureComponent {
+    componentDidMount() {
+        const {
+            location: { pathname },
+        } = this.props.router
+        const params = pathname.match(/[^/]+/g)
+        const id = params[params.length - 1]
+        this.props.getBillList({
+            customerId: id,
+        })
     }
     render() {
-        const { changes } = this.props
+        const { bill } = this.props
         return (
-            <div className={theme.detailCard}>
+            <div className={theme.detailCard} style={{ marginTop: '0.4rem' }}>
                 <div className={theme.titleChip}>
                     <div>
                         <span className={theme.divider}>|</span>
-                        <span className={theme.title}>操作记录</span>
+                        <span className={theme.title}>账单列表</span>
+                        <Button size="small" type="primary">
+                            添加
+                        </Button>
                     </div>
                 </div>
                 <Table
@@ -57,34 +62,35 @@ class Changes extends PureComponent {
                             align: 'center',
                         },
                         {
-                            title: '操作项',
-                            dataIndex: 'item',
-                            key: 'item',
+                            title: '费用名称',
+                            dataIndex: 'name',
+                            key: 'name',
+                            align: 'center',
+                            render: name => <span>{name ? name : '--'}</span>,
+                        },
+                        {
+                            title: '应收款所属期',
+                            dataIndex: 'receiveDate',
+                            key: 'receiveDate',
                             align: 'center',
                         },
                         {
-                            title: '操作时间',
-                            dataIndex: 'operateTime',
-                            key: 'operateTime',
+                            title: '应缴截止日期',
+                            dataIndex: 'limitDate',
+                            key: 'limitDate',
                             align: 'center',
                         },
                         {
-                            title: '操作人员',
-                            dataIndex: 'operatorName',
-                            key: 'operatorName',
-                            align: 'center',
-                        },
-                        {
-                            title: '操作内容',
-                            dataIndex: 'content',
-                            key: 'content',
+                            title: '应收款金额（元）',
+                            dataIndex: 'amount',
+                            key: 'amount',
                             align: 'center',
                         },
                     ]}
-                    dataSource={changes.list}
+                    dataSource={bill.list}
                 />
             </div>
         )
     }
 }
-export default Changes
+export default Bill
