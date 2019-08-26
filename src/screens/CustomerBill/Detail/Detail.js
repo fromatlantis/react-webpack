@@ -51,7 +51,7 @@ class Detail extends PureComponent {
                 <CompanyInfo />
                 <Bill />
                 <BaseInfo />
-                <Changes />
+                <Changes category="bill" />
             </div>
         )
     }

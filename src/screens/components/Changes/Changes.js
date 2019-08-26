@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Table } from 'antd'
+import { Table, Tooltip } from 'antd'
 import theme from 'Theme'
 // redux
 import { bindActionCreators } from 'redux'
@@ -25,6 +25,7 @@ class Changes extends PureComponent {
         if (this.props.customerBaseInfo !== nextProps.customerBaseInfo) {
             if (nextProps.customerBaseInfo.id) {
                 this.props.getRecordsList({
+                    category: this.props.category,
                     customerId: nextProps.customerBaseInfo.id,
                 })
             }
@@ -79,6 +80,15 @@ class Changes extends PureComponent {
                             dataIndex: 'content',
                             key: 'content',
                             align: 'center',
+                            render: content => (
+                                <Tooltip title={content} placement="bottom">
+                                    <span>
+                                        {content.length > 30
+                                            ? `${content.substring(0, 30)}...`
+                                            : content}
+                                    </span>
+                                </Tooltip>
+                            ),
                         },
                     ]}
                     dataSource={changes.list}

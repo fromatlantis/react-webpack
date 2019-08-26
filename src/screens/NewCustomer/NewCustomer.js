@@ -61,6 +61,7 @@ const rentItems = [
         component: <Input placeholder="请输入" />,
     },
 ]
+
 const sellItems = [
     {
         label: '预售单价（元/㎡）',
@@ -126,7 +127,7 @@ class NewCustomer extends PureComponent {
         this.setState({
             base: {
                 ...this.state.base,
-                ...this.base.getFieldsValue(),
+                ...this.baseForm.getFieldsValue(),
                 rentType: value,
             },
         })

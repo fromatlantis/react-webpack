@@ -1,13 +1,15 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { Alert, Button, DatePicker, Table, Input, Select } from 'antd'
+import { Alert, Button, DatePicker, Table, Input, Select, Tag, Modal, message } from 'antd'
 import { FormView } from 'components'
 import theme from 'Theme'
+import BatchImport from './BatchImport/BatchImport'
 // redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { actions } from 'reduxDir/customerBill'
+import { actions as billActions } from 'reduxDir/bill'
 const { RangePicker } = DatePicker
 const { Option } = Select
 const searchItems = [
@@ -56,6 +58,8 @@ const columns = [
         title: '楼栋',
         dataIndex: 'building',
         key: 'building',
+        fixed: 'left',
+        width: 100,
     },
     {
         title: '房号',
@@ -96,59 +100,251 @@ const columns = [
     {
         title: '状态',
         fixed: 'right',
+        align: 'center',
         width: 100,
         dataIndex: 'status',
         key: 'status',
+        render: status =>
+            status === '已确认' ? (
+                <Tag color="green">{status}</Tag>
+            ) : (
+                <Tag color="blue">{status}</Tag>
+            ),
     },
 ]
+let selectedIds = []
 @connect(
     state => ({
+        searchParams: state.customerBill.searchParams,
         bill: state.customerBill.bill,
+        batchBillList: state.customerBill.batchBillList,
     }),
     dispatch => {
         return bindActionCreators(
             {
                 push: push,
                 getCustomerBillList: actions('getCustomerBillList'),
+                getBatchConfirmBillList: actions('getBatchConfirmBillList'),
+                operateBatchConfirmBills: billActions('operateBatchConfirmBills'),
+                operateBatchSendBills: billActions('operateBatchSendBills'),
             },
             dispatch,
         )
     },
 )
 class Bill extends PureComponent {
+    state = {
+        comfirmModal: false,
+        sendModal: false,
+        confirmList: {}, //批量确认
+    }
     componentDidMount() {
         this.props.getCustomerBillList()
     }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.batchBillList !== nextProps.batchBillList) {
+            this.setState({
+                confirmList: nextProps.batchBillList,
+            })
+        }
+    }
+    // 查询
+    search = () => {
+        const params = this.searchForm.getFieldsValue()
+        this.props.getCustomerBillList(params)
+    }
+    reset = () => {
+        this.searchForm.resetFields()
+        this.search()
+    }
+    // 分页
+    onPageNoChange = pageNo => {
+        this.props.getCustomerBillList({ pageNo })
+    }
+    onShowSizeChange = (_, pageSize) => {
+        this.props.getCustomerBillList({ pageNo: 1, pageSize })
+    }
+    // 批量确认
+    batchComfirm = () => {
+        if (selectedIds.length > 0) {
+            this.props.getBatchConfirmBillList({
+                status: '0',
+                customerIds: selectedIds.join(','),
+            })
+            this.setState({
+                comfirmModal: true,
+            })
+        } else {
+            message.error('请从列表中选择客户')
+        }
+    }
+    comfirmModalOk = () => {
+        const {
+            confirmList: { list },
+        } = this.state
+        if (list && list.length > 0) {
+            this.props.operateBatchConfirmBills({
+                billIds: list.map(item => item.billId).join(','),
+            })
+            this.setState({
+                comfirmModal: false,
+            })
+        }
+    }
+    comfirmModalCancel = () => {
+        this.setState({
+            comfirmModal: false,
+        })
+    }
+    // 批量发送
+    batchSend = () => {
+        if (selectedIds.length > 0) {
+            this.props.getBatchConfirmBillList({
+                status: '1',
+                customerIds: selectedIds.join(','),
+            })
+            this.setState({
+                sendModal: true,
+            })
+        } else {
+            message.error('请从列表中选择客户')
+        }
+    }
+    sendModalOk = () => {
+        const {
+            batchBillList: { list },
+            operateBatchSendBills,
+        } = this.props
+        if (list && list.length > 0) {
+            operateBatchSendBills({
+                billIds: list.map(item => item.billId).join(','),
+            })
+            this.setState({
+                sendModal: false,
+            })
+        }
+    }
+    sendModalCancel = () => {
+        this.setState({
+            sendModal: false,
+        })
+    }
+    // 移除
+    removeComfirm = billId => {
+        const list = this.state.confirmList.list.filter(item => item.billId !== billId)
+        this.setState({
+            confirmList: {
+                list,
+                totalCount: list.length,
+            },
+        })
+    }
     render() {
-        const { bill } = this.props
+        const { bill, batchBillList, searchParams } = this.props
+        const { confirmList } = this.state
+        console.log(confirmList)
+        const billColumns = [
+            {
+                title: '账单编号',
+                dataIndex: 'billNo',
+                key: 'billNo',
+            },
+            {
+                title: '楼栋',
+                dataIndex: 'building',
+                key: 'building',
+            },
+            {
+                title: '房号',
+                dataIndex: 'room',
+                key: 'room',
+            },
+            {
+                title: '客户名称',
+                dataIndex: 'customerName',
+                key: 'customerName',
+            },
+            {
+                title: '费用类型',
+                dataIndex: 'type',
+                key: 'type',
+            },
+            {
+                title: '费用名称',
+                dataIndex: 'name',
+                key: 'name',
+            },
+            {
+                title: '应收款所属期',
+                dataIndex: 'receiveDate',
+                key: 'receiveDate',
+            },
+            {
+                title: '应缴费日期',
+                dataIndex: 'limitDate',
+                key: 'limitDate',
+            },
+            {
+                title: '应收款金额',
+                dataIndex: 'amount',
+                key: 'amount',
+            },
+        ]
         return (
             <div className={`${theme.content} ${theme.defaultBg}`}>
                 <FormView
                     onChange={this.onChange}
+                    data={searchParams}
                     items={searchItems}
                     layout="inline"
                     saveBtn={false}
+                    ref={ref => {
+                        this.searchForm = ref
+                    }}
                     formItemLayout={formItemLayout}
                 />
                 <div className={theme.flex} style={{ margin: '15px 0' }}>
                     <Alert style={{ flex: 1 }} message={`共${bill.totalCount}项`} />
                     <div className={theme.btnGroup}>
-                        <Button type="primary">清空</Button>
-                        <Button type="primary">查询</Button>
+                        <Button type="primary" onClick={this.reset}>
+                            清空
+                        </Button>
+                        <Button type="primary" onClick={this.search}>
+                            查询
+                        </Button>
                         <Button type="primary">
                             <Link to="/bill/newCustomer">新增</Link>
                         </Button>
-                        <Button type="primary">批量导入</Button>
-                        <Button type="primary">批量确认</Button>
-                        <Button type="primary">批量发送</Button>
+                        <BatchImport />
+                        <Button type="primary" onClick={this.batchComfirm}>
+                            批量确认
+                        </Button>
+                        <Button type="primary" onClick={this.batchSend}>
+                            批量发送
+                        </Button>
                     </div>
                 </div>
                 <Table
                     style={{ background: '#fff' }}
+                    rowKey="id"
+                    rowSelection={{
+                        onChange: (selectedRowKeys, selectedRows) => {
+                            selectedIds = selectedRowKeys
+                        },
+                    }}
                     dataSource={bill.list}
                     columns={columns}
                     scroll={{ x: 1300 }}
-                    pagination={{ hideOnSinglePage: true }}
+                    pagination={{
+                        hideOnSinglePage: true,
+                        total: bill.totalCount,
+                        current: searchParams.pageNo,
+                        showSizeChanger: true,
+                        showQuickJumper: true,
+                        pageSizeOptions: ['10', '15', '20'],
+                        onShowSizeChange: this.onShowSizeChange,
+                        onChange: this.onPageNoChange,
+                    }}
                     onRow={record => {
                         return {
                             onClick: event => {
@@ -157,6 +353,68 @@ class Bill extends PureComponent {
                         }
                     }}
                 />
+                <Modal
+                    title="批量确认"
+                    visible={this.state.comfirmModal}
+                    onOk={this.comfirmModalOk}
+                    onCancel={this.comfirmModalCancel}
+                    width={930}
+                    // bodyStyle={{ height: 430, overflow: 'auto' }}
+                >
+                    <Table
+                        dataSource={confirmList.list}
+                        pagination={{
+                            hideOnSinglePage: true,
+                            total: confirmList.totalCount,
+                        }}
+                        columns={[
+                            ...billColumns,
+                            {
+                                title: '操作',
+                                dataIndex: 'actions',
+                                key: 'actions',
+                                align: 'center',
+                                fixed: 'right',
+                                width: 100,
+                                render: (_, record) => (
+                                    <Fragment>
+                                        <Button size="small" type="link">
+                                            编辑
+                                        </Button>
+                                        <Button
+                                            size="small"
+                                            type="link"
+                                            onClick={() => {
+                                                this.removeComfirm(record.billId)
+                                            }}
+                                        >
+                                            移除
+                                        </Button>
+                                    </Fragment>
+                                ),
+                            },
+                        ]}
+                        scroll={{ x: 1300 }}
+                    />
+                </Modal>
+                <Modal
+                    title="批量发送"
+                    visible={this.state.sendModal}
+                    onOk={this.sendModalOk}
+                    onCancel={this.sendModalCancel}
+                    width={930}
+                    // bodyStyle={{ height: 430, overflow: 'auto' }}
+                >
+                    <Table
+                        pagination={{
+                            hideOnSinglePage: true,
+                            total: batchBillList.totalCount,
+                        }}
+                        dataSource={batchBillList.list}
+                        columns={billColumns}
+                        scroll={{ x: 1300 }}
+                    />
+                </Modal>
             </div>
         )
     }

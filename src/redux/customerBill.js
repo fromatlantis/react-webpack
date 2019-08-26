@@ -9,6 +9,7 @@ const model = {
     state: {
         bill: {},
         detail: {},
+        batchBillList: [],
         searchParams: {
             pageNo: 1,
             pageSize: 10,
@@ -25,11 +26,17 @@ const model = {
             },
             *effect(action) {
                 const params = yield select(rootState => rootState.customerBill.searchParams)
+                const { receiveDate, ...others } = params
+                if (receiveDate) {
+                    const [receiveDateBegin, receiveDateEnd] = receiveDate
+                    others.receiveDateBegin = receiveDateBegin.format('YYYY.MM.DD')
+                    others.receiveDateEnd = receiveDateEnd.format('YYYY.MM.DD')
+                }
                 const res = yield call(request, {
                     type: 'post',
                     url: `/charge/getCustomerBillList`,
                     contentType: 'multipart/form-data',
-                    data: params,
+                    data: others,
                 })
                 if (res.code === 1000) {
                     yield put(actions('getCustomerBillListOK')(res.data))
@@ -54,6 +61,40 @@ const model = {
                     yield put(push('/bill'))
                 }
             },
+        },
+        {
+            name: 'operateBatchImportBills',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/charge/operateBatchImportBills`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('导入成功')
+                    yield put(actions('getCustomerBillList')())
+                }
+            },
+        },
+        // 获取制定客户账单列表
+        {
+            name: 'getBatchConfirmBillList',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/charge/getBatchConfirmBillList`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    yield put(actions('getBatchConfirmBillListOk')(res.data))
+                }
+            },
+        },
+        {
+            name: 'getBatchConfirmBillListOk',
+            reducer: 'batchBillList',
         },
     ],
 }
