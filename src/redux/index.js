@@ -8,6 +8,8 @@ import changes from './changes'
 import bill from './bill'
 import records from './records'
 import charge from './charge'
+import statTypes from './statTypes'
+import statSettle from './statSettle'
 export default history =>
     combineReducers({
         router: connectRouter(history),
@@ -18,4 +20,6 @@ export default history =>
         bill,
         records,
         charge,
+        statTypes,
+        statSettle,
     })

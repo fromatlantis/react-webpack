@@ -7,6 +7,8 @@ import { effects as changesEffects } from './changes'
 import { effects as billEffects } from './bill'
 import { effects as recordsEffects } from './records'
 import { effects as chargeEffects } from './charge'
+import { effects as statTypesEffects } from './statTypes'
+import { effects as statSettleEffects } from './statSettle'
 // 监听action的调用，然后调用异步generate函数
 export function* watchFetchData() {
     yield all([
@@ -17,5 +19,7 @@ export function* watchFetchData() {
         ...billEffects,
         ...recordsEffects,
         ...chargeEffects,
+        ...statTypesEffects,
+        ...statSettleEffects,
     ])
 }
