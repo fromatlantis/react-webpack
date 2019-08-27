@@ -1,0 +1,14 @@
+.stepCard {
+    margin-top: 16px;
+    border-radius: 6px;
+    background-color: #fafafa;
+    text-align: center;
+}
+.templateList {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    & > a {
+        padding: 0 20px 10px;
+    }
+}

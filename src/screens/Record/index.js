@@ -14,7 +14,7 @@ const menu = [
         title: '客户详情',
         display: 'none',
         icon: '',
-        path: '/record/detail',
+        path: '/record/detail/:id',
         component: Detail,
     },
 ]

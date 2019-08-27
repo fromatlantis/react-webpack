@@ -88,7 +88,7 @@ export default ({ type = 'get', url, data = {}, contentType = 'application/json'
     if (contentType === 'multipart/form-data') {
         let formData = new FormData()
         for (let k in data) {
-            data[k] && formData.append(k, data[k])
+            data[k] !== undefined && formData.append(k, data[k])
         }
         postData = formData
     }
