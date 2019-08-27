@@ -5,6 +5,7 @@ import { effects as customerBillEffects } from './customerBill'
 import { effects as customerEffects } from './customer'
 import { effects as changesEffects } from './changes'
 import { effects as billEffects } from './bill'
+import { effects as overviewEffects } from './overview'
 import { effects as recordsEffects } from './records'
 import { effects as chargeEffects } from './charge'
 import { effects as statTypesEffects } from './statTypes'
@@ -17,6 +18,7 @@ export function* watchFetchData() {
         ...customerEffects,
         ...changesEffects,
         ...billEffects,
+        ...overviewEffects,
         ...recordsEffects,
         ...chargeEffects,
         ...statTypesEffects,

@@ -6,6 +6,7 @@ import customerBill from './customerBill'
 import customer from './customer'
 import changes from './changes'
 import bill from './bill'
+import overview from './overview'
 import records from './records'
 import charge from './charge'
 import statTypes from './statTypes'
@@ -18,6 +19,7 @@ export default history =>
         customer,
         changes,
         bill,
+        overview,
         records,
         charge,
         statTypes,
