@@ -1,0 +1,65 @@
+.selectTime {
+    margin: 0.3rem 0.28rem;
+    display: flex;
+}
+.body {
+    background: #FFFFFF;
+    box-shadow: 0px 0.04rem 0.01rem 0px rgba(167,191,227,0.37);
+    margin: 0.3rem 0.4rem 0.51rem 0.28rem;
+    padding: 0.5rem 0.4rem;
+}
+.amountStatistic {
+    display: flex;
+    padding-bottom: 0.6rem;
+}
+.bluerec {
+    width: 2.14rem;
+    height: 1.10rem;
+    background: #F0F8FF;
+    border-radius: 0.04rem;
+    margin-right:0.55rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.pinkrec {
+    width: 2.14rem;
+    height: 1.10rem;
+    background: rgba(255,244,246,1);
+    border-radius: 0.04rem;
+    margin-right:0.55rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.blueFont {
+    font-size: 36px;
+    font-family: Impact;
+    color: rgba(64,152,255,1);
+    text-shadow: 0px 0.03rem 0.06rem rgba(64,152,255,0.15);
+}
+.pinkFont {
+    font-size: 36px;
+    font-family: Impact;
+    color: rgba(255,119,146,1);
+    text-shadow: 0px 0.04rem 0.08rem rgba(255,119,146,0.2);
+}
+.smalltitle {
+    font-size: 14px;
+    font-family: PingFangSC;
+    font-weight: 400;
+    color: rgba(31,31,31,1);
+}
+.driver {
+    width: 0.04rem;
+    height: 0.24rem;
+    background: rgba(64,152,255,1);
+}
+.title {
+    font-size: 26px;
+    font-family: PingFangSC;
+    font-weight: 500;
+    color: #333;
+}

@@ -6,6 +6,7 @@ import customerBill from './customerBill'
 import customer from './customer'
 import changes from './changes'
 import bill from './bill'
+import overview from './overview'
 export default history =>
     combineReducers({
         router: connectRouter(history),
@@ -14,4 +15,5 @@ export default history =>
         customer,
         changes,
         bill,
+        overview,
     })
