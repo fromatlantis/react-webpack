@@ -4,6 +4,8 @@ import { Alert, Button, DatePicker, Table, Input, Select, Tag, Modal, message } 
 import { FormView } from 'components'
 import theme from 'Theme'
 import BatchImport from './BatchImport/BatchImport'
+import BillForm from './Detail/BillForm'
+import request from '../../utils/request'
 // redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -118,6 +120,7 @@ let selectedIds = []
         searchParams: state.customerBill.searchParams,
         bill: state.customerBill.bill,
         batchBillList: state.customerBill.batchBillList,
+        billDetail: state.bill.billDetail,
     }),
     dispatch => {
         return bindActionCreators(
@@ -127,6 +130,8 @@ let selectedIds = []
                 getBatchConfirmBillList: actions('getBatchConfirmBillList'),
                 operateBatchConfirmBills: billActions('operateBatchConfirmBills'),
                 operateBatchSendBills: billActions('operateBatchSendBills'),
+                getBillDetail: billActions('getBillDetail'),
+                updateBill: billActions('updateBill'),
             },
             dispatch,
         )
@@ -239,10 +244,50 @@ class Bill extends PureComponent {
             },
         })
     }
+    // 编辑
+    showEdit = id => {
+        this.props.getBillDetail({
+            billId: id,
+        })
+        this.setState({
+            addBillModal: true,
+            mode: 'edit',
+        })
+    }
+    addBillOk = () => {
+        const form = this.billForm.getWrappedInstance()
+        form.getFormValues(async params => {
+            await request({
+                type: 'post',
+                url: `/charge/updateBill`,
+                contentType: 'multipart/form-data',
+                data: {
+                    billId: this.props.billDetail.id,
+                    ...params,
+                },
+            })
+            message.success('修改成功')
+            // 更新确认列表
+            this.props.getBatchConfirmBillList({
+                status: '0',
+                customerIds: selectedIds.join(','),
+            })
+            this.setState({
+                addBillModal: false,
+            })
+        })
+    }
+    addBillCancel = () => {
+        const form = this.billForm.getWrappedInstance()
+        form.clearValues()
+        this.setState({
+            addBillModal: false,
+        })
+    }
+
     render() {
         const { bill, batchBillList, searchParams } = this.props
         const { confirmList } = this.state
-        console.log(confirmList)
         const billColumns = [
             {
                 title: '账单编号',
@@ -293,7 +338,6 @@ class Bill extends PureComponent {
         return (
             <div className={`${theme.content} ${theme.defaultBg}`}>
                 <FormView
-                    onChange={this.onChange}
                     data={searchParams}
                     items={searchItems}
                     layout="inline"
@@ -304,7 +348,7 @@ class Bill extends PureComponent {
                     formItemLayout={formItemLayout}
                 />
                 <div className={theme.flex} style={{ margin: '15px 0' }}>
-                    <Alert style={{ flex: 1 }} message={`共${bill.totalCount}项`} />
+                    <Alert style={{ flex: 1 }} message={`共${bill.totalCount || 0}项`} />
                     <div className={theme.btnGroup}>
                         <Button type="primary" onClick={this.reset}>
                             清空
@@ -334,7 +378,7 @@ class Bill extends PureComponent {
                     }}
                     dataSource={bill.list}
                     columns={columns}
-                    scroll={{ x: 1300 }}
+                    scroll={{ x: 1500 }}
                     pagination={{
                         hideOnSinglePage: true,
                         total: bill.totalCount,
@@ -375,10 +419,16 @@ class Bill extends PureComponent {
                                 key: 'actions',
                                 align: 'center',
                                 fixed: 'right',
-                                width: 100,
+                                width: 150,
                                 render: (_, record) => (
                                     <Fragment>
-                                        <Button size="small" type="link">
+                                        <Button
+                                            size="small"
+                                            type="link"
+                                            onClick={() => {
+                                                this.showEdit(record.billId)
+                                            }}
+                                        >
                                             编辑
                                         </Button>
                                         <Button
@@ -413,6 +463,20 @@ class Bill extends PureComponent {
                         dataSource={batchBillList.list}
                         columns={billColumns}
                         scroll={{ x: 1300 }}
+                    />
+                </Modal>
+                <Modal
+                    title="费用信息"
+                    width={890}
+                    visible={this.state.addBillModal}
+                    onOk={this.addBillOk}
+                    onCancel={this.addBillCancel}
+                >
+                    <BillForm
+                        mode={this.state.mode}
+                        ref={ref => {
+                            this.billForm = ref
+                        }}
                     />
                 </Modal>
             </div>

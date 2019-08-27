@@ -3,8 +3,41 @@ import { Link } from 'react-router-dom'
 import { Button, Breadcrumb, Input, Card, Table } from 'antd'
 import { FormView } from 'components'
 import { CompanyInfo, BaseInfo, Changes } from '../../components'
+import Charge from './Charge'
 import theme from 'Theme'
-export default class Detail extends PureComponent {
+// redux
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { push } from 'connected-react-router'
+import { actions } from 'reduxDir/customer'
+@connect(
+    state => ({
+        customerBaseInfo: state.customer.customerBaseInfo,
+        customerRentInfo: state.customer.customerRentInfo,
+    }),
+    dispatch => {
+        return bindActionCreators(
+            {
+                push: push,
+                getCustomerBaseInfo: actions('getCustomerBaseInfo'),
+                getCustomerRentInfo: actions('getCustomerRentInfo'),
+            },
+            dispatch,
+        )
+    },
+)
+class Detail extends PureComponent {
+    componentDidMount() {
+        const {
+            match: { params },
+        } = this.props
+        this.props.getCustomerBaseInfo({
+            customerId: params.id,
+        })
+        this.props.getCustomerRentInfo({
+            customerId: params.id,
+        })
+    }
     render() {
         return (
             <div className={theme.card}>
@@ -17,42 +50,11 @@ export default class Detail extends PureComponent {
                     </Breadcrumb>
                 </div>
                 <CompanyInfo />
-                <div className={theme.detailCard} style={{ marginTop: '0.4rem' }}>
-                    <div className={theme.titleChip}>
-                        <div>
-                            <span className={theme.divider}>|</span>
-                            <span className={theme.title}>费用列表</span>
-                        </div>
-                    </div>
-                    <Table
-                        bordered={true} //边框
-                        rowKey={(record, index) => `complete${record.id}${index}`}
-                        columns={[
-                            {
-                                title: '标题',
-                                dataIndex: 'title',
-                                key: 'title',
-                                align: 'center',
-                            },
-                            {
-                                title: '新闻来源',
-                                dataIndex: 'website',
-                                key: 'website',
-                                align: 'center',
-                            },
-                            {
-                                title: '发布时间',
-                                dataIndex: 'time',
-                                key: 'time',
-                                align: 'center',
-                            },
-                        ]}
-                        dataSource={[]}
-                    />
-                </div>
+                <Charge />
                 <BaseInfo />
-                <Changes />
+                <Changes category="bill" />
             </div>
         )
     }
 }
+export default Detail

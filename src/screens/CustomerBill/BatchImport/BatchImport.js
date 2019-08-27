@@ -355,13 +355,15 @@ class BatchImport extends PureComponent {
             type,
             importResponse: { normalList },
         } = this.state
-        this.props.operateBatchImportBills({
-            type,
-            normalList: JSON.stringify(normalList),
-        })
-        this.setState({
-            modal: false,
-        })
+        if (normalList.length > 0) {
+            this.props.operateBatchImportBills({
+                type,
+                normalList: JSON.stringify(normalList),
+            })
+            this.setState({
+                modal: false,
+            })
+        }
     }
     modalCancel = () => {
         this.setState({
