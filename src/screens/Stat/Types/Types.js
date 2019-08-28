@@ -10,10 +10,12 @@ import { actions } from 'reduxDir/statTypes'
 const { RangePicker } = DatePicker
 @connect(
     state => ({
-        chargeType: state.statTypes.chargeType.map(item => ({
-            name: item.type,
-            value: item.count,
-        })),
+        chargeType: state.statTypes.chargeType
+            .map(item => ({
+                name: item.type,
+                value: item.count,
+            }))
+            .reverse(),
         typeCount: state.statTypes.typeCount,
         searchParams: state.statTypes.searchParams,
         typeDetailList: state.statTypes.typeDetailList,

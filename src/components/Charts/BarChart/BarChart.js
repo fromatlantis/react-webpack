@@ -120,26 +120,40 @@ export default class BarChart extends PureComponent {
             series: [
                 {
                     type: 'bar',
-                    barWidth: '60%',
+                    barWidth: '20px',
                     itemStyle: {
                         normal: {
-                            color: new echarts.graphic.LinearGradient(
-                                0,
-                                0,
-                                0,
-                                1,
-                                [
-                                    {
-                                        offset: 0,
-                                        color: '#4ecac8', // 0% 处的颜色
-                                    },
-                                    {
-                                        offset: 1,
-                                        color: '#4ba6f9', // 100% 处的颜色
-                                    },
-                                ],
-                                false,
-                            ),
+                            barBorderRadius: direction === 'row' ? [0, 10, 10, 0] : [10, 10, 0, 0],
+                            color:
+                                direction === 'row'
+                                    ? new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                                          {
+                                              offset: 0,
+                                              color: '#4098FF',
+                                          },
+                                          {
+                                              offset: 0.5,
+                                              color: '#0286ff',
+                                          },
+                                          //   {
+                                          //       offset: 1,
+                                          //       color: '#0286ff',
+                                          //   },
+                                      ])
+                                    : new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                          {
+                                              offset: 0,
+                                              color: '#4098FF',
+                                          },
+                                          {
+                                              offset: 0.5,
+                                              color: '#0286ff',
+                                          },
+                                          //   {
+                                          //       offset: 1,
+                                          //       color: '#0286ff',
+                                          //   },
+                                      ]),
                         },
                     },
                     data: data,

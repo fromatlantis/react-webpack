@@ -33,7 +33,7 @@ const model = {
             },
         },
         {
-            name: 'getChargeTypeDistributeOK',
+            name: 'getSquareUpStatusOK',
             reducer: 'squareUpStatus',
         },
         {

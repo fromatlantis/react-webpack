@@ -9,14 +9,14 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { actions } from 'reduxDir/statSettle'
-const { RangePicker } = DatePicker
+import SettleChart from './SettleChart'
 @connect(
     state => ({
-        squareUpStatus: state.statTypes.squareUpStatus,
-        settleCount: state.statTypes.typeCount,
-        searchParams: state.statTypes.searchParams,
-        settleDetailList: state.statTypes.typeDetailList,
-        detailSearchParams: state.statTypes.detailSearchParams,
+        squareUpStatus: state.statSettle.squareUpStatus,
+        settleCount: state.statSettle.settleCount,
+        searchParams: state.statSettle.searchParams,
+        settleDetailList: state.statSettle.settleDetailList,
+        detailSearchParams: state.statSettle.detailSearchParams,
     }),
     dispatch => {
         return bindActionCreators(
@@ -136,7 +136,7 @@ class Settle extends PureComponent {
                 </div>
                 <div className={theme.content}>
                     <div style={{ height: 360, display: 'flex' }}>
-                        <BarChart direction="row" title="结清数统计" data={squareUpStatus} />
+                        <SettleChart title="结清数统计" data={squareUpStatus} />
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: 15 }}>
                         <Alert style={{ flex: 1 }} message={`共${settleCount.totalCount || 0}项`} />
@@ -156,24 +156,39 @@ class Settle extends PureComponent {
                         dataSource={settleCount.list}
                         columns={[
                             {
-                                title: '费用类型',
-                                dataIndex: 'type',
-                                key: 'type',
+                                title: '月份',
+                                dataIndex: 'month',
+                                key: 'month',
                             },
                             {
-                                title: '数量总计',
-                                dataIndex: 'totalCount',
-                                key: 'totalCount',
+                                title: '结清数量总计',
+                                dataIndex: 'totalSquareUpCount',
+                                key: 'totalSquareUpCount',
                             },
                             {
-                                title: '当前时间数量',
-                                dataIndex: 'currentCount',
-                                key: 'currentCount',
+                                title: '未清数量总计',
+                                dataIndex: 'totalNotSquaredUpCount',
+                                key: 'totalNotSquaredUpCount',
                             },
                             {
-                                title: '当期类型占比',
-                                dataIndex: 'ratio',
-                                key: 'ratio',
+                                title: '本月结清数量',
+                                dataIndex: 'currentSquareUpCount',
+                                key: 'currentSquareUpCount',
+                            },
+                            {
+                                title: '本月未清数量',
+                                dataIndex: 'currentNotSquareUpCount',
+                                key: 'currentNotSquareUpCount',
+                            },
+                            {
+                                title: '结清数量环比',
+                                dataIndex: 'squareUpChainRatio',
+                                key: 'squareUpChainRatio',
+                            },
+                            {
+                                title: '未清数量环比',
+                                dataIndex: 'notSquareUpChainRatio',
+                                key: 'notSquareUpChainRatio',
                             },
                         ]}
                         pagination={{
@@ -219,9 +234,9 @@ class Settle extends PureComponent {
                         dataSource={settleDetailList.list}
                         columns={[
                             {
-                                title: '费用类型',
-                                dataIndex: 'type',
-                                key: 'type',
+                                title: '月份',
+                                dataIndex: 'month',
+                                key: 'month',
                             },
                             {
                                 title: '楼栋',
@@ -252,6 +267,11 @@ class Settle extends PureComponent {
                                 title: '实收款金额',
                                 dataIndex: 'realAmount',
                                 key: 'realAmount',
+                            },
+                            {
+                                title: '状态',
+                                dataIndex: 'status',
+                                key: 'status',
                             },
                         ]}
                         pagination={{

@@ -23,7 +23,6 @@ export const blaze = model => {
         reducers: (state = model.state, action = {}) => {
             let { actions } = model
             let item = actions.find(item => generateType(item.name) === action.type)
-            // return getNewState(item,state,action)
             return item && item.reducer
                 ? typeof item.reducer === 'string'
                     ? action.payload !== null
@@ -39,6 +38,7 @@ export const blaze = model => {
         effects: model.actions
             .filter(item => item.effect)
             .map(item => {
+                console.log(item)
                 let type = generateType(item.name)
                 return takeEvery(type, item.effect)
             }),
