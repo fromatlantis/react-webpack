@@ -13,6 +13,7 @@ class BaseInfo extends PureComponent {
         const {
             customerBaseInfo: { rentType },
         } = this.props
+        console.log(baseInfoDetial)
         return (
             <div className={theme.detailCard}>
                 <div className={theme.titleChip}>

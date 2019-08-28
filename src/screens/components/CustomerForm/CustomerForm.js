@@ -1,15 +1,36 @@
 import React, { PureComponent } from 'react'
-import { Link } from 'react-router-dom'
-import { Button, Breadcrumb, Input, Select, DatePicker, Divider } from 'antd'
+import { Button, DatePicker, Divider, Select, Input } from 'antd'
 import { FormView } from 'components'
-import theme from 'Theme'
+import moment from 'moment'
 // redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
+import { goBack } from 'connected-react-router'
 import { actions } from 'reduxDir/customerBill'
+import { actions as customerActions } from 'reduxDir/customer'
 const { Option } = Select
 const rentItems = [
+    {
+        label: '签约日期',
+        field: 'signDate',
+        component: <DatePicker placeholder="请输入" />,
+        formatter: signDate => moment(signDate),
+    },
+    {
+        label: '营业执照编号',
+        field: 'licenseNo',
+        component: <Input placeholder="请输入" />,
+    },
+    {
+        label: '付款方式',
+        field: 'payType',
+        component: <Input placeholder="请输入" />,
+    },
+    {
+        label: '合同编号',
+        field: 'contractNo',
+        component: <Input placeholder="请输入" />,
+    },
     {
         label: '实际面积（㎡）',
         field: 'realArea',
@@ -19,11 +40,13 @@ const rentItems = [
         label: '租赁起始日期',
         field: 'startDate',
         component: <DatePicker />,
+        formatter: startDate => moment(startDate),
     },
     {
         label: '租赁终止日期',
         field: 'endDate',
         component: <DatePicker />,
+        formatter: endDate => moment(endDate),
     },
     {
         label: '租赁期限',
@@ -39,11 +62,13 @@ const rentItems = [
         label: '免租起始日期',
         field: 'freeStartDate',
         component: <DatePicker />,
+        formatter: freeStartDate => moment(freeStartDate),
     },
     {
         label: '免租终止日期',
         field: 'freeEndDate',
         component: <DatePicker />,
+        formatter: freeEndDate => moment(freeEndDate),
     },
     {
         label: '免租期限',
@@ -63,6 +88,27 @@ const rentItems = [
 ]
 
 const sellItems = [
+    {
+        label: '签约日期',
+        field: 'signDate',
+        component: <DatePicker placeholder="请输入" />,
+        formatter: signDate => moment(signDate),
+    },
+    {
+        label: '营业执照编号',
+        field: 'licenseNo',
+        component: <Input placeholder="请输入" />,
+    },
+    {
+        label: '付款方式',
+        field: 'payType',
+        component: <Input placeholder="请输入" />,
+    },
+    {
+        label: '合同编号',
+        field: 'contractNo',
+        component: <Input placeholder="请输入" />,
+    },
     {
         label: '预售单价（元/㎡）',
         field: 'advancePrice',
@@ -97,6 +143,7 @@ const sellItems = [
         label: '交房日期',
         field: 'startDate',
         component: <DatePicker />,
+        formatter: startDate => moment(startDate),
     },
 ]
 const formItemLayout = {
@@ -105,23 +152,61 @@ const formItemLayout = {
 }
 @connect(
     state => ({
-        bill: state.customerBill.bill,
+        customerBaseInfo: state.customer.customerBaseInfo,
+        customerRentInfo: state.customer.customerRentInfo,
     }),
     dispatch => {
         return bindActionCreators(
             {
-                push: push,
+                goBack: goBack,
                 addCustomer: actions('addCustomer'),
+                updateCustomer: actions('updateCustomer'),
+                getCustomerBaseInfo: customerActions('getCustomerBaseInfo'),
+                getCustomerRentInfo: customerActions('getCustomerRentInfo'),
             },
             dispatch,
         )
     },
 )
-class NewCustomer extends PureComponent {
+class CustomerForm extends PureComponent {
     state = {
         base: {
             rentType: '1',
         },
+        rent: {},
+    }
+    componentDidMount() {
+        const { id, getCustomerBaseInfo, getCustomerRentInfo } = this.props
+        if (id) {
+            getCustomerBaseInfo({
+                customerId: id,
+            })
+            getCustomerRentInfo({
+                customerId: id,
+            })
+        }
+    }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.customerBaseInfo !== nextProps.customerBaseInfo) {
+            let { customerBaseInfo } = nextProps
+            this.setState({
+                base: customerBaseInfo,
+            })
+        }
+        if (this.props.customerRentInfo !== nextProps.customerRentInfo) {
+            let { customerRentInfo } = nextProps
+            this.setState({
+                rent: customerRentInfo,
+            })
+        }
+    }
+
+    getCustomerId() {
+        const {
+            location: { pathname },
+        } = this.props.router
+        const params = pathname.match(/[^/]+/g)
+        return params[params.length - 1]
     }
     changeType = value => {
         this.setState({
@@ -135,16 +220,42 @@ class NewCustomer extends PureComponent {
     add = () => {
         this.baseForm.validateFields((errors, values) => {
             if (!errors) {
+                const { id, addCustomer, updateCustomer } = this.props
                 const other = this.otherForm.getFieldsValue()
-                this.props.addCustomer({
-                    ...values,
-                    ...other,
-                })
+                // 时间处理
+                if (other.signDate) {
+                    other.signDate = other.signDate.format('YYYY-MM-DD')
+                }
+                if (other.startDate) {
+                    other.startDate = other.startDate.format('YYYY-MM-DD')
+                }
+                if (other.endDate) {
+                    other.endDate = other.endDate.format('YYYY-MM-DD')
+                }
+                if (other.freeStartDate) {
+                    other.freeStartDate = other.freeStartDate.format('YYYY-MM-DD')
+                }
+                if (other.freeEndDate) {
+                    other.freeEndDate = other.freeEndDate.format('YYYY-MM-DD')
+                }
+                if (id) {
+                    //编辑
+                    updateCustomer({
+                        customerId: id,
+                        ...values,
+                        ...other,
+                    })
+                } else {
+                    addCustomer({
+                        ...values,
+                        ...other,
+                    })
+                }
             }
         })
     }
     render() {
-        const { base } = this.state
+        const { base, rent } = this.state
         const items = [
             {
                 label: '产品类型',
@@ -243,76 +354,45 @@ class NewCustomer extends PureComponent {
                 field: 'medium',
                 component: <Input placeholder="请输入" />,
             },
-            {
-                label: '签约日期',
-                field: 'signDate',
-                component: <DatePicker placeholder="请输入" />,
-            },
-            {
-                label: '营业执照编号',
-                field: 'licenseNo',
-                component: <Input placeholder="请输入" />,
-            },
-            {
-                label: '付款方式',
-                field: 'payType',
-                component: <Input placeholder="请输入" />,
-            },
-            {
-                label: '合同编号',
-                field: 'contractNo',
-                component: <Input placeholder="请输入" />,
-            },
         ]
         return (
-            <div className={theme.card}>
-                <div className={theme.title}>
-                    <Breadcrumb>
-                        <Breadcrumb.Item>
-                            <Link to="/bill">账单管理</Link>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>新增客户</Breadcrumb.Item>
-                    </Breadcrumb>
-                </div>
-                <div className={theme.content}>
-                    <div style={{ width: '760px' }}>
-                        <Divider>基本信息</Divider>
-                        <FormView
-                            items={items}
-                            data={base}
-                            layout="inline"
-                            saveBtn={false}
-                            ref={baseForm => {
-                                this.baseForm = baseForm
-                            }}
-                            formItemLayout={formItemLayout}
-                        />
-                        <Divider>其他信息</Divider>
-                        <FormView
-                            items={base.rentType === '1' ? rentItems : sellItems}
-                            layout="inline"
-                            saveBtn={false}
-                            ref={otherForm => {
-                                this.otherForm = otherForm
-                            }}
-                            formItemLayout={formItemLayout}
-                        />
-                        <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                            <Button
-                                type="primary"
-                                style={{ marginRight: '20px' }}
-                                onClick={this.add}
-                            >
-                                保存
-                            </Button>
-                            <Button>
-                                <Link to="/bill">取消</Link>
-                            </Button>
-                        </div>
-                    </div>
+            <div style={{ width: '760px' }}>
+                <Divider>基本信息</Divider>
+                <FormView
+                    items={items}
+                    data={base}
+                    layout="inline"
+                    saveBtn={false}
+                    ref={baseForm => {
+                        this.baseForm = baseForm
+                    }}
+                    formItemLayout={formItemLayout}
+                />
+                <Divider>其他信息</Divider>
+                <FormView
+                    items={base.rentType === '1' ? rentItems : sellItems}
+                    data={rent}
+                    layout="inline"
+                    saveBtn={false}
+                    ref={otherForm => {
+                        this.otherForm = otherForm
+                    }}
+                    formItemLayout={formItemLayout}
+                />
+                <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                    <Button type="primary" style={{ marginRight: '20px' }} onClick={this.add}>
+                        保存
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            this.props.goBack()
+                        }}
+                    >
+                        取消
+                    </Button>
                 </div>
             </div>
         )
     }
 }
-export default NewCustomer
+export default CustomerForm

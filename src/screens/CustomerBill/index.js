@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react'
 import { MenuLayout } from 'components'
 import CustomerBill from './CustomerBill'
+import CustomerAdd from './CustomerAdd'
+import CustomerEdit from './CustomerEdit'
 import Detail from './Detail/Detail'
-import NewCustomer from '../NewCustomer/NewCustomer'
 const menu = [
     {
         title: '客户账单',
@@ -12,11 +13,18 @@ const menu = [
         component: CustomerBill,
     },
     {
-        title: '客户维护',
+        title: '新增客户',
         display: 'none',
         icon: '',
-        path: '/bill/newCustomer',
-        component: NewCustomer,
+        path: '/bill/customerAdd',
+        component: CustomerAdd,
+    },
+    {
+        title: '编辑客户',
+        display: 'none',
+        icon: '',
+        path: '/bill/customerEdit/:id',
+        component: CustomerEdit,
     },
     {
         title: '客户详情',

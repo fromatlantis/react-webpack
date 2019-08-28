@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
-import { Avatar, Row, Col } from 'antd'
-import moment from 'moment'
+import { Avatar, Button, Row, Col } from 'antd'
+import { Link } from 'react-router-dom'
+import { AuthWrapper } from 'components'
 import styles from './CompanyInfo.module.css'
 import { connect } from 'react-redux'
 @connect(state => ({
@@ -19,7 +20,14 @@ class CompanyInfo extends PureComponent {
                     {item.customerName && item.customerName.substring(0, 4)}
                 </Avatar>
                 <div className={styles.detail}>
-                    <h1 className={styles.title}>{item.customerName}</h1>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <span className={styles.title}>{item.customerName}</span>
+                        <AuthWrapper auth="编辑企业">
+                            <Button type="primary" size="small">
+                                <Link to={`/bill/customerEdit/${item.id}`}>编辑企业</Link>
+                            </Button>
+                        </AuthWrapper>
+                    </div>
                     <Row gutter={16} style={{ marginTop: 6 }}>
                         <Col span={7}>
                             <div>业主名称：{item.ownerName}</div>

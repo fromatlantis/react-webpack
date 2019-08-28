@@ -1,5 +1,5 @@
 import { put, call, select } from 'redux-saga/effects'
-import { push } from 'connected-react-router'
+import { goBack } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
@@ -47,6 +47,7 @@ const model = {
             name: 'getCustomerBillListOK',
             reducer: 'bill',
         },
+        // 新增客户
         {
             name: 'addCustomer',
             *effect(action) {
@@ -58,7 +59,23 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('添加成功')
-                    yield put(push('/bill'))
+                    yield put(goBack())
+                }
+            },
+        },
+        // 编辑客户
+        {
+            name: 'updateCustomer',
+            *effect(action) {
+                const res = yield call(request, {
+                    type: 'post',
+                    url: `/charge/updateCustomer`,
+                    contentType: 'multipart/form-data',
+                    data: action.payload,
+                })
+                if (res.code === 1000) {
+                    message.success('修改成功')
+                    yield put(goBack())
                 }
             },
         },

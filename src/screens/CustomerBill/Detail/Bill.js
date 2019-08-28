@@ -3,6 +3,7 @@ import { Button, Table, Modal, Tag, Popconfirm } from 'antd'
 import theme from 'Theme'
 import BillForm from './BillForm'
 import BillDetail from './BillDetail'
+import { AuthWrapper } from 'components'
 // redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -136,45 +137,51 @@ class Bill extends PureComponent {
                 <div style={{ marginRight: 30 }}>
                     {record.status === '0' && (
                         <Fragment>
-                            <Button
-                                size="small"
-                                style={{ marginLeft: 10 }}
-                                type="primary"
-                                onClick={() => {
-                                    this.showEdit(record.id)
-                                }}
-                            >
-                                编辑
-                            </Button>
+                            <AuthWrapper auth="编辑账单">
+                                <Button
+                                    size="small"
+                                    style={{ marginLeft: 10 }}
+                                    type="primary"
+                                    onClick={() => {
+                                        this.showEdit(record.id)
+                                    }}
+                                >
+                                    编辑
+                                </Button>
+                            </AuthWrapper>
+                            <AuthWrapper auth="确认账单">
+                                <Popconfirm
+                                    title="账单是否核实？"
+                                    placement="bottom"
+                                    onConfirm={() => {
+                                        this.operateBatchConfirmBills([record.id])
+                                    }}
+                                    okText="确定"
+                                    cancelText="取消"
+                                >
+                                    <Button size="small" style={{ marginLeft: 10 }} type="primary">
+                                        确认
+                                    </Button>
+                                </Popconfirm>
+                            </AuthWrapper>
+                        </Fragment>
+                    )}
+                    {record.status === '1' && (
+                        <AuthWrapper auth="发送账单">
                             <Popconfirm
-                                title="账单是否核实？"
+                                title="确定要发送此账单？"
                                 placement="bottom"
                                 onConfirm={() => {
-                                    this.operateBatchConfirmBills([record.id])
+                                    this.operateBatchSendBills([record.id])
                                 }}
                                 okText="确定"
                                 cancelText="取消"
                             >
                                 <Button size="small" style={{ marginLeft: 10 }} type="primary">
-                                    确认
+                                    发送
                                 </Button>
                             </Popconfirm>
-                        </Fragment>
-                    )}
-                    {record.status === '1' && (
-                        <Popconfirm
-                            title="确定要发送此账单？"
-                            placement="bottom"
-                            onConfirm={() => {
-                                this.operateBatchSendBills([record.id])
-                            }}
-                            okText="确定"
-                            cancelText="取消"
-                        >
-                            <Button size="small" style={{ marginLeft: 10 }} type="primary">
-                                发送
-                            </Button>
-                        </Popconfirm>
+                        </AuthWrapper>
                     )}
                 </div>
             </div>
@@ -188,18 +195,20 @@ class Bill extends PureComponent {
                     <div>
                         <span className={theme.divider}>|</span>
                         <span className={theme.title}>账单列表</span>
-                        <Button
-                            size="small"
-                            type="primary"
-                            onClick={() => {
-                                this.setState({
-                                    addBillModal: true,
-                                    mode: 'add',
-                                })
-                            }}
-                        >
-                            添加
-                        </Button>
+                        <AuthWrapper auth="添加账单">
+                            <Button
+                                size="small"
+                                type="primary"
+                                onClick={() => {
+                                    this.setState({
+                                        addBillModal: true,
+                                        mode: 'add',
+                                    })
+                                }}
+                            >
+                                添加
+                            </Button>
+                        </AuthWrapper>
                     </div>
                 </div>
                 <Table

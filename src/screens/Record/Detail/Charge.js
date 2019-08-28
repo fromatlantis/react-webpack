@@ -3,6 +3,7 @@ import { Button, Table, Modal, Tag, Popconfirm } from 'antd'
 import theme from 'Theme'
 import ChargeForm from './ChargeForm'
 import ChargeDetail from './ChargeDetail'
+import { AuthWrapper } from 'components'
 // redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -149,19 +150,25 @@ class Charge extends PureComponent {
                                 编辑
                             </Button>
                             {parseFloat(record.restAmount) > 0 ? (
-                                <Popconfirm
-                                    title="确定要催缴此用户？"
-                                    placement="bottom"
-                                    onConfirm={() => {
-                                        this.operateAskPayment(record.id)
-                                    }}
-                                    okText="确定"
-                                    cancelText="取消"
-                                >
-                                    <Button size="small" style={{ marginLeft: 10 }} type="primary">
-                                        催缴
-                                    </Button>
-                                </Popconfirm>
+                                <AuthWrapper auth="催缴">
+                                    <Popconfirm
+                                        title="确定要催缴此用户？"
+                                        placement="bottom"
+                                        onConfirm={() => {
+                                            this.operateAskPayment(record.id)
+                                        }}
+                                        okText="确定"
+                                        cancelText="取消"
+                                    >
+                                        <Button
+                                            size="small"
+                                            style={{ marginLeft: 10 }}
+                                            type="primary"
+                                        >
+                                            催缴
+                                        </Button>
+                                    </Popconfirm>
+                                </AuthWrapper>
                             ) : (
                                 <Popconfirm
                                     title="确定此费用已结清吗？"

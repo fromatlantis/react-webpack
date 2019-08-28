@@ -38,7 +38,6 @@ export const blaze = model => {
         effects: model.actions
             .filter(item => item.effect)
             .map(item => {
-                console.log(item)
                 let type = generateType(item.name)
                 return takeEvery(type, item.effect)
             }),

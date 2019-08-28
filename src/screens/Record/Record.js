@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Alert, Button, DatePicker, Table, Input, Select, Tag, Modal, message } from 'antd'
-import { FormView } from 'components'
+import { AuthWrapper, FormView } from 'components'
 import theme from 'Theme'
 import BatchImport from './BatchImport/BatchImport'
 import ChargeForm from './Detail/ChargeForm'
@@ -262,7 +262,7 @@ class Record extends PureComponent {
         form.getFormValues(async params => {
             await request({
                 type: 'post',
-                url: `/charge/operateUpdateCusCharge`,
+                url: `/charge/updateBill`,
                 contentType: 'multipart/form-data',
                 data: {
                     chargeId: this.props.detail.id,
@@ -316,10 +316,14 @@ class Record extends PureComponent {
                         <Button type="primary" onClick={this.search}>
                             查询
                         </Button>
-                        <BatchImport />
-                        <Button type="primary" onClick={this.batchComfirm}>
-                            批量核对
-                        </Button>
+                        <AuthWrapper auth="批量导入">
+                            <BatchImport />
+                        </AuthWrapper>
+                        <AuthWrapper auth="批量核对">
+                            <Button type="primary" onClick={this.batchComfirm}>
+                                批量核对
+                            </Button>
+                        </AuthWrapper>
                     </div>
                 </div>
                 <Table

@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import { Alert, Button, DatePicker, Table, Input, Select, Tag, Modal, message } from 'antd'
-import { FormView } from 'components'
+import { AuthWrapper, FormView } from 'components'
 import theme from 'Theme'
 import BatchImport from './BatchImport/BatchImport'
 import BillForm from './Detail/BillForm'
@@ -356,16 +356,22 @@ class Bill extends PureComponent {
                         <Button type="primary" onClick={this.search}>
                             查询
                         </Button>
-                        <Button type="primary">
-                            <Link to="/bill/newCustomer">新增</Link>
-                        </Button>
+                        <AuthWrapper auth="新增企业">
+                            <Button type="primary">
+                                <Link to="/bill/customerAdd">新增企业</Link>
+                            </Button>
+                        </AuthWrapper>
                         <BatchImport />
-                        <Button type="primary" onClick={this.batchComfirm}>
-                            批量确认
-                        </Button>
-                        <Button type="primary" onClick={this.batchSend}>
-                            批量发送
-                        </Button>
+                        <AuthWrapper auth="批量确认">
+                            <Button type="primary" onClick={this.batchComfirm}>
+                                批量确认
+                            </Button>
+                        </AuthWrapper>
+                        <AuthWrapper auth="批量发送">
+                            <Button type="primary" onClick={this.batchSend}>
+                                批量发送
+                            </Button>
+                        </AuthWrapper>
                     </div>
                 </div>
                 <Table
