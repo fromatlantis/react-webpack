@@ -4,6 +4,7 @@ const routes = [
     {
         path: '/bill',
         name: '客户账单',
+        role: '客户账单',
         icon: 'appstore',
         navAttr: {
             index: 1,
@@ -17,6 +18,7 @@ const routes = [
     {
         path: '/record',
         name: '收费记录',
+        role: '收费记录',
         icon: 'appstore',
         navAttr: {
             index: 1,
@@ -30,6 +32,7 @@ const routes = [
     {
         path: '/stats',
         name: '统计分析',
+        role: '统计分析',
         icon: 'appstore',
         navAttr: {
             index: 1,

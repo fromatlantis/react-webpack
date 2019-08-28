@@ -49,7 +49,7 @@ class Settle extends PureComponent {
             } = nextProps.settleCount
             if (first) {
                 this.props.getSquareUpDetailList({
-                    month: first.month,
+                    month: first.monthValue,
                 })
             }
         }
@@ -204,7 +204,7 @@ class Settle extends PureComponent {
                         onRow={record => {
                             return {
                                 onClick: event => {
-                                    this.getDetail(record.month)
+                                    this.getDetail(record.monthValue)
                                 }, // 点击行
                             }
                         }}
@@ -231,6 +231,7 @@ class Settle extends PureComponent {
                     </div>
                     <Table
                         style={{ background: '#fff' }}
+                        scroll={{ x: 1100 }}
                         dataSource={settleDetailList.list}
                         columns={[
                             {
@@ -272,6 +273,8 @@ class Settle extends PureComponent {
                                 title: '状态',
                                 dataIndex: 'status',
                                 key: 'status',
+                                fixed: 'right',
+                                width: 80,
                             },
                         ]}
                         pagination={{
