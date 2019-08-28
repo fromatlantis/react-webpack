@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux'
 import { actions } from 'reduxDir/overview'
 import styles from './Overview.module.css'
 import { Select, Divider } from 'antd'
-import { BarChart } from 'components/Charts'
+import { BarChart, LineChart } from 'components/Charts'
+import SettleChart from '../Settle/SettleChart'
 
 const { Option } = Select
 const mapStateToProps = state => {
@@ -34,31 +35,25 @@ const mapDispatchToProps = dispatch => {
 )
 class Overview extends PureComponent {
     state = {
-        range: '3',
+        range: '0',
     }
     componentDidMount() {
         const range = this.state.range
         this.renderData({ range })
     }
     renderData = params => {
-        const { chargeAmountStatistic, chargeTypeStatistic } = this.props
+        const { chargeAmountStatistic, chargeTypeStatistic, squareUpStatusStatistic } = this.props
         chargeAmountStatistic(params)
         chargeTypeStatistic(params)
+        squareUpStatusStatistic(params)
     }
-    onChange(value) {
-        console.log(`selected ${value}`)
+    handleChange = value => {
+        this.setState({ range: value })
+        this.renderData({ range: value })
     }
-    onBlur() {
-        console.log('blur')
-    }
-    onFocus() {
-        console.log('focus')
-    }
-    onSearch(val) {
-        console.log('search:', val)
-    }
+
     render() {
-        const { amountStatistic, typeStatistic } = this.props
+        const { amountStatistic, typeStatistic, upStatusStatistic } = this.props
         return (
             <div>
                 <div className={styles.selectTime}>
@@ -67,14 +62,7 @@ class Overview extends PureComponent {
                         showSearch
                         style={{ width: 200 }}
                         placeholder="请选择"
-                        optionFilterProp="children"
-                        onChange={() => this.onChange()}
-                        // onFocus={() => this.onFocus()}
-                        // onBlur={() => this.onBlur()}
-                        onSearch={() => this.onSearch()}
-                        filterOption={(input, option) =>
-                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
+                        onChange={this.handleChange}
                     >
                         <Option value="1">近一个月</Option>
                         <Option value="2">近六个月</Option>
@@ -83,31 +71,72 @@ class Overview extends PureComponent {
                 </div>
                 <div className={styles.body}>
                     <div className={styles.amountStatistic}>
-                        <div className={styles.bluerec}>
-                            <div className={styles.blueFont}>{amountStatistic.shouldReceive}</div>
-                            <div className={styles.smalltitle}>应收/元</div>
-                        </div>
-                        <div className={styles.pinkrec}>
-                            <div className={styles.pinkFont}>{amountStatistic.realReceive}</div>
-                            <div className={styles.smalltitle}>实收/元</div>
-                        </div>
-                        <div className={styles.bluerec}>
-                            <div className={styles.blueFont}>{amountStatistic.squaredUpCount}</div>
-                            <div className={styles.smalltitle}>已结清笔数/笔</div>
-                        </div>
-                        <div className={styles.pinkrec}>
-                            <div className={styles.pinkFont}>
-                                {amountStatistic.notSquaredUpCount}
+                        {amountStatistic.shouldReceive == '0' ? (
+                            <div className={styles.grey}>
+                                <div className={styles.zero}>0</div>
+                                <div className={styles.zerotitle}>应收/元</div>
                             </div>
-                            <div className={styles.smalltitle}>未结清笔数/笔</div>
-                        </div>
+                        ) : (
+                            <div className={styles.bluerec}>
+                                <div className={styles.blueFont}>
+                                    {new Number(amountStatistic.shouldReceive).toFixed(2)}
+                                </div>
+                                <div className={styles.smalltitle}>应收/元</div>
+                            </div>
+                        )}
+                        {amountStatistic.realReceive == '0' ? (
+                            <div className={styles.grey}>
+                                <div className={styles.zero}>0</div>
+                                <div className={styles.zerotitle}>实收/元</div>
+                            </div>
+                        ) : (
+                            <div className={styles.pinkrec}>
+                                <div className={styles.pinkFont}>
+                                    {new Number(amountStatistic.realReceive).toFixed(2)}
+                                </div>
+                                <div className={styles.smalltitle}>实收/元</div>
+                            </div>
+                        )}
+                        {amountStatistic.squaredUpCount == '0' ? (
+                            <div className={styles.grey}>
+                                <div className={styles.zero}>0</div>
+                                <div className={styles.zerotitle}>已结清笔数/笔</div>
+                            </div>
+                        ) : (
+                            <div className={styles.bluerec}>
+                                <div className={styles.blueFont}>
+                                    {amountStatistic.squaredUpCount}
+                                </div>
+                                <div className={styles.smalltitle}>已结清笔数/笔</div>
+                            </div>
+                        )}
+                        {amountStatistic.notSquaredUpCount == '0' ? (
+                            <div className={styles.grey}>
+                                <div className={styles.zero}>0</div>
+                                <div className={styles.zerotitle}>未结清笔数/笔</div>
+                            </div>
+                        ) : (
+                            <div className={styles.pinkrec}>
+                                <div className={styles.pinkFont}>
+                                    {amountStatistic.notSquaredUpCount}
+                                </div>
+                                <div className={styles.smalltitle}>未结清笔数/笔</div>
+                            </div>
+                        )}
                     </div>
                     <div className={styles.title}>
                         <Divider className={styles.driver} type="vertical" />
                         费用类型统计
                     </div>
-                    <div style={{ height: '400px', marginTop: '50px' }}>
-                        <BarChart data={typeStatistic} />
+                    <div style={{ height: '400px', marginTop: '30px' }}>
+                        <BarChart direction="row" data={typeStatistic} />
+                    </div>
+                    <div className={styles.title} style={{ marginTop: '40px' }}>
+                        <Divider className={styles.driver} type="vertical" />
+                        结清情况统计
+                    </div>
+                    <div style={{ height: '400px' }}>
+                        <SettleChart titleTop data={upStatusStatistic} />
                     </div>
                 </div>
             </div>

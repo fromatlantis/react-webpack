@@ -65,7 +65,7 @@ export default class SettleChart extends PureComponent {
                     length: 0,
                 },
                 axisLabel: {
-                    interval: 0,
+                    // interval: 0,
                     textStyle: {
                         color: '#666',
                     },
