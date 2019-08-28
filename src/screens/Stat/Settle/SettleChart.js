@@ -34,7 +34,7 @@ export default class SettleChart extends PureComponent {
                 trigger: 'axis',
             },
             legend: {
-                data: ['纳税', '营收'],
+                data: ['已结清', '未结清'],
                 icon: 'rect',
                 top: 22,
                 right: 24,
@@ -65,7 +65,7 @@ export default class SettleChart extends PureComponent {
                     length: 0,
                 },
                 axisLabel: {
-                    interval: 0,
+                    // interval: 0,
                     textStyle: {
                         color: '#666',
                     },
