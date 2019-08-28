@@ -26,11 +26,14 @@ const model = {
             },
             *effect(action) {
                 const params = yield select(rootState => rootState.customerBill.searchParams)
-                const { receiveDate, ...others } = params
+                const { receiveDate, limitDate, ...others } = params
                 if (receiveDate) {
                     const [receiveDateBegin, receiveDateEnd] = receiveDate
                     others.receiveDateBegin = receiveDateBegin.format('YYYY.MM.DD')
                     others.receiveDateEnd = receiveDateEnd.format('YYYY.MM.DD')
+                }
+                if (limitDate) {
+                    others.limitDate = limitDate.format('YYYY.MM.DD')
                 }
                 const res = yield call(request, {
                     type: 'post',

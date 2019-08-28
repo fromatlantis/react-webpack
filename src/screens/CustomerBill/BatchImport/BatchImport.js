@@ -363,6 +363,8 @@ class BatchImport extends PureComponent {
             this.setState({
                 modal: false,
             })
+        } else {
+            message.warning('必填项没填写的数据将不可导入，正常数据将导入到系统中')
         }
     }
     modalCancel = () => {

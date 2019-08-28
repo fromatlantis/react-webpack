@@ -63,7 +63,7 @@ class Settle extends PureComponent {
     }
     changeDate = year => {
         this.setState({ year })
-        this.props.getSquareUpStatusCountList({
+        this.props.getSquareUpStatus({
             year: year.format('YYYY'),
         })
     }
@@ -128,6 +128,7 @@ class Settle extends PureComponent {
             settleDetailList,
             detailSearchParams,
         } = this.props
+        console.log(squareUpStatus)
         return (
             <div className={theme.card}>
                 <div className={theme.title}>

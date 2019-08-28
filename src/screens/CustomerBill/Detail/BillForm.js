@@ -208,16 +208,15 @@ class BillForm extends PureComponent {
             ],
             其它综合费用: [],
         }
-        const {
-            values: { type },
-        } = this.state
-        const items = costItems[type]
+        const { values } = this.state
+        const items = costItems[values.type]
         if (items.length > 0) {
             return (
                 <Fragment>
                     <Divider>收费信息</Divider>
                     <FormView
                         items={items}
+                        data={values}
                         layout="inline"
                         saveBtn={false}
                         wrappedComponentRef={costForm => {

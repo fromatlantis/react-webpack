@@ -179,6 +179,8 @@ class Bill extends PureComponent {
             this.setState({
                 comfirmModal: true,
             })
+            // 更新列表
+            this.props.getCustomerBillList()
         } else {
             message.error('请从列表中选择客户')
         }
