@@ -272,7 +272,7 @@ class Record extends PureComponent {
         form.getFormValues(async params => {
             await request({
                 type: 'post',
-                url: `/charge/updateBill`,
+                url: `/charge/operateUpdateCusCharge`,
                 contentType: 'multipart/form-data',
                 data: {
                     chargeId: this.props.detail.id,
@@ -404,6 +404,7 @@ class Record extends PureComponent {
                                         <Button
                                             size="small"
                                             type="link"
+                                            style={{ color: 'red' }}
                                             onClick={() => {
                                                 this.removeComfirm(record.feeId)
                                             }}
@@ -418,7 +419,7 @@ class Record extends PureComponent {
                     />
                 </Modal>
                 <Modal
-                    title="费用信息"
+                    title="费用信息2"
                     width={890}
                     visible={this.state.addBillModal}
                     onOk={this.addBillOk}

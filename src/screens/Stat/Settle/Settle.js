@@ -66,6 +66,7 @@ class Settle extends PureComponent {
         this.props.getSquareUpStatus({
             year: year.format('YYYY'),
         })
+        this.props.getSquareUpStatusCountList({ year: year.format('YYYY') })
     }
     exportCurrent = () => {
         const { year } = this.state

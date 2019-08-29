@@ -3,7 +3,7 @@ import { push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
-
+import { actions as customerBillActions } from './customerBill'
 const model = {
     namespace: 'bill',
     state: {
@@ -131,8 +131,11 @@ const model = {
                                 billId: action.payload.billIds,
                             }),
                         )
+                    } else if (action.payload.batch) {
+                        yield put(customerBillActions('getCustomerBillList')())
+                    } else {
+                        yield put(actions('getBillList')())
                     }
-                    yield put(actions('getBillList')())
                 }
             },
         },

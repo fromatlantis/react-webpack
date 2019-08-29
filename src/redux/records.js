@@ -32,12 +32,11 @@ const model = {
                     others.receiveDateBegin = receiveDateBegin.format('YYYY.MM.DD')
                     others.receiveDateEnd = receiveDateEnd.format('YYYY.MM.DD')
                 }
-                others.appIdentify = APPID
                 const res = yield call(request, {
                     type: 'post',
                     url: `/charge/getChargeRecords`,
                     contentType: 'multipart/form-data',
-                    data: others,
+                    data: { ...others, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     yield put(actions('getChargeRecordsOk')(res.data))

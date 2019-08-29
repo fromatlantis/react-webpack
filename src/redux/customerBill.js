@@ -35,12 +35,11 @@ const model = {
                 if (limitDate) {
                     others.limitDate = limitDate.format('YYYY.MM.DD')
                 }
-                others.appIdentify = APPID
                 const res = yield call(request, {
                     type: 'post',
                     url: `/charge/getCustomerBillList`,
                     contentType: 'multipart/form-data',
-                    data: others,
+                    data: { ...others, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     yield put(actions('getCustomerBillListOK')(res.data))

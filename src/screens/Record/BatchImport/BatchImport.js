@@ -142,6 +142,8 @@ class BatchImport extends PureComponent {
     }
     render() {
         const { current, importResponse } = this.state
+        const normalLength = importResponse.normalList ? importResponse.normalList.length : 0
+        const abnormalLength = importResponse.abnormalList ? importResponse.abnormalList.length : 0
         const uploadProps = {
             name: 'chargeFile',
             multiple: false,
@@ -239,10 +241,8 @@ class BatchImport extends PureComponent {
                     {current === 1 && (
                         <Fragment>
                             <Alert
-                                message={`共 ${parseInt(importResponse.normalList) +
-                                    parseInt(importResponse.abnormalList)} 项，正常数据 ${
-                                    importResponse.normalList
-                                } 项，异常数据 ${importResponse.abnormalList} 项`}
+                                message={`共 ${normalLength +
+                                    abnormalLength} 项，正常数据 ${normalLength} 项，异常数据 ${abnormalLength} 项，异常数据不会被导入。`}
                             />
                             <Tabs defaultActiveKey="1">
                                 <TabPane tab="正常数据" key="1">

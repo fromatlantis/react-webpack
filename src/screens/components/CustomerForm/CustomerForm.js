@@ -14,7 +14,7 @@ const rentItems = [
         label: '签约日期',
         field: 'signDate',
         component: <DatePicker placeholder="请输入" />,
-        formatter: signDate => moment(signDate),
+        formatter: signDate => signDate && moment(signDate),
     },
     {
         label: '营业执照编号',
@@ -40,13 +40,13 @@ const rentItems = [
         label: '租赁起始日期',
         field: 'startDate',
         component: <DatePicker />,
-        formatter: startDate => moment(startDate),
+        formatter: startDate => startDate && moment(startDate),
     },
     {
         label: '租赁终止日期',
         field: 'endDate',
         component: <DatePicker />,
-        formatter: endDate => moment(endDate),
+        formatter: endDate => endDate && moment(endDate),
     },
     {
         label: '租赁期限',
@@ -62,13 +62,13 @@ const rentItems = [
         label: '免租起始日期',
         field: 'freeStartDate',
         component: <DatePicker />,
-        formatter: freeStartDate => moment(freeStartDate),
+        formatter: freeStartDate => freeStartDate && moment(freeStartDate),
     },
     {
         label: '免租终止日期',
         field: 'freeEndDate',
         component: <DatePicker />,
-        formatter: freeEndDate => moment(freeEndDate),
+        formatter: freeEndDate => freeEndDate && moment(freeEndDate),
     },
     {
         label: '免租期限',
@@ -92,7 +92,7 @@ const sellItems = [
         label: '签约日期',
         field: 'signDate',
         component: <DatePicker placeholder="请输入" />,
-        formatter: signDate => moment(signDate),
+        formatter: signDate => signDate && moment(signDate),
     },
     {
         label: '营业执照编号',
@@ -143,7 +143,7 @@ const sellItems = [
         label: '交房日期',
         field: 'startDate',
         component: <DatePicker />,
-        formatter: startDate => moment(startDate),
+        formatter: startDate => startDate && moment(startDate),
     },
 ]
 const formItemLayout = {

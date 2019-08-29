@@ -192,6 +192,7 @@ class Bill extends PureComponent {
         } = this.state
         if (list && list.length > 0) {
             this.props.operateBatchConfirmBills({
+                batch: 'batch',
                 billIds: list.map(item => item.billId).join(','),
             })
             this.setState({
@@ -452,6 +453,7 @@ class Bill extends PureComponent {
                                         <Button
                                             size="small"
                                             type="link"
+                                            style={{ color: 'red' }}
                                             onClick={() => {
                                                 this.removeComfirm(record.billId)
                                             }}

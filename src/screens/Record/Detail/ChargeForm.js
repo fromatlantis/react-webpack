@@ -48,6 +48,7 @@ class BillForm extends PureComponent {
     componentWillReceiveProps(nextProps) {
         // 详情
         if (this.props.detail !== nextProps.detail) {
+            console.log(nextProps.detail)
             // 时间处理
             const {
                 shouldReceiveDateBegin,
@@ -58,16 +59,25 @@ class BillForm extends PureComponent {
                 receiveDate,
                 ...values
             } = nextProps.detail
-            values.shouldReceiveDate = [
-                moment(shouldReceiveDateBegin, 'YYYY.MM.DD'),
-                moment(shouldReceiveDateEnd, 'YYYY.MM.DD'),
-            ]
-            values.realReceiveDates = [
-                moment(realReceiveDateBegin, 'YYYY.MM.DD'),
-                moment(realReceiveDateEnd, 'YYYY.MM.DD'),
-            ]
-            values.limitDate = moment(limitDate, 'YYYY.MM.DD')
-            values.receiveDate = moment(receiveDate, 'YYYY.MM.DD')
+            if (shouldReceiveDateBegin) {
+                values.shouldReceiveDate = [
+                    moment(shouldReceiveDateBegin, 'YYYY.MM.DD'),
+                    moment(shouldReceiveDateEnd, 'YYYY.MM.DD'),
+                ]
+            }
+            if (realReceiveDateBegin) {
+                values.realReceiveDates = [
+                    moment(realReceiveDateBegin, 'YYYY.MM.DD'),
+                    moment(realReceiveDateEnd, 'YYYY.MM.DD'),
+                ]
+            }
+            if (limitDate) {
+                values.limitDate = moment(limitDate, 'YYYY.MM.DD')
+            }
+            if (receiveDate) {
+                values.receiveDate = moment(receiveDate, 'YYYY.MM.DD')
+            }
+            console.log(values)
             this.setState({
                 values,
             })
@@ -77,7 +87,7 @@ class BillForm extends PureComponent {
         const baseForm = this.baseForm.props.form
         baseForm.validateFields((errors, values) => {
             if (!errors) {
-                console.log(values)
+                // console.log(values)
                 // 时间处理
                 values.shouldReceiveDate = values.shouldReceiveDate
                     .map(item => item.format('YYYY.MM.DD'))
