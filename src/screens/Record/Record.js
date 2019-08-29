@@ -379,8 +379,8 @@ class Record extends PureComponent {
                         pagination={{
                             hideOnSinglePage: true,
                             total: confirmList.length,
+                            defaultPageSize: 5,
                         }}
-                        defaultPageSize={5}
                         columns={[
                             ...checkColumns,
                             {
@@ -419,7 +419,7 @@ class Record extends PureComponent {
                     />
                 </Modal>
                 <Modal
-                    title="费用信息2"
+                    title="费用信息"
                     width={890}
                     visible={this.state.addBillModal}
                     onOk={this.addBillOk}

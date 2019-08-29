@@ -249,14 +249,12 @@ class BatchImport extends PureComponent {
                                     <Table
                                         dataSource={importResponse.normalList}
                                         columns={columns}
-                                        defaultPageSize={5}
                                         scroll={{ x: 2300 }}
                                     />
                                 </TabPane>
                                 <TabPane tab="异常数据" key="2">
                                     <Table
                                         dataSource={importResponse.abnormalList}
-                                        defaultPageSize={5}
                                         columns={[
                                             ...columns,
                                             {

@@ -428,8 +428,8 @@ class Bill extends PureComponent {
                         pagination={{
                             hideOnSinglePage: true,
                             total: confirmList.totalCount,
+                            defaultPageSize: 5,
                         }}
-                        defaultPageSize={5}
                         columns={[
                             ...billColumns,
                             {
@@ -479,8 +479,8 @@ class Bill extends PureComponent {
                         pagination={{
                             hideOnSinglePage: true,
                             total: batchBillList.totalCount,
+                            defaultPageSize: 5,
                         }}
-                        defaultPageSize={5}
                         dataSource={batchBillList.list}
                         columns={billColumns}
                         scroll={{ x: 1500 }}
