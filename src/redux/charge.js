@@ -3,7 +3,7 @@ import { push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
-
+import { APPID } from '../config'
 const model = {
     namespace: 'charge',
     state: {
@@ -26,17 +26,11 @@ const model = {
             },
             *effect(action) {
                 const params = yield select(rootState => rootState.charge.searchParams)
-                const { receiveDate, ...others } = params
-                if (receiveDate) {
-                    const [receiveDateBegin, receiveDateEnd] = receiveDate
-                    others.receiveDateBegin = receiveDateBegin.format('YYYY.MM.DD')
-                    others.receiveDateEnd = receiveDateEnd.format('YYYY.MM.DD')
-                }
                 const res = yield call(request, {
                     type: 'post',
                     url: `/charge/getChargesByCus`,
                     contentType: 'multipart/form-data',
-                    data: params,
+                    data: { ...params, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     yield put(actions('getChargesByCusOK')(res.data))

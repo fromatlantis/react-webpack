@@ -4,6 +4,7 @@ import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
 import { actions as customerBillActions } from './customerBill'
+import { APPID } from '../config'
 const model = {
     namespace: 'bill',
     state: {
@@ -30,7 +31,7 @@ const model = {
                     // type: 'post',
                     url: `/charge/getBillList`,
                     // contentType: 'multipart/form-data',
-                    data: params,
+                    data: { ...params, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     yield put(actions('getBillListOK')(res.data))

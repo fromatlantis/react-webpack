@@ -105,7 +105,7 @@ const model = {
                     type: 'post',
                     url: `/charge/getBatchConfirmBillList`,
                     contentType: 'multipart/form-data',
-                    data: action.payload,
+                    data: { ...action.payload, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     yield put(actions('getBatchConfirmBillListOk')(res.data))

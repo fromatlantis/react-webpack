@@ -3,7 +3,7 @@ import { push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
-
+import { APPID } from '../config'
 const model = {
     namespace: 'changes',
     state: {
@@ -27,7 +27,7 @@ const model = {
                     type: 'post',
                     url: `/charge/getRecordsList`,
                     contentType: 'multipart/form-data',
-                    data: action.payload,
+                    data: { ...action.payload, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     yield put(actions('getRecordsListOK')(res.data))

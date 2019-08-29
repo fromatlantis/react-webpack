@@ -90,7 +90,7 @@ const model = {
                     type: 'post',
                     url: `/charge/operateVerifyCharge`,
                     contentType: 'multipart/form-data',
-                    data: action.payload,
+                    data: { ...action.payload, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     message.success('核对成功')

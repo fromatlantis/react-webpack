@@ -11,11 +11,13 @@ const { Option } = Select
 const mapStateToProps = state => {
     return {
         amountStatistic: state.overview.amountStatistic,
-        typeStatistic: state.overview.typeStatistic.map(item => {
-            item.name = item.type
-            item.value = item.count
-            return item
-        }),
+        typeStatistic: state.overview.typeStatistic
+            .map(item => {
+                item.name = item.type
+                item.value = item.count
+                return item
+            })
+            .reverse(),
         upStatusStatistic: state.overview.upStatusStatistic,
     }
 }
