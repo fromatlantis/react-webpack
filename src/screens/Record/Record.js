@@ -6,6 +6,7 @@ import theme from 'Theme'
 import BatchImport from './BatchImport/BatchImport'
 import ChargeForm from './Detail/ChargeForm'
 import request from '../../utils/request'
+import moment from 'moment'
 // redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -144,13 +145,21 @@ const checkColumns = [
     },
     {
         title: '收款所属期',
-        dataIndex: 'receiveDate',
-        key: 'receiveDate',
+        dataIndex: 'realReceiveDates',
+        key: 'realReceiveDates',
     },
     {
         title: '收款日期',
         dataIndex: 'receiveDate',
         key: 'receiveDate',
+        defaultSortOrder: 'descend',
+        sorter: (a, b) => moment(a.receiveDate, 'YYYY.MM.DD') - moment(b.receiveDate, 'YYYY.MM.DD'),
+    },
+    {
+        title: '实收款余额',
+        dataIndex: 'realAmount',
+        key: 'realAmount',
+        sorter: (a, b) => parseFloat(a.realAmount) - parseFloat(b.realAmount),
     },
     {
         title: '凭证号',
@@ -161,6 +170,7 @@ const checkColumns = [
         title: '未收余额',
         dataIndex: 'restAmount',
         key: 'restAmount',
+        sorter: (a, b) => parseFloat(a.restAmount) - parseFloat(b.restAmount),
     },
 ]
 let selectedIds = []
@@ -363,12 +373,14 @@ class Record extends PureComponent {
                     width={930}
                     // bodyStyle={{ height: 430, overflow: 'auto' }}
                 >
+                    <Alert type="info" message={`核对费用共 ${confirmList.length || 0} 项`} />
                     <Table
                         dataSource={confirmList}
                         pagination={{
                             hideOnSinglePage: true,
                             total: confirmList.length,
                         }}
+                        defaultPageSize={5}
                         columns={[
                             ...checkColumns,
                             {
@@ -402,7 +414,7 @@ class Record extends PureComponent {
                                 ),
                             },
                         ]}
-                        scroll={{ x: 1300 }}
+                        scroll={{ x: 1500 }}
                     />
                 </Modal>
                 <Modal

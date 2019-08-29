@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from 'react'
-import { Button, Upload, Modal, Steps, Radio, Tabs, Table, message } from 'antd'
+import { Alert, Button, Upload, Modal, Steps, Radio, Tabs, Table, message } from 'antd'
 import { IconFont } from 'components'
 import styles from './BatchImport.module.css'
 // redux
@@ -403,10 +403,15 @@ class BatchImport extends PureComponent {
                     console.log(info.file, info.fileList)
                 }
                 if (status === 'done') {
-                    message.success(`${info.file.name}上传成功`)
-                    this.setState({
-                        importResponse: info.file.response.data,
-                    })
+                    const { response } = info.file
+                    if (response.code === 1000) {
+                        message.success(`${info.file.name}上传成功`)
+                        this.setState({
+                            importResponse: response.data,
+                        })
+                    } else {
+                        message.error(response.message)
+                    }
                 } else if (status === 'error') {
                     message.error(`${info.file.name}上传失败`)
                 }
@@ -516,22 +521,39 @@ class BatchImport extends PureComponent {
                         </div>
                     )}
                     {current === 1 && (
-                        <Tabs defaultActiveKey="1">
-                            <TabPane tab="正常数据" key="1">
-                                <Table
-                                    dataSource={importResponse.normalList}
-                                    columns={columsMap[type]}
-                                    scroll={{ x: 2300 }}
-                                />
-                            </TabPane>
-                            <TabPane tab="异常数据" key="2">
-                                <Table
-                                    dataSource={importResponse.abnormalList}
-                                    columns={columsMap[type]}
-                                    scroll={{ x: 2300 }}
-                                />
-                            </TabPane>
-                        </Tabs>
+                        <Fragment>
+                            <Alert
+                                message={`共 ${parseInt(importResponse.normalList) +
+                                    parseInt(importResponse.abnormalList)} 项，正常数据 ${
+                                    importResponse.normalList
+                                } 项，异常数据 ${importResponse.abnormalList} 项`}
+                            />
+                            <Tabs defaultActiveKey="1">
+                                <TabPane tab="正常数据" key="1">
+                                    <Table
+                                        dataSource={importResponse.normalList}
+                                        defaultPageSize={5}
+                                        columns={columsMap[type]}
+                                        scroll={{ x: 2300 }}
+                                    />
+                                </TabPane>
+                                <TabPane tab="异常数据" key="2">
+                                    <Table
+                                        dataSource={importResponse.abnormalList}
+                                        defaultPageSize={5}
+                                        columns={[
+                                            ...columsMap[type],
+                                            {
+                                                title: '异常原因',
+                                                dataIndex: 'reason',
+                                                key: 'reason',
+                                            },
+                                        ]}
+                                        scroll={{ x: 2300 }}
+                                    />
+                                </TabPane>
+                            </Tabs>
+                        </Fragment>
                     )}
                 </Modal>
             </Fragment>

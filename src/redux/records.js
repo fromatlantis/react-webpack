@@ -94,6 +94,7 @@ const model = {
                 })
                 if (res.code === 1000) {
                     message.success('核对成功')
+                    yield put(actions('getChargeRecords')())
                 }
             },
         },

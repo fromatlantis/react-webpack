@@ -6,6 +6,7 @@ import theme from 'Theme'
 import BatchImport from './BatchImport/BatchImport'
 import BillForm from './Detail/BillForm'
 import request from '../../utils/request'
+import moment from 'moment'
 // redux
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -330,11 +331,19 @@ class Bill extends PureComponent {
                 title: '应缴费日期',
                 dataIndex: 'limitDate',
                 key: 'limitDate',
+                fixed: 'right',
+                width: 150,
+                defaultSortOrder: 'descend',
+                sorter: (a, b) =>
+                    moment(a.limitDate, 'YYYY.MM.DD') - moment(b.limitDate, 'YYYY.MM.DD'),
             },
             {
                 title: '应收款金额',
                 dataIndex: 'amount',
                 key: 'amount',
+                fixed: 'right',
+                width: 150,
+                sorter: (a, b) => parseFloat(a.amount) - parseFloat(b.amount),
             },
         ]
         return (
@@ -419,6 +428,7 @@ class Bill extends PureComponent {
                             hideOnSinglePage: true,
                             total: confirmList.totalCount,
                         }}
+                        defaultPageSize={5}
                         columns={[
                             ...billColumns,
                             {
@@ -452,7 +462,7 @@ class Bill extends PureComponent {
                                 ),
                             },
                         ]}
-                        scroll={{ x: 1300 }}
+                        scroll={{ x: 1500 }}
                     />
                 </Modal>
                 <Modal
@@ -468,9 +478,10 @@ class Bill extends PureComponent {
                             hideOnSinglePage: true,
                             total: batchBillList.totalCount,
                         }}
+                        defaultPageSize={5}
                         dataSource={batchBillList.list}
                         columns={billColumns}
-                        scroll={{ x: 1300 }}
+                        scroll={{ x: 1500 }}
                     />
                 </Modal>
                 <Modal
