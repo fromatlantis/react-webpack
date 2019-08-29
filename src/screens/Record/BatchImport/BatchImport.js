@@ -120,7 +120,7 @@ class BatchImport extends PureComponent {
         } = this.state
         if (normalList.length > 0) {
             this.props.operateBatchLoadCharges({
-                dataJson: JSON.stringify(normalList),
+                normalList: JSON.stringify(normalList),
             })
             this.setState({
                 modal: false,
