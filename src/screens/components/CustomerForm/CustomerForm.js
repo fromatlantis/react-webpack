@@ -117,12 +117,12 @@ const sellItems = [
     {
         label: '预售面积（㎡）',
         field: 'advanceArea',
-        component: <DatePicker />,
+        component: <Input placeholder="请输入" />,
     },
     {
         label: '实际面积（㎡）',
         field: 'realArea',
-        component: <DatePicker />,
+        component: <Input placeholder="请输入" />,
     },
     {
         label: '预售总价（元）',
@@ -137,7 +137,7 @@ const sellItems = [
     {
         label: '实际面积单价（元/㎡)',
         field: 'realPrice',
-        component: <DatePicker />,
+        component: <Input placeholder="请输入" />,
     },
     {
         label: '交房日期',
@@ -356,7 +356,7 @@ class CustomerForm extends PureComponent {
             },
         ]
         return (
-            <div style={{ width: '760px' }}>
+            <div style={{ width: '860px' }}>
                 <Divider>基本信息</Divider>
                 <FormView
                     items={items}
