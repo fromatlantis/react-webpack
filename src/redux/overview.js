@@ -3,7 +3,7 @@ import { push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
-
+import { APPID } from '../config'
 const model = {
     namespace: 'overview',
     state: {
@@ -18,7 +18,7 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     type: 'get',
-                    url: `/charge/chargeAmountStatistic?range=${action.payload.range}`,
+                    url: `/charge/chargeAmountStatistic?range=${action.payload.range}&appIdentify=${APPID}`,
                 })
                 if (res.code === 1000) {
                     yield put(actions('amountStatisticOK')(res.data))
@@ -40,7 +40,7 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     type: 'get',
-                    url: `/charge/chargeTypeStatistic?range=${action.payload.range}`,
+                    url: `/charge/chargeTypeStatistic?range=${action.payload.range}&appIdentify=${APPID}`,
                 })
                 if (res.code === 1000) {
                     yield put(actions('chargeTypeStatisticOK')(res.data))
@@ -68,7 +68,7 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     type: 'get',
-                    url: `/charge/squareUpStatusStatistic?range=${action.payload.range}`,
+                    url: `/charge/squareUpStatusStatistic?range=${action.payload.range}&appIdentify=${APPID}`,
                 })
                 if (res.code === 1000) {
                     yield put(actions('squareUpStatusStatisticOK')(res.data))

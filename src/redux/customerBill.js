@@ -3,7 +3,7 @@ import { goBack } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
-
+import { APPID } from '../config'
 const model = {
     namespace: 'customerBill',
     state: {
@@ -35,6 +35,7 @@ const model = {
                 if (limitDate) {
                     others.limitDate = limitDate.format('YYYY.MM.DD')
                 }
+                others.appIdentify = APPID
                 const res = yield call(request, {
                     type: 'post',
                     url: `/charge/getCustomerBillList`,

@@ -3,7 +3,7 @@ import { push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
-
+import { APPID } from '../config'
 const model = {
     namespace: 'statTypes',
     state: {
@@ -25,7 +25,7 @@ const model = {
             *effect(action) {
                 const res = yield call(request, {
                     url: `/charge/getChargeTypeDistribute`,
-                    data: action.payload,
+                    data: { ...action.payload, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     yield put(actions('getChargeTypeDistributeOK')(res.data))
@@ -50,7 +50,7 @@ const model = {
                     type: 'post',
                     contentType: 'multipart/form-data',
                     url: `/charge/getChargeTypeCountList`,
-                    data: params,
+                    data: { ...params, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     yield put(actions('getChargeTypeCountListOK')(res.data))
@@ -69,7 +69,7 @@ const model = {
                     type: 'post',
                     contentType: 'multipart/form-data',
                     url: `/charge/exportChargeTypeCountList`,
-                    data: action.payload,
+                    data: { ...action.payload, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     window.location.href = res.data
@@ -91,7 +91,7 @@ const model = {
                     type: 'post',
                     contentType: 'multipart/form-data',
                     url: `/charge/getChargeTypeDetailList`,
-                    data: params,
+                    data: { ...params, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     yield put(actions('getChargeTypeDetailListOK')(res.data))
@@ -110,7 +110,7 @@ const model = {
                     type: 'post',
                     contentType: 'multipart/form-data',
                     url: `/charge/exportChargeTypeDetailList`,
-                    data: action.payload,
+                    data: { ...action.payload, appIdentify: APPID },
                 })
                 if (res.code === 1000) {
                     window.location.href = res.data

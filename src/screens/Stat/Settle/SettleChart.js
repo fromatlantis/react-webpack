@@ -19,7 +19,7 @@ export default class SettleChart extends PureComponent {
         }
     }
     initChart = () => {
-        let { data } = this.props
+        let { data, title } = this.props
         let dataSeries = [],
             done = [],
             todo = []
@@ -30,6 +30,13 @@ export default class SettleChart extends PureComponent {
         })
         var myChart = echarts.init(this.refs.lineChart)
         var option = {
+            title: {
+                text: title,
+                textStyle: {
+                    fontSize: 14,
+                },
+                left: 6,
+            },
             tooltip: {
                 trigger: 'axis',
             },
@@ -48,9 +55,10 @@ export default class SettleChart extends PureComponent {
             },
             color: ['#289df5', '#fbc01b'],
             grid: {
-                left: 24,
-                right: 0,
-                bottom: '30',
+                top: title ? 50 : 10,
+                right: 10,
+                left: 10,
+                bottom: 10,
                 containLabel: true,
             },
             xAxis: {

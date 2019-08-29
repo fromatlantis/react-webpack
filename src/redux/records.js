@@ -3,7 +3,7 @@ import { push } from 'connected-react-router'
 import request from '../utils/request'
 import { blaze } from '../utils/blaze'
 import { message } from 'antd'
-
+import { APPID } from '../config'
 const model = {
     namespace: 'records',
     state: {
@@ -32,6 +32,7 @@ const model = {
                     others.receiveDateBegin = receiveDateBegin.format('YYYY.MM.DD')
                     others.receiveDateEnd = receiveDateEnd.format('YYYY.MM.DD')
                 }
+                others.appIdentify = APPID
                 const res = yield call(request, {
                     type: 'post',
                     url: `/charge/getChargeRecords`,
