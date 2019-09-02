@@ -1,21 +1,52 @@
-/* list页面 */
-.listContainer {
-    padding: 10px;
-    & .search {
-        width: 300px;
-        margin-bottom: 10px;
-        margin-left: 5px;
-        margin-right: 5px;
+@import '~ThemeVariables';
+.defaultBg {
+    background: var(--default-background);
+}
+.flex {
+    display: flex;
+    align-items: center;
+}
+.btnGroup {
+    & button {
+        margin-left: 9px;
+    } 
+}
+/* 内容区 */
+.content {
+    padding: 0.3rem 0.4rem 0.1rem 0.3rem;
+}
+.card {
+    & .title {
+        padding: 0.3rem;
     }
-    & .info {
-        margin-bottom: 10px;
-        margin-top: 10px;
+    & .content {
+        background: rgba(255,255,255,1);
+        box-shadow: 0px 4px 10px 0px rgba(167,191,227,0.37);
+        margin: 0 0.4rem 0.1rem 0.3rem;
+        padding: 0.5rem 0.4rem;
     }
 }
-/* form表单 */
-.form {
-    padding: 20px 10px;
-}
-.inputChip {
-    width: 300px
+/* 详情卡片 */
+.detailCard {
+    padding: 0.4rem;
+    background: #fff;
+    & .titleChip {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 0.2rem;
+    }
+    & .divider {
+        font-size: 0.16rem;
+        font-weight: bold;
+        color: rgba(64,152,255,1);
+    }
+    & .title {
+        font-size: 0.16rem;
+        padding: 0 6px;
+    }
+    & :global .ant-descriptions-bordered :global .ant-descriptions-item-label {
+        /* background-color: #EBF5FF; */
+        width: 260px;
+    }
 }

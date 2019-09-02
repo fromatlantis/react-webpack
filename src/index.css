@@ -1,4 +1,7 @@
 @import '~ThemeVariables';
+html {
+    font-size: calc(100vw / 19.2);
+}
 body {
   margin: 0;
   padding: 0;
@@ -38,22 +41,21 @@ em {
     background: rgba(255,0,0,0.4);
 }
 
+/* 表单 */
 .ant-form-inline .ant-form-item-with-help {
     margin-bottom: 0;
+}
+.ant-form-inline .ant-form-item {
+    width: 360px;
+}
+.ant-breadcrumb {
+    font-size: 16px;
 }
 /* 时间轴-最后一行高度太高 */
 .ant-timeline-item-last > .ant-timeline-item-content {
     min-height: 0px;
 }
-/* rem适配 */
-@media screen and (min-width: 1200px) {
-    html {
-        font-size: 625%;
-        /* font-size: 395%; */
-    }
-}
-@media screen and (min-width: 1900px) {
-    html {
-        font-size: 625%;
-    }
+/* 左侧菜单 */
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: #1156A2;
 }

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { message } from 'antd'
 import { store } from '../index'
-//import { replace } from 'connected-react-router'
+import { push } from 'connected-react-router'
 import { actions } from 'reduxDir/loading'
 import { redirectLogin } from './index'
 // 状态码错误信息
@@ -88,7 +88,7 @@ export default ({ type = 'get', url, data = {}, contentType = 'application/json'
     if (contentType === 'multipart/form-data') {
         let formData = new FormData()
         for (let k in data) {
-            data[k] && formData.append(k, data[k])
+            data[k] !== undefined && data[k] !== null && formData.append(k, data[k])
         }
         postData = formData
     }
@@ -102,12 +102,14 @@ export default ({ type = 'get', url, data = {}, contentType = 'application/json'
         .catch(error => {
             const { status, statusText } = error.response
             const errortext = codeMessage[status] || statusText
-            //const { dispatch } = store;
+            const { dispatch } = store
             if (status === 401) {
                 redirectLogin({
                     type: 0,
                     storeurl: true,
                 })
+            } else if (status === 500) {
+                dispatch(push('/505'))
             }
             return { code: status, message: codeMessage[errortext] }
         })

@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 
 import { Menu } from 'antd'
-import { getNav } from '../../routes/routes'
+import { routes } from '../../routes/routes'
+import { getNav } from '../../utils/authRouter'
 
 const SubMenu = Menu.SubMenu
 
@@ -25,29 +25,30 @@ class NewNavigation extends PureComponent {
                         title={
                             <span>
                                 {/* <Icon type={item.icon} theme="outlined" /> */}
-                                <span>{item.name}</span>
+                                <span>{item.title}</span>
                             </span>
                         }
                     >
                         {this.generateMenu(item.children)}
                     </SubMenu>
                 )
-            } else {
+            } else if (item.path) {
                 return (
                     <Menu.Item key={item.path}>
                         <NavLink to={item.path}>
-                            <span>{item.name}</span>
+                            <span>{item.title}</span>
                         </NavLink>
                     </Menu.Item>
                 )
+            } else {
+                return null
             }
         })
     }
     render() {
         const { location } = this.props.router
         const openKeys = '/' + location.pathname.match(/[^/]+/)
-        // console.log(this.props.auths)
-        const menu = getNav(this.props.auths)
+        const navs = getNav(routes, this.props.auths)
         return (
             <Menu
                 //defaultSelectedKeys={[location.pathname]}
@@ -57,7 +58,7 @@ class NewNavigation extends PureComponent {
                 style={{ lineHeight: '64px' }}
                 theme="dark"
             >
-                {this.generateMenu(menu)}
+                {this.generateMenu(navs)}
             </Menu>
         )
     }

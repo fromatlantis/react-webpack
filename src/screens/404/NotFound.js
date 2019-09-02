@@ -6,7 +6,7 @@ export default class NotFound extends PureComponent {
         return (
             <div className={styles.fullScreen}>
                 <img src={logo} alt="404 not found" />
-                <h1>404 Page Not Found</h1>
+                <p className={styles.des}>抱歉，您访问的页面不存在!~</p>
             </div>
         )
     }

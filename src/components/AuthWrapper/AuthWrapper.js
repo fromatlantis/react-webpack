@@ -7,8 +7,8 @@ import { connect } from 'react-redux'
 })
 class AuthWrapper extends PureComponent {
     render() {
-        const { auths, role, children } = this.props
-        if (role && !auths.includes(role)) {
+        const { auths, auth, children } = this.props
+        if (auth && !auths.includes(auth)) {
             return <Fragment />
         } else {
             return children

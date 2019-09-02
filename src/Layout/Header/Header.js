@@ -20,7 +20,7 @@ export default class Header extends Component {
                         <a href={`${config.origin}/portal`}>
                             <Avatar shape="square" size="large" src={hz} />
                         </a>
-                        <span className={styles.title}>物业服务</span>
+                        <span className={styles.title}>项目名称</span>
                     </div>
                     <Navigation auths={this.props.auths} />
                 </div>
