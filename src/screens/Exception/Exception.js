@@ -23,7 +23,7 @@ export default class Exception extends PureComponent {
         const item = status[statusCode]
         return (
             <div className={styles.fullScreen}>
-                <img src={item.img} alt="404 not found" />
+                <img src={item.img} alt={statusCode} />
                 <p className={styles.des}>{item.des}</p>
             </div>
         )
