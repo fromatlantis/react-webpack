@@ -15,7 +15,7 @@ export default class Header extends Component {
         let { name, account, photo } = this.props.user
         return (
             <Layout.Header className={styles.header}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
                     <div>
                         <a href={`${config.origin}/portal`}>
                             <Avatar shape="square" size="large" src={hz} />

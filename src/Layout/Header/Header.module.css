@@ -32,3 +32,10 @@
     cursor: pointer;
     color: #1890ff;
 }
+.login{
+    line-height: 64px;
+    height: 64px;
+    cursor: pointer;
+    width: 160px;
+    text-align: right;
+}
