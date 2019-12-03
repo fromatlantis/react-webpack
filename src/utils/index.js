@@ -17,8 +17,10 @@ const redirectLogin = ({ type = 0, storeurl = false }) => {
     }
 }
 // 获取地址栏参数
-const getUrlParams = () => {
-    return qs.parse(window.location.href.split('?')[1])
+// 获取地址栏参数
+const getUrlParam = param => {
+    let searchParams = new URLSearchParams(window.location.href.split('?')[1])
+    return searchParams.get(param)
 }
 /**
  * 加解密
@@ -57,4 +59,4 @@ const DESEncrypt = (message, key = 'TUSMART_HOUZAI') => {
     })
     return encrypted.ciphertext.toString(CryptoJS.enc.Base64)
 }
-export { getBase64, redirectLogin, getUrlParams, DESEncrypt, DESDecrypt }
+export { getBase64, redirectLogin, getUrlParam, DESEncrypt, DESDecrypt }
