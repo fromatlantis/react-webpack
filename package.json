@@ -4,6 +4,7 @@
     "private": true,
     "dependencies": {
         "@babel/core": "7.1.0",
+        "@commitlint/cli": "^8.2.0",
         "@svgr/webpack": "2.4.1",
         "antd": "^3.21.2",
         "axios": "^0.18.0",
@@ -88,7 +89,8 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "lint-staged"
+            "pre-commit": "lint-staged",
+            "commit-msg": "commitlint -e $GIT_PARAMS"
         }
     },
     "lint-staged": {
