@@ -99,7 +99,7 @@
             "yarn lint:write",
             "git add"
         ],
-        "src/*.css": [
+        "*.css": [
             "yarn stylelint:write",
             "git add"
         ]
