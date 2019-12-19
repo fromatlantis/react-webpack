@@ -95,11 +95,11 @@
         }
     },
     "lint-staged": {
-        "src/*.(js|jsx)": [
+        "src/**/*.(js|jsx)": [
             "yarn lint:write",
             "git add"
         ],
-        "*.css": [
+        "src/**/*.css": [
             "yarn stylelint:write",
             "git add"
         ]
