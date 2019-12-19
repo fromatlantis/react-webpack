@@ -4,8 +4,6 @@
     "private": true,
     "dependencies": {
         "@babel/core": "7.1.0",
-        "@commitlint/cli": "^8.2.0",
-        "@commitlint/config-conventional": "^8.2.0",
         "@svgr/webpack": "2.4.1",
         "antd": "^3.21.2",
         "axios": "^0.18.0",
@@ -86,6 +84,8 @@
         "test": "node scripts/test.js",
         "lint": "eslint --debug src/",
         "lint:write": "eslint --debug src/ --fix",
+        "stylelint": "stylelint 'src/**/*.css'",
+        "stylelint:write": "stylelint 'src/**/*.css' --fix",
         "update": "git pull https://github.com/fromatlantis/react-webpack.git"
     },
     "husky": {
@@ -97,6 +97,7 @@
     "lint-staged": {
         "src/*.(js|jsx)": [
             "yarn lint:write",
+            "yarn stylelint:write",
             "git add"
         ]
     },
@@ -175,10 +176,15 @@
     },
     "devDependencies": {
         "@babel/plugin-proposal-decorators": "^7.4.4",
+        "@commitlint/cli": "^8.2.0",
+        "@commitlint/config-conventional": "^8.2.0",
         "husky": "^2.1.0",
         "lint-staged": "^8.1.5",
         "prettier": "^1.17.0",
-        "redux-logger": "^3.0.6"
+        "redux-logger": "^3.0.6",
+        "stylelint": "^12.0.0",
+        "stylelint-config-standard": "^19.0.0",
+        "stylelint-order": "^3.1.1"
     },
     "homepage": "."
 }

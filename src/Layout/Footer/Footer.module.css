@@ -1,4 +1,5 @@
 @import '~ThemeVariables';
+
 .footer {
     text-align: center;
     margin-left: var(--siderWidth);

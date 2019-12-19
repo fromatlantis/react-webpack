@@ -1,8 +1,11 @@
 @import '~ThemeVariables';
+
 .root {
     margin-left: var(--siderWidth);
+
     /* padding: 30px; */
 }
+
 .noNav {
     margin-left: 0;
 }

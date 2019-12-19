@@ -1,61 +1,79 @@
 @import '~ThemeVariables';
+
 html {
     font-size: calc(100vw / 19.2);
 }
+
 body {
-  margin: 0;
-  padding: 0;
-  font-family: -var(--font-family-base);
-  background-color: -var(--secondary-color);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+    font-family: -var(--font-family-base);
+    background-color: -var(--secondary-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+
 p {
     margin: 0;
 }
+
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+    font-family:
+        source-code-pro,
+        Menlo,
+        Monaco,
+        Consolas,
+        "Courier New",
+        monospace;
 }
+
 em {
     color: red;
     font-style: normal;
 }
+
 /* 设置滚动条的样式 */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
 }
+
 /* 滚动槽 */
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.3);
+    -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.3);
     border-radius: 6px;
 }
+
 /* 滚动条滑块 */
 ::-webkit-scrollbar-thumb {
     background: #ccc;
     border-radius: 6px;
-    -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
 }
+
 ::-webkit-scrollbar-thumb:window-inactive {
-    background: rgba(255,0,0,0.4);
+    background: rgba(255, 0, 0, 0.4);
 }
 
 /* 表单 */
 .ant-form-inline .ant-form-item-with-help {
     margin-bottom: 0;
 }
+
 .ant-form-inline .ant-form-item {
     width: 360px;
 }
+
 .ant-breadcrumb {
     font-size: 16px;
 }
+
 /* 时间轴-最后一行高度太高 */
 .ant-timeline-item-last > .ant-timeline-item-content {
-    min-height: 0px;
+    min-height: 0;
 }
+
 /* 左侧菜单 */
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-    background-color: #1156A2;
+    background-color: #1156a2;
 }

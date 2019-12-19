@@ -1,5 +1,6 @@
 .carousel {
     width: 600px;
+
     /* height: 400px; */
 }
 
@@ -8,10 +9,11 @@
     height: 80px;
     padding: 2px;
 }
+
 .carousel img {
     height: 400px;
-
 }
+
 .littleThumb {
     list-style: none;
     display: flex;
@@ -22,9 +24,11 @@
     left: 20px;
     right: 20px;
 }
+
 .selected {
     border: 1px solid #000;
 }
+
 .guideBox {
     width: 20px;
     background: #ccc;
@@ -33,5 +37,4 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-
 }

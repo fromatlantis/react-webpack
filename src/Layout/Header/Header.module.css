@@ -1,4 +1,5 @@
 @import '~ThemeVariables';
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -9,30 +10,36 @@
     right: 0;
     z-index: 999;
 }
+
 .title {
     color: #fff;
     font-size: 18px;
     margin-left: 15px;
     margin-right: 90px;
 }
+
 .fold {
     font-size: 20px;
     cursor: pointer;
 }
+
 .bell {
     top: 3px;
     margin-right: 20px;
     font-size: 20px;
 }
+
 .uname {
     margin-left: 8px;
     color: #fff;
 }
+
 .linkBtn {
     cursor: pointer;
     color: #1890ff;
 }
-.login{
+
+.login {
     line-height: 64px;
     height: 64px;
     cursor: pointer;

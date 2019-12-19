@@ -6,9 +6,11 @@
     align-items: center;
     justify-content: center;
     background: #fff;
+
     & img {
         width: 4.74rem;
     }
+
     & .des {
         font-size: 18px;
         margin-top: 0.2rem;

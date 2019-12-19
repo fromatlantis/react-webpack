@@ -4,36 +4,44 @@
     height: 100vh;
     overflow: hidden;
 }
+
 .left {
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1;
+
     & img {
         width: 500px;
     }
 }
+
 .loginCard {
     display: flex;
     justify-content: center;
     align-items: center;
     flex: 1;
 }
+
 .form {
     max-width: 300px;
 }
+
 .title {
     font-size: 18px;
     font-weight: bold;
     text-align: center;
     color: rgba(255, 255, 255, 0.45);
 }
+
 .remember {
     color: rgba(255, 255, 255, 0.45);
 }
+
 .forgot {
     float: right;
 }
+
 .button {
     width: 100%;
 }

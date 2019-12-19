@@ -1,9 +1,10 @@
-.active{
+.active {
     border-radius: 5px;
-    background-color: #1E90FF;
+    background-color: #1e90ff;
     color: #fff;
 }
-.typeBut{
+
+.typeBut {
     display: inline-block;
     margin-right: 13px;
     float: left;
