@@ -3,11 +3,11 @@
 .header {
     display: flex;
     justify-content: space-between;
+    left: 0;
     padding: 0 15px;
     position: fixed;
-    top: 0;
-    left: 0;
     right: 0;
+    top: 0;
     z-index: 999;
 }
 
@@ -19,30 +19,30 @@
 }
 
 .fold {
-    font-size: 20px;
     cursor: pointer;
+    font-size: 20px;
 }
 
 .bell {
-    top: 3px;
-    margin-right: 20px;
     font-size: 20px;
+    margin-right: 20px;
+    top: 3px;
 }
 
 .uname {
-    margin-left: 8px;
     color: #fff;
+    margin-left: 8px;
 }
 
 .linkBtn {
-    cursor: pointer;
     color: #1890ff;
+    cursor: pointer;
 }
 
 .login {
-    line-height: 64px;
-    height: 64px;
     cursor: pointer;
-    width: 160px;
+    height: 64px;
+    line-height: 64px;
     text-align: right;
+    width: 160px;
 }

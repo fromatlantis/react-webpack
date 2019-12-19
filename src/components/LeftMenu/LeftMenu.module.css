@@ -1,15 +1,15 @@
 @import '~ThemeVariables';
 
 .menu {
-    width: var(--siderWidth);
     background: var(--sider-background);
+    bottom: 0;
     color: #fff;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
     position: fixed;
     top: 64px;
-    left: 0;
-    bottom: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
+    width: var(--siderWidth);
 
     & :global {
         & .ant-menu-item {

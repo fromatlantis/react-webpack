@@ -5,9 +5,9 @@
 }
 
 .carImg {
-    width: 80px;
     height: 80px;
     padding: 2px;
+    width: 80px;
 }
 
 .carousel img {
@@ -15,13 +15,13 @@
 }
 
 .littleThumb {
-    list-style: none;
     display: flex;
-    padding: 0;
+    left: 20px;
+    list-style: none;
     margin: 0;
     max-width: 560px;
+    padding: 0;
     position: absolute;
-    left: 20px;
     right: 20px;
 }
 
@@ -30,11 +30,11 @@
 }
 
 .guideBox {
-    width: 20px;
-    background: #ccc;
-    height: 72px;
-    display: flex;
     align-items: center;
-    justify-content: center;
+    background: #ccc;
     cursor: pointer;
+    display: flex;
+    height: 72px;
+    justify-content: center;
+    width: 20px;
 }

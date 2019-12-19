@@ -5,8 +5,8 @@
 }
 
 .flex {
-    display: flex;
     align-items: center;
+        display: flex;
 }
 
 .btnGroup {
@@ -35,20 +35,20 @@
 
 /* 详情卡片 */
 .detailCard {
-    padding: 0.4rem;
     background: #fff;
+    padding: 0.4rem;
 
     & .titleChip {
+        align-items: center;
         display: flex;
         justify-content: space-between;
-        align-items: center;
         padding-bottom: 0.2rem;
     }
 
     & .divider {
+        color: rgba(64, 152, 255, 1);
         font-size: 0.16rem;
         font-weight: bold;
-        color: rgba(64, 152, 255, 1);
     }
 
     & .title {

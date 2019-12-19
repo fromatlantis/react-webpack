@@ -1,8 +1,8 @@
 .root {
-    width: 350px;
+    background-size: cover;
     height: 690px;
     padding: 50px 30px;
-    background-size: cover;
+    width: 350px;
 }
 
 .ios {
