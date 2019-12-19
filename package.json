@@ -5,6 +5,7 @@
     "dependencies": {
         "@babel/core": "7.1.0",
         "@commitlint/cli": "^8.2.0",
+        "@commitlint/config-conventional": "^8.2.0",
         "@svgr/webpack": "2.4.1",
         "antd": "^3.21.2",
         "axios": "^0.18.0",
@@ -90,7 +91,7 @@
     "husky": {
         "hooks": {
             "pre-commit": "lint-staged",
-            "commit-msg": "commitlint -e $GIT_PARAMS"
+            "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
         }
     },
     "lint-staged": {
