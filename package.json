@@ -97,6 +97,9 @@
     "lint-staged": {
         "src/*.(js|jsx)": [
             "yarn lint:write",
+            "git add"
+        ],
+        "src/*.css": [
             "yarn stylelint:write",
             "git add"
         ]

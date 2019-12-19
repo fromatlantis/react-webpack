@@ -55,6 +55,14 @@
     - 修改历史版本Bug：在主干分支找到版本标签位置，创建Hotfix分支
 5. 其他
     - 用于线上发布的代码，不可以使用未正式发布版本的依赖包
+### git提交规范
+- feat：新功能（feature）
+- fix：修补bug
+- docs：文档（documentation）
+- style： 格式方面的优化
+- refactor：重构
+- test：测试
+- chore：构建过程或辅助工具的变动
 ### git常用命令
 - 创建并切换分支 `git checkout -b feature/settings`
 - 合并分支到当前分支下 `git merge dev`
